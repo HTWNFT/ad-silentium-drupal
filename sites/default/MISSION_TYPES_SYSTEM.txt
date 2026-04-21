@@ -1,0 +1,309 @@
+MISSION_TYPES_SYSTEM.txt
+
+GOAL:
+Define mission categories that:
+1) Provide variety beyond combat (Ranger, hostage rescue, etc.)
+2) Gate major power unlocks at milestone levels (Lv1 / 5 / 10 / 15 / 20)
+3) Scale cleanly into Air / Ocean / Land routes until Boss Level (Warlords)
+
+GLOBAL RULES (apply to ALL missions):
+- Every mission has:
+  - Primary Objective (required)
+  - Secondary Objective (optional)
+  - Fail State (clear)
+  - Extraction Condition (how mission ends)
+- Each mission awards:
+  - XP (level progression)
+  - Trial Credit(s) (used to unlock milestone powers)
+  - Loot/Resources (craft/upgrade, if implemented)
+- Mission difficulty tiers:
+  - Tier 1: Lv1–4
+  - Tier 2: Lv5–9
+  - Tier 3: Lv10–14
+  - Tier 4: Lv15–19
+  - Tier 5: Lv20 Boss Level (Warlord)
+
+TRIAL CREDITS (used for milestone power unlocks):
+- [ ] Combat Trial Credit
+- [ ] Ranger Trial Credit
+- [ ] Hostage Trial Credit
+- [ ] Containment Trial Credit
+- [ ] Recovery Trial Credit
+
+MILESTONE GATES (recommended):
+- Lv1 unlock: No gate (starter kit online immediately)
+- Lv5 unlock: Requires ANY 1 Trial Credit
+- Lv10 unlock (Environment Mastery): Requires 1 Trial Credit + matching Route Credit
+- Lv15 unlock (Anti-Warlord Tool): Requires ANY 2 Trial Credits (can be duplicates or mixed)
+- Lv20 unlock (Crown Node / Boss Level): Requires 3 total Trial Credits + completion of a Tier 4 “Gatekeeper” mission
+
+ROUTE CREDITS (environment mastery path):
+- [ ] AIR Route Credit
+- [ ] OCEAN Route Credit
+- [ ] LAND Route Credit
+
+ROUTE CREDIT RULE:
+- A Route Credit is earned by completing a mission that has its core hazard in that environment
+  (ex: AIR = vertical traversal + wind/shear hazards; OCEAN = pressure/oxygen; LAND = seismic/ruin traversal).
+
+============================================================
+MISSION TYPE 01 — COMBAT ASSAULT (DIRECT ENGAGEMENT)
+Purpose:
+- Baseline action loop, teaches enemies + player kit growth.
+
+Primary Objectives (pick one):
+- Eliminate target cell leader
+- Clear an outpost / node
+- Defeat roaming champion
+- Break a blockade and reach extraction
+
+Secondary Objectives (optional):
+- Do not take downed state
+- Keep allied NPC alive
+- Finish under time
+
+Fail States:
+- Player wipe / timer fail / target escapes
+
+Extraction:
+- Reach evac zone OR hold area until signal confirms
+
+Trial Credit:
+- Grants: [Combat Trial Credit]
+Route Credit (if themed):
+- Optional based on map hazard: AIR / OCEAN / LAND
+
+Variants:
+- Breach & Clear (short, intense)
+- Hunt (longer, multi-zone)
+- Duel (single elite target)
+
+============================================================
+MISSION TYPE 02 — RANGER RECON (SCOUT / TRACK / SURVIVE)
+Purpose:
+- Your “not all combat” pillar. Stealth, tracking, survival, navigation, map mastery.
+
+Primary Objectives:
+- Scout and mark 3–5 points of interest
+- Track a moving target and confirm ID
+- Place signal beacons (no detection)
+- Map a hazard corridor (air/ocean/land)
+
+Secondary Objectives:
+- Zero alarms triggered
+- Recover bonus intel cache
+- Complete without killing (optional pacifist run)
+
+Fail States:
+- Too many alarms / beacon destroyed / target lost
+
+Extraction:
+- Exfil by route, or upload recon data at uplink node
+
+Trial Credit:
+- Grants: [Ranger Trial Credit]
+Route Credit:
+- Often grants AIR / OCEAN / LAND if the recon hazard is dominant
+
+Variants:
+- Shadow Trail (tail a patrol)
+- Dead Zone Survey (hazard-heavy)
+- Signal Listening Post (timed uplink)
+
+============================================================
+MISSION TYPE 03 — HOSTAGE RESCUE (STEALTH + EXTRACT)
+Purpose:
+- High tension, route planning, crowd-control, non-lethal preference (optional).
+
+Primary Objectives:
+- Locate hostage(s)
+- Free them (lock, cage, restraint)
+- Escort to extraction
+
+Secondary Objectives:
+- No hostage damage
+- No alarms (or max 1 alarm)
+- Retrieve hostage’s carried item (key intel)
+
+Fail States:
+- Hostage death / hostage taken away / time expiration
+
+Extraction:
+- Escort to evac point OR defend evac while pickup arrives
+
+Trial Credit:
+- Grants: [Hostage Trial Credit]
+Route Credit:
+- If rescue occurs in dominant hazard zone (air rig, sea lab, land ruin), grant route credit.
+
+Variants:
+- Silent Lift (stealth favored)
+- Running Evac (pursuit favored)
+- Split Rescue (multiple targets)
+
+============================================================
+MISSION TYPE 04 — CONTAINMENT HOLD (DEFEND A ZONE)
+Purpose:
+- Teaches area denial, cooldown discipline, resource usage, defense builds.
+
+Primary Objectives:
+- Hold uplink for X waves
+- Protect reactor / beacon / ritual device
+- Keep a perimeter intact while data uploads
+
+Secondary Objectives:
+- Keep structure above 60% integrity
+- Defeat optional elite wave
+- Don’t leave zone
+
+Fail States:
+- Uplink destroyed / zone overrun / integrity hits zero
+
+Extraction:
+- After final wave, reach evac OR survive until timer ends
+
+Trial Credit:
+- Grants: [Containment Trial Credit]
+Route Credit:
+- If hazard is dominant (air platform, ocean pressure dome, land quake zone)
+
+Variants:
+- Wave Defense
+- King-of-the-Hill (moving capture point)
+- Escort-Hold (hold, then move, then hold)
+
+============================================================
+MISSION TYPE 05 — RECOVERY RETRIEVAL (SALVAGE / EXTRACT)
+Purpose:
+- Drives your economy (materials, artifacts, blueprints). Great for “theme production” loot tables later.
+
+Primary Objectives:
+- Retrieve 1–3 items (artifact, prototype, gene-tag relic, signal-cipher)
+- Extract with item intact
+
+Secondary Objectives:
+- Retrieve bonus crate
+- Don’t drop the payload
+- Deliver to alternate extraction for extra reward
+
+Fail States:
+- Payload destroyed / lost / time out
+
+Extraction:
+- Reach extraction while carrying payload OR deposit into drop pod
+
+Trial Credit:
+- Grants: [Recovery Trial Credit]
+Route Credit:
+- Commonly grants route credit due to travel hazards
+
+Variants:
+- Heavy Carry (movement penalty)
+- Timed Collapse (environment falling apart)
+- Contested Recovery (rival scavengers)
+
+============================================================
+MISSION TYPE 06 — SABOTAGE INFILTRATION (NOISE VS SILENCE)
+Purpose:
+- Hybrid: stealth approach, explosive finish, tactical disengage.
+
+Primary Objectives:
+- Plant charges / overload system
+- Disable comms tower / signal node
+- Poison/patch a system (merged tech) or disrupt a discipline node (doomed)
+
+Secondary Objectives:
+- Leave without triggering lockdown
+- Disable 2 extra subsystems
+- Eliminate guard captain
+
+Fail States:
+- Lockdown completes / planted device disarmed
+
+Extraction:
+- Exfil immediately after sabotage OR survive pursuit
+
+Trial Credit:
+- Grants: [Ranger Trial Credit] OR [Combat Trial Credit] depending on approach
+Route Credit:
+- Optional
+
+============================================================
+MISSION TYPE 07 — ESCORT / CONVOY (PROTECT MOVING OBJECTIVE)
+Purpose:
+- Adds pacing variety; forces player to fight while repositioning.
+
+Primary Objectives:
+- Escort allied unit or payload to destination
+- Keep convoy above X% health
+
+Secondary Objectives:
+- No stops / no repairs
+- Save optional civilians / prisoners
+
+Fail States:
+- Payload destroyed / ally dies
+
+Extraction:
+- Arrive at safe zone
+
+Trial Credit:
+- Grants: [Containment Trial Credit] (defense) OR [Hostage Trial Credit] (if escorting persons)
+
+============================================================
+MISSION TYPE 08 — ELITE HUNT (GATEKEEPER / PRE-WARLORD)
+Purpose:
+- Tier 4 gate mission for Lv20 access (required by Milestone Gates).
+
+Primary Objectives:
+- Locate and eliminate Gatekeeper
+- Survive unique mechanic phase (air/ocean/land themed)
+
+Secondary Objectives:
+- No downed state
+- Clear optional elite entourage
+
+Fail States:
+- Player wipe / gatekeeper escapes
+
+Extraction:
+- Confirm kill + extract OR receive “boss-route clearance” signal
+
+Trial Credit:
+- Grants: [Combat Trial Credit] + one additional credit based on mission structure
+Route Credit:
+- Grants matching AIR/OCEAN/LAND Route Credit automatically
+
+============================================================
+BOSS LEVEL MISSION TYPE — WARLORD ASCENT (TIER 5)
+Purpose:
+- Final encounter: player reaches stat parity with Warlord at Lv20.
+- Multi-phase fight with environment dominance.
+
+Primary Objectives:
+- Defeat Warlord (Air / Ocean / Land)
+- Survive phase shift mechanic
+
+Secondary Objectives:
+- Optional: spare/claim/banish choice (if narrative supports)
+- Optional: no damage phase
+
+Fail States:
+- Player wipe
+
+Extraction:
+- Auto-exit cutscene OR manual evac while world destabilizes
+
+Trial Credit:
+- Grants: Crown Node completion (endgame progression marker)
+Route Credit:
+- N/A (already completed)
+
+============================================================
+DEV NOTES (for later theme + content integration):
+- Each mission type should map to:
+  - Drupal content type: "mission"
+  - Taxonomy: {type, tier, route, faction, rewards}
+- Recommended mission fields:
+  - title, tier, route, mission_type, objectives, fail_states, extraction, rewards, enemies, required_powers (optional)
+- Use the manifests system to link background art + portrait/foe art to mission nodes.

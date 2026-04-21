@@ -1,0 +1,24 @@
+<?php
+
+namespace Drupal\ooh_outskirts\Controller;
+
+use Drupal\Core\Controller\ControllerBase;
+
+class OohPageController extends ControllerBase {
+
+  public function landingpage() {
+    $block = \Drupal::service('plugin.manager.block')->createInstance('ooh_landing_block');
+    return $block->build();
+  }
+
+  public function clearance() {
+    $block = \Drupal::service('plugin.manager.block')->createInstance('ooh_clearance_block');
+    return $block->build();
+  }
+
+  public function credits() {
+    $block = \Drupal::service('plugin.manager.block')->createInstance('ooh_credits_block');
+    return $block->build();
+  }
+
+}

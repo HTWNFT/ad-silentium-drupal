@@ -1,0 +1,130 @@
+====================================================================
+GLOBAL VIDEO LOOP STYLE (apply to EVERY PROMPT)
+====================================================================
+- 16:9 cinematic game environment video loop (6–8 seconds), seamless loop
+- No readable text, no logos, no UI/HUD, no watermarks
+- Cold rim light, steel/ash/obsidian palette, high-contrast silhouettes
+- Controlled glow only (minimal, purposeful), militant thriller tone
+- Motion: slow camera push or lateral drift + subtle parallax + atmospheric particles
+- Keep scene readable at a distance (bold shapes, avoid micro-clutter)
+
+GLOBAL AVOID (apply to every AVOID):
+text, letters, numbers, logos, watermarks, UI/HUD, menus, captions, subtitles,
+close-up faces, detailed characters, crowds, bright neon rainbow palettes,
+excessive bloom, strobing lights, heavy lens flare, shakycam, muddy low contrast,
+cartoon style, cute vibes, colorful tropical vibes, gore, organs
+
+
+####################################################################
+CORE LOOP 01 — ESTABLISHING (MARE OCEAN BIOME)
+####################################################################
+
+File: loop_mare_core_01_establishing_black_surface_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Ocean surface at night: black water plane with cold rim highlights on ripples, low militarized sky, distant industrial silhouettes on the horizon (platform towers, rigs, brutalist pylons). Steel/ash/obsidian palette, high contrast silhouettes, controlled glow only (faint reflections). Motion: slow forward camera push + gentle wave parallax + thin mist drift. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid sunsets, avoid bright moon dominating, avoid tropical colors, avoid obvious ships close-up
+
+File: loop_mare_var_01a_establishing_silent_surface_recon_v01.mp4
+PROMPT:
+Same scene as CORE 01 but “Silent Surface Recon” mood: darker exposure, fewer highlights, heavier negative space, horizon silhouettes barely visible through haze. Motion: slower push-in + softer mist drift, tense and quiet. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid heavy glitch artifacts, avoid neon static, avoid bright spotlights
+
+File: loop_mare_var_01b_establishing_storm_swell_warning_v01.mp4
+PROMPT:
+Same scene as CORE 01 but storm-swell warning mood: larger rolling swells, slightly thicker mist bands, distant horizon lights dim and intermittent (controlled, not flashing). Motion: stronger wave parallax, still loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid lightning dominating frame, avoid bright whitecaps everywhere, avoid dramatic lens flare
+
+
+####################################################################
+CORE LOOP 02 — TRAVERSAL (MARE OCEAN BIOME)
+####################################################################
+
+File: loop_mare_core_02_traversal_midwater_ruins_lane_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Midwater traversal lane: towering kelp-column silhouettes and drowned brutalist ruins forming a readable corridor. Cold rim light, steel/ash/obsidian palette, high contrast silhouettes, controlled glow only (tiny distant reflections). Motion: gentle lateral drift + slow particulate drift + subtle current flow lines, parallax depth. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid fish swarms, avoid coral reefs, avoid colorful bioluminescence everywhere
+
+File: loop_mare_var_02a_traversal_route_clear_ranger_v01.mp4
+PROMPT:
+Same traversal lane but “Route-Clear” ranger mood: clearer visibility, reduced particulate, slightly wider framing to show safe path geometry through ruins and kelp columns. Motion: steady lateral glide, calm but tense. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid bright cheerful lighting, avoid high-saturation blues/greens
+
+File: loop_mare_var_02b_traversal_extraction_descent_v01.mp4
+PROMPT:
+Same traversal lane but “Extraction Descent” rescue mood: add one faint controlled beacon-like glow point far ahead (no text), slightly stronger current lines suggesting urgency. Motion: slightly faster drift, still stable and loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid flashing alarms, avoid HUD arrows, avoid readable signage
+
+
+####################################################################
+CORE LOOP 03 — COMBAT ZONE (MARE OCEAN BIOME)
+####################################################################
+
+File: loop_mare_core_03_combat_current_corridor_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Underwater combat zone: a hard-edged “current corridor” framed by ruin ribs and kelp silhouettes, strong simple cover geometry, limited visibility with controlled haze. Cold rim light, high contrast silhouettes, steel/ash/obsidian palette, controlled glow only (minimal). Motion: slow camera push + particulate drift + gentle current eddies, subtle parallax. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid muzzle flashes, avoid visible soldiers, avoid chaotic camera shake, avoid bright bioluminescent creatures
+
+File: loop_mare_var_03a_combat_interference_sabotage_v01.mp4
+PROMPT:
+Same combat corridor but “Signal Interference” sabotage mood: faint distortion-like haze in the far distance (subtle), one small controlled glow point on a conduit node (no markings). Motion: slower push-in, more oppressive atmosphere. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid strong glitch blocks, avoid readable panels, avoid neon pulses
+
+File: loop_mare_var_03b_combat_overdrive_assault_v01.mp4
+PROMPT:
+Same combat corridor but “Overdrive” assault mood: slightly stronger rim light, thicker particulate, occasional tiny controlled spark on one ruin edge (very minimal). Motion: slightly faster push-in, higher tension, still stable and loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid sparks everywhere, avoid explosions, avoid neon bloom
+
+
+####################################################################
+CORE LOOP 04 — AFTERMATH / QUIET (MARE OCEAN BIOME)
+####################################################################
+
+File: loop_mare_core_04_aftermath_silt_quiet_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Aftermath quiet midwater: ruins and kelp silhouettes remain, current calms, silt slowly settles in layered bands, minimal controlled glow reflections. Cold rim light, high contrast silhouettes, heavy negative space, oppressive calm. Motion: slow drift + settling particulate + faint kelp sway. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid warm sunlight shafts, avoid “peaceful aquarium” vibe, avoid colorful marine life
+
+File: loop_mare_var_04a_aftermath_safe_corridor_rescue_v01.mp4
+PROMPT:
+Same aftermath scene but “Safe Corridor” rescue mood: slightly clearer visibility, fewer particles, one dim controlled guidance glow point far away (no text). Motion: slow forward drift, stable and reassuring (still tense). No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid bright runway lights, avoid signage, avoid big spotlights
+
+File: loop_mare_var_04b_aftermath_ghost_quiet_recon_v01.mp4
+PROMPT:
+Same aftermath scene but “Ghost Quiet” recon mood: darker exposure, thicker silt bands, silhouettes fade into negative space, near-still camera with minimal particulate motion. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid horror gore, avoid jump-scare lighting, avoid high-contrast neon outlines
+
+
+####################################################################
+CORE LOOP 05 — BOSS ARENA (MARE OCEAN BIOME)
+####################################################################
+
+File: loop_mare_core_05_boss_trench_gate_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Abyssal trench boss arena: a massive ribbed “gate” structure embedded in a trench wall, deep black negative space beyond, sharp angular ribs, minimal controlled glow highlights tracing a few edges. Cold rim light, severe shadows, steel/ash/obsidian palette, oppressive scale. Motion: slow orbiting camera drift (very subtle) + faint pressure-haze shimmer + sparse particulate. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid showing the boss figure, avoid giant monster silhouettes, avoid dramatic lens flare
+
+File: loop_mare_var_05a_boss_countdown_sabotage_v01.mp4
+PROMPT:
+Same trench gate arena but sabotage “Countdown Core” mood: the gate ribs carry a faint rhythmic controlled glow pulse (slow, not flashing), as if a conduit is charging. Motion: steady drift, tension rising, loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid fast blinking, avoid alarm text, avoid bright strobes
+
+File: loop_mare_var_05b_boss_clash_assault_v01.mp4
+PROMPT:
+Same trench gate arena but “Boss Clash” assault mood: slightly stronger rim light, heavier particulate, subtle turbulence near the gate threshold, occasional tiny controlled spark at one rib seam (minimal). Motion: slightly faster drift, still stable and loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid explosive fireballs, avoid visible fighters, avoid chaotic shake

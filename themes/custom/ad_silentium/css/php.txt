@@ -1,0 +1,89 @@
+<?php
+
+namespace Drupal\ooh_outskirts\Plugin\Block;
+
+use Drupal\Core\Block\BlockBase;
+
+/**
+ * Provides the OOH Landing block.
+ *
+ * @Block(
+ *   id = "ooh_landing_block",
+ *   admin_label = @Translation("OOH Landing Block")
+ * )
+ */
+class OohLandingBlock extends BlockBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function build() {
+    $video = '/STIKWALLET11202025/sites/default/files/outskirts/loops/video_loops_underboard_alley_core.mp4';
+    $img1 = '/STIKWALLET11202025/sites/default/files/outskirts/images/bg_aer_01_core_establishing_cloud_trench_v01.png';
+    $img2 = '/STIKWALLET11202025/sites/default/files/outskirts/images/bg_aer_01A_silent_approach_v01.png';
+    $dossier_url = '/STIKWALLET11202025/dossier';
+
+    $markup = '
+<section class="ooh-landing">
+  <div class="ooh-hero">
+
+    <div class="ooh-hero__media">
+      <div class="ooh-hero__slide is-active">
+        <video class="ooh-hero__video" autoplay muted loop playsinline>
+          <source src="' . $video . '" type="video/mp4">
+        </video>
+      </div>
+
+      <div class="ooh-hero__slide">
+        <img class="ooh-hero__image" src="' . $img1 . '" alt="Cloud trench establishing shot">
+      </div>
+
+      <div class="ooh-hero__slide">
+        <img class="ooh-hero__image" src="' . $img2 . '" alt="Silent approach">
+      </div>
+    </div>
+
+    <div class="ooh-hero__overlay"></div>
+
+    <div class="ooh-hero__content">
+      <div class="ooh-hero__eyebrow">CLASSIFIED // AD SILENTIUM</div>
+      <h1 class="ooh-hero__title">AD SILENTIUM</h1>
+      <p class="ooh-hero__subtitle">Enter the dead zone. Build your path. Select your signal.</p>
+
+      <div class="ooh-hero__actions">
+        <a class="ooh-hero__btn ooh-hero__btn--primary" href="' . $dossier_url . '">ENTER DOSSIER</a>
+        <button class="ooh-hero__btn ooh-hero__btn--secondary" id="ooh-read-prologue" type="button">READ PROLOGUE</button>
+      </div>
+    </div>
+  </div>
+
+  <section id="ooh-prologue-modal" class="ooh-prologue-modal" aria-hidden="true">
+    <div class="ooh-prologue-modal__backdrop"></div>
+    <div class="ooh-prologue-modal__panel" role="dialog" aria-modal="true" aria-labelledby="ooh-prologue-title">
+      <button id="ooh-close-prologue" class="ooh-prologue-modal__close" type="button" aria-label="Close prologue">×</button>
+      <h2 id="ooh-prologue-title" class="ooh-prologue-modal__title">PROLOGUE</h2>
+      <div class="ooh-prologue-modal__viewport">
+        <div id="ooh-prologue-crawl" class="ooh-prologue__crawl">
+          <p>Beyond the outer trench, the signal still whispers.</p>
+          <p>What remains of command has gone dark. The dead zone answers only in fragments.</p>
+          <p>You were not sent here to survive. You were sent here to remember.</p>
+          <p>Enter the silence. Build your path. Choose your signal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+';
+
+    return [
+      '#type' => 'markup',
+      '#markup' => $markup,
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/landing',
+        ],
+      ],
+    ];
+  }
+
+}

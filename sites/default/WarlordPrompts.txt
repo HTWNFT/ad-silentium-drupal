@@ -1,0 +1,171 @@
+WARLORD_INDEX_AND_PROMPTS.txt
+(Genetic Warlords / Elite Families — 9 Houses x 3 NPCs = 27 portraits)
+
+GLOBAL STYLE (apply to every PROMPT):
+- Square 1:1 game UI portrait on a fully transparent background (PNG with alpha)
+- Centered shoulders-up (or tight chest-up) elite NPC portrait
+- Skin tone: unified dark grey; eyes black; hair black (stringy/scraggly)
+- Face: long, scraggly, generally ugly; physically unimposing (frail/slender)
+- Wardrobe: ornate robes, jewels, opulent but sinister; no weapons focus
+- Lighting: cold rim light, high-contrast silhouette, crisp edges, controlled glow only
+- Collar ring + matte gene-tag plate with 3–5 geometric insets (NO readable text)
+- EXACTLY ONE toxic accent dot (one dot only) per House (color below)
+- No background/scene elements
+
+HOUSE ACCENT DOT COLORS:
+- Vesperin: magenta
+- Calderoux: cyan
+- Mournval: sickly green
+- Dravessa: magenta
+- Kyranth: cyan
+- Aurelianth: sickly green
+- Vahloran: cyan
+- Sablehart: magenta
+- Noxmere: sickly green
+
+AVOID (paste with every generation):
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+================================================================================
+HOUSE VESPERIN — “The Blood Nobles of the Aerie”
+(Accent: ONE tiny magenta dot)
+--------------------------------------------------------------------------------
+[01] portrait_warlord_house_vesperin_matriarch_cressida_v01.png
+PROMPT: Square 1:1 game UI warlord portrait on a fully transparent background (PNG with alpha). Centered shoulders-up portrait of House Vesperin Matriarch Cressida: frail, physically unimposing elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair. Wears opulent raptor-court robes with sharp feather-arc geometry rendered as plated collar segments (symbolic, not literal wings), heavy jeweled circlet, ornate rings. Cold rim light, high-contrast silhouette, crisp edges, controlled glow only. Collar ring + matte gene-tag plate with 3–5 geometric insets (no text). EXACTLY ONE toxic accent: one tiny magenta glow dot set into the circlet center (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[02] portrait_warlord_house_vesperin_patriarch_lucian_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Vesperin Patriarch Lucian: thin, unimposing elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair combed back. Wears lacquered obsidian robe armor with clean feather-ridge collar geometry, jeweled clasp, delicate chains. Cold rim light, crisp silhouette, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny magenta glow dot on the robe clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[03] portrait_warlord_house_vesperin_heir_veyra_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Vesperin Heir Veyra: slender, severe elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair in a tight pull-back. Wears opulent robe mantle with angular feather-segment collar, small jeweled diadem, layered necklaces. Cold rim light, high contrast, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny magenta glow dot on an earpiece node (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+================================================================================
+HOUSE CALDEROUX — “The Gilded Chain”
+(Accent: ONE tiny cyan dot)
+--------------------------------------------------------------------------------
+[04] portrait_warlord_house_calderoux_matriarch_mirelle_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Calderoux Matriarch Mirelle: frail, unimposing elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair under a jeweled veil. Wears heavy-gilded robe with brutalist plate trims, gemstone brooches, delicate chain-lattices. Cold rim light, crisp silhouette, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny cyan glow dot on the brooch center (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[05] portrait_warlord_house_calderoux_patriarch_bastien_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Calderoux Patriarch Bastien: thin, stooped elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair. Wears opulent industrial-luxury robe with angular metal filigree (unreadable), gemstone rings, a thick collar ring with matte gene-tag plate (3–5 geometric insets, no text). Cold rim light, controlled glow only. EXACTLY ONE toxic accent: one tiny cyan glow dot on the collar clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[06] portrait_warlord_house_calderoux_heir_adrien_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Calderoux Heir Adrien: slender elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair parted precisely. Wears a pristine robe-coat with gold-thread geometry and jewel-studded buttons (no text), cold rim light, crisp silhouette, controlled glow. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny cyan glow dot on a single button node (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+================================================================================
+HOUSE MOURNVAL — “The Bone Curators”
+(Accent: ONE tiny sickly-green dot)
+--------------------------------------------------------------------------------
+[07] portrait_warlord_house_mournval_matriarch_ezra_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Mournval Matriarch Ezra: frail elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair in wisps. Wears funeral-opulent robes with bone-like geometry (symbolic, not literal bones), heavy black jewels, and a veil. Cold rim light, high contrast, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny sickly-green glow dot at the veil pin (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[08] portrait_warlord_house_mournval_patriarch_simeon_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Mournval Patriarch Simeon: thin, gaunt elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair hanging loose. Wears austere ritual robes with subtle etched seam filigree (decorative, unreadable), gemmed rosary-like chains (no symbols). Cold rim light, crisp silhouette, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny sickly-green glow dot on the throat clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[09] portrait_warlord_house_mournval_heir_selene_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Mournval Heir Selene: slender elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair braided thin. Wears opulent mourning mantle with sharp collar geometry, black gemstone crown, delicate chains. Cold rim light, high contrast, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny sickly-green glow dot on the crown center (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+================================================================================
+HOUSE DRAVESSA — “The Iron Scar Clans”
+(Accent: ONE tiny magenta dot)
+--------------------------------------------------------------------------------
+[10] portrait_warlord_house_dravessa_matriarch_riva_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Dravessa Matriarch Riva: frail elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair. Wears ornate war-rite robe layered over scar-law metal plates (clean, not spiky), heavy gems set into rivets. Cold rim light, crisp silhouette, controlled glow. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny magenta glow dot on a single collar rivet (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[11] portrait_warlord_house_dravessa_patriarch_korrin_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Dravessa Patriarch Korrin: thin, unimposing elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair. Wears opulent iron-thread robes with clean plate collars, gemstone ring-stacks, ceremonial cords. Cold rim light, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny magenta glow dot on the robe clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[12] portrait_warlord_house_dravessa_heir_tamsin_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Dravessa Heir Tamsin: slender elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair tied with metal ribbon. Wears ornate scar-clan regalia—embroidered robe panels and jewel studs—clean silhouette, cold rim light, high contrast, controlled glow. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny magenta glow dot on an earpiece node (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+================================================================================
+HOUSE KYRANTH — “The Deep Routes”
+(Accent: ONE tiny cyan dot)
+--------------------------------------------------------------------------------
+[13] portrait_warlord_house_kyranth_matriarch_maira_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Kyranth Matriarch Maira: frail elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair damp-looking. Wears opulent pelagic robes with fin-arc collar geometry (symbolic), gemstone droplets, pearl-like jewels. Cold rim light, crisp silhouette, controlled glow. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny cyan glow dot on a pendant clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[14] portrait_warlord_house_kyranth_patriarch_dorian_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Kyranth Patriarch Dorian: thin, unimposing elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair. Wears sleek trench-route robe-coat with clean aquatic patterning (decorative, unreadable) and heavy gemstone rings. Cold rim light, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny cyan glow dot on the collar clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[15] portrait_warlord_house_kyranth_heir_elys_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Kyranth Heir Elys: slender elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair braided thin. Wears opulent sea-route mantle with fin-edged collar geometry, jewel studs, pearl chains. Cold rim light, high contrast, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny cyan glow dot on an earpiece node (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+================================================================================
+HOUSE AURELIANTH — “The Extant Regents”
+(Accent: ONE tiny sickly-green dot)
+--------------------------------------------------------------------------------
+[16] portrait_warlord_house_aurelianth_matriarch_lysandra_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Aurelianth Matriarch Lysandra: frail elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair. Wears opulent regent robes with extinct-beast motifs as clean embossed geometry (no literal animals), heavy jewel crown, draped chains. Cold rim light, crisp silhouette, controlled glow. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny sickly-green glow dot on the crown center (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[17] portrait_warlord_house_aurelianth_patriarch_quillon_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Aurelianth Patriarch Quillon: thin elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair hanging in wisps. Wears regal mantle with antler-crown geometry rendered as clean collar arcs, gemstone clusters, delicate chains. Cold rim light, high contrast, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny sickly-green glow dot on the collar clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[18] portrait_warlord_house_aurelianth_heir_marcella_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Aurelianth Heir Marcella: slender elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair tied with a jewel pin. Wears opulent heir mantle with clean embossed fossil-crest geometry, heavy necklaces. Cold rim light, crisp silhouette, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny sickly-green glow dot on the hairpin node (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+================================================================================
+HOUSE VAHLORAN — “The Vault Barons”
+(Accent: ONE tiny cyan dot)
+--------------------------------------------------------------------------------
+[19] portrait_warlord_house_vahloran_matriarch_oriana_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Vahloran Matriarch Oriana: frail elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair under a jeweled hood. Wears opulent vault robes with clean lock-plate geometry at collar and shoulders, gemstone “key” ornaments (abstract, no symbols). Cold rim light, crisp silhouette, controlled glow. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny cyan glow dot on the hood clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[20] portrait_warlord_house_vahloran_patriarch_garrick_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Vahloran Patriarch Garrick: thin elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair. Wears severe vault-coat robe with geometric seam etching (decorative, unreadable), gemstone studs, heavy rings. Cold rim light, high contrast, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny cyan glow dot on the collar clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[21] portrait_warlord_house_vahloran_heir_sable_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Vahloran Heir Sable: slender elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair braided thin. Wears opulent vault mantle with clean plate collar, jewel chains, understated menace. Cold rim light, crisp silhouette, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny cyan glow dot on an earpiece node (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+================================================================================
+HOUSE SABLEHART — “The Shadow Court”
+(Accent: ONE tiny magenta dot)
+--------------------------------------------------------------------------------
+[22] portrait_warlord_house_sablehart_matriarch_nyx_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Sablehart Matriarch Nyx: frail elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair falling in strands. Wears opulent shadow-court robes with sleek feline collar arcs (symbolic), jewel-studded veil, delicate chains. Cold rim light, crisp silhouette, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny magenta glow dot on the veil pin (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[23] portrait_warlord_house_sablehart_patriarch_aldrin_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Sablehart Patriarch Aldrin: thin, unimposing elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair slicked back poorly. Wears sleek obsidian robe-coat with minimal jewelry, a single jeweled clasp, clean silhouette. Cold rim light, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny magenta glow dot on the clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[24] portrait_warlord_house_sablehart_heir_isolde_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Sablehart Heir Isolde: slender elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair in loose strands. Wears opulent stealth-luxury mantle with subtle etched geometry (decorative, unreadable), jewel studs, delicate chain drape. Cold rim light, crisp silhouette, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny magenta glow dot on an earpiece node (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+================================================================================
+HOUSE NOXMERE — “The Blight Patrons”
+(Accent: ONE tiny sickly-green dot)
+--------------------------------------------------------------------------------
+[25] portrait_warlord_house_noxmere_matriarch_mara_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Noxmere Matriarch Mara: frail elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair tangled. Wears opulent biotech-ritual robes with subtle fungal/vein-like seam geometry (decorative, unreadable), heavy gemstone vials (no labels), jeweled hood. Cold rim light, crisp silhouette, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny sickly-green glow dot on the hood clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[26] portrait_warlord_house_noxmere_patriarch_valen_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Noxmere Patriarch Valen: thin, unimposing elite with dark grey skin, long scraggly ugly face, black eyes, black stringy hair. Wears sealed ritual robe with angular plating and subtle biotrace seams (decorative), jewel studs like “spore-caps” (abstract). Cold rim light, high contrast, controlled glow only. Collar ring + matte gene-tag plate (3–5 geometric insets, no text). EXACTLY ONE toxic accent: one tiny sickly-green glow dot at the throat clasp (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject
+
+[27] portrait_warlord_house_noxmere_heir_syl_v01.png
+PROMPT: Square 1:1 transparent PNG UI portrait. Centered shoulders-up portrait of House Noxmere Heir Syl: slender elite with unified dark grey skin, long scraggly ugly face, black eyes, black stringy hair braided thin. Wears opulent blight-court mantle with subtle etched bio-geometry (decorative, unreadable), jewel chains, sealed collar ring + matte gene-tag plate (3–5 geometric insets, no text). Cold rim light, crisp silhouette, controlled glow only. EXACTLY ONE toxic accent: one tiny sickly-green glow dot on an earpiece node (one dot only). No background.
+AVOID: text, letters, numbers, logos, watermarks, readable insignia, background scenery, full scenes, multiple accent colors, extra glow dots, neon bloom, lens flare, gore, exposed organs, messy splatter, attractive/pretty faces, heroic physiques, low contrast, clutter, crowds, weapons dominating the frame, thick borders, drop shadows outside the subject

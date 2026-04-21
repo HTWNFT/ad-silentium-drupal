@@ -1,0 +1,145 @@
+RECRUITER_PACKAGES.TXT
+Version: v01
+Purpose: Character-creation Recruiter selection (D&D “patron/origin sponsor” equivalent).
+Rule: Each Recruiter grants 1 starting Talent + 1 Favor + 1 Starter Item + 1 Signature Mission Twist.
+
+FILENAME RULES (recommended):
+- Portrait: assets/portraits/portrait_recruiter_{recruiter_slug}_v01.png
+- Icon:     assets/icons/icon_recruiter_{nn}_{recruiter_slug}_v01.png
+- Recruiter ID: recruiter_{path}_{recruiter_slug}
+
+----------------------------------------
+[01] RECRUITER: {YOUR_DOOMED_RECRUITER_01_DISPLAY_NAME}
+ID: recruiter_doomed_{YOUR_DOOMED_RECRUITER_01_SLUG}
+PATH AFFINITY: DOOMED (Arts of the Ancients)
+PORTRAIT: assets/portraits/portrait_recruiter_{YOUR_DOOMED_RECRUITER_01_SLUG}_v01.png
+ICON: assets/icons/icon_recruiter_01_{YOUR_DOOMED_RECRUITER_01_SLUG}_v01.png
+
+TONE (1–2 lines):
+A vow-merchant of the old disciplines. Offers power—but only inside an oath.
+
+STARTING TALENT (pick 1):
+- OATH-SIGIL: 1/mission, when you would be downed, stay at 1 HP and gain +1 Will until end of encounter.
+OR
+- RITE OF STILLNESS: advantage on Stealth checks for 10 seconds after using a Doomed power.
+
+FAVOR (story + mechanic):
+- “Oath Token”: once per mission, call in a safehouse hint (reveals 1 objective route / hidden cache marker).
+
+STARTER ITEM:
+- “Sealband” (utility): 1/mission, cleanse a debuff OR stop bleed/burn effects instantly.
+
+SIGNATURE MISSION TWIST:
+- OATH BINDING: in Rescue/Recovery missions, civilians/targets stabilize faster (+25% revive speed or reduced timer).
+
+DEBT / PRESSURE (roleplay hook):
+- You are compelled to accept Rescue/Recovery contracts when offered (turning them down reduces Recruiter Rep).
+
+REPUTATION TRACK (optional meta-progression):
+Rep 1: +1 Will
+Rep 2: +1 Aether max
+Rep 3: unlock cosmetic “Oath Mark”
+Rep 4: 1/mission, negate fear/panic
+Rep 5: unlock “Vowbreak Punisher” finisher cosmetic
+
+----------------------------------------
+[02] RECRUITER: {YOUR_DOOMED_RECRUITER_02_DISPLAY_NAME}
+ID: recruiter_doomed_{YOUR_DOOMED_RECRUITER_02_SLUG}
+PATH AFFINITY: DOOMED (Kinetic / Psionic Warfare)
+PORTRAIT: assets/portraits/portrait_recruiter_{YOUR_DOOMED_RECRUITER_02_SLUG}_v01.png
+ICON: assets/icons/icon_recruiter_02_{YOUR_DOOMED_RECRUITER_02_SLUG}_v01.png
+
+TONE (1–2 lines):
+A battlefield tutor who “polishes” human will into a weapon. Discipline first. Rage second.
+
+STARTING TALENT (pick 1):
+- KINETIC COUNTER: 1/mission, reflect 1 projectile OR negate 1 knockdown/stagger.
+OR
+- BERZERK CHANNEL (SAFE): 1/mission, +15% damage for 8 seconds; after it ends, -10% accuracy for 6 seconds.
+
+FAVOR:
+- “Field Lesson”: once per mission, ping a weak-point on an elite (team gains +crit chance vs that target briefly).
+
+STARTER ITEM:
+- “Pulse Chalk” (utility): mark an area; allies inside gain minor recoil/aim stability (short duration).
+
+SIGNATURE MISSION TWIST:
+- BREACH DOCTRINE: in Combat missions, the first door/gate/lock you interact with opens faster or costs fewer resources.
+
+DEBT / PRESSURE:
+- Must complete at least one “Combat” type mission per session/day to maintain standing.
+
+REPUTATION TRACK (optional):
+Rep 1: +1 Might
+Rep 2: +1 Aether regen
+Rep 3: unlock cosmetic “Marshal Sigil”
+Rep 4: 1/mission, gain brief damage immunity during a dash
+Rep 5: unlock “Kinetic Halo” aura cosmetic
+
+----------------------------------------
+[03] RECRUITER: {YOUR_MERGED_RECRUITER_01_DISPLAY_NAME}
+ID: recruiter_merged_{YOUR_MERGED_RECRUITER_01_SLUG}
+PATH AFFINITY: MERGED (Salvage / Gear Economy / Upgrades)
+PORTRAIT: assets/portraits/portrait_recruiter_{YOUR_MERGED_RECRUITER_01_SLUG}_v01.png
+ICON: assets/icons/icon_recruiter_03_{YOUR_MERGED_RECRUITER_01_SLUG}_v01.png
+
+TONE (1–2 lines):
+A fixer who turns ruins into advantage. Everything has a price—including survival.
+
+STARTING TALENT (pick 1):
+- FIELD PATCH: 1/mission, instantly repair armor (restore a chunk of shield/armor).
+OR
+- SCAVENGER’S EYE: caches highlight at longer range; +loot yield on recovery missions.
+
+FAVOR:
+- “Black Tag”: once per mission, reroll a crafted drop/mod outcome OR “upgrade” a found item (minor).
+
+STARTER ITEM:
+- “Micro-Tool Strap” (utility): 1/mission, disable a simple trap instantly OR reduce hack time.
+
+SIGNATURE MISSION TWIST:
+- SCRAP CLAIM: in Recovery missions, you can extract 1 extra “mod part” from a downed elite.
+
+DEBT / PRESSURE:
+- A cut of your salvage is owed; skipping payment locks one upgrade slot until repaid (soft pressure, not hard fail).
+
+REPUTATION TRACK (optional):
+Rep 1: +1 Intellect
+Rep 2: +1 Charge max
+Rep 3: unlock cosmetic “Broker Tags”
+Rep 4: 1/mission, auto-revive drone deploy (short)
+Rep 5: unlock “Salvage Crown” cosmetic
+
+----------------------------------------
+[04] RECRUITER: {YOUR_MERGED_RECRUITER_02_DISPLAY_NAME}
+ID: recruiter_merged_{YOUR_MERGED_RECRUITER_02_SLUG}
+PATH AFFINITY: MERGED (Signals / Stealth / Battlefield Information)
+PORTRAIT: assets/portraits/portrait_recruiter_{YOUR_MERGED_RECRUITER_02_SLUG}_v01.png
+ICON: assets/icons/icon_recruiter_04_{YOUR_MERGED_RECRUITER_02_SLUG}_v01.png
+
+TONE (1–2 lines):
+A whisper in your comms, a hand on the signal. Knows where the warlords look—and where they don’t.
+
+STARTING TALENT (pick 1):
+- GHOST PROTOCOL (SAFE): 1/mission, brief stealth shimmer; ends on attack.
+OR
+- PULSE SCAN+: scan reveals enemies/traps through thin cover for longer.
+
+FAVOR:
+- “Signal Map”: once per mission, reveal patrol routes OR objective node order (one layer of fog-of-war removed).
+
+STARTER ITEM:
+- “Decoy Beacon” (utility): throw to misdirect enemies for a few seconds (non-lethal, stealth tool).
+
+SIGNATURE MISSION TWIST:
+- INTERCEPT: in Surveillance missions, objectives take fewer “ticks” to complete OR give bonus intel rewards.
+
+DEBT / PRESSURE:
+- Your channel must stay clean: loud play (too many alarms) reduces rep gains that mission.
+
+REPUTATION TRACK (optional):
+Rep 1: +1 Reflex
+Rep 2: +1 Charge regen
+Rep 3: unlock cosmetic “Signal Veil”
+Rep 4: 1/mission, cancel one alarm trigger
+Rep 5: unlock “Beacon Surge” UI effect cosmetic

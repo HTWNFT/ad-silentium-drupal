@@ -1,0 +1,10 @@
+ooh_outskirts:
+  css:
+    theme:
+      css/ooh_outskirts.css: {}
+  js:
+    js/ooh_dossier.js: {}
+    js/ooh_play.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

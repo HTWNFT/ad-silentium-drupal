@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_page_attachments().
+ */
+function ooh_outskirts_page_attachments(array &$attachments) {
+  // getPathInfo() is relative to Drupal's base path, so in your subdir install
+  // it should still look like "/adsilentium" or "/adsilentium/...".
+  $path = \Drupal::request()->getPathInfo();
+
+  // Attach only on /adsilentium and any subpaths like /adsilentium/foo.
+  if ($path === '/adsilentium' || str_starts_with($path, '/adsilentium/')) {
+    $attachments['#attached']['library'][] = 'ooh_outskirts/landing';
+  }
+}

@@ -1,0 +1,52 @@
+(function (Drupal, once) {
+  Drupal.behaviors.oohHeroModal = {
+    attach(context) {
+      once('oohHeroModal', 'body', context).forEach(() => {
+        const openBtn = document.getElementById('ooh-read-prologue');
+        const closeBtn = document.getElementById('ooh-close-prologue');
+        const modal = document.getElementById('ooh-prologue-modal');
+        const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
+        const crawl = document.getElementById('ooh-prologue-crawl');
+
+        if (!openBtn || !closeBtn || !modal) {
+          return;
+        }
+
+        const restartCrawl = () => {
+          if (!crawl) {
+            return;
+          }
+          crawl.style.animation = 'none';
+          void crawl.offsetHeight;
+          crawl.style.animation = '';
+        };
+
+        const openModal = () => {
+          modal.classList.add('is-open');
+          modal.setAttribute('aria-hidden', 'false');
+          document.body.classList.add('ooh-modal-open');
+          restartCrawl();
+        };
+
+        const closeModal = () => {
+          modal.classList.remove('is-open');
+          modal.setAttribute('aria-hidden', 'true');
+          document.body.classList.remove('ooh-modal-open');
+        };
+
+        openBtn.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+
+        if (backdrop) {
+          backdrop.addEventListener('click', closeModal);
+        }
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+            closeModal();
+          }
+        });
+      });
+    }
+  };
+})(Drupal, once);

@@ -1,0 +1,56 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+
+.as-shell {
+  width: 100vw;
+  min-height: 100vh;
+  background: #000;
+  display: flex;
+  justify-content: center;
+}
+
+.as-shell > * {
+  width: 100%;
+  max-width: none;
+}
+
+/* Kill Drupal layout constraints */
+.layout-container,
+.region-content,
+.block {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Remove header spacing */
+.region-header {
+  display: none;
+}
+
+/* Make landing block full screen */
+.ooh-landing,
+.ooh-landing-block {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.ooh-hero {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+
+.ooh-hero__inner {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 2rem 3rem;
+}

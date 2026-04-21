@@ -1,0 +1,75 @@
+base:
+  version: 1.x
+  css:
+    theme:
+      css/ooh_outskirts.css: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+landing:
+  version: 1.x
+  css:
+    theme:
+      css/ooh_hero.css: {}
+  js:
+    js/ooh-hero-carousel.js: {}
+    js/ooh-hero-modal.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupalSettings
+
+dossier:
+  version: 1.x
+  js:
+    js/ooh_dossier.js: {}
+  dependencies:
+    - ooh_outskirts/base
+    - core/drupal
+    - core/once
+    - core/drupalSettings
+
+play:
+  version: 1.x
+  js:
+    js/ooh_play.js: {}
+  dependencies:
+    - ooh_outskirts/base
+    - core/drupal
+    - core/once
+    - core/drupalSettings
+
+game_generator:
+  css:
+    theme:
+      css/ooh_game_generator.css: {}
+  js:
+    js/ooh_game_generator.js: {}
+  dependencies:
+    - ooh_outskirts/base
+    - core/drupal
+    - core/once
+    - core/drupalSettings
+
+clearance:
+  version: 1.x
+  css:
+    theme:
+      css/ooh-clearance.css: {}
+  js:
+    js/ooh-clearance.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+credits:
+  version: 1.x
+  css:
+    theme:
+      css/ooh-credits.css: {}
+  js:
+    js/ooh-credits.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

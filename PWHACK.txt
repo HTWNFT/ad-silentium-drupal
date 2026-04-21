@@ -1,0 +1,10 @@
+# Drupal root (your install)
+$Root = "C:\XAMPP11032025\htdocs\STIKWALLET11202025"
+Set-Location $Root
+
+# 1) Clear caches (safe)
+php (Join-Path $Root "vendor\bin\drush.php") cr
+
+# 2) Generate a fresh one-time login URL for user ID 1 (admin)
+# IMPORTANT: open the printed URL in an INCOGNITO/PRIVATE window
+php (Join-Path $Root "vendor\bin\drush.php") uli --uid=1 --uri="http://localhost/STIKWALLET11202025"

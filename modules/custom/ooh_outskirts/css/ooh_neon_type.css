@@ -1,0 +1,102 @@
+@font-face{
+  font-family:"OxaniumLocal";
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url("../fonts/static/Exo2-Regular.ttf") format("truetype");
+}
+@font-face{
+  font-family:"OxaniumLocal";
+  font-style:normal;
+  font-weight:600;
+  font-display:swap;
+  src:url("../fonts/static/Exo2-SemiBold.ttf") format("truetype");
+}
+@font-face{
+  font-family:"OxaniumLocal";
+  font-style:normal;
+  font-weight:700;
+  font-display:swap;
+  src:url("../fonts/static/Exo2-Bold.ttf") format("truetype");
+}
+.ooh-neon-mode {
+  --ooh-aqua: #54ffff;
+  --ooh-aqua-soft: rgba(84, 255, 255, 0.55);
+  --ooh-aqua-faint: rgba(84, 255, 255, 0.22);
+}
+
+.ooh-neon-mode .ooh-overlay-root .ooh-hero__copy,
+.ooh-neon-mode .ooh-overlay-root .ooh-hero__controls {
+  position: relative;
+  z-index: 1;
+}
+
+.ooh-neon-mode .ooh-overlay-root .ooh-hero__kicker,
+.ooh-neon-mode .ooh-overlay-root .ooh-hero__title,
+.ooh-neon-mode .ooh-overlay-root .ooh-hero__tagline,
+.ooh-neon-mode .ooh-overlay-root .ooh-prologue__kicker,
+.ooh-neon-mode .ooh-overlay-root .ooh-prologue__title,
+.ooh-neon-mode .ooh-overlay-root .ooh-prologue__text,
+.ooh-neon-mode .ooh-overlay-root .ooh-btn,
+.ooh-neon-mode .ooh-prologue .ooh-prologue__kicker,
+.ooh-neon-mode .ooh-prologue .ooh-prologue__title,
+.ooh-neon-mode .ooh-prologue .ooh-prologue__text,
+.ooh-neon-mode .ooh-prologue .ooh-btn {
+  font-family: "OxaniumLocal", "Oxanium", "Orbitron", "Rajdhani", "Segoe UI", system-ui, sans-serif;
+}
+
+.ooh-neon-mode .ooh-overlay-root .ooh-hero__title,
+.ooh-neon-mode .ooh-overlay-root .ooh-game-title {
+  display: block !important;
+  color: var(--ooh-aqua);
+  text-shadow:
+    0 0 10px var(--ooh-aqua-soft),
+    0 0 24px var(--ooh-aqua-faint),
+    0 0 42px rgba(84, 255, 255, 0.18);
+  filter: drop-shadow(0 0 12px rgba(84, 255, 255, 0.18));
+}
+
+.ooh-neon-mode .ooh-overlay-root .ooh-matrix-rail {
+  display: block !important;
+  margin: 0 0 16px 0;
+  font-family: "OxaniumLocal", "Oxanium", "Orbitron", "Rajdhani", "Segoe UI", system-ui, sans-serif;
+  font-size: clamp(11px, 1vw, 14px);
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(84, 255, 255, 0.88);
+  text-shadow:
+    0 0 8px rgba(84, 255, 255, 0.45),
+    0 0 18px rgba(84, 255, 255, 0.20);
+  opacity: 0.82;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ooh-neon-mode .ooh-overlay-root .ooh-sigil-veil {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: min(52vw, 520px);
+  height: min(52vw, 520px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0.14;
+  z-index: 0;
+  background:
+    radial-gradient(circle at center, rgba(84, 255, 255, 0.22) 0%, rgba(84, 255, 255, 0.08) 26%, rgba(84, 255, 255, 0) 62%),
+    radial-gradient(circle at center, rgba(84, 255, 255, 0.18) 0 1px, transparent 1px 100%);
+  filter: blur(1px);
+}
+
+.ooh-neon-mode .ooh-overlay-root .ooh-btn,
+.ooh-neon-mode .ooh-prologue .ooh-btn,
+.ooh-neon-mode .ooh-login-btn {
+  color: var(--ooh-aqua) !important;
+  text-shadow: 0 0 10px rgba(84, 255, 255, 0.30);
+}
+
+.ooh-neon-mode .ooh-overlay-root .ooh-hero__tagline,
+.ooh-neon-mode .ooh-prologue .ooh-prologue__text {
+  color: rgba(235, 250, 255, 0.86);
+}

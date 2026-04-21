@@ -1,0 +1,30 @@
+The “5 core images → everything else” checklist (do this exactly)
+BACKGROUNDS
+
+ Generate A core for each of the 5 locations (16:9)
+
+ Lock 1 winner each → rename *_01a.png
+
+ Use each 01a as reference → generate 01b–01e
+
+ Convert to .webp → move to assets/backgrounds/
+
+PORTRAITS
+
+ Generate 4 recruiter portraits (square)
+
+ Export PNG → assets/portraits/
+
+ICONS
+
+ Generate 4 icons (square)
+
+ Export PNG → assets/icons/
+
+VIDEO
+
+ Pick best background B or E
+
+ Image-to-video → export MP4
+
+ Save as assets/video/loop_neonfog_01.mp4

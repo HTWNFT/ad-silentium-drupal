@@ -1,0 +1,13 @@
+kind,id,source_rel,build_rel,drupal_rel,size
+icon,enclavehandler,Icons/enclavehandler.png,_webp/icons_webp/512/enclavehandler.webp,outskirts/icons/512/enclavehandler.webp,512
+icon,enclavehandler,Icons/enclavehandler.png,_webp/icons_webp/256/enclavehandler.webp,outskirts/icons/256/enclavehandler.webp,256
+icon,enclavehandler,Icons/enclavehandler.png,_webp/icons_webp/128/enclavehandler.webp,outskirts/icons/128/enclavehandler.webp,128
+icon,genescribe,Icons/genescribe.png,_webp/icons_webp/512/genescribe.webp,outskirts/icons/512/genescribe.webp,512
+icon,genescribe,Icons/genescribe.png,_webp/icons_webp/256/genescribe.webp,outskirts/icons/256/genescribe.webp,256
+icon,genescribe,Icons/genescribe.png,_webp/icons_webp/128/genescribe.webp,outskirts/icons/128/genescribe.webp,128
+icon,scrapbroker,Icons/scrapbroker.png,_webp/icons_webp/512/scrapbroker.webp,outskirts/icons/512/scrapbroker.webp,512
+icon,scrapbroker,Icons/scrapbroker.png,_webp/icons_webp/256/scrapbroker.webp,outskirts/icons/256/scrapbroker.webp,256
+icon,scrapbroker,Icons/scrapbroker.png,_webp/icons_webp/128/scrapbroker.webp,outskirts/icons/128/scrapbroker.webp,128
+icon,signalcultliason,Icons/signalcultliason.png,_webp/icons_webp/512/signalcultliason.webp,outskirts/icons/512/signalcultliason.webp,512
+icon,signalcultliason,Icons/signalcultliason.png,_webp/icons_webp/256/signalcultliason.webp,outskirts/icons/256/signalcultliason.webp,256
+icon,signalcultliason,Icons/signalcultliason.png,_webp/icons_webp/128/signalcultliason.webp,outskirts/icons/128/signalcultliason.webp,128

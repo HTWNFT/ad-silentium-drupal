@@ -1,0 +1,38 @@
+$SRC = "$env:USERPROFILE\Downloads"
+$DST = "C:\XAMPP11032025\htdocs\STIKWALLET11202025\games\outskirts-of-hell\vol1_ad_silentium\assets\backgrounds"
+
+$files = Get-ChildItem $SRC -File |
+  Where-Object { $_.Name -match '^ChatGPT Image.*\.(png|jpg|jpeg)$' } |
+  Sort-Object LastWriteTime -Descending |
+  Select-Object -First 5 |
+  Sort-Object LastWriteTime
+
+$names = @("bg_wlan_grove_01","bg_wlan_grove_01a","bg_wlan_grove_01b","bg_wlan_grove_01c","bg_wlan_grove_01d")
+
+for ($i=0; $i -lt 5; $i++) {
+  magick $files[$i].FullName -strip -define webp:method=6 -quality 88 (Join-Path $DST ($names[$i]+".webp"))
+}
+Get-ChildItem $DST -Filter "bg_wlan_grove_*.webp" | Select Name, Length
+
+OR
+
+$SRC = "$env:USERPROFILE\Downloads"
+$DST = "C:\XAMPP11032025\htdocs\STIKWALLET11202025\games\outskirts-of-hell\vol1_ad_silentium\assets\backgrounds"
+
+# Get newest 5 ChatGPT Image files
+$files = Get-ChildItem $SRC -File |
+  Where-Object { $_.Name -match '^ChatGPT Image.*\.(png|jpg|jpeg)$' } |
+  Sort-Object LastWriteTime -Descending |
+  Select-Object -First 5 |
+  Sort-Object LastWriteTime
+
+if ($files.Count -lt 5) { throw "Need 5 ChatGPT Image files in Downloads; found $($files.Count)." }
+
+# Rename targets as needed per scene
+$names = @("bg_NEXTSCENE_01","bg_NEXTSCENE_01a","bg_NEXTSCENE_01b","bg_NEXTSCENE_01c","bg_NEXTSCENE_01d")
+
+for ($i=0; $i -lt 5; $i++) {
+  magick $files[$i].FullName -strip -define webp:method=6 -quality 88 (Join-Path $DST ($names[$i] + ".webp"))
+}
+
+Get-ChildItem $DST -Filter "bg_*.webp" | Sort LastWriteTime -Descending | Select -First 10 Name, Length

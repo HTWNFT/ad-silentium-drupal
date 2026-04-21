@@ -1,0 +1,15 @@
+function Set-DrupalUserPassword {
+  param(
+    [string]$Root = "C:\XAMPP11032025\htdocs\STIKWALLET11202025",
+    [Parameter(Mandatory=$true)][string]$Username,
+    [Parameter(Mandatory=$true)][string]$NewPassword
+  )
+
+  Set-Location $Root
+  $Drush = Join-Path $Root "vendor\bin\drush.php"
+
+  php $Drush user:password $Username $NewPassword
+  php $Drush cr
+}
+
+Set-DrupalUserPassword -Username "nathan" -NewPassword 'N@th@nR1TZ03673'

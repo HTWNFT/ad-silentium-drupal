@@ -1,0 +1,68 @@
+# === OUTSKIRTS OF HELL - Assets Skeleton Builder ===
+# Change this to wherever you want your "assets" root to live.
+# Example: C:\stikwallet\outskirts_of_hell\assets
+$AssetsRoot = "C:"C:\Users\natha\Downloads\assets"
+
+# 9 House slugs (folder-safe)
+$Houses = @(
+  "vesperin",
+  "calderoux",
+  "mournval",
+  "dravessa",
+  "kyranth",
+  "aurelianth",
+  "vahloran",
+  "sablehart",
+  "noxmere"
+)
+
+# Helper: create directory if missing
+function New-Dir($Path) {
+  New-Item -ItemType Directory -Force -Path $Path | Out-Null
+}
+
+# Root
+New-Dir $AssetsRoot
+
+# Core branches
+$Dirs = @(
+  "portraits",
+  "portraits\elites",
+  "portraits\mutants",
+  "portraits\mutants\loyalist",
+  "portraits\mutants\ronin",
+  "icons",
+  "icons\houses",
+  "_imports"
+)
+
+foreach ($d in $Dirs) { New-Dir (Join-Path $AssetsRoot $d) }
+
+# House cascades
+foreach ($h in $Houses) {
+  New-Dir (Join-Path $AssetsRoot "portraits\elites\house_$h")
+  New-Dir (Join-Path $AssetsRoot "portraits\mutants\loyalist\house_$h")
+  New-Dir (Join-Path $AssetsRoot "portraits\mutants\ronin\house_$h")
+}
+
+# Optional: drop placeholder index/readme files so you always know where you are
+$Placeholders = @(
+  "portraits\README_Portraits.md",
+  "portraits\elites\ELITES_INDEX.txt",
+  "portraits\mutants\MUTANTS_INDEX.txt",
+  "portraits\mutants\RONIN_INDEX.txt",
+  "icons\ICON_INDEX.txt",
+  "_imports\media_portraits.csv",
+  "_imports\mutations_records.csv"
+)
+
+foreach ($p in $Placeholders) {
+  $full = Join-Path $AssetsRoot $p
+  if (-not (Test-Path $full)) { New-Item -ItemType File -Force -Path $full | Out-Null }
+}
+
+Write-Host "`nDONE. Assets skeleton created at:`n$AssetsRoot`n"
+
+# Show a quick tree (2 levels deep)
+Write-Host "Top-level structure:"
+Get-ChildItem $AssetsRoot -Directory | Select-Object Name

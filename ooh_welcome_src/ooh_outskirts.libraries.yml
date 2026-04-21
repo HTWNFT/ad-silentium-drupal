@@ -1,0 +1,37 @@
+base:
+  version: 1.x
+  css:
+    theme:
+      css/ooh_outskirts.css: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+dossier:
+  version: 1.x
+  js:
+    js/ooh_dossier.js: {}
+  dependencies:
+    - ooh_outskirts/base
+    - core/drupalSettings
+    - core/once
+
+play:
+  version: 1.x
+  js:
+    js/ooh_play.js: {}
+  dependencies:
+    - ooh_outskirts/base
+    - core/once
+
+hero_carousel:
+  version: 1.x
+  js:
+    js/ooh-hero-carousel.js: {}
+  dependencies:
+    - ooh_outskirts/base
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+
+

@@ -1,0 +1,121 @@
+####################################################################
+MARE (OCEAN) — CORE 03: COMBAT CURRENT CORRIDOR
+####################################################################
+
+File: bg_mare_03_core_combat_current_corridor_v01.png
+PROMPT:
+16:9 cinematic game background, underwater combat zone: hard-edged “current corridor” framed by ruin ribs and kelp silhouettes, strong simple cover geometry, limited visibility with clean controlled haze. Cold rim light, steel/ash/obsidian palette, high contrast realism, controlled glow only, no characters.
+AVOID:
+(GLOBAL AVOID) + muzzle flashes, visible fighters, bright bioluminescent creatures
+
+File: bg_mare_03A_silent_approach_v01.png
+PROMPT:
+Same composition as CORE. “Silent Approach” mood: darker exposure, reduced particulate, corridor feels wider and emptier, stealth tension.
+AVOID:
+(GLOBAL AVOID) + bright highlights, neon accents
+
+File: bg_mare_03B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: soft shimmer in the water column, faint light drift haze across distance, reflections diffused slightly, restrained realism.
+AVOID:
+(GLOBAL AVOID) + graphic overlays, sharp glitch shapes
+
+File: bg_mare_03C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: faint distortion-like haze in the far distance (subtle), one small controlled glow point on a conduit node (no markings), fog/silt bands break visibility.
+AVOID:
+(GLOBAL AVOID) + strong glitch blocks, readable panels, neon pulses
+
+File: bg_mare_03D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: silt settling, dimmer edges, calmer current, debris minimal and non-descript, somber calm.
+AVOID:
+(GLOBAL AVOID) + explosions, gore
+
+File: bg_mare_03E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: controlled teal conduit flare brightens select corridor edges with crisp reflections, restrained volumetric haze, high contrast realism, no characters.
+AVOID:
+(GLOBAL AVOID) + neon bloom everywhere, oversaturation
+
+
+####################################################################
+MARE (OCEAN) — CORE 04: AFTERMATH SILT QUIET
+####################################################################
+
+File: bg_mare_04_core_aftermath_silt_quiet_v01.png
+PROMPT:
+16:9 cinematic game background, aftermath quiet midwater: ruins and kelp silhouettes remain, current calms, silt slowly settles in layered bands, minimal controlled glow reflections. Cold rim light, steel/ash/obsidian palette, high contrast realism, heavy negative space, no characters.
+AVOID:
+(GLOBAL AVOID) + warm sun shafts, peaceful aquarium vibe, colorful marine life
+
+File: bg_mare_04A_silent_approach_v01.png
+PROMPT:
+Same composition as CORE. “Silent Approach” mood: darker exposure, thicker silt bands, silhouettes fade into negative space, stealth dread.
+AVOID:
+(GLOBAL AVOID) + bright highlights, neon accents
+
+File: bg_mare_04B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: soft drift shimmer in the water column, faint light drift haze, reflections diffused slightly, restrained realism.
+AVOID:
+(GLOBAL AVOID) + graphic overlays, neon beams
+
+File: bg_mare_04C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: faint interference haze, uneven segmented glow implied on a distant conduit seam (subtle), fog/silt bands cut visibility.
+AVOID:
+(GLOBAL AVOID) + heavy scanlines, strong glitch blocks
+
+File: bg_mare_04D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: even calmer current, silt settling emphasized, dimmer highlights, somber stillness.
+AVOID:
+(GLOBAL AVOID) + chaos clutter, explosions
+
+File: bg_mare_04E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: a distant beacon flare adds controlled teal highlights on select ruin edges, restrained volumetric haze, crisp reflections, no characters.
+AVOID:
+(GLOBAL AVOID) + neon overload, heavy bloom
+
+
+####################################################################
+MARE (OCEAN) — CORE 05: BOSS ABYSSAL TRENCH GATE
+####################################################################
+
+File: bg_mare_05_core_boss_trench_gate_v01.png
+PROMPT:
+16:9 cinematic game background, abyssal trench boss arena: a massive ribbed “gate” structure embedded in a trench wall, deep black negative space beyond, sharp angular ribs, minimal controlled glow highlights tracing a few edges. Cold rim light, severe shadows, steel/ash/obsidian palette, high-contrast realism, oppressive scale, no characters.
+AVOID:
+(GLOBAL AVOID) + giant monster silhouettes, showing the boss figure, dramatic lens flare
+
+File: bg_mare_05A_silent_approach_v01.png
+PROMPT:
+Same composition as CORE. “Silent Approach” mood: darker exposure, glow reduced, haze thicker, gate silhouette more ominous, minimal particles.
+AVOID:
+(GLOBAL AVOID) + bright spotlights, neon accents
+
+File: bg_mare_05B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: soft shimmer in pressure haze, faint light drift around gate ribs, teal glow diffused subtly, restrained realism.
+AVOID:
+(GLOBAL AVOID) + graphic overlays, sharp glitch shapes
+
+File: bg_mare_05C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: uneven segmented glow along select gate seams (subtle), fog/silt bands partially occlude the threshold, faint interference haze (not UI).
+AVOID:
+(GLOBAL AVOID) + heavy scanlines, extreme distortion, warped ribs
+
+File: bg_mare_05D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: silt settling, dimmer highlights, calmer haze, somber stillness at the gate threshold.
+AVOID:
+(GLOBAL AVOID) + explosions, sparks everywhere, gore
+
+File: bg_mare_05E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: controlled teal flare traces a few gate ribs with crisp reflections, restrained volumetric haze, high contrast realism, no characters.
+AVOID:
+(GLOBAL AVOID) + neon bloom everywhere, oversaturation, lens flare blobs

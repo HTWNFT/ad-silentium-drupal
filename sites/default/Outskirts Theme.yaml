@@ -1,0 +1,15 @@
+name: Outskirts Theme
+type: theme
+description: 'Outskirts launch theme (Drupal + game content).'
+core_version_requirement: ^10 || ^11
+base theme: olivero
+
+libraries:
+  - outskirts_theme/global
+
+regions:
+  header: Header
+  primary_menu: Primary menu
+  hero: Hero
+  content: Content
+  footer: Footer

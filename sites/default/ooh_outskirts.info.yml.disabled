@@ -1,0 +1,7 @@
+name: 'OOH Outskirts Funnel'
+type: module
+description: 'Landing + dossier generator + play overlay blocks for Outskirts of Hell: Ad Silentium.'
+package: 'OOHLaunch'
+core_version_requirement: '^10 || ^11'
+dependencies:
+  - drupal:block

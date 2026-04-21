@@ -1,0 +1,9 @@
+C:\xampp\htdocs\STIKWALLET11202025\modules\custom\ooh_outskirts\
+  ooh_outskirts.info.yml
+  ooh_outskirts.libraries.yml
+  css\ooh_outskirts.css
+  js\ooh_dossier.js
+  js\ooh_play.js
+  src\Plugin\Block\OohLandingBlock.php
+  src\Plugin\Block\OohDossierBlock.php
+  src\Plugin\Block\OohPlayBlock.php

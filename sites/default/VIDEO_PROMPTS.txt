@@ -1,0 +1,130 @@
+====================================================================
+GLOBAL VIDEO LOOP STYLE (apply to EVERY PROMPT)
+====================================================================
+- 16:9 cinematic game environment video loop (6–8 seconds), seamless loop
+- No readable text, no logos, no UI/HUD, no watermarks
+- Cold rim light, steel/ash/obsidian palette, high-contrast silhouettes
+- Controlled glow only (minimal, purposeful), militant thriller tone
+- Motion: slow camera push or lateral drift + subtle parallax + atmospheric particles
+- Keep scene readable at a distance (bold shapes, avoid micro-clutter)
+
+GLOBAL AVOID (apply to every AVOID):
+text, letters, numbers, logos, watermarks, UI/HUD, menus, captions, subtitles,
+close-up faces, detailed characters, crowds, bright neon rainbow palettes,
+excessive bloom, strobing lights, heavy lens flare, shakycam, muddy low contrast,
+cartoon style, cute vibes, colorful coral/tropical vibes, gore, organs
+
+
+####################################################################
+CORE LOOP 01 — ESTABLISHING (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_01_establishing_cloud_trench_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. A hostile sky-world establishing shot: a massive cloud trench splitting the atmosphere, distant floating monolith platforms and cable-bridge silhouettes spanning open air. Cold rim light, steel/ash/obsidian palette, high contrast silhouettes, controlled glow only. Motion: slow forward camera push + drifting cloud shred + tiny distant debris specks, subtle parallax depth. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid bright sunny skies, avoid pretty pastel clouds, avoid birds
+
+File: loop_aer_var_01a_establishing_silent_approach_v01.mp4
+PROMPT:
+Same scene as CORE 01 but “Silent Approach” recon mood: darker exposure, fewer highlights, thinner cloud shred, distant platforms barely visible through haze. Motion: slower push-in, more negative space, faint comms-static atmosphere (subtle, not glitchy). No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid heavy glitch artifacts, avoid neon static
+
+File: loop_aer_var_01b_establishing_stormfront_warning_v01.mp4
+PROMPT:
+Same scene as CORE 01 but stormfront warning mood: deeper cloud massing, occasional far-background lightning-vein illumination (controlled and dim, not flashy). Motion: slightly faster cloud drift, tension-building. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid lightning dominating the frame, avoid bright purple storms
+
+
+####################################################################
+CORE LOOP 02 — TRAVERSAL (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_02_traversal_jetstream_run_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Sky traversal lane through jetstreams: angled pylons and suspended catwalk fragments form a readable path over open air. Cold rim light, high contrast silhouettes, controlled glow only. Motion: gentle lateral drift + jetstream streaks sliding past + minimal particulate. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid tunnel claustrophobia, avoid extreme motion blur
+
+File: loop_aer_var_02a_traversal_route_clear_v01.mp4
+PROMPT:
+Same traversal lane but “Route-Clear” ranger mood: clearer visibility, stronger silhouette readability, fewer particles, slightly wider camera framing to show safe path geometry. Motion: steady lateral glide, calm but tense. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid bright cheerful tone
+
+File: loop_aer_var_02b_traversal_extraction_run_v01.mp4
+PROMPT:
+Same traversal lane but “Extraction Run” rescue mood: add a single controlled beacon-like glow point far ahead (no text), subtle urgency. Motion: slightly faster camera drift, wind streaks stronger, still loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid flashing alarms, avoid HUD arrows
+
+
+####################################################################
+CORE LOOP 03 — COMBAT ZONE (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_03_combat_storm_lattice_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Aerial combat zone: storm-lattice pylons and suspended grid catwalk geometry, hard-edged cover silhouettes in turbulent clouds. Cold rim light, high contrast, steel/ash/obsidian palette, controlled glow only. Motion: slow camera push + subtle environmental shake (very mild) + drifting particles; far-background lightning faint and rare. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid muzzle flashes, avoid visible soldiers, avoid chaotic camera shake
+
+File: loop_aer_var_03a_combat_interference_sabotage_v01.mp4
+PROMPT:
+Same combat zone but “Signal Interference” sabotage mood: faint distortion haze in the distance (subtle), one small controlled glow point on a relay node (no markings). Motion: slower push-in, more oppressive atmosphere. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid strong glitch blocks, avoid readable panels
+
+File: loop_aer_var_03b_combat_overdrive_assault_v01.mp4
+PROMPT:
+Same combat zone but “Overdrive” assault mood: slightly brighter rim light, more particulate, occasional controlled spark arcs on a pylon edge (minimal). Motion: slightly faster push-in, increased tension, still clean silhouettes. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid sparks everywhere, avoid neon bloom
+
+
+####################################################################
+CORE LOOP 04 — AFTERMATH / QUIET (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_04_aftermath_dead_storm_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Aftermath quiet sky corridor: storm reduced to faint haze, pylons remain, a few broken cable lines hanging, minimal controlled glow reflections. Cold rim light, high contrast silhouettes, large negative space. Motion: slow drift + gentle cable sway + light particulate. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid “peaceful sunset,” avoid warm golden lighting
+
+File: loop_aer_var_04a_aftermath_safe_corridor_rescue_v01.mp4
+PROMPT:
+Same aftermath corridor but “Safe Corridor” rescue mood: slightly clearer visibility, fewer particles, one dim controlled guidance glow point far away (no text). Motion: slow forward drift, stable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid bright runway lights, avoid signage
+
+File: loop_aer_var_04b_aftermath_ghost_quiet_recon_v01.mp4
+PROMPT:
+Same aftermath corridor but “Ghost Quiet” recon mood: darker exposure, thicker haze, silhouettes fade into negative space. Motion: almost still, barely moving particulate, ominous calm. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid horror gore, avoid jump-scare lighting
+
+
+####################################################################
+CORE LOOP 05 — BOSS ARENA (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_05_boss_aerie_platform_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Sky boss arena: a wide brutalist platform-ring with a central throne-node spire, open-air drop beyond edges, distant megastructures barely visible through high-altitude haze. Cold rim light, severe shadows, steel/ash/obsidian palette, controlled glow only. Motion: slow orbiting camera drift (very subtle) + faint haze movement. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid showing the boss figure, avoid dramatic lens flare
+
+File: loop_aer_var_05a_boss_countdown_sabotage_v01.mp4
+PROMPT:
+Same boss arena but sabotage “Countdown Core” mood: the spire has a faint rhythmic controlled glow pulse (slow, not flashing). Motion: steady camera drift, tension rising, loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid fast blinking, avoid alarm text
+
+File: loop_aer_var_05b_boss_clash_assault_v01.mp4
+PROMPT:
+Same boss arena but “Boss Clash” assault mood: slightly stronger rim light and heavier haze turbulence; occasional tiny controlled spark on one ring segment. Motion: slightly faster drift, still stable and loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid explosive fireballs, avoid visible fighters

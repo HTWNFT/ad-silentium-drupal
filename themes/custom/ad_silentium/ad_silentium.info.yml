@@ -1,0 +1,9 @@
+name: Ad Silentium
+type: theme
+base theme: olivero
+description: Custom full-screen theme for Outskirts of Hell
+core_version_requirement: ^10
+libraries:
+  - ad_silentium/global
+regions:
+  content: Content

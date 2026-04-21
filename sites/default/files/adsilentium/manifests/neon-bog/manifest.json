@@ -1,0 +1,15 @@
+{
+  "scenario": "neon-bog",
+  "title": "Neon Bog",
+
+  "hero": "video_loops_neon_bog_core.mp4",
+
+  "slides": [
+    "video_loops_neon_bog_core.mp4",
+    "video_loops_neon_bog_signal_drift.mp4",
+    "video_loops_neon_bog_silent_approach.mp4",
+    "video_loops_neon_bog_aftermath.mp4"
+  ],
+
+  "background": "bg_neon_bog_core.webp"
+}

@@ -1,0 +1,56 @@
+MUTANT_INDEX.txt
+(45 Mutant Portrait Specs — filenames + formal/common/slurs)
+
+[01] portrait_mutant_vesperin_peregrine_cutthroat_v01.png | House: Vesperin | Code: AER-PRG | Formal: Vesperin AER-PRG “Falconid Praetorian” | Common: Peregrine Cutthroat | Slurs: Clipwing; Noble Bird | Animal: Peregrine Falcon
+[02] portrait_mutant_vesperin_barn_owl_lanternseer_v01.png | House: Vesperin | Code: AER-STR | Formal: Vesperin AER-STR “Strigiform Seer-Unit” | Common: Lanternseer | Slurs: Softbeak; Hush-Freak | Animal: Barn Owl
+[03] portrait_mutant_vesperin_harpy_eagle_talon_knight_v01.png | House: Vesperin | Code: AER-HRP | Formal: Vesperin AER-HRP “Crown-Talon Dominus” | Common: Talon Knight | Slurs: Meat-Kite; Perch-Born | Animal: Harpy Eagle
+[04] portrait_mutant_vesperin_vampire_bat_nocturne_v01.png | House: Vesperin | Code: AER-NCT | Formal: Vesperin AER-NCT “Nocturne Hemal Scout” | Common: Nocturne | Slurs: Ragwing; Sipper | Animal: Vampire Bat
+[05] portrait_mutant_vesperin_cassowary_butcher_v01.png | House: Vesperin | Code: AER-CSW | Formal: Vesperin AER-CSW “Casque-Butcher Shockline” | Common: Cassowary Butcher | Slurs: Knife-Chicken; Cresthead | Animal: Cassowary
+
+[06] portrait_mutant_calderoux_rhino_bulwark_v01.png | House: Calderoux | Code: BRX-RHN | Formal: Calderoux BRX-RHN “Horn-Bulwark Asset” | Common: Rhino Bulwark | Slurs: Brickhorn; Plowface | Animal: Rhinoceros
+[07] portrait_mutant_calderoux_hippo_mauler_v01.png | House: Calderoux | Code: BRX-HPP | Formal: Calderoux BRX-HPP “River-Jaw Mauler” | Common: Hippo Mauler | Slurs: Mudmaw; Ditch-Hog | Animal: Hippopotamus
+[08] portrait_mutant_calderoux_komodo_reaver_v01.png | House: Calderoux | Code: BRX-KMD | Formal: Calderoux BRX-KMD “Varanid Reaver Line” | Common: Komodo Reaver | Slurs: Tongue-Snake; Coldskin | Animal: Komodo Dragon
+[09] portrait_mutant_calderoux_bombardier_breacher_v01.png | House: Calderoux | Code: BRX-BMB | Formal: Calderoux BRX-BMB “Chitin Breacher Unit” | Common: Bombardier Breacher | Slurs: Pissbug; Shellrat | Animal: Bombardier Beetle
+[10] portrait_mutant_calderoux_electric_ray_stunner_v01.png | House: Calderoux | Code: BRX-RAY | Formal: Calderoux BRX-RAY “Electro-Stunner Chassis” | Common: Ray Stunner | Slurs: Pancake; Shockfish | Animal: Electric Ray
+
+[11] portrait_mutant_mournval_vulture_mortician_v01.png | House: Mournval | Code: CAR-VLT | Formal: Mournval CAR-VLT “Carrion Custodian” | Common: Vulture Mortician | Slurs: Grave-Kite; Pickbeak | Animal: Vulture
+[12] portrait_mutant_mournval_hyena_grin_raider_v01.png | House: Mournval | Code: CAR-HYN | Formal: Mournval CAR-HYN “Laugh-Raider Variant” | Common: Grin Raider | Slurs: Giggle-Mutt; Bone-Snicker | Animal: Hyena
+[13] portrait_mutant_mournval_leech_warden_v01.png | House: Mournval | Code: CAR-LCH | Formal: Mournval CAR-LCH “Sanguine Warden Organism” | Common: Leech Warden | Slurs: Sucker; Drain-Tube | Animal: Leech
+[14] portrait_mutant_mournval_mantis_sutureblade_v01.png | House: Mournval | Code: CAR-MNT | Formal: Mournval CAR-MNT “Sutureblade Ritual Guard” | Common: Sutureblade | Slurs: Prayer-Thing; Scissorlimb | Animal: Praying Mantis
+[15] portrait_mutant_mournval_mosquito_siphoner_v01.png | House: Mournval | Code: CAR-MSQ | Formal: Mournval CAR-MSQ “Siphoner Drone-Human” | Common: Siphoner | Slurs: Needle; Buzz-Leech | Animal: Mosquito
+
+[16] portrait_mutant_dravessa_wild_boar_ramguard_v01.png | House: Dravessa | Code: FER-BOR | Formal: Dravessa FER-BOR “Tusk-Ramguard Line” | Common: Ramguard | Slurs: Bristleback; Rooter | Animal: Wild Boar
+[17] portrait_mutant_dravessa_wolverine_ripper_v01.png | House: Dravessa | Code: FER-WLV | Formal: Dravessa FER-WLV “Ripper Compact Berserker” | Common: Ripper | Slurs: Stinkbear; Claw-Mutt | Animal: Wolverine
+[18] portrait_mutant_dravessa_honey_badger_breaker_v01.png | House: Dravessa | Code: FER-HBD | Formal: Dravessa FER-HBD “Breaker Indomitable” | Common: Breaker | Slurs: Stripe-Rat; Mean-Mole | Animal: Honey Badger
+[19] portrait_mutant_dravessa_cape_buffalo_stampeder_v01.png | House: Dravessa | Code: FER-BFF | Formal: Dravessa FER-BFF “Stampeder Bossline” | Common: Stampeder | Slurs: Hammerhead; Fence-Bull | Animal: Cape Buffalo
+[20] portrait_mutant_dravessa_tasmanian_devil_frenzied_v01.png | House: Dravessa | Code: FER-TDV | Formal: Dravessa FER-TDV “Frenzied Bite-Unit” | Common: Frenzied | Slurs: Yapper; Spin-Maw | Animal: Tasmanian Devil
+
+[21] portrait_mutant_kyranth_piranha_gnawer_v01.png | House: Kyranth | Code: PEL-PRN | Formal: Kyranth PEL-PRN “Gnawer Shearpack” | Common: Gnawer | Slurs: Nibber; Toothschool | Animal: Piranha
+[22] portrait_mutant_kyranth_barracuda_lancer_v01.png | House: Kyranth | Code: PEL-BRC | Formal: Kyranth PEL-BRC “Lancer Needlejaw” | Common: Lancer | Slurs: Spikejaw; Silver-Biter | Animal: Barracuda
+[23] portrait_mutant_kyranth_angler_lure_priest_v01.png | House: Kyranth | Code: PEL-ANG | Formal: Kyranth PEL-ANG “Lure-Priest Deepline” | Common: Lure-Priest | Slurs: Glow-Gulp; Baitface | Animal: Anglerfish
+[24] portrait_mutant_kyranth_moray_coil_biter_v01.png | House: Kyranth | Code: PEL-MRY | Formal: Kyranth PEL-MRY “Coil-Biter Trenchform” | Common: Coil-Biter | Slurs: Drainrope; Pipejaw | Animal: Moray Eel
+[25] portrait_mutant_kyranth_hammerhead_wrecker_v01.png | House: Kyranth | Code: PEL-HMR | Formal: Kyranth PEL-HMR “Wrecker Lateral-Eye” | Common: Wrecker | Slurs: Widehead; Boat-Club | Animal: Hammerhead Shark
+
+[26] portrait_mutant_aurelianth_aurochs_bannerhulk_v01.png | House: Aurelianth | Code: REG-AUR | Formal: Aurelianth REG-AUR “Bannerhulk Prime” | Common: Bannerhulk | Slurs: Yard-Ox; Hornbanner | Animal: Aurochs
+[27] portrait_mutant_aurelianth_mammoth_tusk_lord_v01.png | House: Aurelianth | Code: REG-MAM | Formal: Aurelianth REG-MAM “Tusk-Lord Colossus” | Common: Tusk-Lord | Slurs: Rugstack; Old-Tusk | Animal: Woolly Mammoth
+[28] portrait_mutant_aurelianth_smilodon_fang_prime_v01.png | House: Aurelianth | Code: REG-SML | Formal: Aurelianth REG-SML “Fang-Prime Sabercat” | Common: Fang-Prime | Slurs: Knifegrin; Museum-Cat | Animal: Smilodon
+[29] portrait_mutant_aurelianth_terror_bird_gate_kicker_v01.png | House: Aurelianth | Code: REG-TRB | Formal: Aurelianth REG-TRB “Gate-Kicker Beakline” | Common: Gate-Kicker | Slurs: Kickbird; Beak-Brute | Animal: Terror Bird
+[30] portrait_mutant_aurelianth_giant_elk_crownstag_v01.png | House: Aurelianth | Code: REG-ELK | Formal: Aurelianth REG-ELK “Crownstag Antler-Regent” | Common: Crownstag | Slurs: Branchhead; Rack-Rat | Animal: Giant Elk (Megaloceros)
+
+[31] portrait_mutant_vahloran_pangolin_scale_lock_v01.png | House: Vahloran | Code: CAV-PNG | Formal: Vahloran CAV-PNG “Scale-Lock Sentinel” | Common: Scale-Lock | Slurs: Shingleback; Tin-Runner | Animal: Pangolin
+[32] portrait_mutant_vahloran_armadillo_rollguard_v01.png | House: Vahloran | Code: CAV-ARM | Formal: Vahloran CAV-ARM “Rollguard Carapace” | Common: Rollguard | Slurs: Canback; Casket-Skin | Animal: Armadillo
+[33] portrait_mutant_vahloran_naked_molerat_tunnel_savant_v01.png | House: Vahloran | Code: CAV-NMR | Formal: Vahloran CAV-NMR “Tunnel Savant Worker-Kin” | Common: Tunnel Savant | Slurs: Pink Digger; Nubtooth | Animal: Naked Mole-Rat
+[34] portrait_mutant_vahloran_emperor_scorpion_stinger_adjunct_v01.png | House: Vahloran | Code: CAV-SCR | Formal: Vahloran CAV-SCR “Stinger Adjunct Chitinline” | Common: Stinger Adjunct | Slurs: Pincher; Tailhook | Animal: Emperor Scorpion
+[35] portrait_mutant_vahloran_trapdoor_spider_ambusher_v01.png | House: Vahloran | Code: CAV-TDS | Formal: Vahloran CAV-TDS “Ambusher Latchform” | Common: Ambusher | Slurs: Latchbug; Hatch-Crawler | Animal: Trapdoor Spider
+
+[36] portrait_mutant_sablehart_jaguar_shadow_pouncer_v01.png | House: Sablehart | Code: UMB-JGR | Formal: Sablehart UMB-JGR “Shadow Pouncer Line” | Common: Shadow Pouncer | Slurs: Spotcoat; Nightcat | Animal: Jaguar
+[37] portrait_mutant_sablehart_snow_leopard_ridge_stalker_v01.png | House: Sablehart | Code: UMB-SNL | Formal: Sablehart UMB-SNL “Ridge Stalker Paleform” | Common: Ridge Stalker | Slurs: Frost-Fur; Cliffcat | Animal: Snow Leopard
+[38] portrait_mutant_sablehart_lynx_hookear_sniper_v01.png | House: Sablehart | Code: UMB-LYN | Formal: Sablehart UMB-LYN “Hookear Listener-Killer” | Common: Hookear | Slurs: Tufthead; Bobtail | Animal: Lynx
+[39] portrait_mutant_sablehart_caracal_leap_slasher_v01.png | House: Sablehart | Code: UMB-CRC | Formal: Sablehart UMB-CRC “Leap Slasher” | Common: Leap Slasher | Slurs: Stickear; Sandcat | Animal: Caracal
+[40] portrait_mutant_sablehart_dire_wolf_pack_alpha_v01.png | House: Sablehart | Code: UMB-DRW | Formal: Sablehart UMB-DRW “Pack-Alpha Extantline” | Common: Pack-Alpha | Slurs: Gravehound; Oldfang | Animal: Dire Wolf
+
+[41] portrait_mutant_noxmere_cane_toad_blight_speaker_v01.png | House: Noxmere | Code: MYC-CTD | Formal: Noxmere MYC-CTD “Blight-Speaker Glandline” | Common: Blight-Speaker | Slurs: Wartmouth; Poison-Thunk | Animal: Cane Toad
+[42] portrait_mutant_noxmere_locust_swarm_herald_v01.png | House: Noxmere | Code: MYC-LCS | Formal: Noxmere MYC-LCS “Swarm Herald Chitterline” | Common: Swarm Herald | Slurs: Crop-Eater; Dustwing | Animal: Locust
+[43] portrait_mutant_noxmere_wasp_needle_host_v01.png | House: Noxmere | Code: MYC-WSP | Formal: Noxmere MYC-WSP “Needle Host Stingline” | Common: Needle Host | Slurs: Skewer; Buzzknife | Animal: Wasp
+[44] portrait_mutant_noxmere_cormorant_drown_hunter_v01.png | House: Noxmere | Code: MYC-CRM | Formal: Noxmere MYC-CRM “Drown Hunter Waterline” | Common: Drown Hunter | Slurs: Sinkbird; Wetknife | Animal: Cormorant
+[45] portrait_mutant_noxmere_lamprey_sucker_doctor_v01.png | House: Noxmere | Code: MYC-LMP | Formal: Noxmere MYC-LMP “Sucker-Doctor Ringjaw” | Common: Sucker-Doctor | Slurs: Donut-Maw; Plugface | Animal: Lamprey

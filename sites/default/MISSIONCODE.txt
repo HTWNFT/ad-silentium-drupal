@@ -1,0 +1,816 @@
+=============================
+UNIVERSAL PROMPTS (PASTE ONCE / REUSE)
+=============================
+
+[UNIVERSAL_PROMPT_PREFIX — MISSIONS]
+Cinematic far-future ruin sci-fi + dark esotericism tone. 16:9 frame, crisp silhouettes, cold rim light, steel/ash/obsidian palette, high contrast, controlled glow only, minimal haze, readable shapes, no UI panels. No text, no logos, no watermarks. “Mission card” composition: one clear focal event + 2–3 supporting story props. Avoid messy clutter.
+
+[UNIVERSAL_NEGATIVE — MISSIONS]
+text, letters, numbers, subtitles, logos, watermarks, real-world brands, modern streetwear, bright rainbow palettes, neon bloom, lens flare, overexposed highlights, gore, exposed organs, splatter, pornographic/nudity, comedic/cartoon style, low-contrast fog soup, chaotic crowds, unreadable tiny detail everywhere.
+
+[UNIVERSAL_PROMPT_PREFIX — CORE LOOPS/SCENES]
+Seamless looping environment shot (5–7s loop feeling). Locked camera or slow parallax drift. No characters in foreground. Clear silhouette layering, cold rim light, steel/ash/obsidian palette, high contrast, controlled glow only. No text/logos/watermarks.
+
+[UNIVERSAL_NEGATIVE — CORE LOOPS/SCENES]
+text, logos, watermarks, UI overlays, heavy neon, lens flare, bloom, busy particle storm, warping artifacts, shaky cam, crowd motion, foreground character faces, gore.
+
+
+=========================================================
+MISSIONS (200) — EACH BLOCK IS “UNIQUE ADD-ON PROMPT”
+(Use with UNIVERSAL_PROMPT_PREFIX — MISSIONS + UNIVERSAL_NEGATIVE — MISSIONS)
+=========================================================
+
+-------------------------
+ENCLAVE HANDLER (EH) — toxic accent color: MAGENTA (one small beacon/LED only)
+-------------------------
+
+[EH-CMB-L01] mission_eh_combat_l01_v01
+PROMPT: Enclave Handler Combat L01 — bunker perimeter breach at dusk; two human operatives silhouetted behind a low barricade while a single sealed gate crackles shut. EXACTLY ONE toxic accent: one tiny magenta comms LED on a wall-mounted checkpoint node.
+
+[EH-CMB-L02] mission_eh_combat_l02_v01
+PROMPT: Combat L02 — underpass killzone with cable-trace walls; one mutant silhouette vaulting a rail as a handler drone spotlight cuts the smoke. EXACTLY ONE toxic accent: one magenta status dot on the drone belly.
+
+[EH-CMB-L03] mission_eh_combat_l03_v01
+PROMPT: Combat L03 — stairwell purge inside a concrete megastructure; ricochet sparks (subtle) off a hex badge plate on a downed riot shield. EXACTLY ONE toxic accent: one magenta LED on the shield edge.
+
+[EH-CMB-L04] mission_eh_combat_l04_v01
+PROMPT: Combat L04 — rain-slick harbor bulkhead; operatives fight along a chain fence with a looming rusted crane. EXACTLY ONE toxic accent: one magenta beacon atop a security pylon.
+
+[EH-CMB-L05] mission_eh_combat_l05_v01
+PROMPT: Combat L05 — collapsing skybridge between towers; wind-driven debris, one enemy silhouette thrown backward mid-air. EXACTLY ONE toxic accent: one magenta emergency strobe on a bridge junction.
+
+[EH-CMB-L06] mission_eh_combat_l06_v01
+PROMPT: Combat L06 — submerged service tunnel (waterline visible); operatives wade with reflections on concrete. EXACTLY ONE toxic accent: one magenta indicator on a watertight door wheel.
+
+[EH-CMB-L07] mission_eh_combat_l07_v01
+PROMPT: Combat L07 — rooftop anti-air platform; distant flying war-drones as silhouettes. EXACTLY ONE toxic accent: one magenta targeting dot on a tripod relay.
+
+[EH-CMB-L08] mission_eh_combat_l08_v01
+PROMPT: Combat L08 — refinery canyon with steam stacks; coordinated push through pipe shadows. EXACTLY ONE toxic accent: one magenta comms LED on a shoulder earpiece.
+
+[EH-CMB-L09] mission_eh_combat_l09_v01
+PROMPT: Combat L09 — ocean rig catwalks under storm; waves below, a hulking mutant silhouette climbs a ladder. EXACTLY ONE toxic accent: one magenta warning light on a catwalk junction box.
+
+[EH-CMB-L10] mission_eh_combat_l10_v01
+PROMPT: Combat L10 — “Boss-approach” corridor: sealed gene-vault door with layered hex plating; operatives framed tiny against it. EXACTLY ONE toxic accent: one magenta lock-light at the vault seam.
+
+[EH-RSC-L01] mission_eh_rescue_l01_v01
+PROMPT: Rescue/Recovery L01 — retrieve a stranded courier at a checkpoint ruin; one limp figure dragged behind a barricade. EXACTLY ONE toxic accent: one magenta SOS LED on a wrist module.
+
+[EH-RSC-L02] mission_eh_rescue_l02_v01
+PROMPT: Rescue L02 — extract a defector from a stairwell; shadows of pursuit on the walls. EXACTLY ONE toxic accent: one magenta elevator-call node blinking.
+
+[EH-RSC-L03] mission_eh_rescue_l03_v01
+PROMPT: Rescue L03 — recover a sealed data case from a toppled patrol vehicle; case half-buried in ash. EXACTLY ONE toxic accent: one magenta latch indicator on the case.
+
+[EH-RSC-L04] mission_eh_rescue_l04_v01
+PROMPT: Rescue L04 — night harbor extraction; small boat silhouette under a pier while operatives cover. EXACTLY ONE toxic accent: one magenta dock beacon.
+
+[EH-RSC-L05] mission_eh_rescue_l05_v01
+PROMPT: Rescue L05 — rescue hostages from a derelict transit car; silhouettes behind frosted windows. EXACTLY ONE toxic accent: one magenta door-release LED.
+
+[EH-RSC-L06] mission_eh_rescue_l06_v01
+PROMPT: Rescue L06 — underwater salvage retrieval: a sealed crate tethered by rope in a flooded chamber. EXACTLY ONE toxic accent: one magenta pressure light on the crate.
+
+[EH-RSC-L07] mission_eh_rescue_l07_v01
+PROMPT: Rescue L07 — sky-elevator platform evac; wind shear, dangling cables, evac capsule silhouette. EXACTLY ONE toxic accent: one magenta capsule-ready LED.
+
+[EH-RSC-L08] mission_eh_rescue_l08_v01
+PROMPT: Rescue L08 — retrieve a wounded handler officer across a pipe bridge; one figure carried. EXACTLY ONE toxic accent: one magenta medic-tag LED.
+
+[EH-RSC-L09] mission_eh_rescue_l09_v01
+PROMPT: Rescue L09 — storm rig medevac; stretcher silhouette under a tarp, ocean spray. EXACTLY ONE toxic accent: one magenta flare beacon (small, controlled).
+
+[EH-RSC-L10] mission_eh_rescue_l10_v01
+PROMPT: Rescue L10 — recover a “keyed” collar-ring artifact from a dead zone altar inside concrete ruins. EXACTLY ONE toxic accent: one magenta seal-light on the artifact casing.
+
+[EH-SUR-L01] mission_eh_surveillance_l01_v01
+PROMPT: Surveillance L01 — observe a mutant patrol route from a cracked watchtower; binocular silhouette foreground. EXACTLY ONE toxic accent: one magenta reticle dot on a scope module.
+
+[EH-SUR-L02] mission_eh_surveillance_l02_v01
+PROMPT: Surveillance L02 — map tunnel traffic at a service hatch; chalk marks on metal (no readable text). EXACTLY ONE toxic accent: one magenta sensor LED on a drop-probe.
+
+[EH-SUR-L03] mission_eh_surveillance_l03_v01
+PROMPT: Surveillance L03 — rooftop relay triangulation with antenna silhouettes. EXACTLY ONE toxic accent: one magenta “link” LED on the relay head.
+
+[EH-SUR-L04] mission_eh_surveillance_l04_v01
+PROMPT: Surveillance L04 — harbor container maze; tracking a clandestine exchange at distance. EXACTLY ONE toxic accent: one magenta tracker LED on a placed tag.
+
+[EH-SUR-L05] mission_eh_surveillance_l05_v01
+PROMPT: Surveillance L05 — skybridge overwatch; long perspective lines and tiny figures far below. EXACTLY ONE toxic accent: one magenta camera-node LED on a clamp.
+
+[EH-SUR-L06] mission_eh_surveillance_l06_v01
+PROMPT: Surveillance L06 — flooded corridor listening post; ripples, reflections, sonar-like props (no UI). EXACTLY ONE toxic accent: one magenta ping LED on a floating buoy.
+
+[EH-SUR-L07] mission_eh_surveillance_l07_v01
+PROMPT: Surveillance L07 — anti-air scan on rooftop; distant silhouettes of aerial movement. EXACTLY ONE toxic accent: one magenta scan-bead on a dish mount.
+
+[EH-SUR-L08] mission_eh_surveillance_l08_v01
+PROMPT: Surveillance L08 — refinery overlook; counting supply drones in smog. EXACTLY ONE toxic accent: one magenta tally LED on a wristband.
+
+[EH-SUR-L09] mission_eh_surveillance_l09_v01
+PROMPT: Surveillance L09 — ocean rig perimeter watch; searchlight cones and shadow movement on ladders. EXACTLY ONE toxic accent: one magenta light on a ladder lock.
+
+[EH-SUR-L10] mission_eh_surveillance_l10_v01
+PROMPT: Surveillance L10 — confirm warlord convoy route at a sealed canyon gate; massive doors, tiny silhouettes. EXACTLY ONE toxic accent: one magenta gate-sensor dot.
+
+[EH-SAB-L01] mission_eh_sabotage_l01_v01
+PROMPT: Sabotage L01 — cut power to a checkpoint pylon; operative silhouette prying a panel. EXACTLY ONE toxic accent: one magenta “armed” LED on a charge.
+
+[EH-SAB-L02] mission_eh_sabotage_l02_v01
+PROMPT: Sabotage L02 — jam a comms relay on a rooftop antenna cluster. EXACTLY ONE toxic accent: one magenta jammer LED on a clamp device.
+
+[EH-SAB-L03] mission_eh_sabotage_l03_v01
+PROMPT: Sabotage L03 — disable a sealed gate wheel with cable-trace geometry; sparks minimal. EXACTLY ONE toxic accent: one magenta lockout dot on the mechanism.
+
+[EH-SAB-L04] mission_eh_sabotage_l04_v01
+PROMPT: Sabotage L04 — harbor crane control box tamper; big silhouette of crane above. EXACTLY ONE toxic accent: one magenta access LED on the control box.
+
+[EH-SAB-L05] mission_eh_sabotage_l05_v01
+PROMPT: Sabotage L05 — plant a shaped charge under a skybridge strut. EXACTLY ONE toxic accent: one magenta timer LED (no digits).
+
+[EH-SAB-L06] mission_eh_sabotage_l06_v01
+PROMPT: Sabotage L06 — flood a tunnel by opening a sluice wheel; water surge implied. EXACTLY ONE toxic accent: one magenta valve-status LED.
+
+[EH-SAB-L07] mission_eh_sabotage_l07_v01
+PROMPT: Sabotage L07 — sabotage an anti-air targeting dish with a quick splice. EXACTLY ONE toxic accent: one magenta cut-confirm LED on a tool module.
+
+[EH-SAB-L08] mission_eh_sabotage_l08_v01
+PROMPT: Sabotage L08 — corrupt a refinery conveyor line; silhouettes of falling crates. EXACTLY ONE toxic accent: one magenta “halt” node on a junction.
+
+[EH-SAB-L09] mission_eh_sabotage_l09_v01
+PROMPT: Sabotage L09 — rig catwalk collapse on an ocean platform. EXACTLY ONE toxic accent: one magenta arming LED on a bolt charge.
+
+[EH-SAB-L10] mission_eh_sabotage_l10_v01
+PROMPT: Sabotage L10 — breach-prep: disable the gene-vault outer ring without triggering alarms; massive circular door. EXACTLY ONE toxic accent: one magenta bypass LED on a collar-key tool.
+
+[EH-ESC-L01] mission_eh_escort_l01_v01
+PROMPT: Escort/Extraction L01 — escort a supply cart through a rubble corridor; long shadows. EXACTLY ONE toxic accent: one magenta cart beacon dot.
+
+[EH-ESC-L02] mission_eh_escort_l02_v01
+PROMPT: Escort L02 — extraction across a checkpoint bridge; operatives form a moving wedge. EXACTLY ONE toxic accent: one magenta “go” LED on a handheld signal puck.
+
+[EH-ESC-L03] mission_eh_escort_l03_v01
+PROMPT: Escort L03 — defend an engineer team sealing a door; silhouettes with tools (no readable markings). EXACTLY ONE toxic accent: one magenta seal-light at the door seam.
+
+[EH-ESC-L04] mission_eh_escort_l04_v01
+PROMPT: Escort L04 — escort a boat loadout along a dock corridor. EXACTLY ONE toxic accent: one magenta dock marker light.
+
+[EH-ESC-L05] mission_eh_escort_l05_v01
+PROMPT: Escort L05 — moving through a transit tunnel while holding a rear guard. EXACTLY ONE toxic accent: one magenta rear-signal LED on a baton.
+
+[EH-ESC-L06] mission_eh_escort_l06_v01
+PROMPT: Escort L06 — escort divers to a flooded access hatch; reflective waterline. EXACTLY ONE toxic accent: one magenta hatch-indicator dot.
+
+[EH-ESC-L07] mission_eh_escort_l07_v01
+PROMPT: Escort L07 — extraction to a sky-elevator capsule; cables sway. EXACTLY ONE toxic accent: one magenta capsule guidance light.
+
+[EH-ESC-L08] mission_eh_escort_l08_v01
+PROMPT: Escort L08 — convoy through refinery canyon; silhouettes of armored carts. EXACTLY ONE toxic accent: one magenta lead-cart beacon.
+
+[EH-ESC-L09] mission_eh_escort_l09_v01
+PROMPT: Escort L09 — holdout on an ocean rig helipad while evac approaches (no vehicle detail needed). EXACTLY ONE toxic accent: one magenta landing marker dot.
+
+[EH-ESC-L10] mission_eh_escort_l10_v01
+PROMPT: Escort L10 — final approach escort: carry a vault-key relic through a narrowing concrete throat toward the boss gate. EXACTLY ONE toxic accent: one magenta relic seal-light.
+
+
+-------------------------
+SIGNAL CULT LIAISON (SC) — toxic accent color: MAGENTA (one small glyph/beacon only)
+-------------------------
+
+[SC-CMB-L01] mission_sc_combat_l01_v01
+PROMPT: Signal Cult Combat L01 — alley of broken antennas; psychic “echo” distortions as subtle air shimmer around silhouettes. EXACTLY ONE toxic accent: one tiny magenta glow on a pendant pause-glyph (no text).
+
+[SC-CMB-L02] mission_sc_combat_l02_v01
+PROMPT: Combat L02 — stairwell of hanging cables like rosary strands; shadow-figures clash. EXACTLY ONE toxic accent: one magenta tuning bead on a handheld receiver.
+
+[SC-CMB-L03] mission_sc_combat_l03_v01
+PROMPT: Combat L03 — underpass with resonance drums (abstract metal rings); enemies blur at edges. EXACTLY ONE toxic accent: one magenta node on a ring talisman.
+
+[SC-CMB-L04] mission_sc_combat_l04_v01
+PROMPT: Combat L04 — shoreline signal-scrap field; waves and antenna ribs; one foe collapses into static-like dust (non-gory). EXACTLY ONE toxic accent: one magenta beacon on a sand-staked coil.
+
+[SC-CMB-L05] mission_sc_combat_l05_v01
+PROMPT: Combat L05 — skybridge with radio mast silhouette; storm clouds churn. EXACTLY ONE toxic accent: one magenta mast-tip light.
+
+[SC-CMB-L06] mission_sc_combat_l06_v01
+PROMPT: Combat L06 — flooded chamber where ripples form concentric “frequency” rings. EXACTLY ONE toxic accent: one magenta glow dot on a floating charm.
+
+[SC-CMB-L07] mission_sc_combat_l07_v01
+PROMPT: Combat L07 — rooftop “listening altar” of dish arrays; aerial silhouettes above. EXACTLY ONE toxic accent: one magenta sync-light on the central dish hub.
+
+[SC-CMB-L08] mission_sc_combat_l08_v01
+PROMPT: Combat L08 — refinery canyon with humming conduit arches; psychic shockwave bends dust. EXACTLY ONE toxic accent: one magenta pulse on a wrist receiver.
+
+[SC-CMB-L09] mission_sc_combat_l09_v01
+PROMPT: Combat L09 — ocean rig during signal storm; mist + cables; enemy silhouettes stagger like puppets. EXACTLY ONE toxic accent: one magenta node on a dangling coil.
+
+[SC-CMB-L10] mission_sc_combat_l10_v01
+PROMPT: Combat L10 — boss-approach: colossal broadcast spire base, carved with unreadable micro-etching (decorative). EXACTLY ONE toxic accent: one magenta “lock” glow at the spire access hatch.
+
+[SC-RSC-L01] mission_sc_rescue_l01_v01
+PROMPT: Rescue/Recovery L01 — recover a lost psychic communicator from a collapsed room; small shrine of cables. EXACTLY ONE toxic accent: one magenta glow dot on the recovered receiver.
+
+[SC-RSC-L02] mission_sc_rescue_l02_v01
+PROMPT: Rescue L02 — extract a “listener” acolyte from an interference corridor; silhouettes guided by hand-signals. EXACTLY ONE toxic accent: one magenta guidance dot on a pendant.
+
+[SC-RSC-L03] mission_sc_rescue_l03_v01
+PROMPT: Rescue L03 — retrieve a sealed signal-coin from a dead courier’s satchel (no body focus). EXACTLY ONE toxic accent: one magenta edge-glow on the coin.
+
+[SC-RSC-L04] mission_sc_rescue_l04_v01
+PROMPT: Rescue L04 — harbor pier recovery of a drifting buoy-relic. EXACTLY ONE toxic accent: one magenta buoy dot.
+
+[SC-RSC-L05] mission_sc_rescue_l05_v01
+PROMPT: Rescue L05 — free hostages from a “quiet room” of dampened antennas; doors heavy. EXACTLY ONE toxic accent: one magenta latch glow on a dampener box.
+
+[SC-RSC-L06] mission_sc_rescue_l06_v01
+PROMPT: Rescue L06 — flooded tunnel: retrieve a submerged coil-core from a chain tether. EXACTLY ONE toxic accent: one magenta core-node glow.
+
+[SC-RSC-L07] mission_sc_rescue_l07_v01
+PROMPT: Rescue L07 — sky platform rescue: pull a dangling operator back from the edge. EXACTLY ONE toxic accent: one magenta tether clasp light.
+
+[SC-RSC-L08] mission_sc_rescue_l08_v01
+PROMPT: Rescue L08 — refinery interior recovery: carry an unconscious “interpreter” past conduit arches. EXACTLY ONE toxic accent: one magenta heartbeat dot on a small charm.
+
+[SC-RSC-L09] mission_sc_rescue_l09_v01
+PROMPT: Rescue L09 — ocean rig evac: rescue a signal-tech trapped behind a sealed hatch. EXACTLY ONE toxic accent: one magenta hatch seal-light.
+
+[SC-RSC-L10] mission_sc_rescue_l10_v01
+PROMPT: Rescue L10 — recover the “prime frequency key” from an antechamber beneath the broadcast spire. EXACTLY ONE toxic accent: one magenta key-node glow.
+
+[SC-SUR-L01] mission_sc_surveillance_l01_v01
+PROMPT: Surveillance L01 — alley listening post; whispering cable strands; distant silhouettes. EXACTLY ONE toxic accent: one magenta “tuned” dot on a receiver.
+
+[SC-SUR-L02] mission_sc_surveillance_l02_v01
+PROMPT: Surveillance L02 — stairwell resonance mapping with chalk circles (no readable text). EXACTLY ONE toxic accent: one magenta dot on a tuning fork charm.
+
+[SC-SUR-L03] mission_sc_surveillance_l03_v01
+PROMPT: Surveillance L03 — underpass eavesdrop: hidden behind a ringed antenna frame. EXACTLY ONE toxic accent: one magenta mic-node dot on a clip.
+
+[SC-SUR-L04] mission_sc_surveillance_l04_v01
+PROMPT: Surveillance L04 — harbor container maze; tracking a coded exchange by vibration patterns. EXACTLY ONE toxic accent: one magenta tracker dot on a container latch.
+
+[SC-SUR-L05] mission_sc_surveillance_l05_v01
+PROMPT: Surveillance L05 — skybridge with mast silhouettes; counting aerial passes. EXACTLY ONE toxic accent: one magenta blink on a mast base.
+
+[SC-SUR-L06] mission_sc_surveillance_l06_v01
+PROMPT: Surveillance L06 — flooded corridor: hydrophone drop with concentric ripples. EXACTLY ONE toxic accent: one magenta dot on the hydrophone cap.
+
+[SC-SUR-L07] mission_sc_surveillance_l07_v01
+PROMPT: Surveillance L07 — rooftop dish alignment; scanning the heavens. EXACTLY ONE toxic accent: one magenta sync dot on a dish pivot.
+
+[SC-SUR-L08] mission_sc_surveillance_l08_v01
+PROMPT: Surveillance L08 — refinery conduit arches; tracking “signal ghosts” via drifting dust lines. EXACTLY ONE toxic accent: one magenta dot on a wrist tuner.
+
+[SC-SUR-L09] mission_sc_surveillance_l09_v01
+PROMPT: Surveillance L09 — ocean rig outer ladder watch; listening for footsteps through metal. EXACTLY ONE toxic accent: one magenta dot on a magnet sensor puck.
+
+[SC-SUR-L10] mission_sc_surveillance_l10_v01
+PROMPT: Surveillance L10 — confirm boss spire broadcast pattern from a distant ridge. EXACTLY ONE toxic accent: one magenta dot on a small relay bead.
+
+[SC-SAB-L01] mission_sc_sabotage_l01_v01
+PROMPT: Sabotage L01 — plant a hush-dampener on an alley antenna bundle. EXACTLY ONE toxic accent: one magenta arming dot on the dampener.
+
+[SC-SAB-L02] mission_sc_sabotage_l02_v01
+PROMPT: Sabotage L02 — cut a cable-rosary conduit in a stairwell; sparks minimal. EXACTLY ONE toxic accent: one magenta “cut confirmed” dot on a tool charm.
+
+[SC-SAB-L03] mission_sc_sabotage_l03_v01
+PROMPT: Sabotage L03 — jam an underpass relay ring with a clamp device. EXACTLY ONE toxic accent: one magenta clamp dot.
+
+[SC-SAB-L04] mission_sc_sabotage_l04_v01
+PROMPT: Sabotage L04 — disrupt a harbor beacon coil so it broadcasts wrong-phase (abstract). EXACTLY ONE toxic accent: one magenta coil-node dot.
+
+[SC-SAB-L05] mission_sc_sabotage_l05_v01
+PROMPT: Sabotage L05 — sabotage a skybridge mast by swapping a resonator plate. EXACTLY ONE toxic accent: one magenta plate dot.
+
+[SC-SAB-L06] mission_sc_sabotage_l06_v01
+PROMPT: Sabotage L06 — flood a tunnel to drown interference emitters (no gore). EXACTLY ONE toxic accent: one magenta valve dot.
+
+[SC-SAB-L07] mission_sc_sabotage_l07_v01
+PROMPT: Sabotage L07 — misalign rooftop dish arrays; cables whip in wind. EXACTLY ONE toxic accent: one magenta pivot dot.
+
+[SC-SAB-L08] mission_sc_sabotage_l08_v01
+PROMPT: Sabotage L08 — corrupt refinery conduit chorus; sever one primary link. EXACTLY ONE toxic accent: one magenta link dot.
+
+[SC-SAB-L09] mission_sc_sabotage_l09_v01
+PROMPT: Sabotage L09 — ocean rig: plant a phase-inverter on a ladder junction box. EXACTLY ONE toxic accent: one magenta inverter dot.
+
+[SC-SAB-L10] mission_sc_sabotage_l10_v01
+PROMPT: Sabotage L10 — boss-approach: silence the broadcast spire’s ground node. EXACTLY ONE toxic accent: one magenta node dot on the placed seal.
+
+[SC-ESC-L01] mission_sc_escort_l01_v01
+PROMPT: Escort/Extraction L01 — escort a fragile “listener” through an antenna alley. EXACTLY ONE toxic accent: one magenta guide dot on a pendant.
+
+[SC-ESC-L02] mission_sc_escort_l02_v01
+PROMPT: Escort L02 — extraction through stairwell interference; silhouettes hand-linked. EXACTLY ONE toxic accent: one magenta tether clasp dot.
+
+[SC-ESC-L03] mission_sc_escort_l03_v01
+PROMPT: Escort L03 — protect a tuning ritual at an underpass ring; enemies kept back. EXACTLY ONE toxic accent: one magenta center-node dot.
+
+[SC-ESC-L04] mission_sc_escort_l04_v01
+PROMPT: Escort L04 — escort a buoy-relic along a pier on a cart. EXACTLY ONE toxic accent: one magenta cart beacon dot.
+
+[SC-ESC-L05] mission_sc_escort_l05_v01
+PROMPT: Escort L05 — skybridge crossing while shielding a receiver pack from wind. EXACTLY ONE toxic accent: one magenta pack-dot.
+
+[SC-ESC-L06] mission_sc_escort_l06_v01
+PROMPT: Escort L06 — guide divers to a flooded hatch while maintaining quiet. EXACTLY ONE toxic accent: one magenta hatch dot.
+
+[SC-ESC-L07] mission_sc_escort_l07_v01
+PROMPT: Escort L07 — escort to a rooftop dish altar for extraction signal. EXACTLY ONE toxic accent: one magenta altar dot.
+
+[SC-ESC-L08] mission_sc_escort_l08_v01
+PROMPT: Escort L08 — refinery run: carry a resonance core through conduit arches. EXACTLY ONE toxic accent: one magenta core-dot.
+
+[SC-ESC-L09] mission_sc_escort_l09_v01
+PROMPT: Escort L09 — ocean rig holdout while broadcast fades in. EXACTLY ONE toxic accent: one magenta flare-dot (small, controlled).
+
+[SC-ESC-L10] mission_sc_escort_l10_v01
+PROMPT: Escort L10 — final escort: deliver the frequency key to the spire gate. EXACTLY ONE toxic accent: one magenta gate-dot.
+
+
+-------------------------
+SCRAPBROKER (SB) — toxic accent color: SICKLY GREEN (one small junction glow only)
+-------------------------
+
+[SB-CMB-L01] mission_sb_combat_l01_v01
+PROMPT: Scrapbroker Combat L01 — defend a salvage stall in a scrapyard corridor; stacked metal ribs. EXACTLY ONE toxic accent: one tiny sickly-green junction glow on a cable bundle.
+
+[SB-CMB-L02] mission_sb_combat_l02_v01
+PROMPT: Combat L02 — clash under a collapsed billboard frame; hooks and chains sway. EXACTLY ONE toxic accent: one sickly-green glow dot on a crane remote.
+
+[SB-CMB-L03] mission_sb_combat_l03_v01
+PROMPT: Combat L03 — container canyon firefight silhouettes (weapons secondary); sparks off a gear-wall. EXACTLY ONE toxic accent: one sickly-green node on a lockbox.
+
+[SB-CMB-L04] mission_sb_combat_l04_v01
+PROMPT: Combat L04 — harbor scrapyard with half-submerged cars; waves slap metal. EXACTLY ONE toxic accent: one sickly-green glow dot on a buoyed cable.
+
+[SB-CMB-L05] mission_sb_combat_l05_v01
+PROMPT: Combat L05 — skybridge made of welded trusses; one enemy silhouette drops through a gap. EXACTLY ONE toxic accent: one sickly-green junction light on a splice plate.
+
+[SB-CMB-L06] mission_sb_combat_l06_v01
+PROMPT: Combat L06 — flooded junk tunnel; floating pallets and chains. EXACTLY ONE toxic accent: one sickly-green dot on a waterproof battery pack.
+
+[SB-CMB-L07] mission_sb_combat_l07_v01
+PROMPT: Combat L07 — rooftop crane arm duel; city ruins below. EXACTLY ONE toxic accent: one sickly-green dot on a winch control.
+
+[SB-CMB-L08] mission_sb_combat_l08_v01
+PROMPT: Combat L08 — refinery scrap conveyor; silhouettes fight atop moving belt (motion implied). EXACTLY ONE toxic accent: one sickly-green dot on a conveyor junction.
+
+[SB-CMB-L09] mission_sb_combat_l09_v01
+PROMPT: Combat L09 — ocean salvage rig with dangling nets; enemy silhouettes climb. EXACTLY ONE toxic accent: one sickly-green dot on a deck junction box.
+
+[SB-CMB-L10] mission_sb_combat_l10_v01
+PROMPT: Combat L10 — boss-approach: warlord supply cache fortress made of welded plates. EXACTLY ONE toxic accent: one sickly-green dot on a sealed cache lock.
+
+[SB-RSC-L01] mission_sb_rescue_l01_v01
+PROMPT: Rescue/Recovery L01 — recover a stolen tool satchel from a scrap alcove. EXACTLY ONE toxic accent: one sickly-green dot on the satchel clasp.
+
+[SB-RSC-L02] mission_sb_rescue_l02_v01
+PROMPT: Rescue L02 — pull a trapped salvager from under a collapsed beam. EXACTLY ONE toxic accent: one sickly-green dot on a lift-jack gauge (no numbers).
+
+[SB-RSC-L03] mission_sb_rescue_l03_v01
+PROMPT: Rescue L03 — retrieve a rare alloy plate from a container wreck. EXACTLY ONE toxic accent: one sickly-green dot on a tag puck (no text).
+
+[SB-RSC-L04] mission_sb_rescue_l04_v01
+PROMPT: Rescue L04 — harbor recovery of a drifting salvage crate. EXACTLY ONE toxic accent: one sickly-green dot on the crate seal.
+
+[SB-RSC-L05] mission_sb_rescue_l05_v01
+PROMPT: Rescue L05 — rescue a crew from a derelict tram car used as a raider den. EXACTLY ONE toxic accent: one sickly-green dot on a door pry-tool.
+
+[SB-RSC-L06] mission_sb_rescue_l06_v01
+PROMPT: Rescue L06 — flooded tunnel: recover a battery core chained to a pillar. EXACTLY ONE toxic accent: one sickly-green core dot.
+
+[SB-RSC-L07] mission_sb_rescue_l07_v01
+PROMPT: Rescue L07 — skybridge extraction: carry a crate of “prime parts” across wind gaps. EXACTLY ONE toxic accent: one sickly-green dot on the crate corner.
+
+[SB-RSC-L08] mission_sb_rescue_l08_v01
+PROMPT: Rescue L08 — refinery recovery: retrieve a collapsed drone husk from a pipe nest. EXACTLY ONE toxic accent: one sickly-green dot on the husk node.
+
+[SB-RSC-L09] mission_sb_rescue_l09_v01
+PROMPT: Rescue L09 — ocean rig: recover a netted engine block amid storm spray. EXACTLY ONE toxic accent: one sickly-green dot on a hook clamp.
+
+[SB-RSC-L10] mission_sb_rescue_l10_v01
+PROMPT: Rescue L10 — recover the “warlord ledger crate” from a welded vault stack. EXACTLY ONE toxic accent: one sickly-green dot on the vault latch.
+
+[SB-SUR-L01] mission_sb_surveillance_l01_v01
+PROMPT: Surveillance L01 — scout a scrap lane; silhouettes on catwalks above. EXACTLY ONE toxic accent: one sickly-green dot on a binocular strap module.
+
+[SB-SUR-L02] mission_sb_surveillance_l02_v01
+PROMPT: Surveillance L02 — track footprints through ash near a crane base. EXACTLY ONE toxic accent: one sickly-green dot on a marker puck.
+
+[SB-SUR-L03] mission_sb_surveillance_l03_v01
+PROMPT: Surveillance L03 — container canyon overwatch; watching a deal at distance. EXACTLY ONE toxic accent: one sickly-green dot on a clamp-cam.
+
+[SB-SUR-L04] mission_sb_surveillance_l04_v01
+PROMPT: Surveillance L04 — harbor pier watch among stacked hull plates. EXACTLY ONE toxic accent: one sickly-green dot on a dock sensor.
+
+[SB-SUR-L05] mission_sb_surveillance_l05_v01
+PROMPT: Surveillance L05 — skybridge observation from a welded truss nest. EXACTLY ONE toxic accent: one sickly-green dot on a tether anchor.
+
+[SB-SUR-L06] mission_sb_surveillance_l06_v01
+PROMPT: Surveillance L06 — flooded tunnel: listen for chain rattle echoes. EXACTLY ONE toxic accent: one sickly-green dot on a floating mic puck.
+
+[SB-SUR-L07] mission_sb_surveillance_l07_v01
+PROMPT: Surveillance L07 — rooftop crane arm vantage; scanning supply routes. EXACTLY ONE toxic accent: one sickly-green dot on a winch sensor.
+
+[SB-SUR-L08] mission_sb_surveillance_l08_v01
+PROMPT: Surveillance L08 — refinery conveyor overlook; counting crates. EXACTLY ONE toxic accent: one sickly-green dot on a wrist counter (no numbers).
+
+[SB-SUR-L09] mission_sb_surveillance_l09_v01
+PROMPT: Surveillance L09 — ocean rig ladder watch; silhouettes below. EXACTLY ONE toxic accent: one sickly-green dot on a rung tag.
+
+[SB-SUR-L10] mission_sb_surveillance_l10_v01
+PROMPT: Surveillance L10 — confirm warlord cache movement toward boss zone; welded walls. EXACTLY ONE toxic accent: one sickly-green dot on a placed tracker.
+
+[SB-SAB-L01] mission_sb_sabotage_l01_v01
+PROMPT: Sabotage L01 — cut a rival salvage winch cable at night. EXACTLY ONE toxic accent: one sickly-green dot on a cutter tool.
+
+[SB-SAB-L02] mission_sb_sabotage_l02_v01
+PROMPT: Sabotage L02 — sabotage a crane control box by swapping a fuse (abstract). EXACTLY ONE toxic accent: one sickly-green dot on the fuse cap.
+
+[SB-SAB-L03] mission_sb_sabotage_l03_v01
+PROMPT: Sabotage L03 — lock a container canyon gate with a welded brace. EXACTLY ONE toxic accent: one sickly-green dot on a weld clamp.
+
+[SB-SAB-L04] mission_sb_sabotage_l04_v01
+PROMPT: Sabotage L04 — harbor: sever a tug chain link (no gore) to strand cargo. EXACTLY ONE toxic accent: one sickly-green dot on a chain marker.
+
+[SB-SAB-L05] mission_sb_sabotage_l05_v01
+PROMPT: Sabotage L05 — skybridge: loosen a truss pin to collapse a small section later. EXACTLY ONE toxic accent: one sickly-green dot on a pin cap.
+
+[SB-SAB-L06] mission_sb_sabotage_l06_v01
+PROMPT: Sabotage L06 — flood a junk tunnel to ruin a rival stash. EXACTLY ONE toxic accent: one sickly-green dot on a valve wheel hub.
+
+[SB-SAB-L07] mission_sb_sabotage_l07_v01
+PROMPT: Sabotage L07 — rooftop: jam a crane arm rotation with a wedge plate. EXACTLY ONE toxic accent: one sickly-green dot on the wedge.
+
+[SB-SAB-L08] mission_sb_sabotage_l08_v01
+PROMPT: Sabotage L08 — refinery: derail a scrap conveyor by removing a guide rail. EXACTLY ONE toxic accent: one sickly-green dot on a rail clamp.
+
+[SB-SAB-L09] mission_sb_sabotage_l09_v01
+PROMPT: Sabotage L09 — ocean rig: loosen catwalk bolts for staged collapse. EXACTLY ONE toxic accent: one sickly-green dot on a bolt charge.
+
+[SB-SAB-L10] mission_sb_sabotage_l10_v01
+PROMPT: Sabotage L10 — boss-approach: breach the welded cache wall by cutting a single keystone plate. EXACTLY ONE toxic accent: one sickly-green dot on a thermal cutter node.
+
+[SB-ESC-L01] mission_sb_escort_l01_v01
+PROMPT: Escort/Extraction L01 — escort a handcart of parts through a scrap alley. EXACTLY ONE toxic accent: one sickly-green cart junction dot.
+
+[SB-ESC-L02] mission_sb_escort_l02_v01
+PROMPT: Escort L02 — extraction with a small convoy of salvage sleds. EXACTLY ONE toxic accent: one sickly-green lead beacon dot.
+
+[SB-ESC-L03] mission_sb_escort_l03_v01
+PROMPT: Escort L03 — protect welders sealing a container door. EXACTLY ONE toxic accent: one sickly-green seal dot on the latch.
+
+[SB-ESC-L04] mission_sb_escort_l04_v01
+PROMPT: Escort L04 — pier run: escort a crate to a waiting boat silhouette. EXACTLY ONE toxic accent: one sickly-green dock dot.
+
+[SB-ESC-L05] mission_sb_escort_l05_v01
+PROMPT: Escort L05 — skybridge crossing while shielding a tall scrap stack from wind. EXACTLY ONE toxic accent: one sickly-green tie-down dot.
+
+[SB-ESC-L06] mission_sb_escort_l06_v01
+PROMPT: Escort L06 — guide a battery team into a flooded tunnel; reflections. EXACTLY ONE toxic accent: one sickly-green hatch dot.
+
+[SB-ESC-L07] mission_sb_escort_l07_v01
+PROMPT: Escort L07 — rooftop: escort a crane operator to the arm controls. EXACTLY ONE toxic accent: one sickly-green control dot.
+
+[SB-ESC-L08] mission_sb_escort_l08_v01
+PROMPT: Escort L08 — refinery: escort a rolling salvage drum through pipe shadows. EXACTLY ONE toxic accent: one sickly-green drum dot.
+
+[SB-ESC-L09] mission_sb_escort_l09_v01
+PROMPT: Escort L09 — ocean rig holdout while cargo net is lifted. EXACTLY ONE toxic accent: one sickly-green hook dot.
+
+[SB-ESC-L10] mission_sb_escort_l10_v01
+PROMPT: Escort L10 — final escort: deliver warlord ledger crate toward boss gate through welded corridors. EXACTLY ONE toxic accent: one sickly-green crate seal dot.
+
+
+-------------------------
+GENE-SCRIBE HANDLER (GS) — toxic accent color: CYAN (one small implant/node only)
+-------------------------
+
+[GS-CMB-L01] mission_gs_combat_l01_v01
+PROMPT: Gene-Scribe Combat L01 — containment corridor in a bio-archive; sealed panels, ribbed geometry, silhouettes clearing a breach. EXACTLY ONE toxic accent: one tiny cyan implant node on a wall sensor.
+
+[GS-CMB-L02] mission_gs_combat_l02_v01
+PROMPT: Combat L02 — archive stairwell with etched bio-geometry (decorative); one enemy silhouette pinned against a door. EXACTLY ONE toxic accent: one cyan status dot on a collar-key device.
+
+[GS-CMB-L03] mission_gs_combat_l03_v01
+PROMPT: Combat L03 — underpass clinic ruin: surgical drapes as torn banners (no text). EXACTLY ONE toxic accent: one cyan dot on a sealed vial cap (no labels).
+
+[GS-CMB-L04] mission_gs_combat_l04_v01
+PROMPT: Combat L04 — harbor lab barge; catwalks and sealed containers. EXACTLY ONE toxic accent: one cyan dot on a hatch sensor.
+
+[GS-CMB-L05] mission_gs_combat_l05_v01
+PROMPT: Combat L05 — skybridge between two archive towers; sterile platework, wind. EXACTLY ONE toxic accent: one cyan dot on a tower junction node.
+
+[GS-CMB-L06] mission_gs_combat_l06_v01
+PROMPT: Combat L06 — flooded gene-vault antechamber; waterline and reflections; silhouettes fight near a sealed door. EXACTLY ONE toxic accent: one cyan dot on a door lock node.
+
+[GS-CMB-L07] mission_gs_combat_l07_v01
+PROMPT: Combat L07 — rooftop specimen transfer platform; aerial silhouettes above. EXACTLY ONE toxic accent: one cyan dot on a containment pod latch.
+
+[GS-CMB-L08] mission_gs_combat_l08_v01
+PROMPT: Combat L08 — refinery bio-inlet station; pipes feed into sterile modules. EXACTLY ONE toxic accent: one cyan dot on a valve node.
+
+[GS-CMB-L09] mission_gs_combat_l09_v01
+PROMPT: Combat L09 — ocean rig bioreactor deck; storm spray, sealed tanks. EXACTLY ONE toxic accent: one cyan dot on a tank gauge (no numbers).
+
+[GS-CMB-L10] mission_gs_combat_l10_v01
+PROMPT: Combat L10 — boss-approach: immense circular gene-loom door with layered plates and micro-etching (unreadable). EXACTLY ONE toxic accent: one cyan dot at the core seam.
+
+[GS-RSC-L01] mission_gs_rescue_l01_v01
+PROMPT: Rescue/Recovery L01 — recover a lost gene-tag plate from rubble; small, matte plate visible (no text). EXACTLY ONE toxic accent: one cyan dot on a retrieval clamp.
+
+[GS-RSC-L02] mission_gs_rescue_l02_v01
+PROMPT: Rescue L02 — extract a scribe technician from an archive stairwell. EXACTLY ONE toxic accent: one cyan dot on a medic collar clip.
+
+[GS-RSC-L03] mission_gs_rescue_l03_v01
+PROMPT: Rescue L03 — retrieve a sealed sample capsule from a ruined clinic drawer. EXACTLY ONE toxic accent: one cyan dot on the capsule ring.
+
+[GS-RSC-L04] mission_gs_rescue_l04_v01
+PROMPT: Rescue L04 — harbor recovery of a drifting containment pod tether. EXACTLY ONE toxic accent: one cyan dot on the pod latch.
+
+[GS-RSC-L05] mission_gs_rescue_l05_v01
+PROMPT: Rescue L05 — free hostages from a sterile holding room; heavy door, silhouettes behind frosted panel. EXACTLY ONE toxic accent: one cyan door-release dot.
+
+[GS-RSC-L06] mission_gs_rescue_l06_v01
+PROMPT: Rescue L06 — flooded vault: recover a sample crate chained to a pillar. EXACTLY ONE toxic accent: one cyan dot on the crate seal.
+
+[GS-RSC-L07] mission_gs_rescue_l07_v01
+PROMPT: Rescue L07 — sky platform: retrieve a floating drone-sample vial before it falls. EXACTLY ONE toxic accent: one cyan dot on the vial cap.
+
+[GS-RSC-L08] mission_gs_rescue_l08_v01
+PROMPT: Rescue L08 — refinery station: carry a sealed “lineage ledger” container through pipe shadows. EXACTLY ONE toxic accent: one cyan dot on the container clasp.
+
+[GS-RSC-L09] mission_gs_rescue_l09_v01
+PROMPT: Rescue L09 — ocean rig: recover a bioreactor key module in storm conditions. EXACTLY ONE toxic accent: one cyan dot on the key face.
+
+[GS-RSC-L10] mission_gs_rescue_l10_v01
+PROMPT: Rescue L10 — recover the “prime splice codex” case from the gene-loom antechamber. EXACTLY ONE toxic accent: one cyan dot on the case seal.
+
+[GS-SUR-L01] mission_gs_surveillance_l01_v01
+PROMPT: Surveillance L01 — scan a bio-archive corridor for footprints and residue patterns (abstract). EXACTLY ONE toxic accent: one cyan dot on a handheld scanner node.
+
+[GS-SUR-L02] mission_gs_surveillance_l02_v01
+PROMPT: Surveillance L02 — archive stairwell lineage trace; silhouettes watching a sealed door. EXACTLY ONE toxic accent: one cyan dot on a collar-key tool.
+
+[GS-SUR-L03] mission_gs_surveillance_l03_v01
+PROMPT: Surveillance L03 — underpass clinic: covert observation of a specimen handoff. EXACTLY ONE toxic accent: one cyan dot on a hidden tag.
+
+[GS-SUR-L04] mission_gs_surveillance_l04_v01
+PROMPT: Surveillance L04 — harbor lab barge: watch through rail shadows at night. EXACTLY ONE toxic accent: one cyan dot on a placed camera puck.
+
+[GS-SUR-L05] mission_gs_surveillance_l05_v01
+PROMPT: Surveillance L05 — skybridge: monitor traffic between archive towers. EXACTLY ONE toxic accent: one cyan dot on a tower sensor.
+
+[GS-SUR-L06] mission_gs_surveillance_l06_v01
+PROMPT: Surveillance L06 — flooded vault: deploy a floating probe to map a chamber. EXACTLY ONE toxic accent: one cyan dot on the probe top.
+
+[GS-SUR-L07] mission_gs_surveillance_l07_v01
+PROMPT: Surveillance L07 — rooftop transfer platform: track aerial ingress routes. EXACTLY ONE toxic accent: one cyan dot on a dish-sensor.
+
+[GS-SUR-L08] mission_gs_surveillance_l08_v01
+PROMPT: Surveillance L08 — refinery bio-inlet: observe valve rhythm and security sweeps. EXACTLY ONE toxic accent: one cyan dot on a wrist timer (no numbers).
+
+[GS-SUR-L09] mission_gs_surveillance_l09_v01
+PROMPT: Surveillance L09 — ocean rig: watch ladder wells and hatch cycles in storm haze. EXACTLY ONE toxic accent: one cyan dot on a hatch sensor.
+
+[GS-SUR-L10] mission_gs_surveillance_l10_v01
+PROMPT: Surveillance L10 — confirm boss gene-loom door cycle from a distant sterile gantry. EXACTLY ONE toxic accent: one cyan dot on a relay bead.
+
+[GS-SAB-L01] mission_gs_sabotage_l01_v01
+PROMPT: Sabotage L01 — swap a sample capsule in a corridor drawer (no labels). EXACTLY ONE toxic accent: one cyan dot on the swapped cap.
+
+[GS-SAB-L02] mission_gs_sabotage_l02_v01
+PROMPT: Sabotage L02 — disable an archive stairwell lock by bypassing a collar ring interface. EXACTLY ONE toxic accent: one cyan bypass dot on a tool.
+
+[GS-SAB-L03] mission_gs_sabotage_l03_v01
+PROMPT: Sabotage L03 — corrupt a clinic power node feeding sterile rooms. EXACTLY ONE toxic accent: one cyan arming dot on a small charge.
+
+[GS-SAB-L04] mission_gs_sabotage_l04_v01
+PROMPT: Sabotage L04 — harbor barge: disable containment clamps so cargo can’t move. EXACTLY ONE toxic accent: one cyan clamp-dot.
+
+[GS-SAB-L05] mission_gs_sabotage_l05_v01
+PROMPT: Sabotage L05 — skybridge: sever a single key cable feeding tower access. EXACTLY ONE toxic accent: one cyan cut-confirm dot on a cutter.
+
+[GS-SAB-L06] mission_gs_sabotage_l06_v01
+PROMPT: Sabotage L06 — flooded vault: vent pressure through a sluice wheel to trigger lockdown. EXACTLY ONE toxic accent: one cyan wheel-node dot.
+
+[GS-SAB-L07] mission_gs_sabotage_l07_v01
+PROMPT: Sabotage L07 — rooftop: sabotage a specimen pod latch so it won’t seal. EXACTLY ONE toxic accent: one cyan latch-dot.
+
+[GS-SAB-L08] mission_gs_sabotage_l08_v01
+PROMPT: Sabotage L08 — refinery: poison a valve rhythm by swapping a regulator plate (abstract). EXACTLY ONE toxic accent: one cyan dot on the regulator.
+
+[GS-SAB-L09] mission_gs_sabotage_l09_v01
+PROMPT: Sabotage L09 — ocean rig: disable a bioreactor deck lock by cutting one keystone cable. EXACTLY ONE toxic accent: one cyan dot on a cable tag.
+
+[GS-SAB-L10] mission_gs_sabotage_l10_v01
+PROMPT: Sabotage L10 — boss-approach: break the gene-loom outer ring’s security node. EXACTLY ONE toxic accent: one cyan dot on the planted seal.
+
+[GS-ESC-L01] mission_gs_escort_l01_v01
+PROMPT: Escort/Extraction L01 — escort a scribe courier carrying a sealed case down a corridor. EXACTLY ONE toxic accent: one cyan dot on the case seal.
+
+[GS-ESC-L02] mission_gs_escort_l02_v01
+PROMPT: Escort L02 — extraction through archive stairwell with silent hand signals. EXACTLY ONE toxic accent: one cyan dot on a wrist beacon.
+
+[GS-ESC-L03] mission_gs_escort_l03_v01
+PROMPT: Escort L03 — protect technicians while they reseal a clinic door. EXACTLY ONE toxic accent: one cyan dot at the door seam.
+
+[GS-ESC-L04] mission_gs_escort_l04_v01
+PROMPT: Escort L04 — escort a containment pod along a harbor barge catwalk. EXACTLY ONE toxic accent: one cyan pod-latch dot.
+
+[GS-ESC-L05] mission_gs_escort_l05_v01
+PROMPT: Escort L05 — skybridge crossing while shielding a fragile sample rack from wind. EXACTLY ONE toxic accent: one cyan rack-dot.
+
+[GS-ESC-L06] mission_gs_escort_l06_v01
+PROMPT: Escort L06 — guide divers to a flooded vault hatch for extraction. EXACTLY ONE toxic accent: one cyan hatch-dot.
+
+[GS-ESC-L07] mission_gs_escort_l07_v01
+PROMPT: Escort L07 — rooftop platform: escort a specimen pod to a lift cradle. EXACTLY ONE toxic accent: one cyan cradle-dot.
+
+[GS-ESC-L08] mission_gs_escort_l08_v01
+PROMPT: Escort L08 — refinery: escort a “lineage core” container through pipe arches. EXACTLY ONE toxic accent: one cyan core-dot.
+
+[GS-ESC-L09] mission_gs_escort_l09_v01
+PROMPT: Escort L09 — ocean rig holdout while pod is winched upward. EXACTLY ONE toxic accent: one cyan winch-dot.
+
+[GS-ESC-L10] mission_gs_escort_l10_v01
+PROMPT: Escort L10 — final escort: deliver the splice codex to the gene-loom door. EXACTLY ONE toxic accent: one cyan door-core dot.
+
+
+=========================================================
+CORE LOOPS / SCENES (50) — “REUSABLE BACKGROUND LIBRARY”
+(Use with UNIVERSAL_PROMPT_PREFIX — CORE LOOPS/SCENES + UNIVERSAL_NEGATIVE — CORE LOOPS/SCENES)
+=========================================================
+
+-------------------------
+COMBAT LOOPS (10) — choose ONE toxic accent per loop (magenta OR cyan OR sickly-green)
+-------------------------
+
+[LOOP-CMB-01] loop_combat_01_checkpoint_corridor_v01
+PROMPT: Bunker checkpoint corridor, drifting ash, slow parallax; barricades and sealed gate silhouette. EXACTLY ONE toxic accent: one tiny beacon dot on a wall node.
+
+[LOOP-CMB-02] loop_combat_02_underpass_killzone_v01
+PROMPT: Concrete underpass with cable-trace ribs, shallow smoke layers, slow light sweep. EXACTLY ONE toxic accent: one tiny node dot on a hanging sensor.
+
+[LOOP-CMB-03] loop_combat_03_stairwell_breach_v01
+PROMPT: Harsh stairwell with angular plating, intermittent shadow bands, subtle dust fall. EXACTLY ONE toxic accent: one tiny door-lock dot.
+
+[LOOP-CMB-04] loop_combat_04_harbor_bulkhead_v01
+PROMPT: Rain-slick harbor bulkhead, crane silhouette, water reflections looping. EXACTLY ONE toxic accent: one tiny dock beacon dot.
+
+[LOOP-CMB-05] loop_combat_05_skybridge_gap_v01
+PROMPT: Windy skybridge with welded trusses, slow cloud drift, dangling cable sway. EXACTLY ONE toxic accent: one tiny junction dot.
+
+[LOOP-CMB-06] loop_combat_06_flooded_tunnel_v01
+PROMPT: Flooded service tunnel with ripples and reflections, slow water movement loop. EXACTLY ONE toxic accent: one tiny hatch dot.
+
+[LOOP-CMB-07] loop_combat_07_rooftop_platform_v01
+PROMPT: Rooftop platform with antenna silhouettes, slow haze roll. EXACTLY ONE toxic accent: one tiny relay dot.
+
+[LOOP-CMB-08] loop_combat_08_refinery_canyon_v01
+PROMPT: Refinery canyon of pipes and steam, slow venting loop, deep shadows. EXACTLY ONE toxic accent: one tiny valve-node dot.
+
+[LOOP-CMB-09] loop_combat_09_ocean_rig_catwalk_v01
+PROMPT: Ocean rig catwalks in storm mist, subtle sway and spray loop. EXACTLY ONE toxic accent: one tiny junction box dot.
+
+[LOOP-CMB-10] loop_combat_10_vault_door_approach_v01
+PROMPT: Massive circular vault door antechamber, slow ambient pulse, drifting dust. EXACTLY ONE toxic accent: one tiny seam-core dot.
+
+-------------------------
+RESCUE/RECOVERY LOOPS (10)
+-------------------------
+
+[LOOP-RSC-01] loop_rescue_01_safe_corner_v01
+PROMPT: Small barricaded safe corner with tarp and crates, slow cloth flutter. EXACTLY ONE toxic accent: one tiny case-seal dot.
+
+[LOOP-RSC-02] loop_rescue_02_stairwell_extraction_v01
+PROMPT: Dim stairwell landing with shadow bands, slow falling dust loop. EXACTLY ONE toxic accent: one tiny call-node dot.
+
+[LOOP-RSC-03] loop_rescue_03_wrecked_vehicle_v01
+PROMPT: Toppled patrol vehicle silhouette, ash drift, slow headlight reflection (off). EXACTLY ONE toxic accent: one tiny latch-dot on a case.
+
+[LOOP-RSC-04] loop_rescue_04_pier_understructure_v01
+PROMPT: Under-pier beams with water shimmer, slow wave loop. EXACTLY ONE toxic accent: one tiny dock beacon dot.
+
+[LOOP-RSC-05] loop_rescue_05_transit_car_interior_v01
+PROMPT: Derelict transit car interior, soft flicker from distant light, dust motes. EXACTLY ONE toxic accent: one tiny door-release dot.
+
+[LOOP-RSC-06] loop_rescue_06_submerged_chamber_v01
+PROMPT: Submerged chamber with floating debris, slow bubbles and ripples. EXACTLY ONE toxic accent: one tiny crate-dot.
+
+[LOOP-RSC-07] loop_rescue_07_cable_platform_v01
+PROMPT: Cable-suspended platform with gentle sway and cloud drift. EXACTLY ONE toxic accent: one tiny capsule-ready dot.
+
+[LOOP-RSC-08] loop_rescue_08_pipe_bridge_v01
+PROMPT: Narrow pipe bridge with steam vents, slow venting loop. EXACTLY ONE toxic accent: one tiny guide-dot.
+
+[LOOP-RSC-09] loop_rescue_09_storm_helipad_v01
+PROMPT: Ocean rig helipad in mist, slow spray and tarp flutter loop. EXACTLY ONE toxic accent: one tiny landing dot.
+
+[LOOP-RSC-10] loop_rescue_10_altar_chamber_v01
+PROMPT: Concrete altar-like chamber with sealed relic pedestal silhouette, slow dust. EXACTLY ONE toxic accent: one tiny relic-dot.
+
+-------------------------
+SURVEILLANCE LOOPS (10)
+-------------------------
+
+[LOOP-SUR-01] loop_surveillance_01_watchtower_view_v01
+PROMPT: Cracked watchtower interior framing a distant ruin vista, slow haze drift. EXACTLY ONE toxic accent: one tiny scope-dot.
+
+[LOOP-SUR-02] loop_surveillance_02_service_hatch_v01
+PROMPT: Service hatch corner with cables and condensation, slow drip loop. EXACTLY ONE toxic accent: one tiny probe-dot.
+
+[LOOP-SUR-03] loop_surveillance_03_rooftop_relay_v01
+PROMPT: Rooftop relay cluster with slow antenna sway and cloud drift. EXACTLY ONE toxic accent: one tiny link-dot.
+
+[LOOP-SUR-04] loop_surveillance_04_container_maze_v01
+PROMPT: Container maze corridor with long perspective shadows, slow fog roll. EXACTLY ONE toxic accent: one tiny tracker-dot.
+
+[LOOP-SUR-05] loop_surveillance_05_skybridge_overlook_v01
+PROMPT: Skybridge overlook with slow parallax city depth, cable sway. EXACTLY ONE toxic accent: one tiny anchor-dot.
+
+[LOOP-SUR-06] loop_surveillance_06_listening_pool_v01
+PROMPT: Flooded listening pool with concentric ripples looping. EXACTLY ONE toxic accent: one tiny buoy-dot.
+
+[LOOP-SUR-07] loop_surveillance_07_dish_array_v01
+PROMPT: Dish array silhouette against clouds, slow rotation implied. EXACTLY ONE toxic accent: one tiny sync-dot.
+
+[LOOP-SUR-08] loop_surveillance_08_refinery_overlook_v01
+PROMPT: Refinery overlook with slow steam puffs and shadow motion. EXACTLY ONE toxic accent: one tiny wrist-dot.
+
+[LOOP-SUR-09] loop_surveillance_09_ladder_well_v01
+PROMPT: Ladder well with deep darkness and faint mist, slow drip loop. EXACTLY ONE toxic accent: one tiny rung-dot.
+
+[LOOP-SUR-10] loop_surveillance_10_gate_canyon_v01
+PROMPT: Canyon gate vista with massive doors far away, slow dust drift. EXACTLY ONE toxic accent: one tiny sensor-dot.
+
+-------------------------
+SABOTAGE LOOPS (10)
+-------------------------
+
+[LOOP-SAB-01] loop_sabotage_01_power_pylon_v01
+PROMPT: Power pylon base with open panel silhouette, slow spark flicker minimal. EXACTLY ONE toxic accent: one tiny arming-dot.
+
+[LOOP-SAB-02] loop_sabotage_02_rooftop_jammer_v01
+PROMPT: Rooftop antenna cluster with clamp device silhouette, slow wind sway. EXACTLY ONE toxic accent: one tiny jammer-dot.
+
+[LOOP-SAB-03] loop_sabotage_03_gate_mechanism_v01
+PROMPT: Sealed gate wheel close-up, slow condensation drift, heavy shadows. EXACTLY ONE toxic accent: one tiny lockout-dot.
+
+[LOOP-SAB-04] loop_sabotage_04_crane_control_v01
+PROMPT: Harbor crane control box with rain streaks looping. EXACTLY ONE toxic accent: one tiny access-dot.
+
+[LOOP-SAB-05] loop_sabotage_05_truss_strut_v01
+PROMPT: Skybridge truss strut with clamp silhouettes, slow cable sway. EXACTLY ONE toxic accent: one tiny timer-dot (no digits).
+
+[LOOP-SAB-06] loop_sabotage_06_sluice_valve_v01
+PROMPT: Sluice valve chamber with slow water surge rhythm. EXACTLY ONE toxic accent: one tiny valve-dot.
+
+[LOOP-SAB-07] loop_sabotage_07_targeting_dish_pivot_v01
+PROMPT: Dish pivot close-up with slow oscillation and haze. EXACTLY ONE toxic accent: one tiny pivot-dot.
+
+[LOOP-SAB-08] loop_sabotage_08_conveyor_junction_v01
+PROMPT: Conveyor junction with slow belt motion implied (no items), steam breath. EXACTLY ONE toxic accent: one tiny junction-dot.
+
+[LOOP-SAB-09] loop_sabotage_09_catwalk_bolts_v01
+PROMPT: Catwalk bolt-line in storm mist, subtle sway. EXACTLY ONE toxic accent: one tiny bolt-dot.
+
+[LOOP-SAB-10] loop_sabotage_10_outer_ring_node_v01
+PROMPT: Vault outer ring node close-up, slow ambient pulse, dust drift. EXACTLY ONE toxic accent: one tiny bypass-dot.
+
+-------------------------
+ESCORT/EXTRACTION LOOPS (10)
+-------------------------
+
+[LOOP-ESC-01] loop_escort_01_corridor_run_v01
+PROMPT: Long rubble corridor with directional lighting bands, slow parallax. EXACTLY ONE toxic accent: one tiny guide-dot.
+
+[LOOP-ESC-02] loop_escort_02_bridge_crossing_v01
+PROMPT: Narrow bridge crossing with railing shadows and wind-blown ash loop. EXACTLY ONE toxic accent: one tiny “go” dot.
+
+[LOOP-ESC-03] loop_escort_03_seal_team_door_v01
+PROMPT: Heavy door seam with sealing geometry, slow seam vapor. EXACTLY ONE toxic accent: one tiny seam-dot.
+
+[LOOP-ESC-04] loop_escort_04_dock_lane_v01
+PROMPT: Dock lane with repeating posts and water shimmer, slow wave loop. EXACTLY ONE toxic accent: one tiny marker-dot.
+
+[LOOP-ESC-05] loop_escort_05_tunnel_rearguard_v01
+PROMPT: Transit tunnel perspective with deep shadows, slow dust motes. EXACTLY ONE toxic accent: one tiny rear-dot.
+
+[LOOP-ESC-06] loop_escort_06_hatch_approach_v01
+PROMPT: Flooded hatch approach with reflections, slow ripple loop. EXACTLY ONE toxic accent: one tiny hatch-dot.
+
+[LOOP-ESC-07] loop_escort_07_capsule_platform_v01
+PROMPT: Elevated platform with cables swaying and cloud drift. EXACTLY ONE toxic accent: one tiny capsule-dot.
+
+[LOOP-ESC-08] loop_escort_08_convoy_canyon_v01
+PROMPT: Refinery canyon path with steam bursts and long shadows, slow drift. EXACTLY ONE toxic accent: one tiny lead-dot.
+
+[LOOP-ESC-09] loop_escort_09_helipad_holdout_v01
+PROMPT: Helipad deck in mist, tarp flutter, subtle storm spray. EXACTLY ONE toxic accent: one tiny landing-dot.
+
+[LOOP-ESC-10] loop_escort_10_final_throat_v01
+PROMPT: Narrowing concrete throat leading to a distant massive door, slow dust drift. EXACTLY ONE toxic accent: one tiny relic-dot.

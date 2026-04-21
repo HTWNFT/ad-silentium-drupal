@@ -1,0 +1,222 @@
+/* OOH Outskirts Funnel — minimal dark-cinematic UI */
+
+:root {
+  --ooh-bg: #0b0f14;
+  --ooh-card: rgba(255,255,255,0.06);
+  --ooh-card2: rgba(255,255,255,0.08);
+  --ooh-line: rgba(255,255,255,0.12);
+  --ooh-text: rgba(255,255,255,0.92);
+  --ooh-sub: rgba(255,255,255,0.70);
+  --ooh-accent: #4dd6c4; /* subtle teal */
+  --ooh-warn: #ffcc66;
+  --ooh-radius: 18px;
+  --ooh-shadow: 0 18px 60px rgba(0,0,0,0.45);
+}
+
+.ooh-wrap {
+  color: var(--ooh-text);
+  background: radial-gradient(1200px 700px at 20% 10%, rgba(77,214,196,0.08), transparent 55%),
+              radial-gradient(1200px 700px at 80% 0%, rgba(255,204,102,0.06), transparent 60%),
+              linear-gradient(180deg, #070a0f, #0b0f14);
+  border: 1px solid var(--ooh-line);
+  border-radius: var(--ooh-radius);
+  box-shadow: var(--ooh-shadow);
+  padding: 28px;
+  overflow: hidden;
+}
+
+.ooh-hero {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.ooh-badge {
+  width: 84px;
+  height: 84px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--ooh-line);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.ooh-badge img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  opacity: 0.95;
+}
+
+.ooh-title {
+  font-size: 28px;
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.ooh-subtitle {
+  margin: 6px 0 0 0;
+  color: var(--ooh-sub);
+}
+
+.ooh-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.ooh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 14px;
+  border: 1px solid var(--ooh-line);
+  background: rgba(255,255,255,0.05);
+  color: var(--ooh-text);
+  padding: 10px 14px;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ooh-btn:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.20);
+}
+
+.ooh-btn--primary {
+  background: rgba(77,214,196,0.10);
+  border-color: rgba(77,214,196,0.30);
+}
+
+.ooh-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 18px;
+}
+
+.ooh-card {
+  border-radius: var(--ooh-radius);
+  border: 1px solid var(--ooh-line);
+  background: var(--ooh-card);
+  padding: 16px;
+}
+
+.ooh-label {
+  font-size: 12px;
+  color: var(--ooh-sub);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 8px 0;
+}
+
+.ooh-fieldrow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.ooh-input, .ooh-select, .ooh-textarea {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--ooh-line);
+  background: rgba(0,0,0,0.22);
+  color: var(--ooh-text);
+  padding: 10px 12px;
+}
+
+.ooh-textarea {
+  min-height: 180px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  white-space: pre-wrap;
+}
+
+.ooh-kicker {
+  margin-top: 10px;
+  color: var(--ooh-sub);
+  font-size: 13px;
+}
+
+.ooh-divider {
+  height: 1px;
+  background: var(--ooh-line);
+  margin: 18px 0;
+}
+
+/* Play iframe + overlay */
+.ooh-playShell {
+  border-radius: var(--ooh-radius);
+  border: 1px solid var(--ooh-line);
+  background: rgba(0,0,0,0.30);
+  overflow: hidden;
+}
+
+.ooh-playTopbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ooh-line);
+  background: rgba(255,255,255,0.04);
+}
+
+.ooh-playTopbar .ooh-mini {
+  color: var(--ooh-sub);
+  font-size: 13px;
+}
+
+.ooh-iframeWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.ooh-iframeWrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.ooh-overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: radial-gradient(700px 400px at 50% 40%, rgba(0,0,0,0.35), rgba(0,0,0,0.82));
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.ooh-overlay.is-open {
+  display: flex;
+}
+
+.ooh-overlayCard {
+  width: min(820px, 96vw);
+  border-radius: var(--ooh-radius);
+  border: 1px solid var(--ooh-line);
+  background: rgba(10,14,20,0.92);
+  box-shadow: var(--ooh-shadow);
+  padding: 18px;
+}
+
+.ooh-overlayTitle {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.ooh-overlayBody {
+  color: var(--ooh-sub);
+  font-size: 13px;
+  margin-bottom: 14px;
+}

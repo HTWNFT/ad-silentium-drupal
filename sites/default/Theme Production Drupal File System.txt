@@ -1,0 +1,64 @@
+File System for “Theme Production” (Drupal + Game Content)
+
+This structure keeps raw generation, optimized deploy, and Drupal theme separate.
+
+Recommended root layout (PC / VM)
+--------------------------------------
+
+OUTSKIRTS_OF_HELL/
+  00_ADMIN/
+    roadmap.md
+    naming_conventions.md
+    CHANGELOG.md
+
+  01_GAME_DESIGN/
+    level_up_systems/
+      doomed_levelup.md
+      merged_levelup.md
+      mission_types.md
+      enemy_tiers.md
+    lore_bibles/
+    dialogue/
+
+  02_ASSETS_SOURCE/                     <-- raw, big, editable
+    portraits_png/
+      warlords/
+      mutants/
+      ronin/
+      recruiters/
+    icons_png/
+    backgrounds_png/
+    video_loops_mp4/
+    audio_wav/
+    psd_blend_sources/                  <-- if you have them
+
+  03_ASSETS_BUILD/                      <-- converted, web/game ready
+    portraits_webp/
+      1024/
+      512/
+    icons_webp/
+      256/
+      128/
+    backgrounds_webp/
+    video_loops_mp4/
+    manifests/
+      portraits_manifest.csv
+      icons_manifest.csv
+      loops_manifest.csv
+
+  04_DRUPAL/
+    web/                                <-- your Drupal docroot
+      themes/custom/outskirts_theme/
+        outskirts_theme.info.yml
+        outskirts_theme.libraries.yml
+        templates/
+        css/
+        js/
+        assets/                         <-- ONLY theme UI art (logos, UI chrome)
+      sites/default/files/outskirts/    <-- game content served publicly
+        portraits/
+        icons/
+        backgrounds/
+        loops/
+        manifests/
+    private_files/                      <-- if you use private scheme

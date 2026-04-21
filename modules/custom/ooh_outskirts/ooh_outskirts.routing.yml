@@ -1,0 +1,7 @@
+ooh_outskirts.landingpage:
+  path: '/landingpage'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::landingpage'
+    _title: ''
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,75 @@
+uuid: 6906d306-398a-428b-bd7c-4d6208e8ee98
+langcode: en
+status: true
+dependencies:
+  module:
+    - ooh_outskirts
+    - system
+    - user
+  theme:
+    - olivero
+id: olivero_oohlandingblock
+theme: olivero
+region: hero
+weight: -7
+provider: null
+plugin: ooh_landing_block
+settings:
+  id: ooh_landing_block
+  label: 'OOH Landing Block'
+  label_display: '0'
+  provider: ooh_outskirts
+  prologue_enabled: true
+  prologue_auto_open: true
+  prologue_auto_delay_ms: 2600
+  prologue_kicker: 'Outskirts Of Hell Games'
+  prologue_title: 'Ad Silentium'
+  prologue_text: |-
+    prologue_text: |-
+    In a long-distant, incalculable number of years from now, the universe will stop expanding, becoming full of matter like oxygen in an air-filled lung.
+
+    Reality's "waste matter" will be filtered through and forced out at this stage, while beneficial matter remains. This "matter" will be the living; some can stay, others must leave.
+
+    The time when the harmful and beneficial coexist will be "Ad Silentium", a stillness replicated in the pause between breaths.
+
+    The humans to continue into the next phase are "Selected". They fall into two categories: "Merged" and "Doomed".
+
+    The Merged have evolved into unity with the technology they used for centuries, a rote repetition across many generations, fusing humanity with its progress.
+
+    The Doomed forced their own adaptive evolution through intensive study and practice of ancient ways. The name is one of sarcastic irony; they are esoteric masters on all levels.
+
+    The scourge of the new reality is the Genetic Warlord Class. They are the long-descended remnants of the Genetic Elite class. Many thousands of years before Ad Silentium, they denied recognition of powers beyond themselves and were 
+
+    left behind genetically, physically manifesting their grand denial. Many millennia ago, they fused nature and technology with genetics to survive and live forever.
+
+    Thousands of years later, the families of these elites are low in numbers and are fighting their inevitable expulsion from the universe's realm as waste matter. However, many existing clans are still clinging to their fading power,  
+
+    still denying the reality that they are marked for removal from reality in this culling.
+
+    These worldwide elites engineered mutations out of spite upon discovering they were not "Merged" or "Doomed". Dubbed "Creations", they are merged animal and human DNA. Millennia later, these creations have destroyed all nature and   
+
+    wildlife. Some are still loyal to the Genetic Warlord clans (Mutant class) while others roam free (Ronin class), and will help or harm both Evolved and Doomed.
+
+    You are one of The Selected and are a target of Genetic Warlords and Creations of all kinds.
+
+    You may choose the path of the Merged, a character who is a fusion of human and technology, with powers that translate well into a world that has merged with you, mirroring technology in nature.
+
+    Or you may choose the path of the Doomed, a character with the power to manipulate the still-existing "Old Reality" at will, having evolved in a way that was once forsaken and then reclaimed by your kind.
+
+    The forces of human progress and evolution have merged, and fate is to be earned in the new reality of Ad Silentium.
+
+
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous
+      authenticated: authenticated
+      administrator: administrator

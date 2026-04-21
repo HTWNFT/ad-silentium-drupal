@@ -1,0 +1,23 @@
+Relay Bunker Approach
+bg_relay_bunker_approach_01
+Low concrete forms swallowed by mud/roots; blocked entrances, cable bundles, weak beacon glow.
+
+Neon Fog Marsh
+bg_neon_fog_marsh_01
+Shallow water, heavy fog layers, reflective pools; minimal toxic accent only.
+
+Lab Ruins Perimeter
+bg_lab_ruins_perimeter_01
+Half-buried facility edges; collapsed fencing, broken conduits, “do not enter” vibe without readable text.
+
+Data Shrine Clearing
+bg_data_shrine_clearing_01
+Stone/metal monolith “shrine,” ritual node cluster; controlled glow, strong silhouettes.
+
+Wasteland Ridge Overlook
+bg_wasteland_ridge_overlook_01
+High vantage, distant haze, broken pylons; transitional travel scene.
+
+Sanctum Threshold
+bg_sanctum_threshold_01
+The “safe but ominous” entry zone—vault doors, carved emblems, torchless cold light.

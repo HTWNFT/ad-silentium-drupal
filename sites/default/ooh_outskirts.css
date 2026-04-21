@@ -1,0 +1,121 @@
+/* Outskirts of Hell - landing styles */
+
+.ooh-outskirts {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  color: #fff;
+}
+
+.ooh-outskirts__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateZ(0);
+}
+
+.ooh-outskirts__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.65) 0%,
+    rgba(0,0,0,0.35) 45%,
+    rgba(0,0,0,0.80) 100%
+  );
+}
+
+.ooh-outskirts__content {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 20px;
+}
+
+.ooh-outskirts__title {
+  margin: 0 0 10px;
+  font-size: clamp(28px, 4vw, 54px);
+  line-height: 1.05;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.65);
+}
+
+.ooh-outskirts__subtitle {
+  margin: 0 0 22px;
+  max-width: 70ch;
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.92;
+}
+
+.ooh-outskirts__cta {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,0.65);
+  border-radius: 999px;
+  text-decoration: none;
+  color: #fff;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+}
+
+.ooh-outskirts__cta:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.ooh-grid {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+}
+
+.ooh-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.28);
+  backdrop-filter: blur(8px);
+  transition: transform 140ms ease, border-color 140ms ease;
+}
+
+.ooh-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.28);
+}
+
+.ooh-card__img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: rgba(255,255,255,0.05);
+}
+
+.ooh-card__body {
+  padding: 12px 12px 14px;
+}
+
+.ooh-card__name {
+  margin: 0 0 6px;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.ooh-card__meta {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+@media (max-width: 520px) {
+  .ooh-card__img {
+    height: 180px;
+  }
+}

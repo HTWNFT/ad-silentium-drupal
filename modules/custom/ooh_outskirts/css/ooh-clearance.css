@@ -1,0 +1,124 @@
+.ooh-clearance-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(0, 220, 255, 0.10), transparent 35%),
+    linear-gradient(180deg, #05080d 0%, #02040a 100%);
+  color: #d9f7ff;
+  padding: 72px 24px;
+}
+
+.ooh-clearance-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  border: 1px solid rgba(0, 220, 255, 0.18);
+  background: rgba(2, 10, 18, 0.82);
+  box-shadow: 0 0 30px rgba(0, 220, 255, 0.08);
+  padding: 48px;
+}
+
+.ooh-clearance-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #69f0ff;
+  margin-bottom: 14px;
+}
+
+.ooh-clearance-title {
+  font-size: 56px;
+  line-height: 1;
+  margin: 0 0 18px;
+  letter-spacing: 0.06em;
+}
+
+.ooh-clearance-copy {
+  max-width: 760px;
+  font-size: 18px;
+  color: rgba(217, 247, 255, 0.82);
+  margin-bottom: 32px;
+}
+
+.ooh-clearance-status {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.ooh-status-card {
+  border: 1px solid rgba(0, 220, 255, 0.18);
+  background: rgba(0, 8, 16, 0.7);
+  padding: 18px 20px;
+}
+
+.ooh-status-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #69f0ff;
+  margin-bottom: 8px;
+}
+
+.ooh-clearance-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.ooh-action-card {
+  display: block;
+  text-decoration: none;
+  color: #d9f7ff;
+  border: 1px solid rgba(0, 220, 255, 0.2);
+  background: linear-gradient(180deg, rgba(0, 10, 20, 0.92), rgba(0, 5, 10, 0.96));
+  padding: 28px;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ooh-action-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(105, 240, 255, 0.8);
+  box-shadow: 0 0 26px rgba(0, 220, 255, 0.14);
+}
+
+.ooh-action-kicker {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: #69f0ff;
+  margin-bottom: 12px;
+}
+
+.ooh-action-card h2 {
+  margin: 0 0 10px;
+  font-size: 30px;
+  letter-spacing: 0.05em;
+}
+
+.ooh-action-card p {
+  margin: 0;
+  color: rgba(217, 247, 255, 0.78);
+}
+
+.ooh-clearance-footer-note {
+  margin-top: 28px;
+  font-size: 14px;
+  color: rgba(217, 247, 255, 0.62);
+}
+
+@media (max-width: 768px) {
+  .ooh-clearance-shell {
+    padding: 28px;
+  }
+
+  .ooh-clearance-title {
+    font-size: 40px;
+  }
+
+  .ooh-clearance-status,
+  .ooh-clearance-actions {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,104 @@
+/* HERO ROOT */
+.ooh-hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+/* CAROUSEL CONTAINER */
+.ooh-hero__carousel {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* SLIDES */
+.ooh-hero__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+
+.ooh-hero__slide:first-child,
+.ooh-hero__slide.is-active {
+  opacity: 1;
+}
+
+/* MEDIA */
+.ooh-hero__slide img,
+.ooh-hero__slide video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* DARK OVERLAY */
+.ooh-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.7),
+    rgba(0,0,0,0.9)
+  );
+}
+
+/* TEXT LAYER */
+.ooh-hero__inner {
+  position: relative;
+  z-index: 3;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 140px 40px;
+  color: #fff;
+}
+
+/* TITLE */
+.ooh-hero__title {
+  font-size: 110px;
+  line-height: 1;
+  color: #59f3ff;
+  text-shadow: 0 0 20px rgba(89,243,255,0.6);
+}
+
+/* SUBTITLE */
+.ooh-hero__subtitle {
+  margin-top: 20px;
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+/* BUTTONS */
+.ooh-hero__actions {
+  margin-top: 40px;
+}
+
+.ooh-hero__button {
+  display: inline-block;
+  padding: 14px 28px;
+  margin-right: 15px;
+  border-radius: 6px;
+  border: 1px solid #59f3ff;
+  color: #59f3ff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.ooh-hero__button:hover {
+  background: rgba(89,243,255,0.1);
+}
+
+.ooh-prologue-modal {
+  display: none;
+}
+
+.ooh-prologue-modal.is-open {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}

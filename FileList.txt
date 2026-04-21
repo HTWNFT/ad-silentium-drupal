@@ -1,0 +1,15 @@
+modules/custom/ooh_outskirts/ooh_outskirts.info.yml
+
+modules/custom/ooh_outskirts/ooh_outskirts.libraries.yml ✅ (the one we just fixed)
+
+modules/custom/ooh_outskirts/css/*.css
+
+modules/custom/ooh_outskirts/js/*.js
+
+modules/custom/ooh_outskirts/src/Plugin/Block/OohLandingBlock.php
+
+modules/custom/ooh_outskirts/src/Plugin/Block/OohDossierBlock.php
+
+modules/custom/ooh_outskirts/src/Plugin/Block/OohPlayBlock.php
+
+(Optional but helpful) the exported block placement config block.block.*.yml only if you’re using config sync

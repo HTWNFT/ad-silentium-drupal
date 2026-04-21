@@ -1,0 +1,21 @@
+clearance:
+  version: 1.x
+  css:
+    theme:
+      css/ooh-clearance.css: {}
+  js:
+    js/ooh-clearance.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+credits:
+  version: 1.x
+  css:
+    theme:
+      css/ooh-credits.css: {}
+  js:
+    js/ooh-credits.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

@@ -1,0 +1,25 @@
+Asset/Portraits setup
+
+Recruiters (4):
+- Recruiters/pt_recruiter_01_enclave_handler.png
+- Recruiters/pt_recruiter_02_gene_scribe.png
+- Recruiters/pt_recruiter_03_scrap_broker.png
+- Recruiters/pt_recruiter_04_signal_cult_liaison.png
+
+Mutants:
+- Mutants/pt_mutant_01_ashlung_drifter.png
+- Mutants/pt_mutant_02_glassjaw_scout.png
+- Mutants/pt_mutant_03_cable_bloom.png
+- Mutants/pt_mutant_04_rustskin_laborer.png
+- Mutants/pt_mutant_05_sporeveil.png
+- Mutants/pt_mutant_06_bonecoil.png
+
+Genetic Warlords:
+- Genetic_Warlords/pt_warlord_01_vatborn_tactician.png
+- Genetic_Warlords/pt_warlord_02_chromepatriarch.png
+- Genetic_Warlords/pt_warlord_03_harvest_regent.png
+- Genetic_Warlords/pt_warlord_04_suture_general.png
+
+Shared:
+- Shared/NEGATIVE_PROMPT.txt
+- Shared/STYLE_RULES.md

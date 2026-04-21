@@ -1,0 +1,274 @@
+========================================================================================================================================
+
+# 1) Set these two paths once
+$ProjectRoot = "C:\PATH\TO\OUTSKIRTS_OF_HELL"     # <-- EDIT THIS
+$Inbox      = "$env:USERPROFILE\Downloads\assets"
+$Plan       = Join-Path $Inbox "rename_plan.csv"
+
+# 2) Create tools folder
+New-Item -ItemType Directory -Force -Path (Join-Path $ProjectRoot "tools") | Out-Null
+
+# 3) Create the pipeline script
+@'
+import argparse
+import csv
+import shutil
+from pathlib import Path
+
+def classify(folder: Path):
+    s = str(folder).lower()
+    # inbox folders seen in your rename_plan.csv:
+    # Backgrounds, Icons, Portraits\...\Ronins/Mutants/Genetic_Warlords/Recruiters/Sigils
+    if "background" in s:
+        return "background", Path("backgrounds_png")
+    if "\\icons" in s or s.endswith("icons"):
+        return "icon", Path("icons_png")
+    if "sigil" in s:
+        return "sigil", Path("icons_png") / "sigils"
+    if "recruiter" in s:
+        return "portrait", Path("portraits_png") / "recruiters"
+    if "mutant" in s:
+        return "portrait", Path("portraits_png") / "mutants"
+    if "ronin" in s:
+        return "portrait", Path("portraits_png") / "ronin"
+    if "genetic_warlords" in s or ("warlord" in s and "portrait" in s):
+        return "portrait", Path("portraits_png") / "warlords"
+    return "unknown", Path("misc")
+
+def safe_rename(old_path: Path, new_name: str, dry_run: bool):
+    new_path = old_path.with_name(new_name)
+    if old_path == new_path:
+        return old_path
+    if not old_path.exists():
+        print(f"[WARN] Missing: {old_path}")
+        return new_path
+    if new_path.exists():
+        print(f"[WARN] Target exists, skip rename: {new_path.name}")
+        return new_path
+    print(f"[RENAME] {old_path.name} -> {new_path.name}")
+    if not dry_run:
+        old_path.rename(new_path)
+    return new_path
+
+def ensure_dir(p: Path, dry_run: bool):
+    if dry_run:
+        return
+    p.mkdir(parents=True, exist_ok=True)
+
+def copy_or_move(src: Path, dst: Path, move: bool, dry_run: bool):
+    ensure_dir(dst.parent, dry_run)
+    if dst.exists():
+        return
+    action = "MOVE" if move else "COPY"
+    print(f"[{action}] {src} -> {dst}")
+    if dry_run:
+        return
+    if move:
+        shutil.move(str(src), str(dst))
+    else:
+        shutil.copy2(str(src), str(dst))
+
+def convert_images(project_root: Path, sync_drupal: bool, dry_run: bool):
+    from PIL import Image
+
+    src_root = project_root / "02_ASSETS_SOURCE"
+    build_root = project_root / "03_ASSETS_BUILD"
+    drupal_root = project_root / "04_DRUPAL" / "web" / "sites" / "default" / "files" / "outskirts"
+
+    manifests_dir = build_root / "manifests"
+    ensure_dir(manifests_dir, dry_run)
+
+    portraits_rows = []
+    icons_rows = []
+    backgrounds_rows = []
+
+    # BACKGROUNDS
+    for p in (src_root / "backgrounds_png").rglob("*"):
+        if p.suffix.lower() not in [".png", ".jpg", ".jpeg", ".webp"]:
+            continue
+        out = build_root / "backgrounds_webp" / (p.stem + ".webp")
+        ensure_dir(out.parent, dry_run)
+        if not out.exists():
+            print(f"[WEBP] background -> {out.name}")
+            if not dry_run:
+                im = Image.open(p).convert("RGBA")
+                # keep original size; if you later want, clamp width here
+                im.save(out, "WEBP", quality=90, method=6)
+        backgrounds_rows.append({
+            "id": p.stem,
+            "source_rel": str(p.relative_to(project_root)).replace("\\", "/"),
+            "build_rel": str(out.relative_to(project_root)).replace("\\", "/"),
+            "drupal_rel": f"outskirts/backgrounds/{out.name}",
+        })
+        if sync_drupal:
+            dst = drupal_root / "backgrounds" / out.name
+            copy_or_move(out, dst, move=False, dry_run=dry_run)
+
+    # PORTRAITS (1024/512)
+    portrait_src = (src_root / "portraits_png")
+    for p in portrait_src.rglob("*"):
+        if p.suffix.lower() not in [".png", ".jpg", ".jpeg", ".webp"]:
+            continue
+        for size in [1024, 512]:
+            out = build_root / "portraits_webp" / str(size) / (p.stem + ".webp")
+            ensure_dir(out.parent, dry_run)
+            if not out.exists():
+                print(f"[WEBP] portrait {size} -> {out.name}")
+                if not dry_run:
+                    im = Image.open(p).convert("RGBA")
+                    w, h = im.size
+                    scale = min(size / max(w, h), 1.0)
+                    nw, nh = int(w * scale), int(h * scale)
+                    if (nw, nh) != (w, h):
+                        im = im.resize((nw, nh))
+                    im.save(out, "WEBP", quality=90, method=6)
+            portraits_rows.append({
+                "id": p.stem,
+                "size": size,
+                "source_rel": str(p.relative_to(project_root)).replace("\\", "/"),
+                "build_rel": str(out.relative_to(project_root)).replace("\\", "/"),
+                "drupal_rel": f"outskirts/portraits/{size}/{out.name}",
+            })
+            if sync_drupal:
+                dst = drupal_root / "portraits" / str(size) / out.name
+                copy_or_move(out, dst, move=False, dry_run=dry_run)
+
+    # ICONS (256/128)
+    icon_src = (src_root / "icons_png")
+    for p in icon_src.rglob("*"):
+        if p.suffix.lower() not in [".png", ".jpg", ".jpeg", ".webp"]:
+            continue
+        for size in [256, 128]:
+            out = build_root / "icons_webp" / str(size) / (p.stem + ".webp")
+            ensure_dir(out.parent, dry_run)
+            if not out.exists():
+                print(f"[WEBP] icon {size} -> {out.name}")
+                if not dry_run:
+                    im = Image.open(p).convert("RGBA")
+                    w, h = im.size
+                    scale = min(size / max(w, h), 1.0)
+                    nw, nh = int(w * scale), int(h * scale)
+                    if (nw, nh) != (w, h):
+                        im = im.resize((nw, nh))
+                    im.save(out, "WEBP", quality=90, method=6)
+            icons_rows.append({
+                "id": p.stem,
+                "size": size,
+                "source_rel": str(p.relative_to(project_root)).replace("\\", "/"),
+                "build_rel": str(out.relative_to(project_root)).replace("\\", "/"),
+                "drupal_rel": f"outskirts/icons/{size}/{out.name}",
+            })
+            if sync_drupal:
+                dst = drupal_root / "icons" / str(size) / out.name
+                copy_or_move(out, dst, move=False, dry_run=dry_run)
+
+    # Write manifests
+    if not dry_run:
+        def write_csv(path, rows, fieldnames):
+            ensure_dir(path.parent, dry_run=False)
+            with path.open("w", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=fieldnames)
+                w.writeheader()
+                w.writerows(rows)
+
+        write_csv(manifests_dir / "backgrounds_manifest.csv",
+                  backgrounds_rows,
+                  ["id", "source_rel", "build_rel", "drupal_rel"])
+
+        write_csv(manifests_dir / "portraits_manifest.csv",
+                  portraits_rows,
+                  ["id", "size", "source_rel", "build_rel", "drupal_rel"])
+
+        write_csv(manifests_dir / "icons_manifest.csv",
+                  icons_rows,
+                  ["id", "size", "source_rel", "build_rel", "drupal_rel"])
+
+def sync_video_loops(inbox: Path, project_root: Path, sync_drupal: bool, move: bool, dry_run: bool):
+    src = inbox / "Video Loops"
+    if not src.exists():
+        return
+    src_root = project_root / "02_ASSETS_SOURCE" / "video_loops_mp4"
+    build_root = project_root / "03_ASSETS_BUILD" / "video_loops_mp4"
+    drupal_root = project_root / "04_DRUPAL" / "web" / "sites" / "default" / "files" / "outskirts" / "video_loops"
+
+    for p in src.rglob("*.mp4"):
+        dst_src = src_root / p.name
+        dst_build = build_root / p.name
+        copy_or_move(p, dst_src, move=move, dry_run=dry_run)
+        copy_or_move(dst_src, dst_build, move=False, dry_run=dry_run)
+        if sync_drupal:
+            copy_or_move(dst_build, drupal_root / p.name, move=False, dry_run=dry_run)
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--project", required=True)
+    ap.add_argument("--inbox", required=True)
+    ap.add_argument("--plan", required=True)
+    ap.add_argument("--move", action="store_true", help="Move into repo instead of copy")
+    ap.add_argument("--sync-drupal", action="store_true", help="Copy BUILD outputs into Drupal public files")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--enforce-bg-prefix", default="", help="e.g. ter -> bg_ter_*")
+    args = ap.parse_args()
+
+    project_root = Path(args.project).resolve()
+    inbox = Path(args.inbox).resolve()
+    plan = Path(args.plan).resolve()
+
+    src_root = project_root / "02_ASSETS_SOURCE"
+    ensure_dir(src_root, args.dry_run)
+
+    # 1) Rename + place per rename_plan.csv
+    with plan.open("r", encoding="utf-8-sig", newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            old = Path(row["OldFullName"])
+            folder = Path(row["Folder"])
+            new_name = (row["NewName"] or "").strip()
+            if not new_name:
+                continue
+
+            kind, rel_dest = classify(folder)
+
+            # Optional: force Terra prefix for backgrounds
+            if args.enforce_bg_prefix and kind == "background":
+                if new_name.startswith("bg_") and not new_name.startswith(f"bg_{args.enforce_bg_prefix}_"):
+                    new_name = f"bg_{args.enforce_bg_prefix}_" + new_name[len("bg_"):]
+            renamed = safe_rename(old, new_name, args.dry_run)
+
+            # Place into 02_ASSETS_SOURCE
+            dest = src_root / rel_dest / renamed.name
+            copy_or_move(renamed, dest, move=args.move, dry_run=args.dry_run)
+
+    # 2) Pull mp4 loops from inbox even if they aren't in rename_plan.csv
+    sync_video_loops(inbox, project_root, sync_drupal=args.sync_drupal, move=args.move, dry_run=args.dry_run)
+
+    # 3) Convert to BUILD webp + write manifests (+ optional Drupal sync)
+    convert_images(project_root, sync_drupal=args.sync_drupal, dry_run=args.dry_run)
+
+    print("\nDONE.")
+
+if __name__ == "__main__":
+    main()
+'@ | Set-Content -Encoding UTF8 -Path (Join-Path $ProjectRoot "tools\terra_pipeline.py")
+
+
+
+$ProjectRoot = "C:\PATH\TO\OUTSKIRTS_OF_HELL"     # <-- EDIT THIS
+$Inbox      = "$env:USERPROFILE\Downloads\assets"
+$Plan       = Join-Path $Inbox "rename_plan.csv"
+
+Set-Location $ProjectRoot
+
+py -m pip install --upgrade pillow
+
+# First: dry run (no changes)
+py .\tools\terra_pipeline.py --project "$ProjectRoot" --inbox "$Inbox" --plan "$Plan" --sync-drupal --dry-run --enforce-bg-prefix ter
+
+# If the dry-run output looks correct, do it for real:
+py .\tools\terra_pipeline.py --project "$ProjectRoot" --inbox "$Inbox" --plan "$Plan" --sync-drupal --enforce-bg-prefix ter
+
+
+
+
+py .\tools\terra_pipeline.py --project "$ProjectRoot" --inbox "$Inbox" --plan "$Plan" --sync-drupal --enforce-bg-prefix ter --move
+

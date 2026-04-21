@@ -1,0 +1,3 @@
+id,type,house,role,name,filename,accent_color,notes
+warlord_vesperin_cressida,warlord,vesperin,matriarch,cressida,portrait_warlord_house_vesperin_matriarch_cressida_v01.webp,magenta,one-dot circlet accent
+recruiter_gene_scribe,recruiter,,handler,gene_scribe,portrait_recruiter_gene_scribe_handler_v01.webp,cyan,temple node accent

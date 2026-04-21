@@ -1,0 +1,80 @@
+# =======================
+# CONFIG (edit if needed)
+# =======================
+$SiteFolderName      = "STIKWALLET11202025"
+$PreferredXamppRoot  = "C:\XAMPP11032025"   # your real XAMPP folder
+$LegacyXamppRoot     = "C:\xampp"          # the confusing old one (if it exists)
+$Pattern             = "video_loops_*.mp4"
+
+# =======================
+# Detect Drupal root
+# =======================
+function Test-DrupalRoot($p){
+  (Test-Path (Join-Path $p "index.php")) -and
+  (Test-Path (Join-Path $p "core\lib\Drupal.php")) -and
+  (Test-Path (Join-Path $p "sites\default\settings.php"))
+}
+
+$candidates = @(
+  Join-Path $PreferredXamppRoot "htdocs\$SiteFolderName",
+  Join-Path $LegacyXamppRoot "htdocs\$SiteFolderName"
+) | Where-Object { Test-Path $_ }
+
+$DrupalRoot = $candidates | Where-Object { Test-DrupalRoot $_ } | Select-Object -First 1
+if (-not $DrupalRoot) {
+  Write-Host "Could not auto-detect Drupal root. Candidates found:" -ForegroundColor Yellow
+  $candidates | ForEach-Object { Write-Host " - $_" }
+  throw "Set `$DrupalRoot manually and re-run."
+}
+
+Write-Host "Using Drupal root: $DrupalRoot" -ForegroundColor Green
+
+# Target folder Drupal public files path
+$TargetDir = Join-Path $DrupalRoot "sites\default\files\outskirts\loops"
+New-Item -ItemType Directory -Path $TargetDir -Force | Out-Null
+Write-Host "Target loop folder: $TargetDir" -ForegroundColor Green
+
+# =======================
+# Search for MP4s
+# =======================
+$SearchRoots = @(
+  "$env:USERPROFILE\Downloads",
+  "$env:USERPROFILE\Desktop",
+  "$env:USERPROFILE\Documents",
+  (Join-Path $PreferredXamppRoot "htdocs"),
+  (Join-Path $LegacyXamppRoot "htdocs")
+) | Where-Object { Test-Path $_ } | Select-Object -Unique
+
+Write-Host "`nSearching for $Pattern under:" -ForegroundColor Cyan
+$SearchRoots | ForEach-Object { Write-Host " - $_" }
+
+$Found = foreach ($r in $SearchRoots) {
+  Get-ChildItem -Path $r -Filter $Pattern -File -Recurse -ErrorAction SilentlyContinue
+} | Sort-Object FullName -Unique
+
+if (-not $Found) { throw "No files matched $Pattern. Add a SearchRoots path and re-run." }
+
+Write-Host "`nFound these MP4s:" -ForegroundColor Green
+$Found | Select-Object FullName, Length, LastWriteTime
+
+# =======================
+# DRY RUN (preview moves)
+# =======================
+Write-Host "`nDRY RUN: planned moves to $TargetDir" -ForegroundColor Yellow
+foreach ($f in $Found) {
+  $dest = Join-Path $TargetDir $f.Name
+  Write-Host "MOVE: $($f.FullName) -> $dest"
+}
+
+# =======================
+# DO THE MOVE (uncomment)
+# =======================
+  foreach ($f in $Found) {
+    $dest = Join-Path $TargetDir $f.Name
+    Move-Item -LiteralPath $f.FullName -Destination $dest -Force
+  }
+  Write-Host "`nMoved $($Found.Count) file(s) into $TargetDir" -ForegroundColor Green
+
+# Verify target contents
+Write-Host "`nTarget folder now contains:" -ForegroundColor Cyan
+Get-ChildItem -Path $TargetDir -Filter $Pattern -File | Select-Object Name, Length

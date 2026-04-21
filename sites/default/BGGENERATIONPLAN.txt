@@ -1,0 +1,27 @@
+Signal Tower Battlefield (your “communications tower scenario”)
+
+Underboard Alley (urban underworld, raider routes, black-market rites)
+
+Catacomb Gate (threshold space, necromancy + ancient infrastructure)
+
+WLAN Grove (Merged “nature-network,” luminous roots, data running like sap)
+
+Warlord Enclave Outskirts (fortified ruins, mutation kennels, genetic heraldry)
+
+The 5 variants per location (this is how you get to 25)
+
+A: Calm / Establishing (exploration-ready)
+
+B: Threat / Pre-combat (fog, motion, distant silhouettes)
+
+C: Combat (debris, muzzle flashes, ritual sparks—still readable)
+
+D: Aftermath (smoke, embers, bodies removed, quiet horror)
+
+E: “Event” (boss portal, tower pulse, eclipse, siren glow)
+
+File naming
+
+assets/backgrounds/bg_signal_tower_01a.webp … 01e.webp
+
+Repeat for each location.
