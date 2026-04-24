@@ -7,31 +7,38 @@ use Drupal\Core\Controller\ControllerBase;
 class OohPageController extends ControllerBase {
 
   public function landingpage() {
-    $block = \Drupal::service('plugin.manager.block')->createInstance('ooh_landing_block');
-    $build = $block->build();
 
-    $build['#attached']['library'][] = 'ooh_outskirts.landing';
-    $build['#cache']['max-age'] = 0;
+    $media_dir = DRUPAL_ROOT . '/sites/default/files/adsilentium/loops';
+    $media_url = base_path() . 'sites/default/files/adsilentium/loops/';
 
-    return $build;
-  }
+    $files = glob($media_dir . '/*.mp4') ?: [];
 
-  public function clearance() {
-    $block = \Drupal::service('plugin.manager.block')->createInstance('ooh_clearance_block');
-    $build = $block->build();
-    $build['#attached']['library'][] = 'ooh_outskirts.landing';
-    $build['#cache']['max-age'] = 0;
+    shuffle($files);
+    $files = array_slice($files, 0, 8);
 
-    return $build;
-  }
+    $loops = [];
 
-  public function credits() {
-    $block = \Drupal::service('plugin.manager.block')->createInstance('ooh_credits_block');
-    $build = $block->build();
-    $build['#attached']['library'][] = 'ooh_outskirts.landing';
-    $build['#cache']['max-age'] = 0;
+    foreach ($files as $index => $file) {
+      $loops[] = [
+        'index' => $index,
+        'url' => $media_url . rawurlencode(basename($file)),
+        'active' => $index === 0,
+        'index0' => $index,
+      ];
+    }
 
-    return $build;
+    return [
+      '#theme' => 'ooh_landing_page',
+      '#loops' => $loops,
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/landing',
+        ],
+      ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
   }
 
 }

@@ -2,6 +2,7 @@
 
 namespace Drupal\ooh_outskirts\Plugin\Block;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Block\BlockBase;
 
 /**
@@ -19,31 +20,71 @@ class OohLandingBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    $template = <<<'HTML'
+    $base_path = rtrim(\Drupal::request()->getBasePath(), '/');
+    $loops_dir = DRUPAL_ROOT . '/sites/default/files/adsilentium/loops';
+    $loops_web_path = $base_path . '/sites/default/files/adsilentium/loops';
 
-<section class="ooh-hero ooh-hero-carousel" id="ooh-hero" data-ooh-hero>
+    $loop_files = [];
 
-  <!-- CAROUSEL BACKGROUND -->
-  <div class="ooh-hero__carousel">
-    <div class="ooh-hero__slide is-active">
-      <video autoplay muted loop playsinline>
-        <source src="/STIKWALLET11202025/sites/default/files/outskirts/loops/video_loops_underboard_alley_core.mp4" type="video/mp4">
+    if (is_dir($loops_dir) && is_readable($loops_dir)) {
+      $entries = scandir($loops_dir) ?: [];
+
+      foreach ($entries as $entry) {
+        $full_path = $loops_dir . DIRECTORY_SEPARATOR . $entry;
+
+        if (
+          $entry !== '.' &&
+          $entry !== '..' &&
+          is_file($full_path) &&
+          preg_match('/\.mp4$/i', $entry)
+        ) {
+          $loop_files[] = $entry;
+        }
+      }
+    }
+
+    if (!empty($loop_files)) {
+      shuffle($loop_files);
+    }
+
+    $slides_markup = '';
+
+    if (!empty($loop_files)) {
+      foreach ($loop_files as $index => $file_name) {
+        $is_active = $index === 0 ? ' is-active' : '';
+        $aria_hidden = $index === 0 ? 'false' : 'true';
+        $file_url = $loops_web_path . '/' . rawurlencode($file_name);
+        $file_url_escaped = Html::escape($file_url);
+
+        $slides_markup .= <<<HTML
+    <div class="ooh-hero__slide ooh-hero__slide--video{$is_active}" aria-hidden="{$aria_hidden}">
+      <video class="ooh-hero__loop-video" autoplay muted loop playsinline preload="auto">
+        <source src="{$file_url_escaped}" type="video/mp4">
       </video>
     </div>
 
-    <div class="ooh-hero__slide">
-      <img src="/STIKWALLET11202025/sites/default/files/outskirts/backgrounds/bg_underboard_alley_core.webp" />
+HTML;
+      }
+    }
+    else {
+      $slides_markup = <<<HTML
+    <div class="ooh-hero__slide ooh-hero__slide--fallback is-active" aria-hidden="false">
+      <div class="ooh-hero__fallback-message">
+        NO LOOP ASSETS FOUND IN /sites/default/files/adsilentium/loops
+      </div>
     </div>
 
-    <div class="ooh-hero__slide">
-      <img src="/STIKWALLET11202025/sites/default/files/outskirts/backgrounds/bg_underboard_alley_silent_approach.webp" />
-    </div>
-  </div>
+HTML;
+    }
 
-  <!-- DARK OVERLAY -->
+    $template = <<<HTML
+<section class="ooh-hero ooh-hero-carousel ooh-hero--random-loops ooh-hero--cinematic" id="ooh-hero" data-ooh-hero>
+
+  <div class="ooh-hero__carousel">
+{$slides_markup}  </div>
+
   <div class="ooh-hero__overlay"></div>
 
-  <!-- TEXT CONTENT -->
   <div class="ooh-hero__inner">
     <p class="ooh-hero__eyebrow">CLASSIFIED // AD SILENTIUM</p>
 
@@ -58,10 +99,12 @@ class OohLandingBlock extends BlockBase {
         ENTER DOSSIER
       </a>
 
-      <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue">
+      <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue" type="button">
         READ PROLOGUE
       </button>
     </div>
+
+    <div class="ooh-hero__dots" aria-label="Hero slide navigation"></div>
   </div>
 
 </section>
@@ -111,10 +154,11 @@ HTML;
       'content' => [
         '#markup' => $template,
       ],
-      '#attached' => [
-        'library' => [
-          'ooh_outskirts/landing',
-        ],
+       '#attached' => [
+         'library' => [
+           'ooh_outskirts/landing',
+           'ooh_outskirts/global-fonts',
+         ],
       ],
     ];
   }

@@ -1,15 +1,20 @@
 <?php
 
 /**
- * Implements hook_page_attachments().
+ * @file
+ * Module hooks for the ooh_outskirts module.
  */
-function ooh_outskirts_page_attachments(array &$attachments) {
-  // getPathInfo() is relative to Drupal's base path, so in your subdir install
-  // it should still look like "/adsilentium" or "/adsilentium/...".
-  $path = \Drupal::request()->getPathInfo();
 
-  // Attach only on /adsilentium and any subpaths like /adsilentium/foo.
-  if ($path === '/adsilentium' || str_starts_with($path, '/adsilentium/')) {
-    $attachments['#attached']['library'][] = 'ooh_outskirts/landing';
-  }
+/**
+ * Implements hook_theme().
+ */
+function ooh_outskirts_theme($existing, $type, $theme, $path) {
+  return [
+    'ooh_landing_page' => [
+      'variables' => [
+        'loops' => [],
+      ],
+      'template' => 'ooh-landing-page',
+    ],
+  ];
 }

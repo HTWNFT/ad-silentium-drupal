@@ -245,3 +245,11 @@
   text-align: center;
   background: #05090d;
 }
+
+body.path-landingpage .ooh-prologue-modal {
+  display: none !important;
+}
+
+body.path-landingpage .ooh-prologue-modal.is-open {
+  display: block !important;
+}

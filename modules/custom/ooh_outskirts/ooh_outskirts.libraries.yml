@@ -11,7 +11,7 @@ landing:
   version: 1.x
   css:
     theme:
-      css/ooh_hero.css: {}
+      css/ooh_landing.css: {}
   js:
     js/ooh-hero-carousel.js: {}
     js/ooh-hero-modal.js: {}
@@ -41,6 +41,7 @@ play:
     - core/drupalSettings
 
 game_generator:
+  version: 1.x
   css:
     theme:
       css/ooh_game_generator.css: {}
