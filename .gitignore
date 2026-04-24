@@ -1,5 +1,8 @@
+sites/default/files/php/twig/
+sites/default/settings.php
+sites/default/files/**/*.mp4
+OUTSKIRTS_PIPELINE/
 modules/custom/ooh_outskirts_BACKUP*/
 *.bak
 *.backup
 *_BACKUP*
-sites/default/files/php/twig/
