@@ -41,4 +41,38 @@ class OohPageController extends ControllerBase {
     ];
   }
 
+  /**
+   * Builds the clearance page.
+   */
+  public function clearance() {
+    return [
+      '#theme' => 'ooh_clearance_block',
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/clearance',
+        ],
+      ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
+  }
+
+  /**
+   * Builds the credits page.
+   */
+  public function credits() {
+    return [
+      '#theme' => 'ooh_credits_block',
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/credits',
+        ],
+      ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
+  }
+
 }

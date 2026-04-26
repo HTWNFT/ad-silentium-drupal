@@ -1,3 +1,70 @@
+body.path-clearance {
+  margin: 0;
+  background: #02080d;
+}
+
+body.path-clearance header,
+body.path-clearance .navbar,
+body.path-clearance .site-header,
+body.path-clearance .breadcrumb,
+body.path-clearance .region-primary-menu,
+body.path-clearance .region-secondary-menu,
+body.path-clearance .region-header,
+body.path-clearance .search-block-form {
+  display: none !important;
+}
+
+body.path-clearance .container,
+body.path-clearance .container-fluid,
+body.path-clearance main,
+body.path-clearance .main-content {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.path-clearance #page-wrapper,
+body.path-clearance #page,
+body.path-clearance .layout-main-wrapper,
+body.path-clearance .dialog-off-canvas-main-canvas,
+body.path-clearance .main-content,
+body.path-clearance .container,
+body.path-clearance .container-fluid {
+  background: #02080d !important;
+  border-color: rgba(0, 220, 255, 0.08) !important;
+}
+
+body.path-clearance a[href="/"] {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 10001;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border: 1px solid rgba(105, 240, 255, 0.75);
+  border-radius: 8px;
+  background: rgba(2, 12, 22, 0.78);
+  color: #bff8ff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 0 16px rgba(0, 220, 255, 0.2);
+}
+
+body.path-clearance a[href="/"]:hover,
+body.path-clearance a[href="/"]:focus-visible {
+  border-color: #69f0ff;
+  color: #e2fdff;
+  text-decoration: none;
+  box-shadow: 0 0 28px rgba(105, 240, 255, 0.42);
+}
+
 .ooh-clearance-page {
   min-height: 100vh;
   background:
@@ -5,6 +72,12 @@
     linear-gradient(180deg, #05080d 0%, #02040a 100%);
   color: #d9f7ff;
   padding: 72px 24px;
+}
+
+body.path-clearance .ooh-clearance-page {
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
 }
 
 .ooh-clearance-shell {

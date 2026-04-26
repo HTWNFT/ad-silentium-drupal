@@ -16,5 +16,13 @@ function ooh_outskirts_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'ooh-landing-page',
     ],
+    'ooh_clearance_block' => [
+      'variables' => [],
+      'template' => 'block--ooh-clearance-block',
+    ],
+    'ooh_credits_block' => [
+      'variables' => [],
+      'template' => 'block--ooh-credits-block',
+    ],
   ];
 }
