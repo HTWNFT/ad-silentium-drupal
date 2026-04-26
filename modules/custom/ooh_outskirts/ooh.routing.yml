@@ -7,7 +7,7 @@ ooh_outskirts.clearance:
     _permission: 'access content'
 
 ooh_outskirts.credits:
-  path: '/credits'
+  path: '/clearance/credits'
   defaults:
     _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::credits'
     _title: 'Credits'
