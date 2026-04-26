@@ -4,6 +4,7 @@ namespace Drupal\ooh_outskirts\Plugin\Block;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Url;
 
 /**
  * Provides the Outskirts of Hell landing page block.
@@ -21,6 +22,7 @@ class OohLandingBlock extends BlockBase {
    */
   public function build() {
     $base_path = rtrim(\Drupal::request()->getBasePath(), '/');
+    $clearance_url = Html::escape(Url::fromRoute('ooh_outskirts.clearance')->toString());
     $loops_dir = DRUPAL_ROOT . '/sites/default/files/adsilentium/loops';
     $loops_web_path = $base_path . '/sites/default/files/adsilentium/loops';
 
@@ -95,7 +97,7 @@ HTML;
     </p>
 
     <div class="ooh-hero__actions">
-      <a class="ooh-hero__button ooh-hero__button--primary" href="/dossier">
+      <a class="ooh-hero__button ooh-hero__button--primary" href="{$clearance_url}">
         ENTER DOSSIER
       </a>
 
