@@ -1,3 +1,29 @@
+body.path-clearance {
+  margin: 0;
+  background: #02080d;
+}
+
+body.path-clearance header,
+body.path-clearance .navbar,
+body.path-clearance .site-header,
+body.path-clearance .breadcrumb,
+body.path-clearance .region-primary-menu,
+body.path-clearance .region-secondary-menu,
+body.path-clearance .region-header,
+body.path-clearance .search-block-form {
+  display: none !important;
+}
+
+body.path-clearance .container,
+body.path-clearance .container-fluid,
+body.path-clearance main,
+body.path-clearance .main-content {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .ooh-clearance-page {
   min-height: 100vh;
   background:
@@ -5,6 +31,12 @@
     linear-gradient(180deg, #05080d 0%, #02040a 100%);
   color: #d9f7ff;
   padding: 72px 24px;
+}
+
+body.path-clearance .ooh-clearance-page {
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
 }
 
 .ooh-clearance-shell {

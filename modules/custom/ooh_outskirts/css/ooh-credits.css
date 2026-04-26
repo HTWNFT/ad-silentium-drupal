@@ -1,3 +1,31 @@
-/* Placeholder stylesheet for ooh/credits library.
- * Intentionally minimal until visual styling updates are approved.
- */
+body.path-credits {
+  margin: 0;
+  background: #02080d;
+}
+
+body.path-credits header,
+body.path-credits .navbar,
+body.path-credits .site-header,
+body.path-credits .breadcrumb,
+body.path-credits .region-primary-menu,
+body.path-credits .region-secondary-menu,
+body.path-credits .region-header,
+body.path-credits .search-block-form {
+  display: none !important;
+}
+
+body.path-credits .container,
+body.path-credits .container-fluid,
+body.path-credits main,
+body.path-credits .main-content {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.path-credits .ooh-credits-page {
+  min-height: 100vh;
+  width: 100vw;
+  margin: 0;
+}
