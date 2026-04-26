@@ -49,7 +49,7 @@ class OohPageController extends ControllerBase {
       '#theme' => 'ooh_clearance_block',
       '#attached' => [
         'library' => [
-          'ooh/clearance',
+          'ooh_outskirts/clearance',
         ],
       ],
       '#cache' => [
@@ -66,7 +66,7 @@ class OohPageController extends ControllerBase {
       '#theme' => 'ooh_credits_block',
       '#attached' => [
         'library' => [
-          'ooh/credits',
+          'ooh_outskirts/credits',
         ],
       ],
       '#cache' => [
