@@ -22,6 +22,7 @@ class OohLandingBlock extends BlockBase {
    */
   public function build() {
     $base_path = rtrim(\Drupal::request()->getBasePath(), '/');
+    $dossier_url = Html::escape(Url::fromUserInput('/dossier')->toString());
     $clearance_url = Html::escape(Url::fromRoute('ooh_outskirts.clearance')->toString());
     $loops_dir = DRUPAL_ROOT . '/sites/default/files/adsilentium/loops';
     $loops_web_path = $base_path . '/sites/default/files/adsilentium/loops';
@@ -97,13 +98,13 @@ HTML;
     </p>
 
     <div class="ooh-hero__actions">
-      <a class="ooh-hero__button ooh-hero__button--primary" href="{$clearance_url}">
-        ENTER DOSSIER
+      <a class="ooh-hero__button ooh-hero__button--primary" href="{$dossier_url}">
+        ENTER
       </a>
 
-      <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue" type="button">
-        READ PROLOGUE
-      </button>
+      <a class="ooh-hero__button ooh-hero__button--secondary" href="{$clearance_url}">
+        CLEARANCE
+      </a>
     </div>
 
     <div class="ooh-hero__dots" aria-label="Hero slide navigation"></div>

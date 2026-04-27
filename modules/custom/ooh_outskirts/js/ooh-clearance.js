@@ -33,7 +33,6 @@
     buttons.forEach(function (button) {
       button.addEventListener('click', function () {
         localStorage.setItem('ooh_last_clearance_choice', 'free');
-        window.location.href = '/dossier';
       });
     });
   }
@@ -44,7 +43,6 @@
     buttons.forEach(function (button) {
       button.addEventListener('click', function () {
         localStorage.setItem('ooh_last_clearance_choice', 'paid');
-        window.location.href = '/credits';
       });
     });
   }
