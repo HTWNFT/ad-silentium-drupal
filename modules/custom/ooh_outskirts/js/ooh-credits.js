@@ -61,7 +61,7 @@
 
     returnButtons.forEach(function (button) {
       button.addEventListener('click', function () {
-        window.location.href = '/clearance';
+        localStorage.setItem('ooh_last_credits_action', 'return_to_clearance');
       });
     });
   }

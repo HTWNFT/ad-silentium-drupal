@@ -3,6 +3,7 @@
 namespace Drupal\ooh_outskirts\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Url;
 
 /**
  * Provides the OOH Game Generator Block.
@@ -106,8 +107,8 @@ class OohGameGeneratorBlock extends BlockBase {
       ],
     ];
 
-    $paywall_url = '/clearance';
-    $enter_target = '/play';
+    $paywall_url = Url::fromRoute('ooh_outskirts.clearance')->toString();
+    $enter_target = Url::fromUserInput('/play')->toString();
 
     $build = [];
 
@@ -195,7 +196,7 @@ class OohGameGeneratorBlock extends BlockBase {
 
       <section class="ooh-generator__panel ooh-generator__panel--enter">
         <div class="ooh-generator__enter-wrap">
-          <a href="/play" class="ooh-generator__enter" data-ooh-enter>PLAY</a>
+          <a href="' . $enter_target . '" class="ooh-generator__enter" data-ooh-enter>PLAY</a>
         </div>
       </section>
     </div>
