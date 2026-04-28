@@ -7,7 +7,6 @@ use Drupal\Core\Controller\ControllerBase;
 class OohPageController extends ControllerBase {
 
   public function landingpage() {
-
     $media_dir = DRUPAL_ROOT . '/sites/default/files/adsilentium/loops';
     $media_url = base_path() . 'sites/default/files/adsilentium/loops/';
 
@@ -37,6 +36,17 @@ class OohPageController extends ControllerBase {
       ],
       '#cache' => [
         'max-age' => 0,
+      ],
+    ];
+  }
+
+  public function credits() {
+    return [
+      '#theme' => 'ooh_credits_block',
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/credits',
+        ],
       ],
     ];
   }
