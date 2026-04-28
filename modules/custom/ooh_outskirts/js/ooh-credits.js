@@ -7,14 +7,6 @@
     return Number.isNaN(parsed) ? 0 : parsed;
   }
 
-  function setStoredCredits(amount) {
-    localStorage.setItem('ooh_credits', String(amount));
-  }
-
-  function setAccessTier(tier) {
-    localStorage.setItem('ooh_access_tier', tier);
-  }
-
   function updateDisplayedBalance(context) {
     const balanceElements = once('ooh-credits-balance', '[data-ooh-current-balance]', context);
 
@@ -30,28 +22,25 @@
       button.addEventListener('click', function (event) {
         event.preventDefault();
 
-        const packAmount = parseInt(button.getAttribute('data-ooh-credit-pack'), 10);
-        const currentCredits = getStoredCredits();
-        const newBalance = currentCredits + packAmount;
+        const packName = button.getAttribute('data-credit-package');
+        const packAmount = button.getAttribute('data-credit-amount');
+        const productCode = button.getAttribute('data-product-code');
 
-        if (Number.isNaN(packAmount)) {
+        if (!packName || !packAmount || !productCode) {
           return;
         }
 
-        setStoredCredits(newBalance);
-        setAccessTier('Paid');
-
         const statusMessage = document.querySelector('[data-ooh-credit-status]');
         if (statusMessage) {
-          statusMessage.textContent = packAmount + ' credits added. Current balance: ' + newBalance + '.';
+          statusMessage.textContent =
+            'Checkout coming soon. ' +
+            packName.toUpperCase() +
+            ' package (' +
+            packAmount +
+            ' credits, code: ' +
+            productCode +
+            ') is queued for hosted payment integration.';
         }
-
-        const balanceTargets = document.querySelectorAll('[data-ooh-current-balance]');
-        balanceTargets.forEach(function (target) {
-          target.textContent = newBalance;
-        });
-
-        localStorage.setItem('ooh_last_credit_purchase', String(packAmount));
       });
     });
   }
