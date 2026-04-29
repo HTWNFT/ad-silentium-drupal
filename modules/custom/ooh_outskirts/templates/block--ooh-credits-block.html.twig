@@ -24,25 +24,52 @@
         <span class="ooh-pack-tag">ENTRY</span>
         <h2>60 CREDITS</h2>
         <p>Starter access for premium session entry.</p>
-        <a href="#" class="ooh-pack-button" data-ooh-credit-pack="60">Select</a>
+        <a
+          href="#checkout-coming-soon"
+          class="ooh-pack-button"
+          data-ooh-credit-pack="60"
+          data-credit-package="entry"
+          data-credit-amount="60"
+          data-product-code="credits_entry_60"
+        >
+          Select Entry
+        </a>
       </div>
 
       <div class="ooh-credit-pack">
         <span class="ooh-pack-tag">STANDARD</span>
         <h2>180 CREDITS</h2>
         <p>Extended operational time.</p>
-        <a href="#" class="ooh-pack-button" data-ooh-credit-pack="180">Select</a>
+        <a
+          href="#checkout-coming-soon"
+          class="ooh-pack-button"
+          data-ooh-credit-pack="180"
+          data-credit-package="standard"
+          data-credit-amount="180"
+          data-product-code="credits_standard_180"
+        >
+          Select Standard
+        </a>
       </div>
 
       <div class="ooh-credit-pack">
         <span class="ooh-pack-tag">FOUNDER</span>
         <h2>480 CREDITS</h2>
         <p>Long-session and premium route access.</p>
-        <a href="#" class="ooh-pack-button" data-ooh-credit-pack="480">Select</a>
+        <a
+          href="#checkout-coming-soon"
+          class="ooh-pack-button"
+          data-ooh-credit-pack="480"
+          data-credit-package="founder"
+          data-credit-amount="480"
+          data-product-code="credits_founder_480"
+        >
+          Select Founder
+        </a>
       </div>
     </div>
 
-    <div class="ooh-credits-feedback" data-ooh-credit-status></div>
+    <div class="ooh-credits-feedback" id="checkout-coming-soon" data-ooh-credit-status aria-live="polite"></div>
 
     <div class="ooh-credits-return">
       <a href="{{ path('ooh_outskirts.clearance') }}" class="ooh-return-link" data-ooh-return-clearance>Back to Clearance</a>

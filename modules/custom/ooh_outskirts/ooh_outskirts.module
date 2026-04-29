@@ -18,3 +18,22 @@ function ooh_outskirts_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
+
+return [
+  'ooh_landing_page' => [
+    'variables' => [
+      'loops' => [],
+    ],
+    'template' => 'ooh-landing-page',
+  ],
+
+  'ooh_credits_block' => [
+    'variables' => [],
+    'template' => 'ooh-credits-block',
+  ],
+
+  'ooh_clearance_block' => [
+    'variables' => [],
+    'template' => 'ooh-clearance-block',
+  ],
+];
