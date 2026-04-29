@@ -1,11 +1,31 @@
 body.path-clearance {
   margin: 0;
-  background-color: #010205;
-  background:
-    radial-gradient(circle at 20% 0%, rgba(0, 235, 255, 0.08), transparent 46%),
-    radial-gradient(circle at 100% 25%, rgba(0, 186, 232, 0.07), transparent 52%),
-    linear-gradient(180deg, #020306 0%, #010205 100%);
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #000;
   color: #d8f7ff;
+}
+
+body.path-clearance.toolbar-fixed,
+body.path-clearance.toolbar-horizontal,
+body.path-clearance.toolbar-vertical {
+  padding-top: 0 !important;
+  margin-left: 0 !important;
+}
+
+body.path-clearance #toolbar-administration,
+body.path-clearance header[role="banner"],
+body.path-clearance .site-header,
+body.path-clearance .navbar,
+body.path-clearance .region-header,
+body.path-clearance .region-primary-menu,
+body.path-clearance .highlighted,
+body.path-clearance .page-title,
+body.path-clearance .block-page-title-block,
+body.path-clearance footer[role="contentinfo"],
+body.path-clearance .site-footer {
+  display: none;
 }
 
 body.path-clearance .dialog-off-canvas-main-canvas,
@@ -14,20 +34,58 @@ body.path-clearance .page,
 body.path-clearance .site-wrapper,
 body.path-clearance .main-content,
 body.path-clearance main,
-body.path-clearance .region-content {
-  background-color: #010205;
+body.path-clearance .region-content,
+body.path-clearance .as-shell,
+body.path-clearance #page-wrapper,
+body.path-clearance #page,
+body.path-clearance #main-wrapper,
+body.path-clearance #main,
+body.path-clearance #content,
+body.path-clearance .layout-main-wrapper,
+body.path-clearance .row,
+body.path-clearance .section {
+  width: 100%;
+  min-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+
+body.path-clearance #main.container,
+body.path-clearance .row > * {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+body.path-clearance .as-shell {
+  display: block;
 }
 
 body.path-clearance .ooh-clearance-page {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
   min-height: 100vh;
-  padding: 96px 24px 64px;
-  background: transparent;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 72px 24px;
+  background: #000;
+  color: #d8f7ff;
+}
+
+body.path-clearance .ooh-clearance-page *,
+body.path-clearance .ooh-clearance-page *::before,
+body.path-clearance .ooh-clearance-page *::after {
+  box-sizing: border-box;
 }
 
 body.path-clearance .ooh-clearance-shell {
-  max-width: 1060px;
+  width: min(100%, 920px);
   margin: 0 auto;
-  padding: 48px;
+  padding: clamp(28px, 5vw, 52px);
   border: 1px solid rgba(0, 220, 255, 0.28);
   border-radius: 14px;
   background: linear-gradient(175deg, rgba(5, 10, 22, 0.94), rgba(1, 6, 15, 0.96));
@@ -35,105 +93,165 @@ body.path-clearance .ooh-clearance-shell {
     inset 0 0 0 1px rgba(158, 248, 255, 0.07),
     0 18px 52px rgba(0, 0, 0, 0.58),
     0 0 34px rgba(0, 220, 255, 0.14);
+  text-align: center;
+}
+
+body.path-clearance .region-breadcrumb,
+body.path-clearance .block-system-breadcrumb-block,
+body.path-clearance .breadcrumb,
+body.path-clearance .breadcrumb a,
+body.path-clearance .ooh-clearance-page a[href="/"],
+body.path-clearance .ooh-clearance-page a[href$="/"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.path-clearance .region-breadcrumb,
+body.path-clearance .block-system-breadcrumb-block,
+body.path-clearance .breadcrumb {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 10;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: transparent;
+}
+
+body.path-clearance .block-system-breadcrumb-block > h2,
+body.path-clearance .breadcrumb li:not(:first-child) {
+  display: none;
+}
+
+body.path-clearance .breadcrumb a,
+body.path-clearance .ooh-clearance-page a[href="/"],
+body.path-clearance .ooh-clearance-page a[href$="/"] {
+  min-height: 32px;
+  padding: 7px 12px;
+  border: 1px solid rgba(73, 244, 255, 0.58);
+  border-radius: 999px;
+  color: #d8f7ff;
+  background: rgba(0, 0, 0, 0.76);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 body.path-clearance .ooh-clearance-eyebrow,
-body.path-clearance .ooh-clearance-label {
-  margin-bottom: 14px;
+body.path-clearance .ooh-action-kicker,
+body.path-clearance .ooh-status-label {
+  margin-bottom: 12px;
   color: #67efff;
-  font-size: 12px;
-  letter-spacing: 0.24em;
+  font-size: 11px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
 body.path-clearance .ooh-clearance-title {
   margin: 0 0 18px;
-  color: #d8f7ff;
-  font-size: clamp(2.4rem, 6vw, 3.7rem);
+  color: #e9ffff;
+  font-size: clamp(2rem, 6vw, 3.5rem);
   line-height: 1;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-shadow: 0 0 18px rgba(103, 239, 255, 0.32);
 }
 
-body.path-clearance .ooh-clearance-copy {
-  max-width: 780px;
-  margin: 0 0 32px;
-  color: rgba(216, 247, 255, 0.86);
-  font-size: 18px;
+body.path-clearance .ooh-clearance-copy,
+body.path-clearance .ooh-clearance-footer-note {
+  max-width: 720px;
+  margin: 0 auto 28px;
+  color: rgba(216, 247, 255, 0.84);
+  font-size: 17px;
   line-height: 1.6;
 }
 
-body.path-clearance .ooh-clearance-grid {
+body.path-clearance .ooh-clearance-status,
+body.path-clearance .ooh-clearance-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
+  gap: 16px;
 }
 
-body.path-clearance .ooh-clearance-card {
-  padding: 24px 28px;
-  border: 1px solid rgba(0, 220, 255, 0.34);
+body.path-clearance .ooh-clearance-status {
+  margin: 0 0 22px;
+}
+
+body.path-clearance .ooh-clearance-actions {
+  margin: 0 0 24px;
+}
+
+body.path-clearance .ooh-status-card,
+body.path-clearance .ooh-action-card {
+  border: 1px solid rgba(0, 220, 255, 0.3);
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(4, 14, 30, 0.94), rgba(1, 8, 19, 0.98));
-  box-shadow: inset 0 0 0 1px rgba(132, 244, 255, 0.05);
+  background: linear-gradient(180deg, rgba(4, 16, 34, 0.9), rgba(2, 9, 22, 0.92));
+  box-shadow: inset 0 0 0 1px rgba(140, 245, 255, 0.05);
   color: #d8f7ff;
 }
 
-body.path-clearance .ooh-clearance-value {
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 800;
+body.path-clearance .ooh-status-card {
+  padding: 18px 20px;
 }
 
-body.path-clearance .ooh-clearance-card h2 {
-  margin: 0 0 10px;
-  color: #e9ffff;
-  font-size: 30px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+body.path-clearance .ooh-status-card strong {
+  display: block;
+  color: #fff;
+  font-size: 20px;
 }
 
-body.path-clearance .ooh-clearance-card p {
-  margin: 0 0 18px;
-  color: rgba(216, 247, 255, 0.8);
-  line-height: 1.55;
-}
-
-body.path-clearance .ooh-clearance-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 18px;
-  border: 1px solid rgba(70, 243, 255, 0.72);
-  border-radius: 999px;
-  color: #d8f7ff;
-  background: linear-gradient(145deg, rgba(0, 44, 62, 0.95), rgba(3, 16, 34, 0.98));
+body.path-clearance .ooh-action-card {
+  display: block;
+  min-height: 100%;
+  padding: 24px 26px;
   text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 13px;
-  font-weight: 700;
-  box-shadow: 0 0 22px rgba(0, 223, 255, 0.24);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-body.path-clearance .ooh-clearance-btn:hover,
-body.path-clearance .ooh-clearance-btn:focus-visible {
+body.path-clearance .ooh-action-card:hover,
+body.path-clearance .ooh-action-card:focus-visible {
   transform: translateY(-2px);
   border-color: rgba(178, 252, 255, 0.98);
-  box-shadow: 0 0 30px rgba(0, 223, 255, 0.42);
+  box-shadow:
+    inset 0 0 0 1px rgba(181, 252, 255, 0.18),
+    0 0 30px rgba(0, 223, 255, 0.34);
+}
+
+body.path-clearance .ooh-action-card h2 {
+  margin: 0 0 10px;
+  color: #e9ffff;
+  font-size: clamp(1.35rem, 3.4vw, 1.9rem);
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+body.path-clearance .ooh-action-card p,
+body.path-clearance .ooh-clearance-footer-note {
+  margin-bottom: 0;
+  color: rgba(216, 247, 255, 0.78);
 }
 
 @media (max-width: 768px) {
   body.path-clearance .ooh-clearance-page {
-    padding: 72px 16px 32px;
+    min-height: 100svh;
+    padding: 64px 16px 28px;
   }
 
   body.path-clearance .ooh-clearance-shell {
     padding: 28px;
   }
 
-  body.path-clearance .ooh-clearance-grid {
+  body.path-clearance .ooh-clearance-status,
+  body.path-clearance .ooh-clearance-actions {
     grid-template-columns: 1fr;
   }
 }
