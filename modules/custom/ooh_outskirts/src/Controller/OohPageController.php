@@ -40,6 +40,15 @@ class OohPageController extends ControllerBase {
     ];
   }
 
+  public function clearance() {
+    return [
+      '#markup' => '<section class="ooh-clearance-page"><div class="ooh-clearance-shell"><h1>CLEARANCE</h1><p>Checkpoint active.</p><p><a href="/STIKWALLET11202025/clearance/credits">Buy Credits</a></p><p><a href="/STIKWALLET11202025/dossier">Continue Free</a></p></div></section>',
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
+  }
+
   public function credits() {
     $template = <<<'TWIG'
 <section class="ooh-credits-page">

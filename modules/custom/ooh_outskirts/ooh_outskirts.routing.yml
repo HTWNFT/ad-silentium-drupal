@@ -13,3 +13,11 @@ ooh_outskirts.credits:
     _title: 'Credits'
   requirements:
     _permission: 'access content'
+
+ooh_outskirts.clearance:
+  path: '/clearance'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::clearance'
+    _title: 'Clearance'
+  requirements:
+    _permission: 'access content'
