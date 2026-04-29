@@ -1,4 +1,5 @@
 body.path-clearance {
+  margin: 0;
   background-color: #010205;
   background:
     radial-gradient(circle at 20% 0%, rgba(0, 235, 255, 0.08), transparent 46%),
@@ -7,185 +8,132 @@ body.path-clearance {
   color: #d8f7ff;
 }
 
+body.path-clearance .dialog-off-canvas-main-canvas,
+body.path-clearance .layout-container,
+body.path-clearance .page,
+body.path-clearance .site-wrapper,
+body.path-clearance .main-content,
+body.path-clearance main,
+body.path-clearance .region-content {
+  background-color: #010205;
+}
+
 body.path-clearance .ooh-clearance-page {
   min-height: 100vh;
-  background-color: transparent;
-  padding: 72px 24px;
-}
-
-body.path-clearance a[href="/"],
-body.path-clearance a[href$="/"],
-body.path-clearance a[href*="STIKWALLET11202025"] {
-  position: fixed;
-  top: 22px;
-  left: 22px;
-  z-index: 999;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 12px 24px;
-  border: 1px solid rgba(70, 243, 255, 0.82);
-  border-radius: 999px;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  color: #d8f7ff;
-  background: linear-gradient(145deg, rgba(0, 44, 62, 0.95), rgba(3, 16, 34, 0.98));
-  box-shadow: inset 0 0 0 1px rgba(150, 250, 255, 0.2), 0 0 0 1px rgba(0, 223, 255, 0.25), 0 0 24px rgba(0, 223, 255, 0.36);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-body.path-clearance a[href="/"]::before,
-body.path-clearance a[href$="/"]::before,
-body.path-clearance a[href*="STIKWALLET11202025"]::before {
-  content: "◁";
-  line-height: 1;
-}
-
-body.path-clearance a[href="/"]:hover,
-body.path-clearance a[href$="/"]:hover,
-body.path-clearance a[href*="STIKWALLET11202025"]:hover,
-body.path-clearance a[href="/"]:focus-visible,
-body.path-clearance a[href$="/"]:focus-visible,
-body.path-clearance a[href*="STIKWALLET11202025"]:focus-visible {
-  transform: translateY(-2px);
-  border-color: rgba(178, 252, 255, 0.98);
-  box-shadow: inset 0 0 0 1px rgba(179, 252, 255, 0.25), 0 0 0 1px rgba(0, 223, 255, 0.42), 0 0 34px rgba(0, 223, 255, 0.52);
+  padding: 96px 24px 64px;
+  background: transparent;
 }
 
 body.path-clearance .ooh-clearance-shell {
-  max-width: 1100px;
+  max-width: 1060px;
   margin: 0 auto;
+  padding: 48px;
   border: 1px solid rgba(0, 220, 255, 0.28);
   border-radius: 14px;
   background: linear-gradient(175deg, rgba(5, 10, 22, 0.94), rgba(1, 6, 15, 0.96));
-  box-shadow: inset 0 0 0 1px rgba(158, 248, 255, 0.07), 0 18px 52px rgba(0, 0, 0, 0.58), 0 0 34px rgba(0, 220, 255, 0.14);
-  padding: 48px;
+  box-shadow:
+    inset 0 0 0 1px rgba(158, 248, 255, 0.07),
+    0 18px 52px rgba(0, 0, 0, 0.58),
+    0 0 34px rgba(0, 220, 255, 0.14);
 }
 
-body.path-clearance .ooh-clearance-eyebrow {
+body.path-clearance .ooh-clearance-eyebrow,
+body.path-clearance .ooh-clearance-label {
+  margin-bottom: 14px;
+  color: #67efff;
   font-size: 12px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #67efff;
-  margin-bottom: 14px;
 }
 
 body.path-clearance .ooh-clearance-title {
-  font-size: clamp(2.2rem, 6vw, 3.5rem);
-  line-height: 1;
   margin: 0 0 18px;
-  letter-spacing: 0.06em;
-  text-shadow: 0 0 18px rgba(103, 239, 255, 0.28);
+  color: #d8f7ff;
+  font-size: clamp(2.4rem, 6vw, 3.7rem);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 0 0 18px rgba(103, 239, 255, 0.32);
 }
 
 body.path-clearance .ooh-clearance-copy {
-  max-width: 760px;
+  max-width: 780px;
+  margin: 0 0 32px;
+  color: rgba(216, 247, 255, 0.86);
   font-size: 18px;
-  color: rgba(216, 247, 255, 0.85);
-  margin-bottom: 32px;
+  line-height: 1.6;
 }
 
-body.path-clearance .ooh-clearance-status {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-body.path-clearance .ooh-status-card {
-  border: 1px solid rgba(0, 220, 255, 0.29);
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(4, 16, 34, 0.9), rgba(2, 9, 22, 0.92));
-  box-shadow: inset 0 0 0 1px rgba(140, 245, 255, 0.05);
-  padding: 18px 20px;
-}
-
-body.path-clearance .ooh-status-label {
-  display: block;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: #67efff;
-  margin-bottom: 8px;
-}
-
-body.path-clearance .ooh-clearance-actions {
+body.path-clearance .ooh-clearance-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 
-body.path-clearance .ooh-action-card {
-  display: block;
-  text-decoration: none;
-  color: #d8f7ff;
+body.path-clearance .ooh-clearance-card {
+  padding: 24px 28px;
   border: 1px solid rgba(0, 220, 255, 0.34);
   border-radius: 12px;
   background: linear-gradient(180deg, rgba(4, 14, 30, 0.94), rgba(1, 8, 19, 0.98));
   box-shadow: inset 0 0 0 1px rgba(132, 244, 255, 0.05);
-  padding: 28px;
-  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  color: #d8f7ff;
 }
 
-body.path-clearance .ooh-action-card:hover,
-body.path-clearance .ooh-action-card:focus-visible {
-  transform: translateY(-2px);
-  border-color: rgba(108, 245, 255, 0.96);
-  box-shadow: inset 0 0 0 1px rgba(132, 244, 255, 0.1), 0 0 0 1px rgba(108, 245, 255, 0.25), 0 0 28px rgba(0, 220, 255, 0.28);
+body.path-clearance .ooh-clearance-value {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
 }
 
-body.path-clearance .ooh-action-kicker {
-  display: block;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: #67efff;
-  margin-bottom: 12px;
-}
-
-body.path-clearance .ooh-action-card h2 {
+body.path-clearance .ooh-clearance-card h2 {
   margin: 0 0 10px;
+  color: #e9ffff;
   font-size: 30px;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-body.path-clearance .ooh-action-card p {
-  margin: 0;
+body.path-clearance .ooh-clearance-card p {
+  margin: 0 0 18px;
   color: rgba(216, 247, 255, 0.8);
+  line-height: 1.55;
 }
 
-body.path-clearance .ooh-clearance-footer-note {
-  margin-top: 28px;
-  font-size: 14px;
-  color: rgba(216, 247, 255, 0.64);
+body.path-clearance .ooh-clearance-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(70, 243, 255, 0.72);
+  border-radius: 999px;
+  color: #d8f7ff;
+  background: linear-gradient(145deg, rgba(0, 44, 62, 0.95), rgba(3, 16, 34, 0.98));
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 0 22px rgba(0, 223, 255, 0.24);
+}
+
+body.path-clearance .ooh-clearance-btn:hover,
+body.path-clearance .ooh-clearance-btn:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(178, 252, 255, 0.98);
+  box-shadow: 0 0 30px rgba(0, 223, 255, 0.42);
 }
 
 @media (max-width: 768px) {
-  body.path-clearance a[href="/"],
-  body.path-clearance a[href$="/"],
-  body.path-clearance a[href*="STIKWALLET11202025"] {
-    top: 14px;
-    left: 14px;
-    padding: 10px 18px;
-    letter-spacing: 0.14em;
-    font-size: 12px;
-  }
-
   body.path-clearance .ooh-clearance-page {
-    padding: 60px 16px 24px;
+    padding: 72px 16px 32px;
   }
 
   body.path-clearance .ooh-clearance-shell {
     padding: 28px;
   }
 
-  body.path-clearance .ooh-clearance-status,
-  body.path-clearance .ooh-clearance-actions {
+  body.path-clearance .ooh-clearance-grid {
     grid-template-columns: 1fr;
   }
 }
