@@ -3,6 +3,7 @@
 namespace Drupal\ooh_outskirts\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Symfony\Component\HttpFoundation\Request;
 
 class OohPageController extends ControllerBase {
 
@@ -52,6 +53,28 @@ class OohPageController extends ControllerBase {
   public function credits() {
     return [
       '#theme' => 'ooh_credits_page',
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/credits',
+        ],
+      ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
+  }
+
+  public function creditsCheckout(Request $request) {
+    $pack = (string) $request->query->get('pack', '60');
+    $allowed_packs = ['60', '180', '480'];
+
+    if (!in_array($pack, $allowed_packs, TRUE)) {
+      $pack = '60';
+    }
+
+    return [
+      '#theme' => 'ooh_credits_checkout_page',
+      '#selected_pack' => $pack,
       '#attached' => [
         'library' => [
           'ooh_outskirts/credits',

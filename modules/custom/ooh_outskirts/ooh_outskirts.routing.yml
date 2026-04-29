@@ -22,6 +22,14 @@ ooh_outskirts.credits:
   requirements:
     _permission: 'access content'
 
+ooh_outskirts.credits_checkout:
+  path: '/clearance/credits/checkout'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::creditsCheckout'
+    _title: 'Credits Checkout'
+  requirements:
+    _permission: 'access content'
+
 ooh_outskirts.clearance:
   path: '/clearance'
   defaults:

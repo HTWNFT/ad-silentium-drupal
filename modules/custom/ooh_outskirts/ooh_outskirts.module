@@ -28,6 +28,13 @@ function ooh_outskirts_theme($existing, $type, $theme, $path) {
       'template' => 'ooh-credits-block',
     ],
 
+    'ooh_credits_checkout_page' => [
+      'variables' => [
+        'selected_pack' => '60',
+      ],
+      'template' => 'ooh-credits-checkout-page',
+    ],
+
     'ooh_clearance_block' => [
       'variables' => [],
       'template' => 'ooh-clearance-block',

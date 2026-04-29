@@ -1,0 +1,40 @@
+{% set pack_label = selected_pack ~ ' Credits' %}
+
+<section class="ooh-credits-checkout-page">
+  <div class="ooh-credits-checkout-shell">
+    <div class="ooh-credits-eyebrow">CHECKOUT</div>
+
+    <h1 class="ooh-credits-title">CONFIRM CREDIT PACK</h1>
+
+    <p class="ooh-credits-copy">
+      Selected package: <strong>{{ pack_label }}</strong>
+    </p>
+
+    <div class="ooh-checkout-summary">
+      <span class="ooh-status-label">PACKAGE</span>
+      <strong>{{ pack_label }}</strong>
+    </div>
+
+    <div class="ooh-payment-option-grid" aria-label="Payment options">
+      <button class="ooh-payment-option" type="button" disabled>
+        Credit / Debit Card
+      </button>
+
+      <button class="ooh-payment-option" type="button" disabled>
+        Bank Account / Plaid ACH
+      </button>
+
+      <button class="ooh-payment-option" type="button" disabled>
+        BTC / Crypto
+      </button>
+    </div>
+
+    <p class="ooh-checkout-note">
+      Payment options are placeholders only. Live processing is not enabled.
+    </p>
+
+    <div class="ooh-credits-return">
+      <a class="ooh-return-link" href="{{ path('ooh_outskirts.credits') }}">Back to Credits</a>
+    </div>
+  </div>
+</section>
