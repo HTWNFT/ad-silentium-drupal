@@ -73,11 +73,19 @@
           const audio = landing.querySelector('[data-ooh-ambient-audio]');
           const soundToggle = landing.querySelector('[data-ooh-sound-toggle]');
           const buyCreditsButtons = landing.querySelectorAll('[data-ooh-buy-credits]');
-          const creditStatus = landing.querySelector('[data-ooh-credit-status]');
+          const creditStatuses = landing.querySelectorAll('[data-ooh-credit-status]');
           const loginUrl = landing.getAttribute('data-ooh-login-url') || '/user/login';
           const creditsUrl = landing.getAttribute('data-ooh-credits-url') || '/clearance/credits';
           const isLoggedIn = landing.getAttribute('data-ooh-logged-in') === '1';
-          const placeholderCredits = landing.getAttribute('data-ooh-placeholder-credits') || String(STARTER_CREDITS);
+          const drupalSettingsCredits =
+            window.drupalSettings &&
+            window.drupalSettings.ooh &&
+            window.drupalSettings.ooh.credits;
+          const credits =
+            drupalSettingsCredits ??
+            landing.getAttribute('data-ooh-credits') ??
+            landing.getAttribute('data-ooh-placeholder-credits') ??
+            STARTER_CREDITS;
 
           const loginDialog = document.getElementById('ooh-login-intent-dialog');
           const creditDropDialog = document.getElementById('ooh-credit-drop-dialog');
@@ -247,10 +255,10 @@
             });
           }
 
-          if (isLoggedIn && creditStatus) {
-            creditStatus.textContent = `CREDITS: ${placeholderCredits}`;
+          creditStatuses.forEach((creditStatus) => {
+            creditStatus.textContent = `CREDITS: ${credits}`;
             creditStatus.setAttribute('title', 'Temporary placeholder credits until the credits ledger is implemented.');
-          }
+          });
 
           buyCreditsButtons.forEach((button) => {
             button.setAttribute('href', creditsUrl);
