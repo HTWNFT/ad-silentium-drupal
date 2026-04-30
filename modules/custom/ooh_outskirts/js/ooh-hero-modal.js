@@ -64,6 +64,252 @@
           }
         });
 
+        // ----- Landing monetization UI scaffold -----
+        once('oohLandingMonetizationUi', '[data-ooh-landing-ui]', context).forEach((landing) => {
+          const STARTER_CREDITS = 60;
+          const soundPreferenceKey = 'ooh_landing_sound_enabled';
+          const creditDropDismissedKey = 'ooh_credit_drop_dismissed_v1';
+          const starterCreditsReservedKey = 'ooh_starter_credits_reserved_v1';
+          const audio = landing.querySelector('[data-ooh-ambient-audio]');
+          const soundToggle = landing.querySelector('[data-ooh-sound-toggle]');
+          const buyCreditsButtons = landing.querySelectorAll('[data-ooh-buy-credits]');
+          const creditStatus = landing.querySelector('[data-ooh-credit-status]');
+          const loginUrl = landing.getAttribute('data-ooh-login-url') || '/user/login';
+          const creditsUrl = landing.getAttribute('data-ooh-credits-url') || '/clearance/credits';
+          const isLoggedIn = landing.getAttribute('data-ooh-logged-in') === '1';
+          const placeholderCredits = landing.getAttribute('data-ooh-placeholder-credits') || String(STARTER_CREDITS);
+
+          const loginDialog = document.getElementById('ooh-login-intent-dialog');
+          const creditDropDialog = document.getElementById('ooh-credit-drop-dialog');
+          const purchaseDialog = document.getElementById('ooh-purchase-cta-dialog');
+          const creditChoice = landing.querySelector('[data-ooh-credit-choice]');
+          const creditForm = landing.querySelector('[data-ooh-credit-form]');
+          const creditYes = landing.querySelector('[data-ooh-credit-yes]');
+          const creditNo = landing.querySelector('[data-ooh-credit-no]');
+          const creditStatusMessage = landing.querySelector('[data-ooh-credit-status-message]');
+
+          const dialogs = [loginDialog, creditDropDialog, purchaseDialog].filter(Boolean);
+
+          const isAnyDialogOpen = () => dialogs.some((dialog) => dialog.classList.contains('is-open'));
+
+          const openDialog = (dialog) => {
+            if (!dialog) {
+              return;
+            }
+            dialogs.forEach((item) => {
+              item.classList.remove('is-open');
+              item.setAttribute('aria-hidden', 'true');
+            });
+            dialog.classList.add('is-open');
+            dialog.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('ooh-modal-open');
+          };
+
+          const closeDialog = (dialog) => {
+            if (!dialog) {
+              return;
+            }
+            dialog.classList.remove('is-open');
+            dialog.setAttribute('aria-hidden', 'true');
+            if (!isAnyDialogOpen() && !(modal && modal.classList.contains('is-open'))) {
+              document.body.classList.remove('ooh-modal-open');
+            }
+          };
+
+          dialogs.forEach((dialog) => {
+            dialog.querySelectorAll('[data-ooh-dialog-close]').forEach((closeTarget) => {
+              closeTarget.addEventListener('click', () => closeDialog(dialog));
+            });
+          });
+
+          document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') {
+              return;
+            }
+            dialogs.forEach(closeDialog);
+          });
+
+          const setSoundLabel = (enabled) => {
+            if (!soundToggle) {
+              return;
+            }
+            soundToggle.textContent = enabled ? 'MUTE' : 'SOUND';
+            soundToggle.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+          };
+
+          const playAmbient = () => {
+            if (!audio) {
+              return Promise.resolve(false);
+            }
+            audio.muted = false;
+            audio.volume = 0.42;
+            return audio.play()
+              .then(() => true)
+              .catch(() => {
+                audio.muted = true;
+                return false;
+              });
+          };
+
+          const pauseAmbient = () => {
+            if (!audio) {
+              return;
+            }
+            audio.pause();
+            audio.muted = true;
+          };
+
+          const soundEnabled = (() => {
+            try {
+              return window.localStorage.getItem(soundPreferenceKey) === '1';
+            }
+            catch (error) {
+              return false;
+            }
+          })();
+
+          setSoundLabel(soundEnabled);
+          if (soundEnabled) {
+            playAmbient().then((played) => {
+              setSoundLabel(played);
+            });
+          }
+          else {
+            pauseAmbient();
+          }
+
+          if (soundToggle) {
+            soundToggle.addEventListener('click', () => {
+              const shouldEnable = !audio || audio.paused || audio.muted;
+
+              if (shouldEnable) {
+                playAmbient().then((played) => {
+                  try {
+                    window.localStorage.setItem(soundPreferenceKey, played ? '1' : '0');
+                  }
+                  catch (error) {}
+                  setSoundLabel(played);
+                });
+                return;
+              }
+
+              pauseAmbient();
+              try {
+                window.localStorage.setItem(soundPreferenceKey, '0');
+              }
+              catch (error) {}
+              setSoundLabel(false);
+            });
+          }
+
+          if (isLoggedIn && creditStatus) {
+            creditStatus.textContent = `CREDITS: ${placeholderCredits}`;
+            creditStatus.setAttribute('title', 'Temporary placeholder credits until the credits ledger is implemented.');
+          }
+
+          buyCreditsButtons.forEach((button) => {
+            button.setAttribute('href', creditsUrl);
+          });
+
+          // Real passwordless login must be backed by signed, expiring,
+          // single-use server-generated tokens. Raw URL arguments are only
+          // treated as user intent and never authenticate a visitor.
+          const query = new URLSearchParams(window.location.search);
+          const hasLoginIntent =
+            query.get('ooh_login') === '1' ||
+            query.has('email') ||
+            query.has('return');
+          const hasPurchaseIntent =
+            query.get('buy_credits') === '1' ||
+            query.get('credits_offer') === 'starter';
+
+          const loginConfirm = landing.querySelector('[data-ooh-login-confirm]');
+          if (loginConfirm) {
+            loginConfirm.setAttribute('href', loginUrl);
+          }
+
+          if (hasLoginIntent && !isLoggedIn) {
+            window.setTimeout(() => openDialog(loginDialog), 500);
+          }
+          else if (hasPurchaseIntent) {
+            window.setTimeout(() => openDialog(purchaseDialog), 500);
+          }
+
+          const shouldShowCreditDrop = () => {
+            if (isLoggedIn || hasLoginIntent || hasPurchaseIntent) {
+              return false;
+            }
+            try {
+              return !window.localStorage.getItem(creditDropDismissedKey) &&
+                !window.localStorage.getItem(starterCreditsReservedKey);
+            }
+            catch (error) {
+              return false;
+            }
+          };
+
+          const scheduleCreditDrop = (attempts = 0) => {
+            if (!shouldShowCreditDrop() || attempts > 80) {
+              return;
+            }
+            window.setTimeout(() => {
+              if ((modal && modal.classList.contains('is-open')) || isAnyDialogOpen()) {
+                scheduleCreditDrop(attempts + 1);
+                return;
+              }
+              openDialog(creditDropDialog);
+            }, attempts ? 1800 : 3200);
+          };
+
+          scheduleCreditDrop();
+
+          if (creditYes && creditForm && creditChoice) {
+            creditYes.addEventListener('click', () => {
+              creditChoice.hidden = true;
+              creditForm.hidden = false;
+              const input = creditForm.querySelector('input[type="email"]');
+              if (input) {
+                input.focus();
+              }
+            });
+          }
+
+          if (creditNo) {
+            creditNo.addEventListener('click', () => {
+              try {
+                window.localStorage.setItem(creditDropDismissedKey, '1');
+              }
+              catch (error) {}
+              closeDialog(creditDropDialog);
+            });
+          }
+
+          if (creditForm) {
+            creditForm.addEventListener('submit', (event) => {
+              event.preventDefault();
+              const input = creditForm.querySelector('input[type="email"]');
+              if (!input || !input.checkValidity()) {
+                if (input) {
+                  input.reportValidity();
+                }
+                return;
+              }
+
+              try {
+                window.localStorage.setItem(starterCreditsReservedKey, String(STARTER_CREDITS));
+                window.localStorage.setItem(creditDropDismissedKey, '1');
+              }
+              catch (error) {}
+
+              creditForm.hidden = true;
+              if (creditStatusMessage) {
+                creditStatusMessage.textContent =
+                  'Starter credits reserved. Create or log in to attach them to your account.';
+              }
+            });
+          }
+        });
+
         // ----- Carousel wiring -----
         const slides = Array.from(root.querySelectorAll('.ooh-hero__slide'));
         const dotsWrap = root.querySelector('.ooh-hero__dots');

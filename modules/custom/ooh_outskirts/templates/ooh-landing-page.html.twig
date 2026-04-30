@@ -1,4 +1,43 @@
-<section class="ooh-landing-page">
+{% set ooh_logged_in = logged_in|default(false) %}
+{% set ooh_display_name = ooh_logged_in ? user.displayname|default('Operator') : '' %}
+{% set ooh_starter_credits = 60 %}
+{% set ooh_site_base_path = path('ooh_outskirts.credits')|replace({'/clearance/credits': ''}) %}
+{% set ooh_wind_src = ooh_site_base_path ~ '/modules/custom/ooh_outskirts/audio/wind-ambient.mp3' %}
+
+<section class="ooh-landing-page"
+  data-ooh-landing-ui
+  data-ooh-logged-in="{{ ooh_logged_in ? '1' : '0' }}"
+  data-ooh-display-name="{{ ooh_display_name }}"
+  data-ooh-placeholder-credits="{{ ooh_starter_credits }}"
+  data-ooh-login-url="{{ path('user.login') }}"
+  data-ooh-credits-url="{{ path('ooh_outskirts.credits') }}"
+  data-ooh-wind-src="{{ ooh_wind_src }}">
+  <audio class="ooh-ambient-audio" data-ooh-ambient-audio preload="none" loop playsinline>
+    <source src="{{ ooh_wind_src }}" type="audio/mpeg">
+  </audio>
+
+  <button class="ooh-utility-button ooh-sound-toggle" type="button" data-ooh-sound-toggle aria-pressed="false">
+    SOUND
+  </button>
+
+  <div class="ooh-account-cluster" aria-label="Account and credits">
+    {% if ooh_logged_in %}
+      <a class="ooh-utility-button ooh-credit-status" href="{{ path('ooh_outskirts.credits') }}" data-ooh-credit-status>
+        CREDITS: {{ ooh_starter_credits }}
+      </a>
+      <a class="ooh-utility-button ooh-account-status" href="{{ path('user.page') }}">
+        {{ ooh_display_name }}
+      </a>
+    {% else %}
+      <a class="ooh-utility-button ooh-buy-credits" href="{{ path('ooh_outskirts.credits') }}" data-ooh-buy-credits>
+        BUY CREDITS
+      </a>
+      <a class="ooh-utility-button ooh-login-link" href="{{ path('user.login') }}" data-ooh-login-link>
+        LOGIN
+      </a>
+    {% endif %}
+  </div>
+
   <section class="ooh-hero ooh-hero-carousel ooh-hero--random-loops ooh-hero--cinematic" id="ooh-hero" data-ooh-hero>
     <div class="ooh-hero__carousel">
       {% if loops is not empty %}
@@ -71,6 +110,60 @@
             You are one of The Selected and are a target of Genetic Warlords and Creations of all kinds. You may choose the path of the Merged, a character who is a fusion of human and technology, with powers that translate well into a world that has merged with you, mirroring technology in nature. Or you may choose the path of the Doomed, a character with the power to manipulate the still-existing "Old Reality" at will, having evolved in a way that was once forsaken and then reclaimed by your kind. The forces of human progress and evolution have merged, and fate is to be earned in the new cross-reality of Ad Silentium.
           </p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ooh-landing-dialog" id="ooh-login-intent-dialog" data-ooh-dialog="login-intent" aria-hidden="true">
+    <div class="ooh-landing-dialog__backdrop" data-ooh-dialog-close></div>
+    <div class="ooh-landing-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="ooh-login-intent-title">
+      <button class="ooh-landing-dialog__close" type="button" data-ooh-dialog-close aria-label="Close">CLOSE</button>
+      <p class="ooh-landing-dialog__eyebrow">ACCOUNT SIGNAL</p>
+      <h2 class="ooh-landing-dialog__title" id="ooh-login-intent-title">Approve Login Intent?</h2>
+      <p class="ooh-landing-dialog__copy">
+        This URL requested an account flow. Continue only if you initiated it.
+      </p>
+      <div class="ooh-landing-dialog__actions">
+        <a class="ooh-landing-dialog__button" href="{{ path('user.login') }}" data-ooh-login-confirm>CONTINUE TO LOGIN</a>
+        <button class="ooh-landing-dialog__button ooh-landing-dialog__button--ghost" type="button" data-ooh-dialog-close>NOT NOW</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="ooh-landing-dialog" id="ooh-credit-drop-dialog" data-ooh-dialog="credit-drop" aria-hidden="true">
+    <div class="ooh-landing-dialog__backdrop" data-ooh-dialog-close></div>
+    <div class="ooh-landing-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="ooh-credit-drop-title">
+      <button class="ooh-landing-dialog__close" type="button" data-ooh-dialog-close aria-label="Close">CLOSE</button>
+      <p class="ooh-landing-dialog__eyebrow">CLEARANCE DROP</p>
+      <h2 class="ooh-landing-dialog__title" id="ooh-credit-drop-title">Claim your first clearance drop?</h2>
+      <p class="ooh-landing-dialog__copy">
+        Enter your email and receive starter paid credits.
+      </p>
+      <div class="ooh-landing-dialog__actions" data-ooh-credit-choice>
+        <button class="ooh-landing-dialog__button" type="button" data-ooh-credit-yes>YES</button>
+        <button class="ooh-landing-dialog__button ooh-landing-dialog__button--ghost" type="button" data-ooh-credit-no>NO</button>
+      </div>
+      <form class="ooh-credit-email-form" data-ooh-credit-form hidden>
+        <label class="visually-hidden" for="ooh-credit-email">Email</label>
+        <input id="ooh-credit-email" class="ooh-credit-email-input" type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+        <button class="ooh-landing-dialog__button" type="submit">RESERVE DROP</button>
+      </form>
+      <p class="ooh-landing-dialog__status" data-ooh-credit-status-message aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="ooh-landing-dialog" id="ooh-purchase-cta-dialog" data-ooh-dialog="purchase-cta" aria-hidden="true">
+    <div class="ooh-landing-dialog__backdrop" data-ooh-dialog-close></div>
+    <div class="ooh-landing-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="ooh-purchase-cta-title">
+      <button class="ooh-landing-dialog__close" type="button" data-ooh-dialog-close aria-label="Close">CLOSE</button>
+      <p class="ooh-landing-dialog__eyebrow">CLEARANCE ACCESS</p>
+      <h2 class="ooh-landing-dialog__title" id="ooh-purchase-cta-title">Secure your clearance now.</h2>
+      <p class="ooh-landing-dialog__copy">
+        Buy credits and continue into the dossier.
+      </p>
+      <div class="ooh-landing-dialog__actions">
+        <a class="ooh-landing-dialog__button" href="{{ path('ooh_outskirts.credits') }}">BUY CREDITS</a>
+        <button class="ooh-landing-dialog__button ooh-landing-dialog__button--ghost" type="button" data-ooh-dialog-close>NOT NOW</button>
       </div>
     </div>
   </section>

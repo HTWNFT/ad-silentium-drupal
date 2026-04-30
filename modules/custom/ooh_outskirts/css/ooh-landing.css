@@ -598,3 +598,259 @@ body:has(.ooh-landing-page) .ooh-prologue__crawl p:nth-child(2n) {
     inset: 142px 20px 30px;
   }
 }
+
+body:has(.ooh-landing-page) .ooh-ambient-audio {
+  display: none;
+}
+
+body:has(.ooh-landing-page) {
+  --ooh-landing-control-top: 18px;
+  --ooh-landing-mobile-account-top: 64px;
+}
+
+body.toolbar-fixed:has(.ooh-landing-page),
+body.user-logged-in.toolbar-horizontal:has(.ooh-landing-page),
+body.user-logged-in.toolbar-vertical:has(.ooh-landing-page) {
+  --ooh-landing-control-top: 58px;
+  --ooh-landing-mobile-account-top: 104px;
+}
+
+body.toolbar-horizontal.toolbar-tray-open:has(.ooh-landing-page) {
+  --ooh-landing-control-top: 98px;
+  --ooh-landing-mobile-account-top: 144px;
+}
+
+body:has(.ooh-landing-page) .ooh-account-cluster,
+body:has(.ooh-landing-page) .ooh-sound-toggle {
+  position: fixed;
+  z-index: 50;
+}
+
+body:has(.ooh-landing-page) .ooh-account-cluster {
+  top: var(--ooh-landing-control-top);
+  right: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+body:has(.ooh-landing-page) .ooh-sound-toggle {
+  top: var(--ooh-landing-control-top);
+  left: 18px;
+}
+
+body:has(.ooh-landing-page) .ooh-utility-button,
+body:has(.ooh-landing-page) .ooh-utility-button:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 9px 14px;
+  border: 1px solid rgba(89, 243, 255, 0.62);
+  border-radius: 4px;
+  background: rgba(0, 8, 16, 0.48);
+  color: #59f3ff;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.07),
+    0 0 16px rgba(89, 243, 255, 0.14);
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+body:has(.ooh-landing-page) .ooh-utility-button:hover,
+body:has(.ooh-landing-page) .ooh-utility-button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(169, 255, 255, 0.98);
+  background: #59f3ff;
+  color: #021a2a;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.32),
+    0 0 22px rgba(89, 243, 255, 0.48);
+}
+
+body:has(.ooh-landing-page) .ooh-credit-status,
+body:has(.ooh-landing-page) .ooh-account-status {
+  max-width: min(42vw, 220px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  place-items: center;
+  padding: 24px;
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog.is-open {
+  display: grid;
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(84, 255, 255, 0.13), transparent 44%),
+    rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__panel {
+  position: relative;
+  width: min(520px, calc(100vw - 32px));
+  padding: 34px;
+  border: 1px solid rgba(89, 243, 255, 0.34);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(2, 16, 28, 0.96), rgba(0, 4, 10, 0.98)),
+    #000;
+  box-shadow:
+    inset 0 0 0 1px rgba(170, 255, 255, 0.08),
+    0 0 44px rgba(89, 243, 255, 0.22),
+    0 22px 80px rgba(0, 0, 0, 0.72);
+  color: #e8fdff;
+  text-align: center;
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  min-height: 30px;
+  padding: 7px 10px;
+  border: 1px solid rgba(89, 243, 255, 0.46);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.42);
+  color: #9dffff;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__eyebrow {
+  margin: 0 0 10px;
+  color: rgba(145, 250, 255, 0.82);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__title {
+  margin: 0 0 14px;
+  color: #59f3ff;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 12px rgba(89, 243, 255, 0.62),
+    0 0 30px rgba(89, 243, 255, 0.26);
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__copy,
+body:has(.ooh-landing-page) .ooh-landing-dialog__status {
+  margin: 0 auto 22px;
+  color: rgba(228, 252, 255, 0.84);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__actions,
+body:has(.ooh-landing-page) .ooh-credit-email-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+body:has(.ooh-landing-page) .ooh-credit-email-form[hidden] {
+  display: none;
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__button,
+body:has(.ooh-landing-page) .ooh-landing-dialog__button:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 12px 18px;
+  border: 1px solid rgba(89, 243, 255, 0.68);
+  border-radius: 4px;
+  background: rgba(89, 243, 255, 0.12);
+  color: #59f3ff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__button--ghost {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+body:has(.ooh-landing-page) .ooh-landing-dialog__button:hover,
+body:has(.ooh-landing-page) .ooh-landing-dialog__button:focus-visible,
+body:has(.ooh-landing-page) .ooh-landing-dialog__close:hover,
+body:has(.ooh-landing-page) .ooh-landing-dialog__close:focus-visible {
+  background: #59f3ff;
+  color: #021a2a;
+}
+
+body:has(.ooh-landing-page) .ooh-credit-email-input {
+  min-height: 42px;
+  width: min(100%, 260px);
+  padding: 10px 12px;
+  border: 1px solid rgba(89, 243, 255, 0.44);
+  border-radius: 4px;
+  background: rgba(0, 5, 12, 0.72);
+  color: #e8fdff;
+  font: inherit;
+}
+
+body:has(.ooh-landing-page) .ooh-credit-email-input::placeholder {
+  color: rgba(228, 252, 255, 0.46);
+}
+
+@media (max-width: 640px) {
+  body:has(.ooh-landing-page) .ooh-account-cluster {
+    top: var(--ooh-landing-mobile-account-top);
+    right: 12px;
+    max-width: calc(100vw - 24px);
+  }
+
+  body:has(.ooh-landing-page) .ooh-sound-toggle {
+    top: var(--ooh-landing-control-top);
+    left: 12px;
+  }
+
+  body:has(.ooh-landing-page) .ooh-utility-button {
+    min-height: 34px;
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+
+  body:has(.ooh-landing-page) .ooh-landing-dialog__panel {
+    padding: 32px 18px 24px;
+  }
+}
