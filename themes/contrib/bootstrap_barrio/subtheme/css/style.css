@@ -2,3 +2,171 @@
  * @file
  * Subtheme specific CSS.
  */
+
+body:has(.ooh-account-shell) {
+  margin: 0;
+  padding-top: 0 !important;
+  background: #02060a;
+  color: #e9fdff;
+  font-family: "Oxanium", "Exo 2", "Rajdhani", "Segoe UI", sans-serif;
+}
+
+body:has(.ooh-account-shell) #toolbar-administration,
+body:has(.ooh-account-shell) .toolbar-tray,
+body:has(.ooh-account-shell) .site-footer,
+body:has(.ooh-account-shell) header,
+body:has(.ooh-account-shell) nav.navbar {
+  display: none !important;
+}
+
+.ooh-account-shell {
+  min-height: 100vh;
+  padding: clamp(24px, 5vw, 64px);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(82, 241, 255, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(2, 12, 22, 0.98), #000 72%);
+}
+
+.ooh-account-main {
+  min-height: calc(100vh - clamp(48px, 10vw, 128px));
+  display: grid;
+  place-items: center;
+}
+
+.ooh-account-card {
+  position: relative;
+  width: min(980px, 100%);
+  padding: clamp(28px, 5vw, 56px);
+  border: 1px solid rgba(89, 243, 255, 0.34);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(5, 21, 35, 0.94), rgba(0, 4, 10, 0.98)),
+    #000;
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.08),
+    0 0 46px rgba(89, 243, 255, 0.18),
+    0 24px 96px rgba(0, 0, 0, 0.68);
+}
+
+.ooh-account-home,
+.ooh-account-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 11px 16px;
+  border: 1px solid rgba(89, 243, 255, 0.68);
+  border-radius: 4px;
+  background: rgba(89, 243, 255, 0.1);
+  color: #59f3ff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-account-home {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  min-height: 34px;
+  padding: 8px 12px;
+  font-size: 10px;
+}
+
+.ooh-account-home:hover,
+.ooh-account-home:focus-visible,
+.ooh-account-button:hover,
+.ooh-account-button:focus-visible {
+  background: #59f3ff;
+  color: #031827;
+  text-decoration: none;
+  box-shadow: 0 0 22px rgba(89, 243, 255, 0.44);
+}
+
+.ooh-account-eyebrow {
+  margin: 18px 0 12px;
+  color: rgba(159, 250, 255, 0.8);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.ooh-account-title {
+  margin: 0 0 32px;
+  color: #59f3ff;
+  font-size: clamp(42px, 8vw, 86px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 14px rgba(89, 243, 255, 0.66),
+    0 0 46px rgba(89, 243, 255, 0.24);
+  overflow-wrap: anywhere;
+}
+
+.ooh-account-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.ooh-account-section {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid rgba(89, 243, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(0, 10, 18, 0.72);
+}
+
+.ooh-account-section h2 {
+  margin: 0 0 18px;
+  color: #eaffff;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-account-list {
+  display: grid;
+  gap: 14px;
+  margin: 0 0 22px;
+}
+
+.ooh-account-list div {
+  display: grid;
+  gap: 4px;
+}
+
+.ooh-account-list dt {
+  color: rgba(159, 250, 255, 0.68);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-account-list dd {
+  margin: 0;
+  color: #f0feff;
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  .ooh-account-shell {
+    padding: 18px;
+  }
+
+  .ooh-account-card {
+    padding: 62px 20px 24px;
+  }
+
+  .ooh-account-grid {
+    grid-template-columns: 1fr;
+  }
+}

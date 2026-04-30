@@ -609,15 +609,16 @@ body:has(.ooh-landing-page) {
 }
 
 body.toolbar-fixed:has(.ooh-landing-page),
-body.user-logged-in.toolbar-horizontal:has(.ooh-landing-page),
-body.user-logged-in.toolbar-vertical:has(.ooh-landing-page) {
-  --ooh-landing-control-top: 58px;
-  --ooh-landing-mobile-account-top: 104px;
+body.toolbar-horizontal:has(.ooh-landing-page),
+body.toolbar-vertical:has(.ooh-landing-page),
+body.toolbar-tray-open:has(.ooh-landing-page) {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
-body.toolbar-horizontal.toolbar-tray-open:has(.ooh-landing-page) {
-  --ooh-landing-control-top: 98px;
-  --ooh-landing-mobile-account-top: 144px;
+body:has(.ooh-landing-page) #toolbar-administration,
+body:has(.ooh-landing-page) .toolbar-tray {
+  display: none !important;
 }
 
 body:has(.ooh-landing-page) .ooh-account-cluster,

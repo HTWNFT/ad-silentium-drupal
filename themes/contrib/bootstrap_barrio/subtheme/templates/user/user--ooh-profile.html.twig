@@ -1,0 +1,59 @@
+{#
+/**
+ * @file
+ * Cinematic account dashboard presentation for user profile pages.
+ */
+#}
+<article{{ attributes.addClass('ooh-account-card') }}>
+  <a class="ooh-account-home" href="{{ ooh_profile_home_url|default('/') }}">HOME</a>
+
+  <p class="ooh-account-eyebrow">ACCOUNT SIGNAL</p>
+  <h1 class="ooh-account-title">{{ ooh_profile_display_name|default(user.label) }}</h1>
+
+  <div class="ooh-account-grid">
+    <section class="ooh-account-section">
+      <h2>Operator</h2>
+      <dl class="ooh-account-list">
+        <div>
+          <dt>Username</dt>
+          <dd>{{ ooh_profile_display_name|default(user.label) }}</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd>
+            {% if ooh_profile_email %}
+              {{ ooh_profile_email }}
+            {% else %}
+              Hidden
+            {% endif %}
+          </dd>
+        </div>
+        <div>
+          <dt>Member for</dt>
+          <dd>{{ ooh_profile_member_for|default('New clearance holder') }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="ooh-account-section">
+      <h2>Clearance</h2>
+      <dl class="ooh-account-list">
+        <div>
+          <dt>Credits</dt>
+          <dd>{{ ooh_profile_placeholder_credits|default(60) }} placeholder</dd>
+        </div>
+        <div>
+          <dt>Payment status</dt>
+          <dd>Not connected</dd>
+        </div>
+        <div>
+          <dt>Payment methods</dt>
+          <dd>Coming soon</dd>
+        </div>
+      </dl>
+      <a class="ooh-account-button" href="{{ ooh_profile_credits_url|default('/clearance/credits') }}">
+        BUY CREDITS
+      </a>
+    </section>
+  </div>
+</article>

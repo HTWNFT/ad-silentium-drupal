@@ -137,15 +137,68 @@
             soundToggle.setAttribute('aria-pressed', enabled ? 'true' : 'false');
           };
 
-          const playAmbient = () => {
+          const setStoredSoundPreference = (enabled) => {
+            try {
+              window.localStorage.setItem(soundPreferenceKey, enabled ? '1' : '0');
+            }
+            catch (error) {}
+          };
+
+          const audioIsAudible = () => {
+            return !!audio && !audio.paused && !audio.muted && audio.volume > 0;
+          };
+
+          const prepareAmbientAudio = () => {
             if (!audio) {
+              return false;
+            }
+
+            const windSrc = landing.getAttribute('data-ooh-wind-src');
+            const source = audio.querySelector('source');
+
+            if (windSrc) {
+              if (audio.getAttribute('src') !== windSrc) {
+                audio.setAttribute('src', windSrc);
+              }
+              if (source && source.getAttribute('src') !== windSrc) {
+                source.setAttribute('src', windSrc);
+              }
+            }
+
+            audio.loop = true;
+            audio.preload = 'auto';
+            return true;
+          };
+
+          const playAmbient = (withSound) => {
+            if (!prepareAmbientAudio()) {
               return Promise.resolve(false);
             }
-            audio.muted = false;
+            audio.muted = !withSound;
             audio.volume = 0.42;
-            return audio.play()
-              .then(() => true)
+
+            if (audio.readyState === 0) {
+              audio.load();
+            }
+
+            const playPromise = audio.play();
+            if (!playPromise || typeof playPromise.then !== 'function') {
+              return Promise.resolve(audioIsAudible());
+            }
+
+            return playPromise
+              .then(() => audioIsAudible())
               .catch(() => {
+                if (withSound) {
+                  audio.muted = true;
+                  const mutedRetry = audio.play();
+                  if (!mutedRetry || typeof mutedRetry.then !== 'function') {
+                    return false;
+                  }
+                  return mutedRetry
+                    .then(() => false)
+                    .catch(() => false);
+                }
                 audio.muted = true;
                 return false;
               });
@@ -159,6 +212,8 @@
             audio.muted = true;
           };
 
+          prepareAmbientAudio();
+
           const soundEnabled = (() => {
             try {
               return window.localStorage.getItem(soundPreferenceKey) === '1';
@@ -168,36 +223,26 @@
             }
           })();
 
-          setSoundLabel(soundEnabled);
-          if (soundEnabled) {
-            playAmbient().then((played) => {
-              setSoundLabel(played);
-            });
-          }
-          else {
-            pauseAmbient();
-          }
+          setSoundLabel(false);
+          playAmbient(soundEnabled).then((audible) => {
+            setSoundLabel(audible);
+          });
 
           if (soundToggle) {
-            soundToggle.addEventListener('click', () => {
-              const shouldEnable = !audio || audio.paused || audio.muted;
+            soundToggle.addEventListener('click', (event) => {
+              event.preventDefault();
+              const shouldEnable = !audioIsAudible();
 
               if (shouldEnable) {
-                playAmbient().then((played) => {
-                  try {
-                    window.localStorage.setItem(soundPreferenceKey, played ? '1' : '0');
-                  }
-                  catch (error) {}
-                  setSoundLabel(played);
+                playAmbient(true).then((audible) => {
+                  setStoredSoundPreference(audible);
+                  setSoundLabel(audible);
                 });
                 return;
               }
 
               pauseAmbient();
-              try {
-                window.localStorage.setItem(soundPreferenceKey, '0');
-              }
-              catch (error) {}
+              setStoredSoundPreference(false);
               setSoundLabel(false);
             });
           }
