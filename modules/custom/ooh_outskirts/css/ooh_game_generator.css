@@ -1963,40 +1963,30 @@ button.ooh-generator__enter:hover {
 
 /* === LOGIN SHELL === */
 
-body.path-user,
+body.page-user-login,
 body.path-user-login {
   min-height: 100vh;
   margin: 0 !important;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(89, 243, 255, 0.11), transparent 34%),
-    linear-gradient(180deg, rgba(0, 6, 12, 0.98), #000 68%) !important;
+  background: #000 !important;
+  background-color: #000 !important;
   color: #dffefe;
   font-family: "OohLandingFuturist", "Oxanium", "Orbitron", "Rajdhani", "Segoe UI", system-ui, sans-serif;
 }
 
-body.path-user::before,
+body.page-user-login::before,
 body.path-user-login::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(89, 243, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(89, 243, 255, 0.045) 1px, transparent 1px);
-  background-size: 42px 42px;
-  opacity: 0.18;
+  display: none !important;
 }
 
-body.path-user .dialog-off-canvas-main-canvas,
-body.path-user .layout-container,
-body.path-user #page-wrapper,
-body.path-user #page,
-body.path-user main,
-body.path-user .layout-content,
-body.path-user .region-content,
-body.path-user .main-content,
-body.path-user .content,
+body.page-user-login .dialog-off-canvas-main-canvas,
+body.page-user-login .layout-container,
+body.page-user-login #page-wrapper,
+body.page-user-login #page,
+body.page-user-login main,
+body.page-user-login .layout-content,
+body.page-user-login .region-content,
+body.page-user-login .main-content,
+body.page-user-login .content,
 body.path-user-login .dialog-off-canvas-main-canvas,
 body.path-user-login .layout-container,
 body.path-user-login #page-wrapper,
@@ -2015,15 +2005,34 @@ body.path-user-login .content {
   background: transparent !important;
 }
 
-body.path-user header,
-body.path-user footer,
-body.path-user .breadcrumb,
-body.path-user .region-breadcrumb,
-body.path-user .block-system-breadcrumb-block,
-body.path-user .block-page-title-block,
-body.path-user .tabs,
-body.path-user .tabs-wrapper,
-body.path-user .local-tasks,
+body.page-user-login #main-wrapper,
+body.page-user-login #main,
+body.page-user-login .container,
+body.page-user-login .container-fluid,
+body.page-user-login .row,
+body.page-user-login .section,
+body.page-user-login .region,
+body.page-user-login .col,
+body.path-user-login #main-wrapper,
+body.path-user-login #main,
+body.path-user-login .container,
+body.path-user-login .container-fluid,
+body.path-user-login .row,
+body.path-user-login .section,
+body.path-user-login .region,
+body.path-user-login .col {
+  background: transparent !important;
+}
+
+body.page-user-login header,
+body.page-user-login footer,
+body.page-user-login .breadcrumb,
+body.page-user-login .region-breadcrumb,
+body.page-user-login .block-system-breadcrumb-block,
+body.page-user-login .block-page-title-block,
+body.page-user-login .tabs,
+body.page-user-login .tabs-wrapper,
+body.page-user-login .local-tasks,
 body.path-user-login header,
 body.path-user-login footer,
 body.path-user-login .breadcrumb,
@@ -2036,7 +2045,7 @@ body.path-user-login .local-tasks {
   display: none !important;
 }
 
-body.path-user .messages,
+body.page-user-login .messages,
 body.path-user-login .messages {
   width: min(560px, calc(100% - 32px));
   margin: 18px auto 0;

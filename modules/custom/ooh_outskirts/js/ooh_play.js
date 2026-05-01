@@ -256,6 +256,68 @@
     return (routeStates[routeId] || routeStates.terra) + pathTone + ' Mission type: ' + missionLabel + '.';
   }
 
+  function buildActiveSceneStatus(routeId, pathKey, missionLabel) {
+    const routeStates = {
+      aer: 'MISSION ACTIVE. Sky corridor live. Maintain altitude discipline.',
+      mare: 'MISSION ACTIVE. Pressure zone live. Maintain oxygen discipline.',
+      terra: 'MISSION ACTIVE. Ground route live. Maintain signal discipline.'
+    };
+    const pathTone = pathKey === 'DOOMED' ?
+      ' DOOMED presentation channel unstable.' :
+      (pathKey === 'MERGED' ? ' MERGED presentation channel synchronized.' : '');
+
+    return (routeStates[routeId] || routeStates.terra) + pathTone + ' Mission type: ' + missionLabel + '.';
+  }
+
+  function activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel) {
+    root.classList.add('is-mission-active');
+    if (shell) {
+      shell.classList.add('is-mission-active');
+      shell.setAttribute('data-mission-state', 'active');
+    }
+    if (sceneStatus) {
+      sceneStatus.textContent = buildActiveSceneStatus(routeId, pathKey, missionLabel);
+    }
+
+    const debugPanel = root.querySelector('[data-ooh-briefing-debug]');
+    if (debugPanel) {
+      const panel = debugPanel.closest('.ooh-play-scene__debug');
+      if (panel) {
+        panel.hidden = true;
+      }
+    }
+
+    const activateButton = root.querySelector('[data-ooh-activate-mission]');
+    if (activateButton) {
+      activateButton.textContent = 'MISSION ACTIVE';
+      activateButton.disabled = true;
+      activateButton.setAttribute('aria-disabled', 'true');
+    }
+  }
+
+  function initSceneTransition(shell) {
+    shell.classList.remove('has-scene-asset', 'has-scene-video', 'is-scene-ready', 'is-scene-video-ready');
+    shell.classList.add('is-scene-loading');
+    shell.style.removeProperty('--ooh-scene-bg-image');
+  }
+
+  function handleImageLoad(shell, asset) {
+    shell.style.setProperty('--ooh-scene-bg-image', 'url("' + asset.image + '")');
+    shell.classList.add('has-scene-asset');
+
+    window.setTimeout(function () {
+      shell.classList.remove('is-scene-loading');
+      shell.classList.add('is-scene-ready');
+    }, 80);
+  }
+
+  function handleVideoReady(shell, video) {
+    window.setTimeout(function () {
+      shell.classList.add('has-scene-video', 'is-scene-video-ready');
+      video.play().catch(function () {});
+    }, 420);
+  }
+
   function bindSceneAssets(shell, routeId) {
     if (!shell) {
       return;
@@ -264,18 +326,16 @@
     const asset = sceneAssetMap[routeId] || sceneAssetMap.terra;
     const video = shell.querySelector('[data-ooh-scene-video]');
 
-    shell.classList.remove('has-scene-asset', 'has-scene-video');
-    shell.style.removeProperty('--ooh-scene-bg-image');
+    initSceneTransition(shell);
     shell.setAttribute('data-scene-asset', asset.label);
 
     const image = new Image();
     image.onload = function () {
-      shell.style.setProperty('--ooh-scene-bg-image', 'url("' + asset.image + '")');
-      shell.classList.add('has-scene-asset');
+      handleImageLoad(shell, asset);
     };
     image.onerror = function () {
       shell.style.removeProperty('--ooh-scene-bg-image');
-      shell.classList.remove('has-scene-asset');
+      shell.classList.remove('has-scene-asset', 'has-scene-video', 'is-scene-loading', 'is-scene-ready', 'is-scene-video-ready');
     };
     image.src = asset.image;
 
@@ -287,11 +347,10 @@
     video.removeAttribute('src');
     video.load();
     video.oncanplay = function () {
-      shell.classList.add('has-scene-video');
-      video.play().catch(function () {});
+      handleVideoReady(shell, video);
     };
     video.onerror = function () {
-      shell.classList.remove('has-scene-video');
+      shell.classList.remove('has-scene-video', 'is-scene-video-ready');
       video.removeAttribute('src');
     };
     video.src = asset.video;
@@ -421,6 +480,7 @@
         const routeHeader = root.querySelector('[data-ooh-scene-route-label]');
         const sceneMissionLabel = root.querySelector('[data-ooh-scene-mission-label]');
         const sceneStatus = root.querySelector('[data-ooh-scene-status]');
+        const activateButton = root.querySelector('[data-ooh-activate-mission]');
         const scene = sceneCopy(routeId, payload, selectedPrompt);
         const assembly = buildMissionAssembly(payload);
         const pathKey = recruiterPathKey(payload);
@@ -445,6 +505,12 @@
 
         if (sceneStatus) {
           sceneStatus.textContent = buildSceneStatus(routeId, pathKey, missionLabel);
+        }
+
+        if (activateButton) {
+          activateButton.addEventListener('click', function () {
+            activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel);
+          });
         }
 
         const fields = {

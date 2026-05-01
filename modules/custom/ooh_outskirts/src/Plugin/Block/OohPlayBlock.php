@@ -303,6 +303,7 @@ final class OohPlayBlock extends BlockBase {
       </section>
 
       <div class="ooh-play-scene__actions">
+        <button class="ooh-generator__overlay-btn ooh-play-scene__activate" type="button" data-ooh-activate-mission>ACTIVATE MISSION</button>
         <a class="ooh-generator__overlay-btn" href="{$dossier_target_escaped}">Return to Dossier</a>
       </div>
     </div>
