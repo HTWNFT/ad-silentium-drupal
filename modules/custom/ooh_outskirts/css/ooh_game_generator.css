@@ -1118,6 +1118,25 @@ body.page-play .content {
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  opacity: 0.48;
+  filter: brightness(0.54) saturate(0.72);
+  transform: scale(1.012);
+  transition:
+    opacity 0.9s ease,
+    filter 1.15s ease,
+    transform 1.15s ease;
+}
+
+.ooh-play-scene.is-scene-loading .ooh-play-scene__visual {
+  opacity: 0.42;
+  filter: brightness(0.42) saturate(0.62);
+  transform: scale(1.012);
+}
+
+.ooh-play-scene.is-scene-ready .ooh-play-scene__visual {
+  opacity: 1;
+  filter: brightness(1) saturate(1);
+  transform: scale(1);
 }
 
 .ooh-play-scene.has-scene-asset .ooh-play-scene__visual {
@@ -1126,6 +1145,7 @@ body.page-play .content {
     var(--ooh-scene-bg-image);
   background-position: center;
   background-size: cover;
+  animation: ooh-scene-activation-pulse 1.2s ease 0.1s 1 both;
 }
 
 .ooh-play-scene__asset-video {
@@ -1141,6 +1161,10 @@ body.page-play .content {
 }
 
 .ooh-play-scene.has-scene-video .ooh-play-scene__asset-video {
+  opacity: 0;
+}
+
+.ooh-play-scene.is-scene-video-ready .ooh-play-scene__asset-video {
   opacity: 0.34;
 }
 
@@ -1410,8 +1434,96 @@ body.page-play .content {
   position: relative;
   z-index: 2;
   display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   justify-content: center;
   padding: 0 26px 26px;
+}
+
+.ooh-play-scene__activate {
+  border-color: rgba(169, 255, 255, 0.70);
+  background: rgba(8, 30, 38, 0.94);
+  color: #eaffff;
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.08),
+    0 0 22px rgba(89, 243, 255, 0.18);
+}
+
+.ooh-play-session.is-mission-active .ooh-play-scene {
+  border-color: rgba(169, 255, 255, 0.46);
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.50),
+    0 0 46px rgba(89, 243, 255, 0.18),
+    inset 0 0 0 1px rgba(215, 255, 255, 0.05);
+}
+
+.ooh-play-session.is-mission-active .ooh-play-scene__visual {
+  filter: brightness(1.08) saturate(1.08);
+}
+
+.ooh-play-session.is-mission-active .ooh-play-scene__mission-label {
+  border-color: rgba(169, 255, 255, 0.70);
+  background: rgba(0, 18, 26, 0.78);
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(89, 243, 255, 0.20);
+}
+
+.ooh-play-session.is-mission-active .ooh-play-scene__staging-kicker {
+  color: #ffffff;
+}
+
+.ooh-play-session.is-mission-active .ooh-play-scene__staging-kicker::after {
+  content: " // MISSION ACTIVE";
+}
+
+.ooh-play-session.is-mission-active .ooh-play-scene__briefing-panel,
+.ooh-play-session.is-mission-active .ooh-play-scene__assembly {
+  opacity: 0.82;
+}
+
+.ooh-play-session.is-mission-active .ooh-play-scene__scanlines {
+  opacity: 0.58;
+}
+
+.ooh-play-session.is-mission-active .ooh-play-scene__activate {
+  cursor: default;
+  opacity: 0.74;
+  transform: none;
+}
+
+.ooh-play-session .ooh-play-scene__actions .ooh-generator__overlay-btn,
+.ooh-play-session .ooh-play-scene__actions .ooh-generator__overlay-btn:visited,
+.ooh-play-session .ooh-generator__nav-button,
+.ooh-play-session .ooh-generator__nav-button:visited {
+  border-color: rgba(118, 248, 255, 0.48);
+  background: rgba(5, 22, 28, 0.86);
+  color: #bffcff;
+  outline: none;
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(89, 243, 255, 0.18);
+}
+
+.ooh-play-session .ooh-play-scene__actions .ooh-generator__overlay-btn:hover,
+.ooh-play-session .ooh-play-scene__actions .ooh-generator__overlay-btn:focus,
+.ooh-play-session .ooh-play-scene__actions .ooh-generator__overlay-btn:focus-visible,
+.ooh-play-session .ooh-play-scene__actions .ooh-generator__overlay-btn:active,
+.ooh-play-session .ooh-generator__nav-button:hover,
+.ooh-play-session .ooh-generator__nav-button:focus,
+.ooh-play-session .ooh-generator__nav-button:focus-visible,
+.ooh-play-session .ooh-generator__nav-button:active {
+  border-color: rgba(169, 255, 255, 0.92);
+  background: rgba(11, 42, 50, 0.96);
+  color: #efffff;
+  outline: 2px solid rgba(89, 243, 255, 0.62);
+  outline-offset: 3px;
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.13),
+    0 0 24px rgba(89, 243, 255, 0.26);
+}
+
+.ooh-play-session .ooh-play-scene__actions .ooh-generator__overlay-btn:active,
+.ooh-play-session .ooh-generator__nav-button:active {
+  transform: translateY(0);
 }
 
 .ooh-play-scene[data-route="AER"] {
@@ -1601,6 +1713,24 @@ body.page-play .content {
 
 .ooh-play-scene[data-playlist-mood="void"] .ooh-play-scene__visual {
   filter: contrast(0.94) saturate(0.72);
+}
+
+.ooh-play-scene.is-scene-loading .ooh-play-scene__visual {
+  filter: brightness(0.42) saturate(0.62);
+}
+
+@keyframes ooh-scene-activation-pulse {
+  0% {
+    box-shadow: inset 0 0 80px rgba(0, 255, 255, 0.00);
+  }
+
+  48% {
+    box-shadow: inset 0 0 90px rgba(89, 243, 255, 0.06);
+  }
+
+  100% {
+    box-shadow: inset 0 0 80px rgba(0, 255, 255, 0.00);
+  }
 }
 
 .ooh-generator__overlay[hidden] {
@@ -1829,4 +1959,279 @@ button.ooh-generator__enter:hover {
     0 0 40px rgba(0, 255, 255, 0.12);
 
   transform: translateY(-1px);
+}
+
+/* === LOGIN SHELL === */
+
+body.path-user,
+body.path-user-login {
+  min-height: 100vh;
+  margin: 0 !important;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(89, 243, 255, 0.11), transparent 34%),
+    linear-gradient(180deg, rgba(0, 6, 12, 0.98), #000 68%) !important;
+  color: #dffefe;
+  font-family: "OohLandingFuturist", "Oxanium", "Orbitron", "Rajdhani", "Segoe UI", system-ui, sans-serif;
+}
+
+body.path-user::before,
+body.path-user-login::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(89, 243, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(89, 243, 255, 0.045) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity: 0.18;
+}
+
+body.path-user .dialog-off-canvas-main-canvas,
+body.path-user .layout-container,
+body.path-user #page-wrapper,
+body.path-user #page,
+body.path-user main,
+body.path-user .layout-content,
+body.path-user .region-content,
+body.path-user .main-content,
+body.path-user .content,
+body.path-user-login .dialog-off-canvas-main-canvas,
+body.path-user-login .layout-container,
+body.path-user-login #page-wrapper,
+body.path-user-login #page,
+body.path-user-login main,
+body.path-user-login .layout-content,
+body.path-user-login .region-content,
+body.path-user-login .main-content,
+body.path-user-login .content {
+  position: relative;
+  z-index: 1;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+body.path-user header,
+body.path-user footer,
+body.path-user .breadcrumb,
+body.path-user .region-breadcrumb,
+body.path-user .block-system-breadcrumb-block,
+body.path-user .block-page-title-block,
+body.path-user .tabs,
+body.path-user .tabs-wrapper,
+body.path-user .local-tasks,
+body.path-user-login header,
+body.path-user-login footer,
+body.path-user-login .breadcrumb,
+body.path-user-login .region-breadcrumb,
+body.path-user-login .block-system-breadcrumb-block,
+body.path-user-login .block-page-title-block,
+body.path-user-login .tabs,
+body.path-user-login .tabs-wrapper,
+body.path-user-login .local-tasks {
+  display: none !important;
+}
+
+body.path-user .messages,
+body.path-user-login .messages {
+  width: min(560px, calc(100% - 32px));
+  margin: 18px auto 0;
+  border: 1px solid rgba(89, 243, 255, 0.28);
+  background: rgba(0, 8, 14, 0.78);
+  color: #dffefe;
+}
+
+.ooh-login-shell {
+  box-sizing: border-box;
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 86px 18px 48px;
+}
+
+.ooh-login-home,
+.ooh-login-home:visited {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 9px 14px;
+  border: 1px solid rgba(89, 243, 255, 0.62);
+  border-radius: 4px;
+  background: rgba(0, 8, 16, 0.48);
+  color: #59f3ff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.07),
+    0 0 16px rgba(89, 243, 255, 0.14);
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.ooh-login-home:hover,
+.ooh-login-home:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(169, 255, 255, 0.98);
+  background: #59f3ff;
+  color: #021a2a;
+  outline: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.32),
+    0 0 22px rgba(89, 243, 255, 0.48);
+}
+
+.ooh-login-panel {
+  box-sizing: border-box;
+  width: min(480px, 100%);
+  padding: 28px;
+  border: 1px solid rgba(96, 244, 255, 0.28);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(8, 18, 29, 0.94), rgba(5, 12, 20, 0.98));
+  box-shadow:
+    0 22px 70px rgba(0, 0, 0, 0.44),
+    0 0 42px rgba(89, 243, 255, 0.09),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+}
+
+.ooh-login-panel::before {
+  content: "Operator Access";
+  display: block;
+  margin: 0 0 22px;
+  color: #ccffff;
+  font-size: 1.18rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 10px rgba(0, 255, 255, 0.20),
+    0 0 26px rgba(0, 255, 255, 0.11);
+}
+
+.ooh-login-panel .form-item {
+  margin: 0 0 18px;
+}
+
+.ooh-login-panel label {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(126, 244, 255, 0.86);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.ooh-login-panel input[type="text"],
+.ooh-login-panel input[type="password"],
+.ooh-login-panel input[type="email"] {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid rgba(93, 240, 255, 0.28);
+  border-radius: 4px;
+  background: rgba(0, 9, 16, 0.84);
+  color: #e8ffff;
+  font: inherit;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: inset 0 0 24px rgba(0, 255, 255, 0.045);
+}
+
+.ooh-login-panel input[type="text"]:focus,
+.ooh-login-panel input[type="password"]:focus,
+.ooh-login-panel input[type="email"]:focus {
+  border-color: rgba(169, 255, 255, 0.82);
+  box-shadow:
+    0 0 0 1px rgba(124, 252, 255, 0.18),
+    0 0 24px rgba(0, 255, 255, 0.15),
+    inset 0 0 32px rgba(0, 255, 255, 0.05);
+}
+
+.ooh-login-panel .description,
+.ooh-login-panel .form-item__description {
+  margin-top: 8px;
+  color: rgba(220, 255, 255, 0.66);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.ooh-login-panel .form-actions {
+  margin: 24px 0 0;
+}
+
+.ooh-login-panel input[type="submit"],
+.ooh-login-panel button[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 50px;
+  padding: 0 18px;
+  border: 1px solid rgba(118, 248, 255, 0.52);
+  border-radius: 4px;
+  background: rgba(5, 22, 28, 0.94);
+  color: #c9ffff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.08),
+    0 0 22px rgba(89, 243, 255, 0.18);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.ooh-login-panel input[type="submit"]:hover,
+.ooh-login-panel input[type="submit"]:focus-visible,
+.ooh-login-panel button[type="submit"]:hover,
+.ooh-login-panel button[type="submit"]:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(169, 255, 255, 0.92);
+  background: #59f3ff;
+  color: #021a2a;
+  outline: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    0 0 24px rgba(89, 243, 255, 0.38);
+}
+
+.ooh-login-panel a {
+  color: #7df9ff;
+}
+
+@media (max-width: 640px) {
+  .ooh-login-shell {
+    padding: 82px 14px 34px;
+  }
+
+  .ooh-login-panel {
+    padding: 22px;
+  }
 }

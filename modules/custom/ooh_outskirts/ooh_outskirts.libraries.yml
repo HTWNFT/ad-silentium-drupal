@@ -67,6 +67,14 @@ game_generator:
     - core/once
     - core/drupalSettings
 
+login:
+  version: 1.x
+  css:
+    theme:
+      css/ooh_game_generator.css: {}
+  dependencies:
+    - ooh_outskirts/base
+
 clearance:
   version: 1.x
   css:

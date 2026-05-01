@@ -46,3 +46,14 @@ function ooh_outskirts_theme($existing, $type, $theme, $path) {
     ],
   ];
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter() for user_login_form.
+ */
+function ooh_outskirts_form_user_login_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  $home_url = \Drupal\Core\Url::fromRoute('<front>')->toString();
+
+  $form['#prefix'] = '<div class="ooh-login-shell"><a class="ooh-login-home" href="' . $home_url . '">Home</a><div class="ooh-login-panel">';
+  $form['#suffix'] = '</div></div>';
+  $form['#attached']['library'][] = 'ooh_outskirts/login';
+}
