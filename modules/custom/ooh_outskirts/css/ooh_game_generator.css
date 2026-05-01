@@ -1120,8 +1120,33 @@ body.page-play .content {
   pointer-events: none;
 }
 
+.ooh-play-scene.has-scene-asset .ooh-play-scene__visual {
+  background-image:
+    linear-gradient(180deg, rgba(0, 4, 8, 0.20), rgba(0, 0, 0, 0.66)),
+    var(--ooh-scene-bg-image);
+  background-position: center;
+  background-size: cover;
+}
+
+.ooh-play-scene__asset-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  filter: contrast(1.08) saturate(0.82) brightness(0.62);
+  transition: opacity 0.45s ease;
+}
+
+.ooh-play-scene.has-scene-video .ooh-play-scene__asset-video {
+  opacity: 0.34;
+}
+
 .ooh-play-scene__visual::before,
 .ooh-play-scene__visual::after,
+.ooh-play-scene__asset-video,
 .ooh-play-scene__sky,
 .ooh-play-scene__horizon,
 .ooh-play-scene__terrain,

@@ -39,6 +39,26 @@
     return cleanId(payload.missionType || ((payload.mission || {}).id), 'unconfirmed');
   }
 
+  // Deterministic route asset map. Entries point at local public files and are optional:
+  // the CSS route gradients remain the fallback whenever an image or passive loop is missing.
+  const sceneAssetMap = {
+    aer: {
+      image: '/STIKWALLET11202025/sites/default/files/outskirts/backgrounds/bg_underboard_alley_signal_drift.webp',
+      video: '/STIKWALLET11202025/sites/default/files/outskirts/loops/video_loops_underboard_alley_signal_drift.mp4',
+      label: 'AER route asset: upper corridor signal drift'
+    },
+    mare: {
+      image: '/STIKWALLET11202025/sites/default/files/outskirts/backgrounds/bg_neon_bog_core.webp',
+      video: '/STIKWALLET11202025/sites/default/files/outskirts/loops/video_loops_neon_fog_marsh_core.mp4',
+      label: 'MARE route asset: submerged pressure fog'
+    },
+    terra: {
+      image: '/STIKWALLET11202025/sites/default/files/outskirts/backgrounds/bg_wasteland_ridge_aftermath_quiet.webp',
+      video: '/STIKWALLET11202025/sites/default/files/outskirts/loops/video_loops_wasteland_ridge_core.mp4',
+      label: 'TERRA route asset: wasteland ridge'
+    }
+  };
+
   function cleanId(value, fallback) {
     const cleaned = String(value || '')
       .toLowerCase()
@@ -236,6 +256,48 @@
     return (routeStates[routeId] || routeStates.terra) + pathTone + ' Mission type: ' + missionLabel + '.';
   }
 
+  function bindSceneAssets(shell, routeId) {
+    if (!shell) {
+      return;
+    }
+
+    const asset = sceneAssetMap[routeId] || sceneAssetMap.terra;
+    const video = shell.querySelector('[data-ooh-scene-video]');
+
+    shell.classList.remove('has-scene-asset', 'has-scene-video');
+    shell.style.removeProperty('--ooh-scene-bg-image');
+    shell.setAttribute('data-scene-asset', asset.label);
+
+    const image = new Image();
+    image.onload = function () {
+      shell.style.setProperty('--ooh-scene-bg-image', 'url("' + asset.image + '")');
+      shell.classList.add('has-scene-asset');
+    };
+    image.onerror = function () {
+      shell.style.removeProperty('--ooh-scene-bg-image');
+      shell.classList.remove('has-scene-asset');
+    };
+    image.src = asset.image;
+
+    if (!video) {
+      return;
+    }
+
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+    video.oncanplay = function () {
+      shell.classList.add('has-scene-video');
+      video.play().catch(function () {});
+    };
+    video.onerror = function () {
+      shell.classList.remove('has-scene-video');
+      video.removeAttribute('src');
+    };
+    video.src = asset.video;
+    video.load();
+  }
+
   function buildMissionCodename(payload, routeId, objective) {
     const route = routeLabel(routeId);
     const missionPart = (objective && objective.code) || cleanId(payload.missionType || ((payload.mission || {}).id), 'mission').toUpperCase();
@@ -370,6 +432,7 @@
           shell.setAttribute('data-mission-type', missionTypeAttribute(payload));
           shell.setAttribute('data-playlist-mood', playlistMoodAttribute(payload));
           shell.setAttribute('data-prompt-block', selectedPrompt ? (selectedPrompt.id || 'prompt_block') : 'unavailable');
+          bindSceneAssets(shell, routeId);
         }
 
         if (routeHeader) {

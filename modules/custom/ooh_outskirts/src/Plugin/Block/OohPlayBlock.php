@@ -192,6 +192,7 @@ final class OohPlayBlock extends BlockBase {
 
     <div class="ooh-play-scene" data-ooh-scene-shell data-route="TERRA" data-path="UNASSIGNED" data-mission-type="unconfirmed" data-playlist-mood="neutral">
       <div class="ooh-play-scene__visual" aria-hidden="true">
+        <video class="ooh-play-scene__asset-video" data-ooh-scene-video muted loop playsinline preload="metadata"></video>
         <div class="ooh-play-scene__sky"></div>
         <div class="ooh-play-scene__horizon"></div>
         <div class="ooh-play-scene__terrain"></div>
