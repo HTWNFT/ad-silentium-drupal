@@ -50,7 +50,10 @@
 
     returnButtons.forEach(function (button) {
       button.addEventListener('click', function () {
-        window.location.href = '/clearance';
+        const target = button.getAttribute('href') || button.getAttribute('data-ooh-clearance-url') || '';
+        if (target) {
+          window.location.href = target;
+        }
       });
     });
   }

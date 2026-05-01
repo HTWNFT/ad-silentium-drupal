@@ -1,14 +1,35 @@
 (function (Drupal, once) {
-  Drupal.behaviors.oohHeroLanding = {
+  const warnOnce = (key, message) => {
+    window.oohLandingWarnings = window.oohLandingWarnings || {};
+    if (!window.oohLandingWarnings[key]) {
+      window.oohLandingWarnings[key] = true;
+      console.warn(message);
+    }
+  };
+
+  Drupal.behaviors.oohLanding = {
     attach(context) {
-      once('oohHeroLanding', '[data-ooh-hero]', context).forEach((root) => {
+      once('oohLanding', '[data-ooh-landing-ui]', context).forEach((landing) => {
+        document.documentElement.setAttribute('data-ooh-landing-library-loaded', '1');
+        const root = landing.querySelector('[data-ooh-hero]');
+
         // ----- Modal wiring -----
-        const openBtn = document.getElementById('ooh-read-prologue');
-        const closeBtn = document.getElementById('ooh-close-prologue');
-        const modal = document.getElementById('ooh-prologue-modal');
+        const openBtn = landing.querySelector('#ooh-read-prologue');
+        const closeBtn = landing.querySelector('#ooh-close-prologue');
+        const modal = landing.querySelector('#ooh-prologue-modal');
         const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
-        const crawl = document.getElementById('ooh-prologue-crawl');
+        const crawl = landing.querySelector('#ooh-prologue-crawl');
         const prologueSeenKey = 'ooh_prologue_seen_landing_v1';
+
+        if (!root) {
+          warnOnce('hero-missing', 'OOH landing: hero root not found.');
+        }
+        if (!openBtn) {
+          warnOnce('prologue-button-missing', 'OOH landing: READ PROLOGUE button not found.');
+        }
+        if (!modal) {
+          warnOnce('prologue-modal-missing', 'OOH landing: prologue modal not found.');
+        }
 
         const restartCrawl = () => {
           if (!crawl) {
@@ -65,17 +86,19 @@
         });
 
         // ----- Landing monetization UI scaffold -----
-        once('oohLandingMonetizationUi', '[data-ooh-landing-ui]', context).forEach((landing) => {
+        (() => {
           const STARTER_CREDITS = 60;
           const soundPreferenceKey = 'ooh_landing_sound_enabled';
           const creditDropDismissedKey = 'ooh_credit_drop_dismissed_v1';
           const starterCreditsReservedKey = 'ooh_starter_credits_reserved_v1';
           const audio = landing.querySelector('[data-ooh-ambient-audio]');
           const soundToggle = landing.querySelector('[data-ooh-sound-toggle]');
+          const dossierLink = landing.querySelector('.ooh-hero__button--primary[href]');
           const buyCreditsButtons = landing.querySelectorAll('[data-ooh-buy-credits]');
           const creditStatuses = landing.querySelectorAll('[data-ooh-credit-status]');
-          const loginUrl = landing.getAttribute('data-ooh-login-url') || '/user/login';
-          const creditsUrl = landing.getAttribute('data-ooh-credits-url') || '/clearance/credits';
+          const memberLink = landing.querySelector('.ooh-account-status[href]');
+          const loginUrl = landing.getAttribute('data-ooh-login-url') || '';
+          const creditsUrl = landing.getAttribute('data-ooh-credits-url') || '';
           const isLoggedIn = landing.getAttribute('data-ooh-logged-in') === '1';
           const drupalSettingsCredits =
             window.drupalSettings &&
@@ -97,6 +120,22 @@
           const creditStatusMessage = landing.querySelector('[data-ooh-credit-status-message]');
 
           const dialogs = [loginDialog, creditDropDialog, purchaseDialog].filter(Boolean);
+
+          if (!soundToggle) {
+            warnOnce('sound-button-missing', 'OOH landing: SOUND button not found.');
+          }
+          if (!audio) {
+            warnOnce('audio-missing', 'OOH landing: ambient audio element not found.');
+          }
+          if (!dossierLink) {
+            warnOnce('dossier-link-missing', 'OOH landing: ENTER DOSSIER link not found.');
+          }
+          if (!creditStatuses.length && !buyCreditsButtons.length) {
+            warnOnce('credits-link-missing', 'OOH landing: credits button not found.');
+          }
+          if (isLoggedIn && !memberLink) {
+            warnOnce('member-link-missing', 'OOH landing: member account button not found.');
+          }
 
           const isAnyDialogOpen = () => dialogs.some((dialog) => dialog.classList.contains('is-open'));
 
@@ -361,9 +400,13 @@
               }
             });
           }
-        });
+        })();
 
         // ----- Carousel wiring -----
+        if (!root) {
+          return;
+        }
+
         const slides = Array.from(root.querySelectorAll('.ooh-hero__slide'));
         const dotsWrap = root.querySelector('.ooh-hero__dots');
         const prevBtn = root.querySelector('[data-ooh-carousel-prev]');

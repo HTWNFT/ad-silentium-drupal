@@ -30,6 +30,22 @@ ooh_outskirts.credits_checkout:
   requirements:
     _permission: 'access content'
 
+ooh_outskirts.dossier:
+  path: '/dossier'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::dossier'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ooh_outskirts.play:
+  path: '/play'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::play'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
 ooh_outskirts.clearance:
   path: '/clearance'
   defaults:

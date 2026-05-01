@@ -50,6 +50,33 @@ class OohPageController extends ControllerBase {
       ],
     ];
   }
+
+  public function dossier() {
+    $block = \Drupal::service('plugin.manager.block')
+      ->createInstance('ooh_game_generator_block', []);
+    $build = $block->build();
+
+    $build['#cache'] = [
+      'max-age' => 0,
+    ];
+
+    return $build;
+  }
+
+  public function play() {
+    $block = \Drupal::service('plugin.manager.block')
+      ->createInstance('ooh_play_block', [
+        'require_login' => FALSE,
+      ]);
+    $build = $block->build();
+
+    $build['#cache'] = [
+      'max-age' => 0,
+    ];
+
+    return $build;
+  }
+
   public function credits() {
     return [
       '#theme' => 'ooh_credits_page',

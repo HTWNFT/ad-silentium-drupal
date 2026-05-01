@@ -7,15 +7,21 @@ base:
     - core/drupal
     - core/once
 
+player_pages:
+  version: 1.x
+  css:
+    theme:
+      css/ooh-player-pages.css: {}
+
 landing:
   version: 1.x
   css:
     theme:
       css/ooh-landing.css: {}
   js:
-    js/ooh-hero-carousel.js: {}
     js/ooh-hero-modal.js: {}
   dependencies:
+    - ooh_outskirts/player_pages
     - core/drupal
     - core/once
     - core/drupalSettings
@@ -24,31 +30,39 @@ dossier:
   version: 1.x
   js:
     js/ooh_dossier.js: {}
+    js/ooh-spotify-playlists.js: {}
   dependencies:
     - ooh_outskirts/base
+    - ooh_outskirts/player_pages
     - core/drupal
     - core/once
     - core/drupalSettings
 
 play:
   version: 1.x
+  css:
+    theme:
+      css/ooh_game_generator.css: {}
   js:
     js/ooh_play.js: {}
   dependencies:
     - ooh_outskirts/base
+    - ooh_outskirts/player_pages
     - core/drupal
     - core/once
     - core/drupalSettings
 
 game_generator:
-  version: 1.x
+  version: 2.0.2-lockdown
   css:
     theme:
       css/ooh_game_generator.css: {}
   js:
     js/ooh_game_generator.js: {}
+    js/ooh-spotify-playlists.js: {}
   dependencies:
     - ooh_outskirts/base
+    - ooh_outskirts/player_pages
     - core/drupal
     - core/once
     - core/drupalSettings
@@ -61,6 +75,7 @@ clearance:
   js:
     js/ooh-clearance.js: {}
   dependencies:
+    - ooh_outskirts/player_pages
     - core/drupal
     - core/once
 
@@ -72,5 +87,6 @@ credits:
   js:
     js/ooh-credits.js: {}
   dependencies:
+    - ooh_outskirts/player_pages
     - core/drupal
     - core/once

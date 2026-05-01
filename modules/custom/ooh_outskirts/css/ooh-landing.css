@@ -855,3 +855,57 @@ body:has(.ooh-landing-page) .ooh-credit-email-input::placeholder {
     padding: 32px 18px 24px;
   }
 }
+
+body.path-frontpage,
+body.path-landingpage,
+body.path-dossier {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #000 !important;
+  overflow-x: hidden !important;
+}
+
+body.path-frontpage .dialog-off-canvas-main-canvas,
+body.path-frontpage .layout-container,
+body.path-frontpage #page-wrapper,
+body.path-frontpage #page,
+body.path-frontpage main,
+body.path-landingpage .dialog-off-canvas-main-canvas,
+body.path-landingpage .layout-container,
+body.path-landingpage #page-wrapper,
+body.path-landingpage #page,
+body.path-landingpage main,
+body.path-dossier .dialog-off-canvas-main-canvas,
+body.path-dossier .layout-container,
+body.path-dossier #page-wrapper,
+body.path-dossier #page,
+body.path-dossier main {
+  width: 100vw !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.ooh-signature {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(120, 255, 255, 0.45);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 5;
+  font-family: inherit;
+}
+
+.ooh-signature::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  filter: blur(6px);
+  opacity: 0.25;
+}
