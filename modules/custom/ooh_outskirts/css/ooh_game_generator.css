@@ -1560,7 +1560,13 @@ body.page-play .content {
 .ooh-play-trigger-selector__label,
 .ooh-play-trigger-selector__output,
 .ooh-play-trigger-selector__outcome,
-.ooh-play-trigger-selector__passive-preview {
+.ooh-play-trigger-selector__passive-preview,
+.ooh-play-trigger-selector__transition-preview,
+.ooh-play-trigger-selector__confirmation,
+.ooh-play-trigger-selector__pending-review,
+.ooh-play-trigger-selector__application-lock,
+.ooh-play-trigger-selector__application-checklist,
+.ooh-play-trigger-selector__audit-stamp {
   min-width: 0;
   color: rgba(255, 196, 180, 0.62);
   font-size: 0.56rem;
@@ -1585,6 +1591,76 @@ body.page-play .content {
 .ooh-play-trigger-selector__passive-preview {
   grid-column: 1 / -1;
   color: rgba(235, 255, 255, 0.70);
+}
+
+.ooh-play-trigger-selector__transition-preview {
+  grid-column: 1 / -1;
+  color: rgba(255, 235, 229, 0.72);
+}
+
+.ooh-play-trigger-selector__confirm,
+.ooh-play-trigger-selector__arm-application {
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-height: 30px;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 148, 124, 0.24);
+  border-radius: 4px;
+  background: rgba(12, 8, 10, 0.82);
+  color: rgba(255, 235, 229, 0.78);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ooh-play-trigger-selector__confirm:disabled,
+.ooh-play-trigger-selector__arm-application:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.ooh-play-trigger-selector__confirm:not(:disabled):hover,
+.ooh-play-trigger-selector__confirm:not(:disabled):focus-visible {
+  border-color: rgba(255, 196, 180, 0.76);
+  box-shadow: 0 0 16px rgba(255, 96, 72, 0.14);
+  outline: none;
+}
+
+.ooh-play-trigger-selector__confirmation {
+  grid-column: 1 / -1;
+  color: rgba(235, 255, 255, 0.68);
+}
+
+.ooh-play-trigger-selector__pending-review {
+  grid-column: 1 / -1;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 196, 180, 0.10);
+  color: rgba(255, 235, 229, 0.82);
+}
+
+.ooh-play-trigger-selector__application-lock {
+  grid-column: 1 / -1;
+  color: rgba(235, 255, 255, 0.66);
+}
+
+.ooh-play-trigger-selector__application-checklist {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 8px;
+  border: 1px solid rgba(255, 196, 180, 0.10);
+  border-radius: 4px;
+  background: rgba(0, 6, 10, 0.32);
+  color: rgba(235, 255, 255, 0.72);
+  font-family: inherit;
+  white-space: pre-wrap;
+}
+
+.ooh-play-trigger-selector__audit-stamp {
+  grid-column: 1 / -1;
+  color: rgba(255, 235, 229, 0.78);
 }
 
 .ooh-play-trigger-selector__control {

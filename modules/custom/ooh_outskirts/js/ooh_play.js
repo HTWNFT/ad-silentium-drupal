@@ -390,13 +390,15 @@
 
   const enemyContactProfileFields = [
     ['category', 'CATEGORY'],
+    ['factionFamily', 'FACTION FAMILY'],
     ['speciesBase', 'SPECIES BASE'],
     ['allegianceState', 'ALLEGIANCE'],
     ['dispositionState', 'DISPOSITION'],
     ['behaviorState', 'BEHAVIOR STATE'],
     ['movementType', 'MOVEMENT'],
     ['threatRole', 'THREAT ROLE'],
-    ['behaviorMode', 'BEHAVIOR']
+    ['behaviorMode', 'BEHAVIOR'],
+    ['description', 'DESCRIPTION']
   ];
 
   const enemyMovementTagFields = [
@@ -470,19 +472,29 @@
     }
   };
 
+  const triggerStateTransitionPreview = {
+    none: null,
+    caution: 'CAUTIOUS',
+    hostile: 'THREATENING',
+    support: 'SUPPORT-READY',
+    retreat: 'WITHDRAWING'
+  };
+
   const enemyContactArchetypes = [
     {
-      id: 'hippo_ronin',
-      label: 'HIPPO RONIN',
+      id: 'hippo_mutant',
+      label: 'HIPPO MUTANT',
       profile: {
-        category: 'MUTANT / RONIN',
+        category: 'MUTANT',
+        factionFamily: 'MUTANT',
         speciesBase: 'HIPPO',
         allegianceState: 'NEUTRAL',
         dispositionState: 'WATCHING',
         behaviorState: 'HOLDING',
         movementType: 'AMPHIBIOUS HEAVY',
         threatRole: 'BREACHER',
-        behaviorMode: 'OBSERVING'
+        behaviorMode: 'OBSERVING',
+        description: 'Mutant heavy contact that anchors breach points and flooded routes.'
       },
       movementTags: {
         terrainAffinity: 'WATER / MUD / BREACH POINT',
@@ -506,17 +518,55 @@
       }
     },
     {
-      id: 'leech_ronin',
-      label: 'LEECH RONIN',
+      id: 'hippo_ronin',
+      label: 'HIPPO RONIN',
       profile: {
-        category: 'MUTANT / RONIN',
+        category: 'RONIN',
+        factionFamily: 'RONIN',
+        speciesBase: 'HIPPO',
+        allegianceState: 'NEUTRAL',
+        dispositionState: 'WATCHING',
+        behaviorState: 'HOLDING',
+        movementType: 'AMPHIBIOUS HEAVY',
+        threatRole: 'BREACHER',
+        behaviorMode: 'OBSERVING',
+        description: 'Ronin heavy contact that watches waterline crossings before committing.'
+      },
+      movementTags: {
+        terrainAffinity: 'WATER / MUD / BREACH POINT',
+        locomotionClass: 'AMPHIBIOUS HEAVY',
+        formationStyle: 'SOLO PRESSURE',
+        engagementRange: 'CLOSE / IMPACT',
+        mobilityNote: 'SLOW LAND PUSH, FAST WATER AMBUSH'
+      },
+      missionAffinity: {
+        primaryMissionType: 'WATER / BREACH',
+        secondaryMissionType: 'LAND ASSAULT',
+        environmentalUse: 'RIVER, SWAMP, FLOODED RUINS',
+        tacticalUse: 'BREAKS LINES, BLOCKS ESCAPE ROUTES'
+      },
+      behaviorIntent: {
+        defaultIntent: 'HOLD TERRITORY',
+        cautionTrigger: 'PLAYER ENTERS WATERLINE',
+        hostileTrigger: 'BREACH ROUTE BLOCKED',
+        supportTrigger: 'SHARED ENEMY PRESSURE',
+        retreatTrigger: 'DEEP WATER WITHDRAWAL'
+      }
+    },
+    {
+      id: 'leech_mutant',
+      label: 'LEECH MUTANT',
+      profile: {
+        category: 'MUTANT',
+        factionFamily: 'MUTANT',
         speciesBase: 'LEECH',
         allegianceState: 'NEUTRAL',
         dispositionState: 'DORMANT',
         behaviorState: 'DORMANT',
         movementType: 'AMPHIBIOUS SWARM',
         threatRole: 'DRAINER',
-        behaviorMode: 'DORMANT'
+        behaviorMode: 'DORMANT',
+        description: 'Mutant swarm contact that remains latent around tunnels and waterlines.'
       },
       movementTags: {
         terrainAffinity: 'WATER / TUNNEL / BODY CONTACT',
@@ -540,17 +590,55 @@
       }
     },
     {
-      id: 'bee_ronin',
-      label: 'BEE RONIN',
+      id: 'leech_ronin',
+      label: 'LEECH RONIN',
       profile: {
-        category: 'MUTANT / RONIN',
+        category: 'RONIN',
+        factionFamily: 'RONIN',
+        speciesBase: 'LEECH',
+        allegianceState: 'NEUTRAL',
+        dispositionState: 'DORMANT',
+        behaviorState: 'DORMANT',
+        movementType: 'AMPHIBIOUS SWARM',
+        threatRole: 'DRAINER',
+        behaviorMode: 'DORMANT',
+        description: 'Ronin swarm contact that waits for disturbance before revealing intent.'
+      },
+      movementTags: {
+        terrainAffinity: 'WATER / TUNNEL / BODY CONTACT',
+        locomotionClass: 'AMPHIBIOUS SWARM',
+        formationStyle: 'CLUSTER SWARM',
+        engagementRange: 'CLOSE / ATTACH',
+        mobilityNote: 'SMALL GROUP RUSH, DRAIN CONTACT'
+      },
+      missionAffinity: {
+        primaryMissionType: 'WATER / TUNNEL',
+        secondaryMissionType: 'INFILTRATION',
+        environmentalUse: 'SEWERS, MARSH, SUBMERGED STRUCTURES',
+        tacticalUse: 'DRAIN PRESSURE, SWARM CONTACT'
+      },
+      behaviorIntent: {
+        defaultIntent: 'REMAIN DORMANT',
+        cautionTrigger: 'PLAYER ENTERS CLUSTER RANGE',
+        hostileTrigger: 'CONTACT DISTURBS SWARM',
+        supportTrigger: 'SIGNAL OVERRIDE',
+        retreatTrigger: 'LIGHT / HEAT PRESSURE'
+      }
+    },
+    {
+      id: 'bee_mutant',
+      label: 'BEE MUTANT',
+      profile: {
+        category: 'MUTANT',
+        factionFamily: 'MUTANT',
         speciesBase: 'BEE',
         allegianceState: 'NEUTRAL',
         dispositionState: 'FORMING',
         behaviorState: 'FORMING',
         movementType: 'AIRBORNE SWARM',
         threatRole: 'STINGER',
-        behaviorMode: 'FORMING'
+        behaviorMode: 'FORMING',
+        description: 'Mutant swarm contact that gathers pressure over exposed spaces.'
       },
       movementTags: {
         terrainAffinity: 'AIR / OPEN FIELD / STRUCTURE EDGE',
@@ -574,17 +662,91 @@
       }
     },
     {
-      id: 'owl_ronin',
-      label: 'OWL RONIN',
+      id: 'bee_ronin',
+      label: 'BEE RONIN',
       profile: {
-        category: 'MUTANT / RONIN',
+        category: 'RONIN',
+        factionFamily: 'RONIN',
+        speciesBase: 'BEE',
+        allegianceState: 'NEUTRAL',
+        dispositionState: 'FORMING',
+        behaviorState: 'FORMING',
+        movementType: 'AIRBORNE SWARM',
+        threatRole: 'STINGER',
+        behaviorMode: 'FORMING',
+        description: 'Ronin swarm contact that forms around airspace pressure and signal shifts.'
+      },
+      movementTags: {
+        terrainAffinity: 'AIR / OPEN FIELD / STRUCTURE EDGE',
+        locomotionClass: 'AIRBORNE SWARM',
+        formationStyle: 'SWARM CLOUD',
+        engagementRange: 'MID / STING PASS',
+        mobilityNote: 'FORMATION FLIGHT, REPEATED STING RUNS'
+      },
+      missionAffinity: {
+        primaryMissionType: 'AIR / SWARM',
+        secondaryMissionType: 'AREA DENIAL',
+        environmentalUse: 'OPEN FIELD, ROOFTOPS, STRUCTURE EDGES',
+        tacticalUse: 'HARASSMENT, STING PASSES, CROWD PRESSURE'
+      },
+      behaviorIntent: {
+        defaultIntent: 'FORM SWARM',
+        cautionTrigger: 'PLAYER ENTERS AIRSPACE',
+        hostileTrigger: 'HIVE VECTOR THREATENED',
+        supportTrigger: 'AREA DENIAL ALIGNMENT',
+        retreatTrigger: 'SMOKE / SIGNAL DISRUPTION'
+      }
+    },
+    {
+      id: 'owl_mutant',
+      label: 'OWL MUTANT',
+      profile: {
+        category: 'MUTANT',
+        factionFamily: 'MUTANT',
         speciesBase: 'OWL',
         allegianceState: 'NEUTRAL',
         dispositionState: 'OVERWATCH',
         behaviorState: 'OBSERVING',
         movementType: 'AIRBORNE PREDATOR',
         threatRole: 'AER SUPPORT',
-        behaviorMode: 'OVERWATCH'
+        behaviorMode: 'OVERWATCH',
+        description: 'Mutant overwatch contact that tracks exposed movement from high cover.'
+      },
+      movementTags: {
+        terrainAffinity: 'AIR / NIGHT / HIGH PERCH',
+        locomotionClass: 'AIRBORNE PREDATOR',
+        formationStyle: 'OVERWATCH SOLO',
+        engagementRange: 'LONG / DIVE STRIKE',
+        mobilityNote: 'AERIAL SUPPORT, DIVE-ANGLE CONTROL'
+      },
+      missionAffinity: {
+        primaryMissionType: 'AER / OVERWATCH',
+        secondaryMissionType: 'AIR SUPPORT',
+        environmentalUse: 'NIGHT SKY, HIGH PERCH, CLOUD COVER',
+        tacticalUse: 'RECON, DIVE ANGLES, TARGET MARKING'
+      },
+      behaviorIntent: {
+        defaultIntent: 'OBSERVE FROM ABOVE',
+        cautionTrigger: 'PLAYER BREAKS STEALTH',
+        hostileTrigger: 'TARGET MARK CONFIRMED',
+        supportTrigger: 'AER SUPPORT ALIGNMENT',
+        retreatTrigger: 'CLOUD COVER EXIT'
+      }
+    },
+    {
+      id: 'owl_ronin',
+      label: 'OWL RONIN',
+      profile: {
+        category: 'RONIN',
+        factionFamily: 'RONIN',
+        speciesBase: 'OWL',
+        allegianceState: 'NEUTRAL',
+        dispositionState: 'OVERWATCH',
+        behaviorState: 'OBSERVING',
+        movementType: 'AIRBORNE PREDATOR',
+        threatRole: 'AER SUPPORT',
+        behaviorMode: 'OVERWATCH',
+        description: 'Ronin overwatch contact that observes before committing to alignment.'
       },
       movementTags: {
         terrainAffinity: 'AIR / NIGHT / HIGH PERCH',
@@ -612,6 +774,7 @@
   let activeEnemyContactArchetypeId = 'hippo_ronin';
   let selectedTriggerPreview = 'none';
   let passivePreviewLogEntries = [];
+  let engagementState = 'DISENGAGED';
 
   function activeEnemyContactArchetype() {
     return enemyContactArchetypes.find(function (archetype) {
@@ -632,7 +795,9 @@
 
   function passiveBehaviorPreviewLabel() {
     const archetype = activeEnemyContactArchetype();
-    const archetypePreview = passiveBehaviorPreviewText[archetype ? archetype.id : ''] || passiveBehaviorPreviewText.hippo_ronin;
+    const speciesBase = archetype && archetype.profile ? archetype.profile.speciesBase : '';
+    const speciesPreviewKey = speciesBase ? speciesBase.toLowerCase() + '_ronin' : '';
+    const archetypePreview = passiveBehaviorPreviewText[archetype ? archetype.id : ''] || passiveBehaviorPreviewText[speciesPreviewKey] || passiveBehaviorPreviewText.hippo_ronin;
     return archetypePreview[selectedTriggerPreview] || archetypePreview.none;
   }
 
@@ -643,6 +808,89 @@
       selectedTriggerPreview.toUpperCase(),
       passiveBehaviorPreviewLabel()
     ].join(' // ');
+  }
+
+  function behaviorStateTransitionPreviewLabel() {
+    const archetype = activeEnemyContactArchetype();
+    const profile = archetype ? archetype.profile : {};
+    const currentState = profile.behaviorState || 'UNKNOWN';
+    const previewState = triggerStateTransitionPreview[selectedTriggerPreview] || currentState;
+    return currentState + ' -> ' + previewState;
+  }
+
+  function behaviorStateTransitionPreviewState() {
+    return triggerStateTransitionPreview[selectedTriggerPreview] || null;
+  }
+
+  function transitionConfirmationPreviewText() {
+    const archetype = activeEnemyContactArchetype();
+    return [
+      'TRANSITION CONFIRMED FOR PREVIEW ONLY: ' + (archetype ? archetype.label : 'UNKNOWN CONTACT'),
+      selectedTriggerPreview.toUpperCase(),
+      behaviorStateTransitionPreviewLabel()
+    ].join(' // ');
+  }
+
+  function transitionPendingReviewText() {
+    const archetype = activeEnemyContactArchetype();
+    return [
+      'TRANSITION READY FOR MANUAL REVIEW ONLY: ' + (archetype ? archetype.label : 'UNKNOWN CONTACT'),
+      selectedTriggerPreview.toUpperCase(),
+      behaviorStateTransitionPreviewLabel(),
+      'NO STATE APPLIED'
+    ].join(' // ');
+  }
+
+  function allegianceCompatibilityReviewText(archetype) {
+    const profile = archetype ? archetype.profile : {};
+    return [
+      'ALLEGIANCE COMPATIBILITY REVIEW: ' + (archetype ? archetype.label : 'UNKNOWN CONTACT'),
+      'CURRENT ALLEGIANCE: ' + (profile.allegianceState || 'UNKNOWN'),
+      'NO ALLEGIANCE CHANGE APPLIED'
+    ].join(' // ');
+  }
+
+  function derivedAllegianceState(archetype) {
+    const label = archetype ? archetype.label : '';
+    if (label.indexOf('MUTANT') !== -1) {
+      return 'MUTANT';
+    }
+    if (label.indexOf('RONIN') !== -1) {
+      return 'RONIN';
+    }
+    return 'NEUTRAL';
+  }
+
+  function allegianceReviewChecklistText(allegianceChangeArmed, allegianceChanged) {
+    return [
+      'ALLEGIANCE REVIEW CHECKLIST:',
+      '- Behavior state applied: YES',
+      '- Allegiance review required: YES',
+      '- Allegiance change armed: ' + (allegianceChangeArmed ? 'YES' : 'NO'),
+      '- Allegiance changed: ' + (allegianceChanged ? 'YES' : 'NO'),
+      '- Combat systems engaged: NO'
+    ].join('\n');
+  }
+
+  function phase10FinalAuditText(archetype) {
+    const profile = archetype ? archetype.profile : {};
+    return [
+      'PHASE 10 AUDIT COMPLETE: BEHAVIOR STATE APPLIED // ALLEGIANCE REVIEWED // COMBAT SYSTEMS LOCKED',
+      'Current behaviorState: ' + (profile.behaviorState || 'UNKNOWN'),
+      'Current allegianceState: ' + (profile.allegianceState || 'UNKNOWN'),
+      'Combat systems engaged: NO'
+    ].join('\n');
+  }
+
+  function transitionApplicationChecklistText(previewConfirmed, behaviorStateChanged) {
+    return [
+      'APPLICATION CHECKLIST:',
+      '- Preview confirmed: ' + (previewConfirmed ? 'YES' : 'NO'),
+      '- Manual review required: YES',
+      '- State application armed: NO',
+      '- Behavior state changed: ' + (behaviorStateChanged ? 'YES' : 'NO'),
+      '- Allegiance changed: NO'
+    ].join('\n');
   }
 
   function createCombatState() {
@@ -1265,8 +1513,10 @@
     });
 
     select.value = selectedTriggerPreview;
+    let transitionPreviewConfirmed = false;
     select.addEventListener('change', function () {
       setSelectedTriggerPreview(select.value);
+      transitionPreviewConfirmed = false;
       select.value = selectedTriggerPreview;
       syncTriggerSelectionPreview(encounter);
       appendPassivePreviewLog(encounter);
@@ -1287,11 +1537,279 @@
     passivePreview.setAttribute('data-ooh-passive-behavior-preview', '');
     passivePreview.textContent = 'PASSIVE BEHAVIOR PREVIEW: CONTACT REMAINS UNDER OBSERVATION';
 
+    const transitionPreview = document.createElement('span');
+    transitionPreview.className = 'ooh-play-trigger-selector__transition-preview';
+    transitionPreview.setAttribute('data-ooh-state-transition-preview', '');
+    transitionPreview.textContent = 'STATE TRANSITION PREVIEW: HOLDING -> HOLDING';
+
+    const confirmButton = document.createElement('button');
+    confirmButton.className = 'ooh-play-trigger-selector__confirm';
+    confirmButton.type = 'button';
+    confirmButton.setAttribute('data-ooh-transition-confirm-button', '');
+    confirmButton.disabled = true;
+    confirmButton.setAttribute('aria-disabled', 'true');
+    confirmButton.textContent = 'CONFIRM TRANSITION PREVIEW';
+
+    const confirmation = document.createElement('span');
+    confirmation.className = 'ooh-play-trigger-selector__confirmation';
+    confirmation.setAttribute('data-ooh-transition-confirmation', '');
+    confirmation.textContent = 'TRANSITION CONFIRMATION AWAITING TRIGGER PREVIEW';
+
+    const pendingReview = document.createElement('span');
+    pendingReview.className = 'ooh-play-trigger-selector__pending-review';
+    pendingReview.setAttribute('data-ooh-transition-pending-review', '');
+    pendingReview.textContent = 'TRANSITION READINESS AWAITING CONFIRMATION // NO STATE APPLIED';
+
+    const armButton = document.createElement('button');
+    armButton.className = 'ooh-play-trigger-selector__arm-application';
+    armButton.type = 'button';
+    armButton.setAttribute('data-ooh-transition-arm-application', '');
+    armButton.disabled = true;
+    armButton.setAttribute('aria-disabled', 'true');
+    armButton.textContent = 'ARM TRANSITION APPLICATION';
+
+    const applicationLock = document.createElement('span');
+    applicationLock.className = 'ooh-play-trigger-selector__application-lock';
+    applicationLock.setAttribute('data-ooh-transition-application-lock', '');
+    applicationLock.textContent = 'TRANSITION APPLICATION LOCKED: MANUAL REVIEW REQUIRED // NO STATE APPLIED';
+
+    const applicationExecuted = document.createElement('span');
+    applicationExecuted.className = 'ooh-play-trigger-selector__application-executed';
+    applicationExecuted.setAttribute('data-ooh-transition-application-executed', '');
+    applicationExecuted.textContent = 'TRANSITION APPLICATION EXECUTED: NOT RUN';
+
+    const allegianceCompatibility = document.createElement('span');
+    allegianceCompatibility.className = 'ooh-play-trigger-selector__allegiance-compatibility';
+    allegianceCompatibility.setAttribute('data-ooh-allegiance-compatibility-review', '');
+    allegianceCompatibility.hidden = true;
+
+    const allegianceReviewButton = document.createElement('button');
+    allegianceReviewButton.className = 'ooh-play-trigger-selector__allegiance-review';
+    allegianceReviewButton.type = 'button';
+    allegianceReviewButton.setAttribute('data-ooh-allegiance-review-button', '');
+    allegianceReviewButton.disabled = true;
+    allegianceReviewButton.setAttribute('aria-disabled', 'true');
+    allegianceReviewButton.hidden = true;
+    allegianceReviewButton.textContent = 'ARM ALLEGIANCE REVIEW';
+
+    const allegianceReviewLock = document.createElement('span');
+    allegianceReviewLock.className = 'ooh-play-trigger-selector__allegiance-review-lock';
+    allegianceReviewLock.setAttribute('data-ooh-allegiance-review-lock', '');
+    allegianceReviewLock.hidden = true;
+    allegianceReviewLock.textContent = 'ALLEGIANCE REVIEW LOCKED: MANUAL CONFIRMATION REQUIRED // NO ALLEGIANCE CHANGE APPLIED';
+
+    const allegianceApplicationExecuted = document.createElement('span');
+    allegianceApplicationExecuted.className = 'ooh-play-trigger-selector__allegiance-application-executed';
+    allegianceApplicationExecuted.setAttribute('data-ooh-allegiance-application-executed', '');
+    allegianceApplicationExecuted.hidden = true;
+
+    const phase10FinalAudit = document.createElement('pre');
+    phase10FinalAudit.className = 'ooh-play-trigger-selector__phase-10-final-audit';
+    phase10FinalAudit.setAttribute('data-ooh-phase-10-final-audit', '');
+    phase10FinalAudit.hidden = true;
+
+    const engagementStatus = document.createElement('span');
+    engagementStatus.className = 'ooh-play-trigger-selector__engagement-status';
+    engagementStatus.setAttribute('data-ooh-engagement-status', '');
+    engagementStatus.hidden = true;
+    engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
+
+    const engageHostileButton = document.createElement('button');
+    engageHostileButton.className = 'ooh-play-trigger-selector__engage-hostile';
+    engageHostileButton.type = 'button';
+    engageHostileButton.setAttribute('data-ooh-engage-hostile-contact', '');
+    engageHostileButton.disabled = true;
+    engageHostileButton.setAttribute('aria-disabled', 'true');
+    engageHostileButton.hidden = true;
+    engageHostileButton.textContent = 'ENGAGE HOSTILE CONTACT';
+
+    const engagementConfirmed = document.createElement('span');
+    engagementConfirmed.className = 'ooh-play-trigger-selector__engagement-confirmed';
+    engagementConfirmed.setAttribute('data-ooh-engagement-confirmed', '');
+    engagementConfirmed.hidden = true;
+    engagementConfirmed.textContent = '';
+
+    const combatLoopStatus = document.createElement('span');
+    combatLoopStatus.className = 'ooh-play-trigger-selector__combat-loop-status';
+    combatLoopStatus.setAttribute('data-ooh-combat-loop-status', '');
+    combatLoopStatus.hidden = true;
+    combatLoopStatus.textContent = 'COMBAT LOOP ACTIVE: SINGLE ACTION ONLY // SYSTEM NOT FULLY DEPLOYED';
+
+    const executeStrikeButton = document.createElement('button');
+    executeStrikeButton.className = 'ooh-play-trigger-selector__execute-strike';
+    executeStrikeButton.type = 'button';
+    executeStrikeButton.setAttribute('data-ooh-execute-strike', '');
+    executeStrikeButton.hidden = true;
+    executeStrikeButton.textContent = 'EXECUTE STRIKE';
+
+    const strikeOutcome = document.createElement('span');
+    strikeOutcome.className = 'ooh-play-trigger-selector__strike-outcome';
+    strikeOutcome.setAttribute('data-ooh-strike-outcome', '');
+    strikeOutcome.hidden = true;
+    strikeOutcome.textContent = '';
+
+    const allegianceReviewChecklist = document.createElement('pre');
+    allegianceReviewChecklist.className = 'ooh-play-trigger-selector__allegiance-review-checklist';
+    allegianceReviewChecklist.setAttribute('data-ooh-allegiance-review-checklist', '');
+    allegianceReviewChecklist.hidden = true;
+    allegianceReviewChecklist.textContent = allegianceReviewChecklistText(false, false);
+
+    const applicationChecklist = document.createElement('pre');
+    applicationChecklist.className = 'ooh-play-trigger-selector__application-checklist';
+    applicationChecklist.setAttribute('data-ooh-transition-application-checklist', '');
+    applicationChecklist.textContent = transitionApplicationChecklistText(false);
+
+    const auditStamp = document.createElement('span');
+    auditStamp.className = 'ooh-play-trigger-selector__audit-stamp';
+    auditStamp.setAttribute('data-ooh-phase-9-audit-stamp', '');
+    auditStamp.textContent = 'PHASE 9 AUDIT STAMP: NOT RECORDED';
+
+    confirmButton.addEventListener('click', function () {
+      if (confirmButton.disabled || selectedTriggerPreview === 'none') {
+        return;
+      }
+      transitionPreviewConfirmed = true;
+      confirmation.textContent = transitionConfirmationPreviewText();
+      pendingReview.textContent = transitionPendingReviewText();
+      applicationLock.textContent = 'TRANSITION APPLICATION LOCKED: MANUAL REVIEW REQUIRED // NO STATE APPLIED';
+      applicationChecklist.textContent = transitionApplicationChecklistText(true);
+      allegianceCompatibility.hidden = true;
+      allegianceCompatibility.textContent = '';
+      allegianceReviewButton.hidden = true;
+      allegianceReviewButton.disabled = true;
+      allegianceReviewButton.setAttribute('aria-disabled', 'true');
+      allegianceReviewLock.hidden = true;
+      allegianceApplicationExecuted.hidden = true;
+      allegianceApplicationExecuted.textContent = '';
+      phase10FinalAudit.hidden = true;
+      phase10FinalAudit.textContent = '';
+      engagementStatus.hidden = true;
+      engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
+      engageHostileButton.hidden = true;
+      engageHostileButton.disabled = true;
+      engageHostileButton.setAttribute('aria-disabled', 'true');
+      engagementConfirmed.hidden = true;
+      engagementConfirmed.textContent = '';
+      combatLoopStatus.hidden = true;
+      executeStrikeButton.hidden = true;
+      strikeOutcome.hidden = true;
+      strikeOutcome.textContent = '';
+      allegianceReviewChecklist.hidden = true;
+      allegianceReviewChecklist.textContent = allegianceReviewChecklistText(false, false);
+      auditStamp.textContent = 'PHASE 9 AUDIT STAMP: PREVIEW REVIEWED // APPLICATION LOCKED // NO STATE APPLIED';
+      armButton.disabled = !behaviorStateTransitionPreviewState();
+      armButton.setAttribute('aria-disabled', armButton.disabled ? 'true' : 'false');
+    });
+
+    allegianceReviewButton.addEventListener('click', function () {
+      const archetype = activeEnemyContactArchetype();
+      if (allegianceReviewButton.disabled || !archetype) {
+        return;
+      }
+      const allegianceState = derivedAllegianceState(archetype);
+      archetype.profile.allegianceState = allegianceState;
+      allegianceCompatibility.textContent = allegianceCompatibilityReviewText(archetype);
+      allegianceApplicationExecuted.textContent = 'ALLEGIANCE APPLICATION EXECUTED: ' + allegianceState + ' // NO COMBAT SYSTEMS ENGAGED';
+      allegianceApplicationExecuted.hidden = false;
+      allegianceReviewChecklist.textContent = allegianceReviewChecklistText(true, allegianceState !== 'NEUTRAL');
+      phase10FinalAudit.textContent = phase10FinalAuditText(archetype);
+      phase10FinalAudit.hidden = false;
+      engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
+      engagementStatus.hidden = false;
+      engageHostileButton.hidden = false;
+      engageHostileButton.disabled = allegianceState === 'NEUTRAL';
+      engageHostileButton.setAttribute('aria-disabled', engageHostileButton.disabled ? 'true' : 'false');
+      engagementConfirmed.hidden = true;
+      engagementConfirmed.textContent = '';
+      combatLoopStatus.hidden = true;
+      executeStrikeButton.hidden = true;
+      strikeOutcome.hidden = true;
+      strikeOutcome.textContent = '';
+    });
+
+    engageHostileButton.addEventListener('click', function () {
+      if (engageHostileButton.disabled) {
+        return;
+      }
+      engagementState = 'ENGAGED';
+      engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState;
+      engagementConfirmed.textContent = 'ENGAGEMENT CONFIRMED: TARGET LOCKED // NO DAMAGE SYSTEM ACTIVE';
+      engagementConfirmed.hidden = false;
+      combatLoopStatus.hidden = false;
+      executeStrikeButton.hidden = false;
+      strikeOutcome.hidden = true;
+      strikeOutcome.textContent = '';
+    });
+
+    executeStrikeButton.addEventListener('click', function () {
+      if (engagementState !== 'ENGAGED') {
+        return;
+      }
+      strikeOutcome.textContent = 'STRIKE EXECUTED: TARGET SUPPRESSED';
+      strikeOutcome.hidden = false;
+    });
+
+    armButton.addEventListener('click', function () {
+      const archetype = activeEnemyContactArchetype();
+      const previewState = behaviorStateTransitionPreviewState();
+      if (armButton.disabled || !transitionPreviewConfirmed || !archetype || !previewState) {
+        return;
+      }
+      archetype.profile.behaviorState = previewState;
+      applicationChecklist.textContent = transitionApplicationChecklistText(true, true);
+      applicationExecuted.textContent = 'TRANSITION APPLICATION EXECUTED: BEHAVIOR STATE ONLY // NO OTHER SYSTEMS ENGAGED';
+      allegianceCompatibility.textContent = allegianceCompatibilityReviewText(archetype);
+      allegianceCompatibility.hidden = false;
+      allegianceReviewButton.hidden = false;
+      allegianceReviewButton.disabled = false;
+      allegianceReviewButton.setAttribute('aria-disabled', 'false');
+      allegianceReviewLock.hidden = false;
+      allegianceApplicationExecuted.hidden = true;
+      allegianceApplicationExecuted.textContent = '';
+      phase10FinalAudit.hidden = true;
+      phase10FinalAudit.textContent = '';
+      engagementStatus.hidden = true;
+      engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
+      engageHostileButton.hidden = true;
+      engageHostileButton.disabled = true;
+      engageHostileButton.setAttribute('aria-disabled', 'true');
+      engagementConfirmed.hidden = true;
+      engagementConfirmed.textContent = '';
+      combatLoopStatus.hidden = true;
+      executeStrikeButton.hidden = true;
+      strikeOutcome.hidden = true;
+      strikeOutcome.textContent = '';
+      allegianceReviewChecklist.textContent = allegianceReviewChecklistText(true, false);
+      allegianceReviewChecklist.hidden = false;
+      auditStamp.textContent = 'PHASE 10 APPLICATION: BEHAVIOR STATE APPLIED // ' + previewState;
+    });
+
     selectorWrap.appendChild(label);
     selectorWrap.appendChild(select);
     selectorWrap.appendChild(output);
     selectorWrap.appendChild(outcome);
     selectorWrap.appendChild(passivePreview);
+    selectorWrap.appendChild(transitionPreview);
+    selectorWrap.appendChild(confirmButton);
+    selectorWrap.appendChild(confirmation);
+    selectorWrap.appendChild(pendingReview);
+    selectorWrap.appendChild(armButton);
+    selectorWrap.appendChild(applicationLock);
+    selectorWrap.appendChild(applicationExecuted);
+    selectorWrap.appendChild(allegianceCompatibility);
+    selectorWrap.appendChild(allegianceReviewButton);
+    selectorWrap.appendChild(allegianceReviewLock);
+    selectorWrap.appendChild(allegianceApplicationExecuted);
+    selectorWrap.appendChild(phase10FinalAudit);
+    selectorWrap.appendChild(engagementStatus);
+    selectorWrap.appendChild(engageHostileButton);
+    selectorWrap.appendChild(engagementConfirmed);
+    selectorWrap.appendChild(combatLoopStatus);
+    selectorWrap.appendChild(executeStrikeButton);
+    selectorWrap.appendChild(strikeOutcome);
+    selectorWrap.appendChild(allegianceReviewChecklist);
+    selectorWrap.appendChild(applicationChecklist);
+    selectorWrap.appendChild(auditStamp);
 
     const triggerPreview = encounter.querySelector('[data-ooh-trigger-preview]');
     const behavior = encounter.querySelector('[data-ooh-behavior-intent]');
@@ -1328,6 +1846,9 @@
     const output = selectorWrap.querySelector('[data-ooh-selected-trigger-output]');
     const outcome = selectorWrap.querySelector('[data-ooh-trigger-outcome-preview]');
     const passivePreview = selectorWrap.querySelector('[data-ooh-passive-behavior-preview]');
+    const transitionPreview = selectorWrap.querySelector('[data-ooh-state-transition-preview]');
+    const confirmButton = selectorWrap.querySelector('[data-ooh-transition-confirm-button]');
+    const armButton = selectorWrap.querySelector('[data-ooh-transition-arm-application]');
     if (select) {
       select.value = selectedTriggerPreview;
     }
@@ -1339,6 +1860,17 @@
     }
     if (passivePreview) {
       passivePreview.textContent = 'PASSIVE BEHAVIOR PREVIEW: ' + passiveBehaviorPreviewLabel();
+    }
+    if (transitionPreview) {
+      transitionPreview.textContent = 'STATE TRANSITION PREVIEW: ' + behaviorStateTransitionPreviewLabel();
+    }
+    if (confirmButton) {
+      confirmButton.disabled = selectedTriggerPreview === 'none';
+      confirmButton.setAttribute('aria-disabled', confirmButton.disabled ? 'true' : 'false');
+    }
+    if (armButton) {
+      armButton.disabled = true;
+      armButton.setAttribute('aria-disabled', 'true');
     }
   }
 
