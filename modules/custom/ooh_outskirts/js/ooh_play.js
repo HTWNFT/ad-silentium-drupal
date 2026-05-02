@@ -393,6 +393,7 @@
     ['speciesBase', 'SPECIES BASE'],
     ['allegianceState', 'ALLEGIANCE'],
     ['dispositionState', 'DISPOSITION'],
+    ['behaviorState', 'BEHAVIOR STATE'],
     ['movementType', 'MOVEMENT'],
     ['threatRole', 'THREAT ROLE'],
     ['behaviorMode', 'BEHAVIOR']
@@ -413,6 +414,31 @@
     ['tacticalUse', 'TACTICAL USE']
   ];
 
+  const enemyBehaviorIntentFields = [
+    ['defaultIntent', 'DEFAULT INTENT'],
+    ['cautionTrigger', 'CAUTION TRIGGER'],
+    ['hostileTrigger', 'HOSTILE TRIGGER'],
+    ['supportTrigger', 'SUPPORT TRIGGER'],
+    ['retreatTrigger', 'RETREAT TRIGGER']
+  ];
+
+  const enemyTriggerPreviewFields = [
+    ['cautionTrigger', 'CAUTION TRIGGER'],
+    ['hostileTrigger', 'HOSTILE TRIGGER'],
+    ['supportTrigger', 'SUPPORT TRIGGER'],
+    ['retreatTrigger', 'RETREAT TRIGGER']
+  ];
+
+  const triggerSelectorOptions = ['none', 'caution', 'hostile', 'support', 'retreat'];
+
+  const triggerOutcomePreviewText = {
+    none: 'NO TRIGGER SELECTED',
+    caution: 'CONTACT WOULD ENTER CAUTION REVIEW',
+    hostile: 'CONTACT WOULD REQUIRE HOSTILITY CHECK',
+    support: 'CONTACT WOULD REQUIRE SUPPORT ALIGNMENT CHECK',
+    retreat: 'CONTACT WOULD REQUIRE RETREAT PATH CHECK'
+  };
+
   const enemyContactArchetypes = [
     {
       id: 'hippo_ronin',
@@ -422,6 +448,7 @@
         speciesBase: 'HIPPO',
         allegianceState: 'NEUTRAL',
         dispositionState: 'WATCHING',
+        behaviorState: 'HOLDING',
         movementType: 'AMPHIBIOUS HEAVY',
         threatRole: 'BREACHER',
         behaviorMode: 'OBSERVING'
@@ -438,6 +465,13 @@
         secondaryMissionType: 'LAND ASSAULT',
         environmentalUse: 'RIVER, SWAMP, FLOODED RUINS',
         tacticalUse: 'BREAKS LINES, BLOCKS ESCAPE ROUTES'
+      },
+      behaviorIntent: {
+        defaultIntent: 'HOLD TERRITORY',
+        cautionTrigger: 'PLAYER ENTERS WATERLINE',
+        hostileTrigger: 'BREACH ROUTE BLOCKED',
+        supportTrigger: 'SHARED ENEMY PRESSURE',
+        retreatTrigger: 'DEEP WATER WITHDRAWAL'
       }
     },
     {
@@ -448,6 +482,7 @@
         speciesBase: 'LEECH',
         allegianceState: 'NEUTRAL',
         dispositionState: 'DORMANT',
+        behaviorState: 'DORMANT',
         movementType: 'AMPHIBIOUS SWARM',
         threatRole: 'DRAINER',
         behaviorMode: 'DORMANT'
@@ -464,6 +499,13 @@
         secondaryMissionType: 'INFILTRATION',
         environmentalUse: 'SEWERS, MARSH, SUBMERGED STRUCTURES',
         tacticalUse: 'DRAIN PRESSURE, SWARM CONTACT'
+      },
+      behaviorIntent: {
+        defaultIntent: 'REMAIN DORMANT',
+        cautionTrigger: 'PLAYER ENTERS CLUSTER RANGE',
+        hostileTrigger: 'CONTACT DISTURBS SWARM',
+        supportTrigger: 'SIGNAL OVERRIDE',
+        retreatTrigger: 'LIGHT / HEAT PRESSURE'
       }
     },
     {
@@ -474,6 +516,7 @@
         speciesBase: 'BEE',
         allegianceState: 'NEUTRAL',
         dispositionState: 'FORMING',
+        behaviorState: 'FORMING',
         movementType: 'AIRBORNE SWARM',
         threatRole: 'STINGER',
         behaviorMode: 'FORMING'
@@ -490,6 +533,13 @@
         secondaryMissionType: 'AREA DENIAL',
         environmentalUse: 'OPEN FIELD, ROOFTOPS, STRUCTURE EDGES',
         tacticalUse: 'HARASSMENT, STING PASSES, CROWD PRESSURE'
+      },
+      behaviorIntent: {
+        defaultIntent: 'FORM SWARM',
+        cautionTrigger: 'PLAYER ENTERS AIRSPACE',
+        hostileTrigger: 'HIVE VECTOR THREATENED',
+        supportTrigger: 'AREA DENIAL ALIGNMENT',
+        retreatTrigger: 'SMOKE / SIGNAL DISRUPTION'
       }
     },
     {
@@ -500,6 +550,7 @@
         speciesBase: 'OWL',
         allegianceState: 'NEUTRAL',
         dispositionState: 'OVERWATCH',
+        behaviorState: 'OBSERVING',
         movementType: 'AIRBORNE PREDATOR',
         threatRole: 'AER SUPPORT',
         behaviorMode: 'OVERWATCH'
@@ -516,11 +567,19 @@
         secondaryMissionType: 'AIR SUPPORT',
         environmentalUse: 'NIGHT SKY, HIGH PERCH, CLOUD COVER',
         tacticalUse: 'RECON, DIVE ANGLES, TARGET MARKING'
+      },
+      behaviorIntent: {
+        defaultIntent: 'OBSERVE FROM ABOVE',
+        cautionTrigger: 'PLAYER BREAKS STEALTH',
+        hostileTrigger: 'TARGET MARK CONFIRMED',
+        supportTrigger: 'AER SUPPORT ALIGNMENT',
+        retreatTrigger: 'CLOUD COVER EXIT'
       }
     }
   ];
 
   let activeEnemyContactArchetypeId = 'hippo_ronin';
+  let selectedTriggerPreview = 'none';
 
   function activeEnemyContactArchetype() {
     return enemyContactArchetypes.find(function (archetype) {
@@ -533,6 +592,10 @@
       return archetype.id === archetypeId;
     });
     activeEnemyContactArchetypeId = matched ? matched.id : 'hippo_ronin';
+  }
+
+  function setSelectedTriggerPreview(triggerType) {
+    selectedTriggerPreview = triggerSelectorOptions.indexOf(triggerType) !== -1 ? triggerType : 'none';
   }
 
   function createCombatState() {
@@ -609,6 +672,9 @@
     syncEnemyContactProfile(encounter);
     syncEnemyMovementTags(encounter);
     syncEnemyMissionAffinity(encounter);
+    syncEnemyBehaviorIntent(encounter);
+    syncEnemyTriggerPreview(encounter);
+    syncTriggerSelectionPreview(encounter);
   }
 
   function ensureArchetypeSelector(encounter) {
@@ -950,6 +1016,270 @@
         el.textContent = missionAffinity[field] || '';
       }
     });
+  }
+
+  function ensureEnemyBehaviorIntent(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-behavior-intent]');
+    if (existing) {
+      return existing;
+    }
+
+    const behavior = document.createElement('div');
+    behavior.className = 'ooh-play-behavior-intent';
+    behavior.setAttribute('data-ooh-behavior-intent', '');
+    behavior.setAttribute('aria-label', 'Ronin behavior intent tags');
+
+    enemyBehaviorIntentFields.forEach(function (field) {
+      const line = document.createElement('span');
+      line.className = 'ooh-play-behavior-intent__line';
+      line.setAttribute('data-ooh-behavior-intent-field', field[0]);
+
+      const label = document.createElement('span');
+      label.className = 'ooh-play-behavior-intent__label';
+      label.textContent = field[1];
+
+      const value = document.createElement('span');
+      value.className = 'ooh-play-behavior-intent__value';
+
+      line.appendChild(label);
+      line.appendChild(value);
+      behavior.appendChild(line);
+    });
+
+    const missionAffinity = encounter.querySelector('[data-ooh-mission-affinity]');
+    const movementTags = encounter.querySelector('[data-ooh-movement-tags]');
+    const profile = encounter.querySelector('[data-ooh-contact-profile]');
+    const telemetry = encounter.querySelector('[data-ooh-combat-telemetry]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (missionAffinity) {
+      encounter.insertBefore(behavior, missionAffinity.nextSibling);
+      return behavior;
+    }
+    if (movementTags) {
+      encounter.insertBefore(behavior, movementTags.nextSibling);
+      return behavior;
+    }
+    if (profile) {
+      encounter.insertBefore(behavior, profile.nextSibling);
+      return behavior;
+    }
+    if (telemetry) {
+      encounter.insertBefore(behavior, telemetry);
+      return behavior;
+    }
+    if (actions) {
+      encounter.insertBefore(behavior, actions);
+      return behavior;
+    }
+
+    encounter.appendChild(behavior);
+    return behavior;
+  }
+
+  function syncEnemyBehaviorIntent(encounter) {
+    const behavior = ensureEnemyBehaviorIntent(encounter);
+    if (!behavior) {
+      return;
+    }
+
+    const archetype = activeEnemyContactArchetype();
+    const behaviorIntent = archetype ? archetype.behaviorIntent : {};
+    behavior.setAttribute('data-active-archetype', archetype ? archetype.id : '');
+
+    enemyBehaviorIntentFields.forEach(function (fieldDefinition) {
+      const field = fieldDefinition[0];
+      const el = behavior.querySelector('[data-ooh-behavior-intent-field="' + field + '"] .ooh-play-behavior-intent__value');
+      if (el) {
+        el.textContent = behaviorIntent[field] || '';
+      }
+    });
+  }
+
+  function ensureEnemyTriggerPreview(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-trigger-preview]');
+    if (existing) {
+      return existing;
+    }
+
+    const preview = document.createElement('div');
+    preview.className = 'ooh-play-trigger-preview';
+    preview.setAttribute('data-ooh-trigger-preview', '');
+    preview.setAttribute('aria-label', 'Ronin behavior trigger preview');
+
+    enemyTriggerPreviewFields.forEach(function (field) {
+      const line = document.createElement('span');
+      line.className = 'ooh-play-trigger-preview__line';
+      line.setAttribute('data-ooh-trigger-preview-field', field[0]);
+
+      const label = document.createElement('span');
+      label.className = 'ooh-play-trigger-preview__label';
+      label.textContent = field[1];
+
+      const value = document.createElement('span');
+      value.className = 'ooh-play-trigger-preview__value';
+
+      line.appendChild(label);
+      line.appendChild(value);
+      preview.appendChild(line);
+    });
+
+    const behavior = encounter.querySelector('[data-ooh-behavior-intent]');
+    const missionAffinity = encounter.querySelector('[data-ooh-mission-affinity]');
+    const movementTags = encounter.querySelector('[data-ooh-movement-tags]');
+    const profile = encounter.querySelector('[data-ooh-contact-profile]');
+    const telemetry = encounter.querySelector('[data-ooh-combat-telemetry]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (behavior) {
+      encounter.insertBefore(preview, behavior.nextSibling);
+      return preview;
+    }
+    if (missionAffinity) {
+      encounter.insertBefore(preview, missionAffinity.nextSibling);
+      return preview;
+    }
+    if (movementTags) {
+      encounter.insertBefore(preview, movementTags.nextSibling);
+      return preview;
+    }
+    if (profile) {
+      encounter.insertBefore(preview, profile.nextSibling);
+      return preview;
+    }
+    if (telemetry) {
+      encounter.insertBefore(preview, telemetry);
+      return preview;
+    }
+    if (actions) {
+      encounter.insertBefore(preview, actions);
+      return preview;
+    }
+
+    encounter.appendChild(preview);
+    return preview;
+  }
+
+  function syncEnemyTriggerPreview(encounter) {
+    const preview = ensureEnemyTriggerPreview(encounter);
+    if (!preview) {
+      return;
+    }
+
+    const archetype = activeEnemyContactArchetype();
+    const behaviorIntent = archetype ? archetype.behaviorIntent : {};
+    preview.setAttribute('data-active-archetype', archetype ? archetype.id : '');
+
+    enemyTriggerPreviewFields.forEach(function (fieldDefinition) {
+      const field = fieldDefinition[0];
+      const el = preview.querySelector('[data-ooh-trigger-preview-field="' + field + '"] .ooh-play-trigger-preview__value');
+      if (el) {
+        el.textContent = behaviorIntent[field] || '';
+      }
+    });
+  }
+
+  function ensureTriggerSelector(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-trigger-selector]');
+    if (existing) {
+      return existing;
+    }
+
+    const selectorWrap = document.createElement('div');
+    selectorWrap.className = 'ooh-play-trigger-selector';
+    selectorWrap.setAttribute('data-ooh-trigger-selector', '');
+
+    const label = document.createElement('label');
+    label.className = 'ooh-play-trigger-selector__label';
+    label.textContent = 'SIMULATED TRIGGER';
+
+    const select = document.createElement('select');
+    select.className = 'ooh-play-trigger-selector__control';
+    select.setAttribute('data-ooh-trigger-select', '');
+    select.setAttribute('aria-label', 'Simulated trigger preview selector');
+
+    triggerSelectorOptions.forEach(function (triggerType) {
+      const option = document.createElement('option');
+      option.value = triggerType;
+      option.textContent = triggerType.toUpperCase();
+      select.appendChild(option);
+    });
+
+    select.value = selectedTriggerPreview;
+    select.addEventListener('change', function () {
+      setSelectedTriggerPreview(select.value);
+      select.value = selectedTriggerPreview;
+      syncTriggerSelectionPreview(encounter);
+    });
+
+    const output = document.createElement('span');
+    output.className = 'ooh-play-trigger-selector__output';
+    output.setAttribute('data-ooh-selected-trigger-output', '');
+    output.textContent = 'SELECTED TRIGGER: NONE';
+
+    const outcome = document.createElement('span');
+    outcome.className = 'ooh-play-trigger-selector__outcome';
+    outcome.setAttribute('data-ooh-trigger-outcome-preview', '');
+    outcome.textContent = 'OUTCOME PREVIEW: NO TRIGGER SELECTED';
+
+    selectorWrap.appendChild(label);
+    selectorWrap.appendChild(select);
+    selectorWrap.appendChild(output);
+    selectorWrap.appendChild(outcome);
+
+    const triggerPreview = encounter.querySelector('[data-ooh-trigger-preview]');
+    const behavior = encounter.querySelector('[data-ooh-behavior-intent]');
+    const missionAffinity = encounter.querySelector('[data-ooh-mission-affinity]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (triggerPreview) {
+      encounter.insertBefore(selectorWrap, triggerPreview.nextSibling);
+      return selectorWrap;
+    }
+    if (behavior) {
+      encounter.insertBefore(selectorWrap, behavior.nextSibling);
+      return selectorWrap;
+    }
+    if (missionAffinity) {
+      encounter.insertBefore(selectorWrap, missionAffinity.nextSibling);
+      return selectorWrap;
+    }
+    if (actions) {
+      encounter.insertBefore(selectorWrap, actions);
+      return selectorWrap;
+    }
+
+    encounter.appendChild(selectorWrap);
+    return selectorWrap;
+  }
+
+  function syncTriggerSelectionPreview(encounter) {
+    const selectorWrap = ensureTriggerSelector(encounter);
+    if (!selectorWrap) {
+      return;
+    }
+
+    const select = selectorWrap.querySelector('[data-ooh-trigger-select]');
+    const output = selectorWrap.querySelector('[data-ooh-selected-trigger-output]');
+    const outcome = selectorWrap.querySelector('[data-ooh-trigger-outcome-preview]');
+    if (select) {
+      select.value = selectedTriggerPreview;
+    }
+    if (output) {
+      output.textContent = 'SELECTED TRIGGER: ' + selectedTriggerPreview.toUpperCase();
+    }
+    if (outcome) {
+      outcome.textContent = 'OUTCOME PREVIEW: ' + (triggerOutcomePreviewText[selectedTriggerPreview] || triggerOutcomePreviewText.none);
+    }
   }
 
   function ensureEncounterPulse(encounter) {
