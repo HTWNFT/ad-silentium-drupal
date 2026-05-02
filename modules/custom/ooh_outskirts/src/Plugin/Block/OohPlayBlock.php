@@ -184,7 +184,7 @@ final class OohPlayBlock extends BlockBase {
       <a class="ooh-generator__nav-button ooh-generator__nav-button--home" href="{$dossier_target_escaped}">RETURN TO DOSSIER</a>
     </nav>
 
-    <div class="ooh-generator__header ooh-play-scene__header">
+    <div class="ooh-generator__header ooh-play-scene__header" data-ooh-play-top>
       <div class="ooh-generator__eyebrow" data-ooh-scene-route-label>MISSION SCENE // ROUTE PENDING</div>
       <h2 class="ooh-generator__title">{$title}</h2>
       <p class="ooh-generator__intro">{$subtitle}</p>
@@ -202,19 +202,100 @@ final class OohPlayBlock extends BlockBase {
         <div class="ooh-play-scene__marker ooh-play-scene__marker--beta"></div>
         <div class="ooh-play-scene__mission-label" data-ooh-scene-mission-label>MISSION TYPE // PENDING</div>
         <div class="ooh-play-scene__staging-card">
-          <span class="ooh-play-scene__staging-kicker">MISSION STAGING</span>
+          <span class="ooh-play-scene__staging-kicker">MISSION STATUS</span>
           <span class="ooh-play-scene__staging-copy" data-ooh-scene-status>Scene staged. Awaiting activation order.</span>
         </div>
+        <aside class="ooh-play__hud" data-ooh-active-hud aria-label="Active mission HUD" aria-hidden="true">
+          <div class="ooh-play__hud-panel ooh-play__hud-panel--command">
+            <span class="ooh-play__hud-label">OPERATION</span>
+            <span class="ooh-play__hud-value" data-ooh-hud-field="codename">Pending</span>
+          </div>
+          <div class="ooh-play__hud-grid">
+            <div class="ooh-play__hud-readout">
+              <span class="ooh-play__hud-label">THEATER</span>
+              <span class="ooh-play__hud-value" data-ooh-hud-field="theater">Pending</span>
+            </div>
+            <div class="ooh-play__hud-readout">
+              <span class="ooh-play__hud-label">MISSION</span>
+              <span class="ooh-play__hud-value" data-ooh-hud-field="mission">Pending</span>
+            </div>
+            <div class="ooh-play__hud-readout">
+              <span class="ooh-play__hud-label">PATH</span>
+              <span class="ooh-play__hud-value" data-ooh-hud-field="path">Pending</span>
+            </div>
+            <div class="ooh-play__hud-readout">
+              <span class="ooh-play__hud-label">STATUS</span>
+              <span class="ooh-play__hud-value" data-ooh-hud-field="status">STAGED</span>
+            </div>
+          </div>
+          <div class="ooh-play__hud-panel">
+            <span class="ooh-play__hud-label">PRIMARY OBJECTIVE</span>
+            <span class="ooh-play__hud-value" data-ooh-hud-field="primary">Pending</span>
+          </div>
+          <div class="ooh-play__hud-panel">
+            <span class="ooh-play__hud-label">EXTRACTION</span>
+            <span class="ooh-play__hud-value" data-ooh-hud-field="extraction">Pending</span>
+          </div>
+          <div class="ooh-play__hud-panel ooh-play__hud-panel--actions">
+            <span class="ooh-play__hud-label">PASSIVE INPUT</span>
+            <div class="ooh-play__hud-actions" aria-label="Passive mission inputs">
+              <button class="ooh-play__hud-action" type="button" data-ooh-action="scan" disabled>SCAN</button>
+              <button class="ooh-play__hud-action" type="button" data-ooh-action="hold" disabled>HOLD POSITION</button>
+              <button class="ooh-play__hud-action" type="button" data-ooh-action="signal" disabled>CHECK SIGNAL</button>
+            </div>
+          </div>
+          <div class="ooh-play__hud-panel ooh-play__hud-panel--readout">
+            <span class="ooh-play__hud-label">INPUT READOUT</span>
+            <span class="ooh-play__hud-value" data-ooh-action-readout>Awaiting active mission input.</span>
+          </div>
+          <div class="ooh-play__hud-band">
+            <span data-ooh-hud-field="telemetryA">Telemetry pending</span>
+            <span data-ooh-hud-field="telemetryB">Telemetry pending</span>
+            <span data-ooh-hud-field="telemetryC">Telemetry pending</span>
+          </div>
+        </aside>
         <div class="ooh-play-scene__scanlines"></div>
       </div>
 
       <div class="ooh-play-scene__hud">
-        <section class="ooh-generator__panel ooh-play-scene__briefing-panel">
+        <section class="ooh-generator__panel ooh-play-scene__briefing-panel" data-ooh-mission-briefing>
           <div class="ooh-generator__panel-head">
             <div class="ooh-generator__panel-kicker" data-ooh-briefing-field="route">---</div>
             <h3 class="ooh-generator__panel-title">Mission Briefing</h3>
           </div>
           <pre class="ooh-play-mission__briefing ooh-play-mission__briefing--generated" data-ooh-generated-briefing>Awaiting dossier payload.</pre>
+          <div class="ooh-play-combat-gate" data-ooh-combat-gate hidden>
+            <button class="ooh-play-combat-gate__button" type="button" data-ooh-combat-gate-button disabled aria-disabled="true">ENGAGE HOSTILE CONTACT</button>
+            <span class="ooh-play-combat-gate__note" data-ooh-combat-gate-status>Combat systems offline.</span>
+          </div>
+          <div class="ooh-play-encounter" data-ooh-combat-encounter hidden aria-live="polite">
+            <div class="ooh-play-encounter__header">
+              <span class="ooh-play-encounter__kicker">ENCOUNTER SCAFFOLD</span>
+              <span class="ooh-play-encounter__status" data-ooh-encounter-status>CONTACT DISPLAY ONLY</span>
+            </div>
+            <article class="ooh-play-encounter__card" data-ooh-hostile-card>
+              <h4 class="ooh-play-encounter__title">HOSTILE CONTACT // UNIDENTIFIED</h4>
+              <dl class="ooh-play-encounter__readouts">
+                <div>
+                  <dt>THREAT CLASS</dt>
+                  <dd>PROBING</dd>
+                </div>
+                <div>
+                  <dt>RANGE</dt>
+                  <dd>OUTER PERIMETER</dd>
+                </div>
+                <div>
+                  <dt>STATUS</dt>
+                  <dd>OBSERVING</dd>
+                </div>
+              </dl>
+            </article>
+            <div class="ooh-play-encounter__actions" aria-label="Combat actions unavailable">
+              <button class="ooh-play-encounter__action" type="button" disabled aria-disabled="true">TARGET</button>
+              <button class="ooh-play-encounter__action" type="button" disabled aria-disabled="true">EVADE</button>
+              <button class="ooh-play-encounter__action" type="button" disabled aria-disabled="true">SUPPRESS</button>
+            </div>
+          </div>
         </section>
 
         <aside class="ooh-generator__panel ooh-play-scene__telemetry" aria-label="Mission telemetry">

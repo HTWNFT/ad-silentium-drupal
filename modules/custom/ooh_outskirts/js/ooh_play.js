@@ -269,7 +269,909 @@
     return (routeStates[routeId] || routeStates.terra) + pathTone + ' Mission type: ' + missionLabel + '.';
   }
 
-  function activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel) {
+  function buildCombatShellSceneStatus(routeId, pathKey, missionLabel) {
+    const routeStates = {
+      aer: 'COMBAT SHELL ARMED. Sky corridor contact confirmed. Maintain altitude discipline.',
+      mare: 'COMBAT SHELL ARMED. Pressure-zone contact confirmed. Maintain oxygen discipline.',
+      terra: 'COMBAT SHELL ARMED. Ground-route contact confirmed. Maintain signal discipline.'
+    };
+    const pathTone = pathKey === 'DOOMED' ?
+      ' DOOMED channel elevated.' :
+      (pathKey === 'MERGED' ? ' MERGED channel tracking clean.' : '');
+
+    return (routeStates[routeId] || routeStates.terra) + pathTone + ' Mission type: ' + missionLabel + '.';
+  }
+
+  function routeHudTelemetry(routeId) {
+    const telemetry = {
+      aer: ['ALTITUDE HOLD', 'CLOUDLINE LOCK', 'WIND SHEAR WATCH'],
+      mare: ['PRESSURE WATCH', 'OXYGEN DISCIPLINE', 'CURRENT VECTOR'],
+      terra: ['DUST INDEX', 'GROUND SIGNAL', 'RUIN VISIBILITY']
+    };
+    return telemetry[routeId] || telemetry.terra;
+  }
+
+  function routeActionLanguage(routeId) {
+    const language = {
+      aer: {
+        scan: 'Cloudline scan complete',
+        hold: 'Altitude hold confirmed',
+        signal: 'Corridor signal verified'
+      },
+      mare: {
+        scan: 'Pressure field scan complete',
+        hold: 'Depth hold confirmed',
+        signal: 'Waterline signal verified'
+      },
+      terra: {
+        scan: 'Ruin scan complete',
+        hold: 'Ground hold confirmed',
+        signal: 'Bunker signal verified'
+      }
+    };
+    return language[routeId] || language.terra;
+  }
+
+  function pathActionTone(pathKey) {
+    if (pathKey === 'DOOMED') {
+      return ' Unstable channel burns hot.';
+    }
+    if (pathKey === 'MERGED') {
+      return ' Synthetic channel remains clean.';
+    }
+    return ' Channel remains passive.';
+  }
+
+  function scrollToMissionBriefing(root) {
+    const target = root.querySelector('[data-ooh-mission-briefing]') ||
+      root.querySelector('[data-ooh-play-top]') ||
+      root;
+
+    if (target && typeof target.scrollIntoView === 'function') {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      return;
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  function passiveActionText(action, routeId, pathKey) {
+    const language = routeActionLanguage(routeId);
+    const fallback = language.scan;
+    const text = language[action] || fallback;
+    return text + '.' + pathActionTone(pathKey);
+  }
+
+  function triggerPassiveAction(root, shell, action, routeId, pathKey) {
+    if (!root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    const readout = root.querySelector('[data-ooh-action-readout]');
+    if (readout) {
+      readout.textContent = passiveActionText(action, routeId, pathKey);
+    }
+
+    if (!shell) {
+      return;
+    }
+
+    shell.classList.remove('is-action-pulse', 'is-scan-pulse', 'is-hold-pulse', 'is-signal-pulse');
+    void shell.offsetWidth;
+    shell.classList.add('is-action-pulse', 'is-' + action + '-pulse');
+    window.setTimeout(function () {
+      shell.classList.remove('is-action-pulse', 'is-scan-pulse', 'is-hold-pulse', 'is-signal-pulse');
+    }, 650);
+  }
+
+  const encounterActionStatusText = {
+    target: 'TARGET LOCK ATTEMPT',
+    evade: 'EVASIVE MANEUVER INITIATED',
+    suppress: 'SUPPRESSION FIELD PROJECTED'
+  };
+
+  const encounterActionContactState = {
+    target: 'targeting',
+    evade: 'evading',
+    suppress: 'suppressing'
+  };
+
+  const encounterActionPulseText = {
+    target: 'CONTACT SIGNATURE NARROWING...',
+    evade: 'VECTOR SHIFT REGISTERED...',
+    suppress: 'SUPPRESSION FIELD CHARGING...'
+  };
+
+  const enemyContactProfileFields = [
+    ['category', 'CATEGORY'],
+    ['speciesBase', 'SPECIES BASE'],
+    ['allegianceState', 'ALLEGIANCE'],
+    ['dispositionState', 'DISPOSITION'],
+    ['movementType', 'MOVEMENT'],
+    ['threatRole', 'THREAT ROLE'],
+    ['behaviorMode', 'BEHAVIOR']
+  ];
+
+  const enemyMovementTagFields = [
+    ['terrainAffinity', 'TERRAIN'],
+    ['locomotionClass', 'LOCOMOTION'],
+    ['formationStyle', 'FORMATION'],
+    ['engagementRange', 'RANGE'],
+    ['mobilityNote', 'MOBILITY NOTE']
+  ];
+
+  const enemyMissionAffinityFields = [
+    ['primaryMissionType', 'PRIMARY MISSION'],
+    ['secondaryMissionType', 'SECONDARY'],
+    ['environmentalUse', 'ENVIRONMENT'],
+    ['tacticalUse', 'TACTICAL USE']
+  ];
+
+  const enemyContactArchetypes = [
+    {
+      id: 'hippo_ronin',
+      label: 'HIPPO RONIN',
+      profile: {
+        category: 'MUTANT / RONIN',
+        speciesBase: 'HIPPO',
+        allegianceState: 'NEUTRAL',
+        dispositionState: 'WATCHING',
+        movementType: 'AMPHIBIOUS HEAVY',
+        threatRole: 'BREACHER',
+        behaviorMode: 'OBSERVING'
+      },
+      movementTags: {
+        terrainAffinity: 'WATER / MUD / BREACH POINT',
+        locomotionClass: 'AMPHIBIOUS HEAVY',
+        formationStyle: 'SOLO PRESSURE',
+        engagementRange: 'CLOSE / IMPACT',
+        mobilityNote: 'SLOW LAND PUSH, FAST WATER AMBUSH'
+      },
+      missionAffinity: {
+        primaryMissionType: 'WATER / BREACH',
+        secondaryMissionType: 'LAND ASSAULT',
+        environmentalUse: 'RIVER, SWAMP, FLOODED RUINS',
+        tacticalUse: 'BREAKS LINES, BLOCKS ESCAPE ROUTES'
+      }
+    },
+    {
+      id: 'leech_ronin',
+      label: 'LEECH RONIN',
+      profile: {
+        category: 'MUTANT / RONIN',
+        speciesBase: 'LEECH',
+        allegianceState: 'NEUTRAL',
+        dispositionState: 'DORMANT',
+        movementType: 'AMPHIBIOUS SWARM',
+        threatRole: 'DRAINER',
+        behaviorMode: 'DORMANT'
+      },
+      movementTags: {
+        terrainAffinity: 'WATER / TUNNEL / BODY CONTACT',
+        locomotionClass: 'AMPHIBIOUS SWARM',
+        formationStyle: 'CLUSTER SWARM',
+        engagementRange: 'CLOSE / ATTACH',
+        mobilityNote: 'SMALL GROUP RUSH, DRAIN CONTACT'
+      },
+      missionAffinity: {
+        primaryMissionType: 'WATER / TUNNEL',
+        secondaryMissionType: 'INFILTRATION',
+        environmentalUse: 'SEWERS, MARSH, SUBMERGED STRUCTURES',
+        tacticalUse: 'DRAIN PRESSURE, SWARM CONTACT'
+      }
+    },
+    {
+      id: 'bee_ronin',
+      label: 'BEE RONIN',
+      profile: {
+        category: 'MUTANT / RONIN',
+        speciesBase: 'BEE',
+        allegianceState: 'NEUTRAL',
+        dispositionState: 'FORMING',
+        movementType: 'AIRBORNE SWARM',
+        threatRole: 'STINGER',
+        behaviorMode: 'FORMING'
+      },
+      movementTags: {
+        terrainAffinity: 'AIR / OPEN FIELD / STRUCTURE EDGE',
+        locomotionClass: 'AIRBORNE SWARM',
+        formationStyle: 'SWARM CLOUD',
+        engagementRange: 'MID / STING PASS',
+        mobilityNote: 'FORMATION FLIGHT, REPEATED STING RUNS'
+      },
+      missionAffinity: {
+        primaryMissionType: 'AIR / SWARM',
+        secondaryMissionType: 'AREA DENIAL',
+        environmentalUse: 'OPEN FIELD, ROOFTOPS, STRUCTURE EDGES',
+        tacticalUse: 'HARASSMENT, STING PASSES, CROWD PRESSURE'
+      }
+    },
+    {
+      id: 'owl_ronin',
+      label: 'OWL RONIN',
+      profile: {
+        category: 'MUTANT / RONIN',
+        speciesBase: 'OWL',
+        allegianceState: 'NEUTRAL',
+        dispositionState: 'OVERWATCH',
+        movementType: 'AIRBORNE PREDATOR',
+        threatRole: 'AER SUPPORT',
+        behaviorMode: 'OVERWATCH'
+      },
+      movementTags: {
+        terrainAffinity: 'AIR / NIGHT / HIGH PERCH',
+        locomotionClass: 'AIRBORNE PREDATOR',
+        formationStyle: 'OVERWATCH SOLO',
+        engagementRange: 'LONG / DIVE STRIKE',
+        mobilityNote: 'AERIAL SUPPORT, DIVE-ANGLE CONTROL'
+      },
+      missionAffinity: {
+        primaryMissionType: 'AER / OVERWATCH',
+        secondaryMissionType: 'AIR SUPPORT',
+        environmentalUse: 'NIGHT SKY, HIGH PERCH, CLOUD COVER',
+        tacticalUse: 'RECON, DIVE ANGLES, TARGET MARKING'
+      }
+    }
+  ];
+
+  let activeEnemyContactArchetypeId = 'hippo_ronin';
+
+  function activeEnemyContactArchetype() {
+    return enemyContactArchetypes.find(function (archetype) {
+      return archetype.id === activeEnemyContactArchetypeId;
+    }) || enemyContactArchetypes[0];
+  }
+
+  function setActiveEnemyContactArchetypeId(archetypeId) {
+    const matched = enemyContactArchetypes.find(function (archetype) {
+      return archetype.id === archetypeId;
+    });
+    activeEnemyContactArchetypeId = matched ? matched.id : 'hippo_ronin';
+  }
+
+  function createCombatState() {
+    return {
+      shellArmed: false,
+      selectedAction: null,
+      contactState: 'dormant'
+    };
+  }
+
+  function combatStateLabel(value, fallback) {
+    return String(value || fallback || '').toUpperCase();
+  }
+
+  function ensureCombatTelemetry(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-combat-telemetry]');
+    if (existing) {
+      return existing;
+    }
+
+    const telemetry = document.createElement('div');
+    telemetry.className = 'ooh-play-combat-telemetry';
+    telemetry.setAttribute('data-ooh-combat-telemetry', '');
+    telemetry.setAttribute('aria-label', 'Combat telemetry readout');
+
+    ['shell', 'action', 'contact'].forEach(function (field) {
+      const line = document.createElement('span');
+      line.className = 'ooh-play-combat-telemetry__line';
+      line.setAttribute('data-ooh-combat-telemetry-field', field);
+      telemetry.appendChild(line);
+    });
+
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (actions) {
+      encounter.insertBefore(telemetry, actions);
+      return telemetry;
+    }
+
+    encounter.appendChild(telemetry);
+    return telemetry;
+  }
+
+  function syncCombatTelemetry(encounter, combatState) {
+    const telemetry = ensureCombatTelemetry(encounter);
+    if (!telemetry || !combatState) {
+      return;
+    }
+
+    const fields = {
+      shell: 'SHELL: ' + (combatState.shellArmed ? 'ARMED' : 'INACTIVE'),
+      action: 'ACTION: ' + combatStateLabel(combatState.selectedAction, 'none'),
+      contact: 'CONTACT: ' + combatStateLabel(combatState.contactState, 'dormant')
+    };
+
+    Object.keys(fields).forEach(function (field) {
+      const el = telemetry.querySelector('[data-ooh-combat-telemetry-field="' + field + '"]');
+      if (el) {
+        el.textContent = fields[field];
+      }
+    });
+  }
+
+  function syncArchetypeReadouts(encounter) {
+    if (!encounter) {
+      return;
+    }
+
+    encounter.setAttribute('data-active-archetype', activeEnemyContactArchetypeId);
+    syncEncounterSummary(encounter);
+    syncEnemyContactProfile(encounter);
+    syncEnemyMovementTags(encounter);
+    syncEnemyMissionAffinity(encounter);
+  }
+
+  function ensureArchetypeSelector(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-archetype-selector]');
+    if (existing) {
+      return existing;
+    }
+
+    const selectorWrap = document.createElement('div');
+    selectorWrap.className = 'ooh-play-archetype-selector';
+    selectorWrap.setAttribute('data-ooh-archetype-selector', '');
+
+    const label = document.createElement('label');
+    label.className = 'ooh-play-archetype-selector__label';
+    label.textContent = 'CONTACT ARCHETYPE';
+
+    const select = document.createElement('select');
+    select.className = 'ooh-play-archetype-selector__control';
+    select.setAttribute('data-ooh-archetype-select', '');
+    select.setAttribute('aria-label', 'Contact archetype test selector');
+
+    enemyContactArchetypes.forEach(function (archetype) {
+      const option = document.createElement('option');
+      option.value = archetype.id;
+      option.textContent = archetype.label;
+      select.appendChild(option);
+    });
+
+    select.value = activeEnemyContactArchetypeId;
+    select.addEventListener('change', function () {
+      setActiveEnemyContactArchetypeId(select.value);
+      select.value = activeEnemyContactArchetypeId;
+      syncArchetypeReadouts(encounter);
+    });
+
+    selectorWrap.appendChild(label);
+    selectorWrap.appendChild(select);
+
+    const profile = encounter.querySelector('[data-ooh-contact-profile]');
+    const telemetry = encounter.querySelector('[data-ooh-combat-telemetry]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (profile) {
+      encounter.insertBefore(selectorWrap, profile);
+      return selectorWrap;
+    }
+    if (telemetry) {
+      encounter.insertBefore(selectorWrap, telemetry);
+      return selectorWrap;
+    }
+    if (actions) {
+      encounter.insertBefore(selectorWrap, actions);
+      return selectorWrap;
+    }
+
+    encounter.appendChild(selectorWrap);
+    return selectorWrap;
+  }
+
+  function ensureEncounterSummary(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-encounter-summary]');
+    if (existing) {
+      return existing;
+    }
+
+    const summary = document.createElement('div');
+    summary.className = 'ooh-play-encounter-summary';
+    summary.setAttribute('data-ooh-encounter-summary', '');
+    summary.setAttribute('aria-label', 'Encounter summary');
+
+    const selector = encounter.querySelector('[data-ooh-archetype-selector]');
+    const profile = encounter.querySelector('[data-ooh-contact-profile]');
+    const telemetry = encounter.querySelector('[data-ooh-combat-telemetry]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (selector) {
+      encounter.insertBefore(summary, selector.nextSibling);
+      return summary;
+    }
+    if (profile) {
+      encounter.insertBefore(summary, profile);
+      return summary;
+    }
+    if (telemetry) {
+      encounter.insertBefore(summary, telemetry);
+      return summary;
+    }
+    if (actions) {
+      encounter.insertBefore(summary, actions);
+      return summary;
+    }
+
+    encounter.appendChild(summary);
+    return summary;
+  }
+
+  function syncEncounterSummary(encounter) {
+    const summary = ensureEncounterSummary(encounter);
+    if (!summary) {
+      return;
+    }
+
+    const archetype = activeEnemyContactArchetype();
+    const profile = archetype ? archetype.profile : {};
+    const missionAffinity = archetype ? archetype.missionAffinity : {};
+    summary.setAttribute('data-active-archetype', archetype ? archetype.id : '');
+    summary.textContent = [
+      'CONTACT SUMMARY: ' + (archetype ? archetype.label : 'UNKNOWN CONTACT'),
+      profile.allegianceState || 'UNCONFIRMED',
+      profile.dispositionState || 'UNCONFIRMED',
+      missionAffinity.primaryMissionType || 'UNASSIGNED'
+    ].join(' // ');
+  }
+
+  function ensureEnemyContactProfile(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-contact-profile]');
+    if (existing) {
+      return existing;
+    }
+
+    const profile = document.createElement('div');
+    profile.className = 'ooh-play-contact-profile';
+    profile.setAttribute('data-ooh-contact-profile', '');
+    profile.setAttribute('aria-label', 'Enemy contact profile');
+
+    enemyContactProfileFields.forEach(function (field) {
+      const line = document.createElement('span');
+      line.className = 'ooh-play-contact-profile__line';
+      line.setAttribute('data-ooh-contact-profile-field', field[0]);
+
+      const label = document.createElement('span');
+      label.className = 'ooh-play-contact-profile__label';
+      label.textContent = field[1];
+
+      const value = document.createElement('span');
+      value.className = 'ooh-play-contact-profile__value';
+
+      line.appendChild(label);
+      line.appendChild(value);
+      profile.appendChild(line);
+    });
+
+    const telemetry = encounter.querySelector('[data-ooh-combat-telemetry]');
+    const selector = encounter.querySelector('[data-ooh-archetype-selector]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (selector) {
+      encounter.insertBefore(profile, selector.nextSibling);
+      return profile;
+    }
+    if (telemetry) {
+      encounter.insertBefore(profile, telemetry);
+      return profile;
+    }
+    if (actions) {
+      encounter.insertBefore(profile, actions);
+      return profile;
+    }
+
+    encounter.appendChild(profile);
+    return profile;
+  }
+
+  function syncEnemyContactProfile(encounter) {
+    const profile = ensureEnemyContactProfile(encounter);
+    if (!profile) {
+      return;
+    }
+
+    const archetype = activeEnemyContactArchetype();
+    const activeProfile = archetype ? archetype.profile : {};
+    profile.setAttribute('data-active-archetype', archetype ? archetype.id : '');
+
+    enemyContactProfileFields.forEach(function (fieldDefinition) {
+      const field = fieldDefinition[0];
+      const el = profile.querySelector('[data-ooh-contact-profile-field="' + field + '"] .ooh-play-contact-profile__value');
+      if (el) {
+        el.textContent = activeProfile[field] || '';
+      }
+    });
+  }
+
+  function ensureEnemyMovementTags(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-movement-tags]');
+    if (existing) {
+      return existing;
+    }
+
+    const tags = document.createElement('div');
+    tags.className = 'ooh-play-movement-tags';
+    tags.setAttribute('data-ooh-movement-tags', '');
+    tags.setAttribute('aria-label', 'Enemy movement tags');
+
+    enemyMovementTagFields.forEach(function (field) {
+      const line = document.createElement('span');
+      line.className = 'ooh-play-movement-tags__line';
+      line.setAttribute('data-ooh-movement-tag-field', field[0]);
+
+      const label = document.createElement('span');
+      label.className = 'ooh-play-movement-tags__label';
+      label.textContent = field[1];
+
+      const value = document.createElement('span');
+      value.className = 'ooh-play-movement-tags__value';
+
+      line.appendChild(label);
+      line.appendChild(value);
+      tags.appendChild(line);
+    });
+
+    const profile = encounter.querySelector('[data-ooh-contact-profile]');
+    const selector = encounter.querySelector('[data-ooh-archetype-selector]');
+    const telemetry = encounter.querySelector('[data-ooh-combat-telemetry]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (profile) {
+      encounter.insertBefore(tags, profile.nextSibling);
+      return tags;
+    }
+    if (selector) {
+      encounter.insertBefore(tags, selector.nextSibling);
+      return tags;
+    }
+    if (telemetry) {
+      encounter.insertBefore(tags, telemetry);
+      return tags;
+    }
+    if (actions) {
+      encounter.insertBefore(tags, actions);
+      return tags;
+    }
+
+    encounter.appendChild(tags);
+    return tags;
+  }
+
+  function syncEnemyMovementTags(encounter) {
+    const tags = ensureEnemyMovementTags(encounter);
+    if (!tags) {
+      return;
+    }
+
+    const archetype = activeEnemyContactArchetype();
+    const movementTags = archetype ? archetype.movementTags : {};
+    tags.setAttribute('data-active-archetype', archetype ? archetype.id : '');
+
+    enemyMovementTagFields.forEach(function (fieldDefinition) {
+      const field = fieldDefinition[0];
+      const el = tags.querySelector('[data-ooh-movement-tag-field="' + field + '"] .ooh-play-movement-tags__value');
+      if (el) {
+        el.textContent = movementTags[field] || '';
+      }
+    });
+  }
+
+  function ensureEnemyMissionAffinity(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-mission-affinity]');
+    if (existing) {
+      return existing;
+    }
+
+    const affinity = document.createElement('div');
+    affinity.className = 'ooh-play-mission-affinity';
+    affinity.setAttribute('data-ooh-mission-affinity', '');
+    affinity.setAttribute('aria-label', 'Enemy mission affinity');
+
+    enemyMissionAffinityFields.forEach(function (field) {
+      const line = document.createElement('span');
+      line.className = 'ooh-play-mission-affinity__line';
+      line.setAttribute('data-ooh-mission-affinity-field', field[0]);
+
+      const label = document.createElement('span');
+      label.className = 'ooh-play-mission-affinity__label';
+      label.textContent = field[1];
+
+      const value = document.createElement('span');
+      value.className = 'ooh-play-mission-affinity__value';
+
+      line.appendChild(label);
+      line.appendChild(value);
+      affinity.appendChild(line);
+    });
+
+    const movementTags = encounter.querySelector('[data-ooh-movement-tags]');
+    const profile = encounter.querySelector('[data-ooh-contact-profile]');
+    const telemetry = encounter.querySelector('[data-ooh-combat-telemetry]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (movementTags) {
+      encounter.insertBefore(affinity, movementTags.nextSibling);
+      return affinity;
+    }
+    if (profile) {
+      encounter.insertBefore(affinity, profile.nextSibling);
+      return affinity;
+    }
+    if (telemetry) {
+      encounter.insertBefore(affinity, telemetry);
+      return affinity;
+    }
+    if (actions) {
+      encounter.insertBefore(affinity, actions);
+      return affinity;
+    }
+
+    encounter.appendChild(affinity);
+    return affinity;
+  }
+
+  function syncEnemyMissionAffinity(encounter) {
+    const affinity = ensureEnemyMissionAffinity(encounter);
+    if (!affinity) {
+      return;
+    }
+
+    const archetype = activeEnemyContactArchetype();
+    const missionAffinity = archetype ? archetype.missionAffinity : {};
+    affinity.setAttribute('data-active-archetype', archetype ? archetype.id : '');
+
+    enemyMissionAffinityFields.forEach(function (fieldDefinition) {
+      const field = fieldDefinition[0];
+      const el = affinity.querySelector('[data-ooh-mission-affinity-field="' + field + '"] .ooh-play-mission-affinity__value');
+      if (el) {
+        el.textContent = missionAffinity[field] || '';
+      }
+    });
+  }
+
+  function ensureEncounterPulse(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-encounter-pulse]');
+    if (existing) {
+      return existing;
+    }
+
+    const pulse = document.createElement('div');
+    pulse.className = 'ooh-play-encounter__pulse';
+    pulse.setAttribute('data-ooh-encounter-pulse', '');
+    pulse.setAttribute('aria-live', 'polite');
+
+    const telemetry = encounter.querySelector('[data-ooh-combat-telemetry]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (actions) {
+      encounter.insertBefore(pulse, actions);
+      return pulse;
+    }
+    if (telemetry) {
+      encounter.insertBefore(pulse, telemetry.nextSibling);
+      return pulse;
+    }
+
+    encounter.appendChild(pulse);
+    return pulse;
+  }
+
+  function triggerEncounterPulse(encounter, action) {
+    const pulseText = encounterActionPulseText[action];
+    const pulse = ensureEncounterPulse(encounter);
+    if (!encounter || !pulse || !pulseText) {
+      return;
+    }
+
+    pulse.textContent = pulseText;
+    encounter.classList.remove('is-encounter-pulsing');
+    void encounter.offsetWidth;
+    encounter.classList.add('is-encounter-pulsing');
+    if (encounter.oohEncounterPulseTimer) {
+      window.clearTimeout(encounter.oohEncounterPulseTimer);
+    }
+    encounter.oohEncounterPulseTimer = window.setTimeout(function () {
+      encounter.classList.remove('is-encounter-pulsing');
+      encounter.oohEncounterPulseTimer = null;
+    }, 780);
+  }
+
+  function syncEncounterState(encounter, combatState) {
+    if (!encounter || !combatState) {
+      return;
+    }
+
+    encounter.setAttribute('data-contact-state', combatState.contactState || 'dormant');
+    if (combatState.selectedAction) {
+      encounter.setAttribute('data-selected-action', combatState.selectedAction);
+    }
+    else {
+      encounter.removeAttribute('data-selected-action');
+    }
+    syncCombatTelemetry(encounter, combatState);
+    ensureArchetypeSelector(encounter);
+    syncArchetypeReadouts(encounter);
+  }
+
+  function encounterActionFromButton(button) {
+    return cleanId(button ? button.textContent : '', '');
+  }
+
+  function encounterStatusField(encounter) {
+    const card = encounter ? encounter.querySelector('[data-ooh-hostile-card]') : null;
+    if (!card) {
+      return null;
+    }
+
+    const labels = card.querySelectorAll('dt');
+    for (let i = 0; i < labels.length; i++) {
+      if (String(labels[i].textContent || '').trim().toUpperCase() === 'STATUS') {
+        return labels[i].nextElementSibling || null;
+      }
+    }
+
+    return null;
+  }
+
+  function enableEncounterActions(encounter) {
+    if (!encounter) {
+      return;
+    }
+
+    encounter.querySelectorAll('.ooh-play-encounter__action').forEach(function (button) {
+      button.disabled = false;
+      button.setAttribute('aria-disabled', 'false');
+    });
+  }
+
+  function triggerEncounterAction(root, button, combatState) {
+    if (!root.classList.contains('is-combat-shell') || !button || button.disabled) {
+      return;
+    }
+
+    const encounter = button.closest('[data-ooh-combat-encounter]');
+    const statusField = encounterStatusField(encounter);
+    const action = encounterActionFromButton(button);
+    const statusText = encounterActionStatusText[action];
+
+    if (!encounter || !statusField || !statusText) {
+      return;
+    }
+
+    if (combatState) {
+      combatState.shellArmed = true;
+      combatState.selectedAction = action;
+      combatState.contactState = encounterActionContactState[action] || 'observing';
+      syncEncounterState(encounter, combatState);
+    }
+
+    statusField.textContent = statusText;
+    triggerEncounterPulse(encounter, action);
+    encounter.querySelectorAll('.ooh-play-encounter__action').forEach(function (actionButton) {
+      actionButton.classList.remove('is-combat-action-active');
+    });
+
+    button.classList.add('is-combat-action-active');
+    if (button.oohCombatActionTimer) {
+      window.clearTimeout(button.oohCombatActionTimer);
+    }
+    button.oohCombatActionTimer = window.setTimeout(function () {
+      button.classList.remove('is-combat-action-active');
+      button.oohCombatActionTimer = null;
+    }, 720);
+  }
+
+  function activateCombatShell(root, shell, sceneStatus, routeId, pathKey, missionLabel, combatState) {
+    if (!root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    const message = 'HOSTILE CONTACT CONFIRMED. COMBAT SHELL ARMED.';
+    const actionReadout = root.querySelector('[data-ooh-action-readout]');
+    const gateStatus = root.querySelector('[data-ooh-combat-gate-status]');
+    const hudStatus = root.querySelector('[data-ooh-hud-field="status"]');
+    const gateButton = root.querySelector('[data-ooh-combat-gate-button]');
+    const encounter = root.querySelector('[data-ooh-combat-encounter]');
+
+    root.classList.add('is-combat-shell');
+    if (combatState) {
+      combatState.shellArmed = true;
+      combatState.selectedAction = null;
+      combatState.contactState = 'observing';
+    }
+
+    if (actionReadout) {
+      actionReadout.textContent = message + ' Passive inputs remain online.';
+    }
+    if (gateStatus) {
+      gateStatus.textContent = message;
+    }
+    if (hudStatus) {
+      hudStatus.textContent = 'COMBAT SHELL';
+    }
+    if (sceneStatus) {
+      sceneStatus.textContent = buildCombatShellSceneStatus(routeId, pathKey, missionLabel);
+    }
+    if (gateButton) {
+      gateButton.textContent = 'COMBAT SHELL ARMED';
+      gateButton.classList.add('is-combat-armed');
+      gateButton.disabled = true;
+      gateButton.setAttribute('aria-disabled', 'true');
+    }
+    if (encounter) {
+      encounter.hidden = false;
+      encounter.classList.add('is-encounter-visible');
+      encounter.setAttribute('data-encounter-state', 'visible');
+      syncEncounterState(encounter, combatState);
+      enableEncounterActions(encounter);
+    }
+    if (shell) {
+      shell.classList.add('is-combat-shell', 'is-combat-armed');
+      shell.setAttribute('data-combat-state', 'shell');
+      shell.classList.remove('is-action-pulse', 'is-scan-pulse', 'is-hold-pulse', 'is-signal-pulse', 'is-gate-pulse');
+      void shell.offsetWidth;
+      shell.classList.add('is-action-pulse', 'is-gate-pulse');
+      window.setTimeout(function () {
+        shell.classList.remove('is-action-pulse', 'is-gate-pulse');
+      }, 650);
+    }
+  }
+
+  function populateActiveHud(root, assembly, routeId, pathKey, missionLabel) {
+    const hud = root.querySelector('[data-ooh-active-hud]');
+    if (!hud) {
+      return;
+    }
+
+    const telemetry = routeHudTelemetry(routeId);
+    const fields = {
+      codename: assembly.missionCodename || 'Pending',
+      theater: assembly.routeTheater || routeLabel(routeId),
+      mission: missionLabel,
+      path: pathKey,
+      status: 'ACTIVE',
+      primary: assembly.primaryObjective || 'Pending',
+      extraction: assembly.extractionCondition || 'Pending',
+      telemetryA: telemetry[0],
+      telemetryB: telemetry[1],
+      telemetryC: telemetry[2]
+    };
+
+    Object.keys(fields).forEach(function (field) {
+      const el = hud.querySelector('[data-ooh-hud-field="' + field + '"]');
+      if (el) {
+        el.textContent = fields[field];
+      }
+    });
+  }
+
+  function activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel, assembly) {
     root.classList.add('is-mission-active');
     if (shell) {
       shell.classList.add('is-mission-active');
@@ -292,6 +1194,31 @@
       activateButton.textContent = 'MISSION ACTIVE';
       activateButton.disabled = true;
       activateButton.setAttribute('aria-disabled', 'true');
+    }
+
+    const hud = root.querySelector('[data-ooh-active-hud]');
+    if (hud) {
+      populateActiveHud(root, assembly || {}, routeId, pathKey, missionLabel);
+      hud.setAttribute('aria-hidden', 'false');
+      hud.querySelectorAll('[data-ooh-action]').forEach(function (button) {
+        button.disabled = false;
+        button.setAttribute('aria-disabled', 'false');
+      });
+      const readout = hud.querySelector('[data-ooh-action-readout]');
+      if (readout) {
+        readout.textContent = 'Passive inputs online. Awaiting SCAN, HOLD POSITION, or CHECK SIGNAL.';
+      }
+    }
+
+    const combatGate = root.querySelector('[data-ooh-combat-gate]');
+    if (combatGate) {
+      combatGate.hidden = false;
+    }
+
+    const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
+    if (combatGateButton) {
+      combatGateButton.disabled = false;
+      combatGateButton.setAttribute('aria-disabled', 'false');
     }
   }
 
@@ -485,6 +1412,7 @@
         const assembly = buildMissionAssembly(payload);
         const pathKey = recruiterPathKey(payload);
         const missionLabel = itemLabel(payload.mission, payload.missionType || 'Unconfirmed');
+        const combatState = createCombatState();
 
         if (shell) {
           shell.setAttribute('data-route', routeAttribute(routeId));
@@ -509,9 +1437,44 @@
 
         if (activateButton) {
           activateButton.addEventListener('click', function () {
-            activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel);
+            activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel, assembly);
+            window.setTimeout(function () {
+              scrollToMissionBriefing(root);
+            }, 60);
           });
         }
+
+        root.querySelectorAll('[data-ooh-action]').forEach(function (button) {
+          button.addEventListener('click', function () {
+            triggerPassiveAction(root, shell, button.getAttribute('data-ooh-action'), routeId, pathKey);
+          });
+        });
+
+        const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
+        if (combatGateButton) {
+          combatGateButton.addEventListener('click', function () {
+            activateCombatShell(root, shell, sceneStatus, routeId, pathKey, missionLabel, combatState);
+          });
+        }
+
+        root.querySelectorAll('.ooh-play-encounter__action').forEach(function (button) {
+          button.addEventListener('click', function () {
+            triggerEncounterAction(root, button, combatState);
+          });
+        });
+
+        document.addEventListener('keydown', function (event) {
+          const tagName = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : '';
+          if (tagName === 'input' || tagName === 'textarea' || tagName === 'select' || event.ctrlKey || event.altKey || event.metaKey) {
+            return;
+          }
+
+          const key = String(event.key || '').toLowerCase();
+          const action = key === 's' ? 'scan' : (key === 'h' ? 'hold' : (key === 'c' ? 'signal' : ''));
+          if (action) {
+            triggerPassiveAction(root, shell, action, routeId, pathKey);
+          }
+        });
 
         const fields = {
           route: routeLabel(routeId),
