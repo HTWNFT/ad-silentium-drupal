@@ -1559,7 +1559,8 @@ body.page-play .content {
 
 .ooh-play-trigger-selector__label,
 .ooh-play-trigger-selector__output,
-.ooh-play-trigger-selector__outcome {
+.ooh-play-trigger-selector__outcome,
+.ooh-play-trigger-selector__passive-preview {
   min-width: 0;
   color: rgba(255, 196, 180, 0.62);
   font-size: 0.56rem;
@@ -1581,6 +1582,11 @@ body.page-play .content {
   color: rgba(235, 255, 255, 0.72);
 }
 
+.ooh-play-trigger-selector__passive-preview {
+  grid-column: 1 / -1;
+  color: rgba(235, 255, 255, 0.70);
+}
+
 .ooh-play-trigger-selector__control {
   min-width: 0;
   min-height: 32px;
@@ -1600,6 +1606,34 @@ body.page-play .content {
   border-color: rgba(255, 196, 180, 0.76);
   box-shadow: 0 0 16px rgba(255, 96, 72, 0.14);
   outline: none;
+}
+
+.ooh-play-passive-preview-log {
+  display: grid;
+  gap: 5px;
+  min-height: 28px;
+  padding: 8px;
+  border: 1px solid rgba(255, 196, 180, 0.12);
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgba(8, 14, 18, 0.42), rgba(0, 6, 10, 0.36));
+}
+
+.ooh-play-passive-preview-log__entry {
+  display: block;
+  min-width: 0;
+  color: rgba(235, 255, 255, 0.62);
+  font-size: 0.56rem;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.ooh-play-passive-preview-log__entry.is-latest {
+  color: rgba(255, 235, 229, 0.82);
+  text-shadow: 0 0 10px rgba(255, 148, 124, 0.16);
 }
 
 .ooh-play-encounter__pulse {

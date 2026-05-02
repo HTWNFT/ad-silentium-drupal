@@ -439,6 +439,37 @@
     retreat: 'CONTACT WOULD REQUIRE RETREAT PATH CHECK'
   };
 
+  const passiveBehaviorPreviewText = {
+    hippo_ronin: {
+      none: 'CONTACT HOLDS WATERLINE UNDER OBSERVATION',
+      caution: 'CONTACT WOULD SHIFT WEIGHT TOWARD BREACH ROUTE',
+      hostile: 'CONTACT WOULD PREPARE IMPACT CHARGE',
+      support: 'CONTACT WOULD HOLD LINE AGAINST SHARED PRESSURE',
+      retreat: 'CONTACT WOULD WITHDRAW INTO DEEP WATER'
+    },
+    leech_ronin: {
+      none: 'CONTACT REMAINS DORMANT IN CLUSTER',
+      caution: 'CONTACT WOULD TIGHTEN CLUSTER RANGE',
+      hostile: 'CONTACT WOULD PREPARE DRAIN SWARM',
+      support: 'CONTACT WOULD DISRUPT ENEMY ADVANCE',
+      retreat: 'CONTACT WOULD FALL BACK FROM LIGHT / HEAT'
+    },
+    bee_ronin: {
+      none: 'CONTACT SWARM CONTINUES FORMING',
+      caution: 'CONTACT WOULD RAISE SWARM DENSITY',
+      hostile: 'CONTACT WOULD PREPARE STING PASS',
+      support: 'CONTACT WOULD CREATE AREA DENIAL SCREEN',
+      retreat: 'CONTACT WOULD DISPERSE THROUGH SIGNAL NOISE'
+    },
+    owl_ronin: {
+      none: 'CONTACT MAINTAINS AERIAL OVERWATCH',
+      caution: 'CONTACT WOULD ADJUST DIVE ANGLE',
+      hostile: 'CONTACT WOULD PREPARE TARGET MARK',
+      support: 'CONTACT WOULD PROVIDE AER TARGETING SUPPORT',
+      retreat: 'CONTACT WOULD EXIT THROUGH CLOUD COVER'
+    }
+  };
+
   const enemyContactArchetypes = [
     {
       id: 'hippo_ronin',
@@ -580,6 +611,7 @@
 
   let activeEnemyContactArchetypeId = 'hippo_ronin';
   let selectedTriggerPreview = 'none';
+  let passivePreviewLogEntries = [];
 
   function activeEnemyContactArchetype() {
     return enemyContactArchetypes.find(function (archetype) {
@@ -596,6 +628,21 @@
 
   function setSelectedTriggerPreview(triggerType) {
     selectedTriggerPreview = triggerSelectorOptions.indexOf(triggerType) !== -1 ? triggerType : 'none';
+  }
+
+  function passiveBehaviorPreviewLabel() {
+    const archetype = activeEnemyContactArchetype();
+    const archetypePreview = passiveBehaviorPreviewText[archetype ? archetype.id : ''] || passiveBehaviorPreviewText.hippo_ronin;
+    return archetypePreview[selectedTriggerPreview] || archetypePreview.none;
+  }
+
+  function passivePreviewLogText() {
+    const archetype = activeEnemyContactArchetype();
+    return [
+      'LOG: ' + (archetype ? archetype.label : 'UNKNOWN CONTACT'),
+      selectedTriggerPreview.toUpperCase(),
+      passiveBehaviorPreviewLabel()
+    ].join(' // ');
   }
 
   function createCombatState() {
@@ -675,6 +722,7 @@
     syncEnemyBehaviorIntent(encounter);
     syncEnemyTriggerPreview(encounter);
     syncTriggerSelectionPreview(encounter);
+    syncPassivePreviewLog(encounter);
   }
 
   function ensureArchetypeSelector(encounter) {
@@ -712,6 +760,7 @@
       setActiveEnemyContactArchetypeId(select.value);
       select.value = activeEnemyContactArchetypeId;
       syncArchetypeReadouts(encounter);
+      appendPassivePreviewLog(encounter);
     });
 
     selectorWrap.appendChild(label);
@@ -1220,6 +1269,7 @@
       setSelectedTriggerPreview(select.value);
       select.value = selectedTriggerPreview;
       syncTriggerSelectionPreview(encounter);
+      appendPassivePreviewLog(encounter);
     });
 
     const output = document.createElement('span');
@@ -1232,10 +1282,16 @@
     outcome.setAttribute('data-ooh-trigger-outcome-preview', '');
     outcome.textContent = 'OUTCOME PREVIEW: NO TRIGGER SELECTED';
 
+    const passivePreview = document.createElement('span');
+    passivePreview.className = 'ooh-play-trigger-selector__passive-preview';
+    passivePreview.setAttribute('data-ooh-passive-behavior-preview', '');
+    passivePreview.textContent = 'PASSIVE BEHAVIOR PREVIEW: CONTACT REMAINS UNDER OBSERVATION';
+
     selectorWrap.appendChild(label);
     selectorWrap.appendChild(select);
     selectorWrap.appendChild(output);
     selectorWrap.appendChild(outcome);
+    selectorWrap.appendChild(passivePreview);
 
     const triggerPreview = encounter.querySelector('[data-ooh-trigger-preview]');
     const behavior = encounter.querySelector('[data-ooh-behavior-intent]');
@@ -1271,6 +1327,7 @@
     const select = selectorWrap.querySelector('[data-ooh-trigger-select]');
     const output = selectorWrap.querySelector('[data-ooh-selected-trigger-output]');
     const outcome = selectorWrap.querySelector('[data-ooh-trigger-outcome-preview]');
+    const passivePreview = selectorWrap.querySelector('[data-ooh-passive-behavior-preview]');
     if (select) {
       select.value = selectedTriggerPreview;
     }
@@ -1280,6 +1337,63 @@
     if (outcome) {
       outcome.textContent = 'OUTCOME PREVIEW: ' + (triggerOutcomePreviewText[selectedTriggerPreview] || triggerOutcomePreviewText.none);
     }
+    if (passivePreview) {
+      passivePreview.textContent = 'PASSIVE BEHAVIOR PREVIEW: ' + passiveBehaviorPreviewLabel();
+    }
+  }
+
+  function ensurePassivePreviewLog(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-passive-preview-log]');
+    if (existing) {
+      return existing;
+    }
+
+    const log = document.createElement('div');
+    log.className = 'ooh-play-passive-preview-log';
+    log.setAttribute('data-ooh-passive-preview-log', '');
+    log.setAttribute('aria-label', 'Passive behavior preview log');
+
+    const selector = encounter.querySelector('[data-ooh-trigger-selector]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (selector) {
+      encounter.insertBefore(log, selector.nextSibling);
+      return log;
+    }
+    if (actions) {
+      encounter.insertBefore(log, actions);
+      return log;
+    }
+
+    encounter.appendChild(log);
+    return log;
+  }
+
+  function syncPassivePreviewLog(encounter) {
+    const log = ensurePassivePreviewLog(encounter);
+    if (!log) {
+      return;
+    }
+
+    log.textContent = '';
+    passivePreviewLogEntries.forEach(function (entry, index) {
+      const line = document.createElement('span');
+      line.className = 'ooh-play-passive-preview-log__entry';
+      if (index === 0) {
+        line.classList.add('is-latest');
+      }
+      line.textContent = entry;
+      log.appendChild(line);
+    });
+  }
+
+  function appendPassivePreviewLog(encounter) {
+    passivePreviewLogEntries.unshift(passivePreviewLogText());
+    passivePreviewLogEntries = passivePreviewLogEntries.slice(0, 5);
+    syncPassivePreviewLog(encounter);
   }
 
   function ensureEncounterPulse(encounter) {
