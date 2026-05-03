@@ -1296,6 +1296,7 @@ body.page-play .content {
   line-height: 1.35;
   overflow-wrap: anywhere;
   text-transform: uppercase;
+  white-space: pre-wrap;
 }
 
 .ooh-play-archetype-selector {
@@ -1358,6 +1359,39 @@ body.page-play .content {
   line-height: 1.4;
   overflow-wrap: anywhere;
   text-transform: uppercase;
+}
+
+.ooh-play-generated-contact-readout,
+.ooh-play-generated-contact-audit,
+.ooh-play-generated-contact-lock,
+.ooh-play-generated-contact-presence {
+  display: block;
+  padding: 8px 10px;
+  border: 1px solid rgba(118, 248, 255, 0.16);
+  border-radius: 4px;
+  background: rgba(0, 12, 18, 0.44);
+  color: rgba(191, 252, 255, 0.82);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.ooh-play-mission-authority-stamp {
+  display: inline-block;
+  justify-self: start;
+  padding: 7px 12px;
+  border: 2px solid rgba(255, 235, 229, 0.72);
+  border-radius: 3px;
+  color: rgba(255, 235, 229, 0.86);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-transform: uppercase;
+  transform: rotate(-1deg);
 }
 
 .ooh-play-contact-profile {

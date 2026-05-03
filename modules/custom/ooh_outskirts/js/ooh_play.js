@@ -775,7 +775,10 @@
   let selectedTriggerPreview = 'none';
   let passivePreviewLogEntries = [];
   let engagementState = 'DISENGAGED';
-
+  let generatedContactReadoutText = '';
+  let generatedContactAuditText = '';
+  let generatedContactLockText = '';
+  let generatedContactPresenceText = '';
   function activeEnemyContactArchetype() {
     return enemyContactArchetypes.find(function (archetype) {
       return archetype.id === activeEnemyContactArchetypeId;
@@ -789,17 +792,68 @@
     activeEnemyContactArchetypeId = matched ? matched.id : 'hippo_ronin';
   }
 
-  function setSelectedTriggerPreview(triggerType) {
-    selectedTriggerPreview = triggerSelectorOptions.indexOf(triggerType) !== -1 ? triggerType : 'none';
+  function generatedContactArchetypeId(routeId, pathKey, missionLabel) {
+    const source = [routeId, pathKey, missionLabel].join(' ').toLowerCase();
+    if (source.indexOf('mare') !== -1 || source.indexOf('water') !== -1 || source.indexOf('extraction') !== -1 || source.indexOf('tunnel') !== -1) {
+      return source.indexOf('tunnel') !== -1 ? 'leech_ronin' : 'hippo_ronin';
+    }
+    if (source.indexOf('aer') !== -1 || source.indexOf('air') !== -1 || source.indexOf('overwatch') !== -1) {
+      return source.indexOf('overwatch') !== -1 ? 'owl_ronin' : 'bee_ronin';
+    }
+    if (source.indexOf('sabotage') !== -1) {
+      return 'leech_ronin';
+    }
+    if (source.indexOf('assault') !== -1 || source.indexOf('terra') !== -1 || source.indexOf('ground') !== -1) {
+      return source.indexOf('assault') !== -1 ? 'hippo_ronin' : 'bee_ronin';
+    }
+    return 'hippo_ronin';
   }
+  
+function applyGeneratedContact(routeId, pathKey, missionLabel) {
+  setActiveEnemyContactArchetypeId(generatedContactArchetypeId(routeId, pathKey, missionLabel));
+  const archetype = activeEnemyContactArchetype();
 
-  function passiveBehaviorPreviewLabel() {
-    const archetype = activeEnemyContactArchetype();
-    const speciesBase = archetype && archetype.profile ? archetype.profile.speciesBase : '';
-    const speciesPreviewKey = speciesBase ? speciesBase.toLowerCase() + '_ronin' : '';
-    const archetypePreview = passiveBehaviorPreviewText[archetype ? archetype.id : ''] || passiveBehaviorPreviewText[speciesPreviewKey] || passiveBehaviorPreviewText.hippo_ronin;
-    return archetypePreview[selectedTriggerPreview] || archetypePreview.none;
-  }
+  generatedContactReadoutText = [
+    'MISSION ORDER DOSSIER',
+    'DESIGNATED CONTACT: ' + (archetype ? archetype.label : 'UNKNOWN CONTACT'),
+    'SOURCE: ROUTE + MISSION PROFILE'
+  ].join('\n');
+
+  generatedContactAuditText =
+    'CONTACT GENERATION AUDIT: ROUTE=' + routeLabel(routeId) +
+    ' // PATH=' + pathKey +
+    ' // MISSION=' + missionLabel +
+    ' // SOURCE=LOCAL PROFILE ONLY';
+
+  generatedContactLockText =
+    'CONTACT PROFILE LOCKED: ' +
+    (archetype ? archetype.label : 'UNKNOWN CONTACT') +
+    ' // ENCOUNTER READOUT ONLY';
+
+  generatedContactPresenceText =
+    'CONTACT PRESENCE: ' +
+    (archetype && archetype.profile ? archetype.profile.movementType : 'UNKNOWN') +
+    ' // ' +
+    (archetype && archetype.profile ? archetype.profile.threatRole : 'UNKNOWN') +
+    ' // ' +
+    (archetype && archetype.profile ? archetype.profile.behaviorState : 'UNKNOWN');
+}
+
+function setSelectedTriggerPreview(triggerType) {
+  selectedTriggerPreview =
+    triggerSelectorOptions.indexOf(triggerType) !== -1
+      ? triggerType
+      : 'none';
+}
+
+function passiveBehaviorPreviewLabel() {
+  const archetype = activeEnemyContactArchetype();
+  const speciesBase = archetype && archetype.profile ? archetype.profile.speciesBase : '';
+  const speciesPreviewKey = speciesBase ? speciesBase.toLowerCase() + '_ronin' : '';
+  const archetypePreview = passiveBehaviorPreviewText[archetype ? archetype.id : ''] || passiveBehaviorPreviewText[speciesPreviewKey] || passiveBehaviorPreviewText.hippo_ronin;
+  return archetypePreview[selectedTriggerPreview] || archetypePreview.none;
+}
+
 
   function passivePreviewLogText() {
     const archetype = activeEnemyContactArchetype();
@@ -963,6 +1017,7 @@
     }
 
     encounter.setAttribute('data-active-archetype', activeEnemyContactArchetypeId);
+    syncGeneratedContactReadout(encounter);
     syncEncounterSummary(encounter);
     syncEnemyContactProfile(encounter);
     syncEnemyMovementTags(encounter);
@@ -973,6 +1028,187 @@
     syncPassivePreviewLog(encounter);
   }
 
+  function ensureGeneratedContactReadout(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-generated-contact-readout]');
+    if (existing) {
+      return existing;
+    }
+
+    const readout = document.createElement('span');
+    readout.className = 'ooh-play-generated-contact-readout';
+    readout.setAttribute('data-ooh-generated-contact-readout', '');
+
+    const selector = encounter.querySelector('[data-ooh-archetype-selector]');
+    const profile = encounter.querySelector('[data-ooh-contact-profile]');
+    const telemetry = encounter.querySelector('[data-ooh-combat-telemetry]');
+    const actions = encounter.querySelector('.ooh-play-encounter__actions');
+    if (selector) {
+      encounter.insertBefore(readout, selector.nextSibling);
+      return readout;
+    }
+    if (profile) {
+      encounter.insertBefore(readout, profile);
+      return readout;
+    }
+    if (telemetry) {
+      encounter.insertBefore(readout, telemetry);
+      return readout;
+    }
+    if (actions) {
+      encounter.insertBefore(readout, actions);
+      return readout;
+    }
+
+    encounter.appendChild(readout);
+    return readout;
+  }
+
+  function syncGeneratedContactReadout(encounter) {
+    const readout = ensureGeneratedContactReadout(encounter);
+    if (!readout) {
+      return;
+    }
+    readout.textContent = generatedContactReadoutText;
+    readout.hidden = !generatedContactReadoutText;
+    syncGeneratedContactAuditReadout(encounter);
+    syncGeneratedContactLockReadout(encounter);
+  }
+
+  function ensureGeneratedContactAuditReadout(encounter) {
+    if (!encounter) {
+      return null;
+    }
+
+    const existing = encounter.querySelector('[data-ooh-generated-contact-audit]');
+    if (existing) {
+      return existing;
+    }
+
+    const audit = document.createElement('span');
+    audit.className = 'ooh-play-generated-contact-audit';
+    audit.setAttribute('data-ooh-generated-contact-audit', '');
+    const readout = encounter.querySelector('[data-ooh-generated-contact-readout]');
+    if (readout) {
+      encounter.insertBefore(audit, readout.nextSibling);
+      return audit;
+    }
+    encounter.appendChild(audit);
+    return audit;
+  }
+
+  function syncGeneratedContactAuditReadout(encounter) {
+    const audit = ensureGeneratedContactAuditReadout(encounter);
+    if (!audit) {
+      return;
+    }
+    audit.textContent = generatedContactAuditText;
+    audit.hidden = !generatedContactAuditText;
+  }
+  function ensureGeneratedContactLockReadout(encounter) {
+  if (!encounter) {
+    return null;
+  }
+
+  const existing = encounter.querySelector('[data-ooh-generated-contact-lock]');
+  if (existing) {
+    return existing;
+  }
+
+  const lock = document.createElement('span');
+  lock.className = 'ooh-play-generated-contact-lock';
+  lock.setAttribute('data-ooh-generated-contact-lock', '');
+
+  const audit = encounter.querySelector('[data-ooh-generated-contact-audit]');
+  if (audit) {
+    encounter.insertBefore(lock, audit.nextSibling);
+    return lock;
+  }
+
+  encounter.appendChild(lock);
+  return lock;
+ }
+
+ function syncGeneratedContactLockReadout(encounter) {
+   const lock = ensureGeneratedContactLockReadout(encounter);
+   if (!lock) {
+     return;
+ }
+  lock.textContent = generatedContactLockText;
+  lock.hidden = !generatedContactLockText;
+  syncMissionAuthorityStamp(encounter);
+ }
+
+ function ensureMissionAuthorityStamp(encounter) {
+  if (!encounter) {
+    return null;
+  }
+
+  const existing = encounter.querySelector('[data-ooh-mission-authority-stamp]');
+  if (existing) {
+    return existing;
+  }
+
+  const stamp = document.createElement('span');
+  stamp.className = 'ooh-play-mission-authority-stamp';
+  stamp.setAttribute('data-ooh-mission-authority-stamp', '');
+  stamp.textContent = 'CLASSIFIED // VERIFIED // LOCKED';
+
+  const lock = encounter.querySelector('[data-ooh-generated-contact-lock]');
+  if (lock) {
+    encounter.insertBefore(stamp, lock.nextSibling);
+    return stamp;
+  }
+
+  encounter.appendChild(stamp);
+  return stamp;
+ }
+
+ function syncMissionAuthorityStamp(encounter) {
+  const stamp = ensureMissionAuthorityStamp(encounter);
+  if (!stamp) {
+    return;
+  }
+  stamp.hidden = !generatedContactLockText;
+  syncGeneratedContactPresenceReadout(encounter);
+ }
+
+ function ensureGeneratedContactPresenceReadout(encounter) {
+  if (!encounter) {
+    return null;
+  }
+
+  const existing = encounter.querySelector('[data-ooh-generated-contact-presence]');
+  if (existing) {
+    return existing;
+  }
+
+  const presence = document.createElement('span');
+  presence.className = 'ooh-play-generated-contact-presence';
+  presence.setAttribute('data-ooh-generated-contact-presence', '');
+
+  const stamp = encounter.querySelector('[data-ooh-mission-authority-stamp]');
+  if (stamp) {
+    encounter.insertBefore(presence, stamp.nextSibling);
+    return presence;
+  }
+
+  encounter.appendChild(presence);
+  return presence;
+ }
+
+ function syncGeneratedContactPresenceReadout(encounter) {
+  const presence = ensureGeneratedContactPresenceReadout(encounter);
+  if (!presence) {
+    return;
+  }
+  presence.textContent = generatedContactPresenceText;
+  presence.hidden = !generatedContactPresenceText;
+ }
+  
   function ensureArchetypeSelector(encounter) {
     if (!encounter) {
       return null;
@@ -2165,6 +2401,7 @@
       encounter.hidden = false;
       encounter.classList.add('is-encounter-visible');
       encounter.setAttribute('data-encounter-state', 'visible');
+      applyGeneratedContact(routeId, pathKey, missionLabel);
       syncEncounterState(encounter, combatState);
       enableEncounterActions(encounter);
     }
@@ -2558,4 +2795,3 @@
     }
   };
 })(Drupal, once, drupalSettings);
-
