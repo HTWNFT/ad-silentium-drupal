@@ -1011,12 +1011,26 @@ function passiveBehaviorPreviewLabel() {
     });
   }
 
+  function contactTensionLevel(archetype) {
+    const profile = archetype ? archetype.profile : {};
+    const state = String(profile.behaviorState || profile.dispositionState || '').toUpperCase();
+
+    if (state === 'THREATENING' || state === 'WITHDRAWING') {
+      return 'high';
+    }
+    if (state === 'FORMING' || state === 'CAUTIOUS' || state === 'SUPPORT-READY') {
+      return 'medium';
+    }
+    return 'low';
+  }
+
   function syncArchetypeReadouts(encounter) {
     if (!encounter) {
       return;
     }
 
     encounter.setAttribute('data-active-archetype', activeEnemyContactArchetypeId);
+    encounter.setAttribute('data-contact-tension', contactTensionLevel(activeEnemyContactArchetype()));
     syncGeneratedContactReadout(encounter);
     syncEncounterSummary(encounter);
     syncEnemyContactProfile(encounter);
@@ -1734,7 +1748,7 @@ function passiveBehaviorPreviewLabel() {
 
     const label = document.createElement('label');
     label.className = 'ooh-play-trigger-selector__label';
-    label.textContent = 'CONTACT RESPONSE';
+    label.textContent = 'ENGAGEMENT POSTURE';
 
     const select = document.createElement('select');
     select.className = 'ooh-play-trigger-selector__control';
@@ -1968,6 +1982,15 @@ function passiveBehaviorPreviewLabel() {
         return;
       }
       engagementState = 'ENGAGED';
+      const focusedEncounter =
+        engageHostileButton.closest('[data-ooh-combat-encounter]') ||
+        engageHostileButton.closest('.ooh-play-encounter') ||
+        document.querySelector('.ooh-play-encounter.is-encounter-visible') ||
+        document.querySelector('[data-contact-tension]');
+      if (focusedEncounter) {
+        focusedEncounter.setAttribute('data-contact-focus', 'locked');
+        focusedEncounter.classList.add('is-contact-focus-locked');
+      }
       engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState;
       engagementConfirmed.textContent = 'ENGAGEMENT CONFIRMED: TARGET LOCKED // NO DAMAGE SYSTEM ACTIVE';
       engagementConfirmed.hidden = false;
