@@ -1879,6 +1879,12 @@ function passiveBehaviorPreviewLabel() {
     engagementConfirmed.hidden = true;
     engagementConfirmed.textContent = '';
 
+    const contactLockConfirmation = document.createElement('span');
+    contactLockConfirmation.className = 'ooh-play-trigger-selector__contact-lock-confirmation';
+    contactLockConfirmation.setAttribute('data-ooh-contact-lock-confirmation', '');
+    contactLockConfirmation.hidden = true;
+    contactLockConfirmation.textContent = 'CONTACT LOCK CONFIRMED // VISUAL TRACKING ONLY';
+
     const combatLoopStatus = document.createElement('span');
     combatLoopStatus.className = 'ooh-play-trigger-selector__combat-loop-status';
     combatLoopStatus.setAttribute('data-ooh-combat-loop-status', '');
@@ -1940,6 +1946,7 @@ function passiveBehaviorPreviewLabel() {
       engageHostileButton.setAttribute('aria-disabled', 'true');
       engagementConfirmed.hidden = true;
       engagementConfirmed.textContent = '';
+      contactLockConfirmation.hidden = true;
       combatLoopStatus.hidden = true;
       executeStrikeButton.hidden = true;
       strikeOutcome.hidden = true;
@@ -1971,6 +1978,7 @@ function passiveBehaviorPreviewLabel() {
       engageHostileButton.setAttribute('aria-disabled', engageHostileButton.disabled ? 'true' : 'false');
       engagementConfirmed.hidden = true;
       engagementConfirmed.textContent = '';
+      contactLockConfirmation.hidden = true;
       combatLoopStatus.hidden = true;
       executeStrikeButton.hidden = true;
       strikeOutcome.hidden = true;
@@ -1994,6 +2002,7 @@ function passiveBehaviorPreviewLabel() {
       engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState;
       engagementConfirmed.textContent = 'ENGAGEMENT CONFIRMED: TARGET LOCKED // NO DAMAGE SYSTEM ACTIVE';
       engagementConfirmed.hidden = false;
+      contactLockConfirmation.hidden = false;
       combatLoopStatus.hidden = false;
       executeStrikeButton.hidden = false;
       strikeOutcome.hidden = true;
@@ -2035,6 +2044,7 @@ function passiveBehaviorPreviewLabel() {
       engageHostileButton.setAttribute('aria-disabled', 'true');
       engagementConfirmed.hidden = true;
       engagementConfirmed.textContent = '';
+      contactLockConfirmation.hidden = true;
       combatLoopStatus.hidden = true;
       executeStrikeButton.hidden = true;
       strikeOutcome.hidden = true;
@@ -2064,6 +2074,7 @@ function passiveBehaviorPreviewLabel() {
     selectorWrap.appendChild(engagementStatus);
     selectorWrap.appendChild(engageHostileButton);
     selectorWrap.appendChild(engagementConfirmed);
+    selectorWrap.appendChild(contactLockConfirmation);
     selectorWrap.appendChild(combatLoopStatus);
     selectorWrap.appendChild(executeStrikeButton);
     selectorWrap.appendChild(strikeOutcome);

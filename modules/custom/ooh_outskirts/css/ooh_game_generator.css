@@ -1165,7 +1165,8 @@ body.page-play .content {
   outline: 1px solid rgba(140, 255, 255, 0.55);
   box-shadow:
     0 0 0 1px rgba(140, 255, 255, 0.22),
-    0 0 18px rgba(0, 255, 255, 0.18);
+    0 0 18px rgba(0, 255, 255, 0.18),
+    inset 0 0 18px rgba(140, 255, 255, 0.06);
 }
 
 .ooh-play-encounter[data-contact-focus="locked"]::after,
@@ -1757,6 +1758,21 @@ body.page-play .content {
 .ooh-play-trigger-selector__audit-stamp {
   grid-column: 1 / -1;
   color: rgba(255, 235, 229, 0.78);
+}
+
+.ooh-play-trigger-selector__contact-lock-confirmation {
+  grid-column: 1 / -1;
+  padding: 7px 9px;
+  border: 1px solid rgba(140, 255, 255, 0.24);
+  border-radius: 3px;
+  background: rgba(0, 18, 24, 0.42);
+  color: rgba(180, 255, 255, 0.88);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
 }
 
 .ooh-play-trigger-selector__control {
