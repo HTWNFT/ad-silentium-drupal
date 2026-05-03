@@ -1309,6 +1309,10 @@ body.page-play .content {
   background: rgba(0, 6, 10, 0.42);
 }
 
+.ooh-play-archetype-selector--dev-only {
+  display: none;
+}
+
 .ooh-play-archetype-selector__label {
   color: rgba(255, 196, 180, 0.62);
   font-size: 0.56rem;
@@ -1599,34 +1603,57 @@ body.page-play .content {
 }
 
 .ooh-play-trigger-selector__confirm,
-.ooh-play-trigger-selector__arm-application {
+.ooh-play-trigger-selector__arm-application,
+.ooh-play-trigger-selector__allegiance-review,
+.ooh-play-trigger-selector__engage-hostile,
+.ooh-play-trigger-selector__execute-strike {
   grid-column: 1 / -1;
   justify-self: start;
-  min-height: 30px;
-  padding: 7px 10px;
-  border: 1px solid rgba(255, 148, 124, 0.24);
+  min-height: 36px;
+  padding: 8px 14px;
+  border: 2px solid rgba(118, 248, 255, 0.56);
   border-radius: 4px;
-  background: rgba(12, 8, 10, 0.82);
-  color: rgba(255, 235, 229, 0.78);
+  background: linear-gradient(180deg, rgba(8, 34, 42, 0.94), rgba(3, 13, 19, 0.96));
+  color: #bffcff;
   cursor: pointer;
   font-family: inherit;
   font-size: 0.58rem;
   font-weight: 900;
   letter-spacing: 0.14em;
+  line-height: 1;
+  text-align: center;
   text-transform: uppercase;
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.06),
+    0 0 18px rgba(89, 243, 255, 0.14);
 }
 
 .ooh-play-trigger-selector__confirm:disabled,
-.ooh-play-trigger-selector__arm-application:disabled {
+.ooh-play-trigger-selector__arm-application:disabled,
+.ooh-play-trigger-selector__allegiance-review:disabled,
+.ooh-play-trigger-selector__engage-hostile:disabled,
+.ooh-play-trigger-selector__execute-strike:disabled {
   cursor: not-allowed;
-  opacity: 0.42;
+  opacity: 0.52;
+  pointer-events: none;
 }
 
 .ooh-play-trigger-selector__confirm:not(:disabled):hover,
-.ooh-play-trigger-selector__confirm:not(:disabled):focus-visible {
-  border-color: rgba(255, 196, 180, 0.76);
-  box-shadow: 0 0 16px rgba(255, 96, 72, 0.14);
-  outline: none;
+.ooh-play-trigger-selector__confirm:not(:disabled):focus-visible,
+.ooh-play-trigger-selector__arm-application:not(:disabled):hover,
+.ooh-play-trigger-selector__arm-application:not(:disabled):focus-visible,
+.ooh-play-trigger-selector__allegiance-review:not(:disabled):hover,
+.ooh-play-trigger-selector__allegiance-review:not(:disabled):focus-visible,
+.ooh-play-trigger-selector__engage-hostile:not(:disabled):hover,
+.ooh-play-trigger-selector__engage-hostile:not(:disabled):focus-visible,
+.ooh-play-trigger-selector__execute-strike:not(:disabled):hover,
+.ooh-play-trigger-selector__execute-strike:not(:disabled):focus-visible {
+  border-color: rgba(169, 255, 255, 0.92);
+  background: rgba(11, 42, 50, 0.96);
+  color: #efffff;
+  outline: 2px solid rgba(89, 243, 255, 0.48);
+  outline-offset: 2px;
+  box-shadow: 0 0 20px rgba(89, 243, 255, 0.18);
 }
 
 .ooh-play-trigger-selector__confirmation {
@@ -3335,4 +3362,39 @@ body.path-user-login .messages {
   .ooh-login-panel {
     padding: 22px;
   }
+}
+/* Phases 15-19 combat foundation audit: UI-only */
+.ooh-play__combat-foundation-audit {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid rgba(76, 255, 238, 0.35);
+  border-left: 3px solid rgba(76, 255, 238, 0.75);
+  border-radius: 8px;
+  background: linear-gradient(
+    180deg,
+    rgba(3, 18, 24, 0.92),
+    rgba(2, 8, 12, 0.96)
+  );
+  color: rgba(190, 255, 248, 0.92);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  white-space: pre-wrap;
+  box-shadow:
+    0 0 18px rgba(76, 255, 238, 0.12),
+    inset 0 0 18px rgba(76, 255, 238, 0.045);
+}
+
+/* Phase 15-19 audit width fix */
+.ooh-play__combat-foundation-audit {
+  display: block;
+  width: min(100%, 720px);
+  max-width: 720px;
+  min-width: 520px;
+  box-sizing: border-box;
+  white-space: pre-wrap;
+  overflow-wrap: normal;
+  word-break: normal;
 }

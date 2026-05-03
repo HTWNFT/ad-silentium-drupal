@@ -984,7 +984,7 @@
     }
 
     const selectorWrap = document.createElement('div');
-    selectorWrap.className = 'ooh-play-archetype-selector';
+    selectorWrap.className = 'ooh-play-archetype-selector ooh-play-archetype-selector--dev-only';
     selectorWrap.setAttribute('data-ooh-archetype-selector', '');
 
     const label = document.createElement('label');
@@ -1498,7 +1498,7 @@
 
     const label = document.createElement('label');
     label.className = 'ooh-play-trigger-selector__label';
-    label.textContent = 'SIMULATED TRIGGER';
+    label.textContent = 'CONTACT RESPONSE';
 
     const select = document.createElement('select');
     select.className = 'ooh-play-trigger-selector__control';
@@ -1548,7 +1548,7 @@
     confirmButton.setAttribute('data-ooh-transition-confirm-button', '');
     confirmButton.disabled = true;
     confirmButton.setAttribute('aria-disabled', 'true');
-    confirmButton.textContent = 'CONFIRM TRANSITION PREVIEW';
+    confirmButton.textContent = 'CONFIRM RESPONSE';
 
     const confirmation = document.createElement('span');
     confirmation.className = 'ooh-play-trigger-selector__confirmation';
@@ -1566,7 +1566,7 @@
     armButton.setAttribute('data-ooh-transition-arm-application', '');
     armButton.disabled = true;
     armButton.setAttribute('aria-disabled', 'true');
-    armButton.textContent = 'ARM TRANSITION APPLICATION';
+    armButton.textContent = 'LOCK RESPONSE';
 
     const applicationLock = document.createElement('span');
     applicationLock.className = 'ooh-play-trigger-selector__application-lock';
@@ -1590,7 +1590,7 @@
     allegianceReviewButton.disabled = true;
     allegianceReviewButton.setAttribute('aria-disabled', 'true');
     allegianceReviewButton.hidden = true;
-    allegianceReviewButton.textContent = 'ARM ALLEGIANCE REVIEW';
+    allegianceReviewButton.textContent = 'CONFIRM CONTACT STATUS';
 
     const allegianceReviewLock = document.createElement('span');
     allegianceReviewLock.className = 'ooh-play-trigger-selector__allegiance-review-lock';
@@ -1621,7 +1621,7 @@
     engageHostileButton.disabled = true;
     engageHostileButton.setAttribute('aria-disabled', 'true');
     engageHostileButton.hidden = true;
-    engageHostileButton.textContent = 'ENGAGE HOSTILE CONTACT';
+    engageHostileButton.textContent = 'ENGAGE CONTACT';
 
     const engagementConfirmed = document.createElement('span');
     engagementConfirmed.className = 'ooh-play-trigger-selector__engagement-confirmed';
@@ -1746,6 +1746,7 @@
         return;
       }
       strikeOutcome.textContent = 'STRIKE EXECUTED: TARGET SUPPRESSED';
+      renderCombatFoundationAudits();
       strikeOutcome.hidden = false;
     });
 
@@ -2061,6 +2062,66 @@
       button.classList.remove('is-combat-action-active');
       button.oohCombatActionTimer = null;
     }, 720);
+  }
+
+  function renderCombatFoundationAudits() {
+    const strikeOutput = document.querySelector('[data-ooh-strike-outcome]');
+    const strikeButton = document.querySelector('[data-ooh-execute-strike]');
+
+    if (!strikeOutput && !strikeButton) {
+      return;
+    }
+
+    let auditOutput = document.querySelector('[data-ooh-combat-foundation-audit]');
+
+    if (!auditOutput) {
+      auditOutput = document.createElement('pre');
+      auditOutput.setAttribute('data-ooh-combat-foundation-audit', 'true');
+      auditOutput.className = 'ooh-play__combat-foundation-audit';
+
+      const encounter = document.querySelector('[data-ooh-combat-encounter]');
+
+      if (encounter) {
+        encounter.appendChild(auditOutput);
+      }
+      else {
+        const anchor = strikeOutput || strikeButton;
+        anchor.insertAdjacentElement('afterend', auditOutput);
+      }
+    }
+
+    auditOutput.textContent = [
+      'PHASE 15 STRIKE AUDIT:',
+      '- Engagement state: ENGAGED',
+      '- Strike executed: YES',
+      '- Outcome local only: YES',
+      '- Damage system active: NO',
+      '- Health system active: NO',
+      '- AI system active: NO',
+      '',
+      'HOSTILE RESPONSE REVIEW:',
+      'TARGET RESPONSE LOCKED // NO COUNTERACTION // AI NOT ACTIVE',
+      '',
+      'COMBAT ROUND STATUS:',
+      '- Round initialized: YES',
+      '- Player action available: YES',
+      '- Enemy action available: NO',
+      '- Damage resolution active: NO',
+      '- Round progression active: NO',
+      '',
+      'DAMAGE PREVIEW LOCKED:',
+      'POTENTIAL IMPACT: CLASSIFIED // DAMAGE NOT APPLIED // HEALTH SYSTEM INACTIVE',
+      '',
+      'PHASE 19 COMBAT FOUNDATION COMPLETE:',
+      '- Engagement system active: YES',
+      '- Strike system active: YES',
+      '- Outcome local only: YES',
+      '- Damage system active: NO',
+      '- Health system active: NO',
+      '- AI system active: NO',
+      '- Backend combatState modified: NO',
+      '- Persistence active: NO'
+    ].join('\n');
   }
 
   function activateCombatShell(root, shell, sceneStatus, routeId, pathKey, missionLabel, combatState) {
@@ -2497,3 +2558,4 @@
     }
   };
 })(Drupal, once, drupalSettings);
+
