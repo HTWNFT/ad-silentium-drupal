@@ -4722,3 +4722,92 @@ body.page-dossier .ooh-generator__enter.is-premium-ready {
     transition: none !important;
   }
 }
+
+/* Phase 54 — Dossier Step Focus Guidance */
+
+body.path-dossier .ooh-generator__panel.is-step-unlocked,
+body.page-dossier .ooh-generator__panel.is-step-unlocked {
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    opacity 0.18s ease,
+    filter 0.18s ease;
+}
+
+body.path-dossier .ooh-generator__panel.is-step-unlocked:has(.ooh-generator__option.is-selected),
+body.page-dossier .ooh-generator__panel.is-step-unlocked:has(.ooh-generator__option.is-selected) {
+  opacity: 0.88;
+  filter: saturate(0.82);
+  border-color: rgba(96, 244, 255, 0.16);
+  box-shadow:
+    0 14px 38px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.015);
+}
+
+body.path-dossier .ooh-generator__panel.is-step-unlocked:not(:has(.ooh-generator__option.is-selected)):not([data-ooh-section="enter"]),
+body.page-dossier .ooh-generator__panel.is-step-unlocked:not(:has(.ooh-generator__option.is-selected)):not([data-ooh-section="enter"]) {
+  opacity: 1;
+  filter: saturate(1);
+  transform: translateY(-2px);
+  border-color: rgba(178, 255, 255, 0.34);
+  box-shadow:
+    0 20px 52px rgba(0, 0, 0, 0.30),
+    0 0 0 1px rgba(178, 255, 255, 0.08),
+    0 0 24px rgba(0, 255, 255, 0.09),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+}
+
+body.path-dossier .ooh-generator__panel.is-step-unlocked:not(:has(.ooh-generator__option.is-selected)):not([data-ooh-section="enter"]) .ooh-generator__panel-kicker,
+body.page-dossier .ooh-generator__panel.is-step-unlocked:not(:has(.ooh-generator__option.is-selected)):not([data-ooh-section="enter"]) .ooh-generator__panel-kicker {
+  border-color: rgba(178, 255, 255, 0.46);
+  color: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.045),
+    0 0 14px rgba(89, 243, 255, 0.13);
+}
+
+body.path-dossier .ooh-generator__panel.is-step-unlocked:not(:has(.ooh-generator__option.is-selected)):not([data-ooh-section="enter"]) .ooh-generator__panel-title,
+body.page-dossier .ooh-generator__panel.is-step-unlocked:not(:has(.ooh-generator__option.is-selected)):not([data-ooh-section="enter"]) .ooh-generator__panel-title {
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(125, 249, 255, 0.18);
+}
+
+body.path-dossier .ooh-generator__panel.is-step-locked,
+body.page-dossier .ooh-generator__panel.is-step-locked {
+  opacity: 0.34;
+  filter: saturate(0.46);
+  transform: none;
+  border-color: rgba(96, 244, 255, 0.08);
+  box-shadow: none;
+}
+
+body.path-dossier .ooh-generator__panel[data-ooh-section="enter"].is-step-unlocked:has(.ooh-generator__enter.is-premium-ready),
+body.page-dossier .ooh-generator__panel[data-ooh-section="enter"].is-step-unlocked:has(.ooh-generator__enter.is-premium-ready) {
+  opacity: 1;
+  filter: saturate(1);
+  transform: translateY(-1px);
+  border-color: rgba(190, 255, 255, 0.28);
+  box-shadow:
+    0 18px 46px rgba(0, 0, 0, 0.28),
+    0 0 24px rgba(0, 255, 255, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.022);
+}
+
+body.path-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"] .ooh-generator__option--route-readout,
+body.page-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"] .ooh-generator__option--route-readout {
+  transform: none;
+}
+
+body.path-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"] .ooh-generator__option--route-readout.is-derived,
+body.page-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"] .ooh-generator__option--route-readout.is-derived {
+  filter: saturate(0.92);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.path-dossier .ooh-generator__panel,
+  body.page-dossier .ooh-generator__panel {
+    transition: none !important;
+    transform: none !important;
+  }
+}
