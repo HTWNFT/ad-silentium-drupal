@@ -5385,3 +5385,70 @@ body.path-play .ooh-play-session .ooh-play-combat-telemetry__line,
 body.page-play .ooh-play-session .ooh-play-combat-telemetry__line {
   border-color: rgba(255, 170, 148, 0.13);
 }
+
+/* Phase 67 — Contact Presence Calibration */
+
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible {
+  filter: saturate(0.96) contrast(1.03);
+}
+
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__card,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__card {
+  border-color: rgba(255, 184, 164, 0.24);
+  box-shadow:
+    0 0 0 1px rgba(255, 160, 132, 0.08),
+    0 16px 38px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__title,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__title {
+  color: rgba(255, 247, 243, 0.96);
+  text-shadow: 0 0 10px rgba(255, 148, 124, 0.12);
+}
+
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__status,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__status {
+  color: rgba(255, 222, 212, 0.82);
+  letter-spacing: 0.1em;
+}
+
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__readouts div,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__readouts div {
+  border-color: rgba(255, 170, 148, 0.16);
+  background: rgba(18, 9, 10, 0.58);
+}
+
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__readouts dt,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__readouts dt {
+  color: rgba(255, 184, 164, 0.7);
+}
+
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__readouts dd,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-encounter-visible .ooh-play-encounter__readouts dd {
+  color: rgba(255, 247, 243, 0.92);
+}
+
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter-summary,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter-summary,
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-generated-contact-readout,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-generated-contact-readout,
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-generated-contact-lock,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-generated-contact-lock,
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-generated-contact-presence,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-generated-contact-presence {
+  border-color: rgba(255, 170, 148, 0.15);
+  color: rgba(255, 238, 232, 0.84);
+}
+
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter[data-contact-focus="locked"] .ooh-play-encounter__card,
+body.path-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-contact-focus-locked .ooh-play-encounter__card,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter[data-contact-focus="locked"] .ooh-play-encounter__card,
+body.page-play .ooh-play-session.is-combat-shell .ooh-play-encounter.is-contact-focus-locked .ooh-play-encounter__card {
+  border-color: rgba(255, 214, 202, 0.32);
+  box-shadow:
+    0 0 0 1px rgba(255, 196, 180, 0.1),
+    0 18px 42px rgba(0, 0, 0, 0.3),
+    inset 3px 0 0 rgba(255, 196, 180, 0.22);
+}
