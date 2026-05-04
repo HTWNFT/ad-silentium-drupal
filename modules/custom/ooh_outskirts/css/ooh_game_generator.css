@@ -512,3 +512,304 @@ button.ooh-generator__enter:hover {
   letter-spacing: 0.04em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
+
+/* Phase 76 — Post-Resolution Contrast Balance Layer */
+.ooh-generator__message,
+.ooh-generator__overlay-copy {
+  color: rgba(224, 252, 252, 0.86);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.26);
+}
+
+.ooh-generator__overlay-title {
+  color: rgba(233, 255, 255, 0.94);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.32);
+}
+
+/* Phase 77 — Post-Resolution Interface Cohesion Layer */
+.ooh-generator__message,
+.ooh-generator__overlay-card,
+.ooh-generator__overlay-copy {
+  border-color: rgba(120, 245, 255, 0.18);
+}
+
+.ooh-generator__message,
+.ooh-generator__overlay-copy,
+.ooh-generator__overlay-title {
+  color: rgba(226, 252, 252, 0.88);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.28);
+}
+
+.ooh-generator__overlay-card {
+  box-shadow:
+    0 0 0 1px rgba(120, 245, 255, 0.035),
+    0 18px 48px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+/* Phase 79 — Post-Resolution Exit Clarity Layer */
+.ooh-generator__overlay-card {
+  border-color: rgba(120, 245, 255, 0.2);
+  background:
+    linear-gradient(180deg, rgba(6, 18, 24, 0.96), rgba(3, 10, 14, 0.98));
+}
+
+.ooh-generator__overlay-actions .close-btn {
+  border-color: rgba(120, 245, 255, 0.22);
+  background: rgba(7, 18, 22, 0.86);
+  color: rgba(218, 252, 252, 0.84);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 10px 24px rgba(0, 0, 0, 0.24);
+}
+
+/* Phase 80 — Post-Resolution Neutral State Layer */
+.ooh-generator__overlay-card {
+  border-color: rgba(120, 245, 255, 0.16);
+  box-shadow:
+    0 0 0 1px rgba(120, 245, 255, 0.025),
+    0 14px 40px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.ooh-generator__overlay-actions .close-btn {
+  border-color: rgba(120, 245, 255, 0.18);
+  background: rgba(6, 16, 20, 0.82);
+  color: rgba(214, 246, 246, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Phase 81 — Post-Resolution Baseline Lock Layer */
+.ooh-generator__message,
+.ooh-generator__overlay-card,
+.ooh-generator__overlay-copy,
+.ooh-generator__overlay-actions .close-btn {
+  border-color: rgba(120, 245, 255, 0.15);
+}
+
+.ooh-generator__message,
+.ooh-generator__overlay-copy,
+.ooh-generator__overlay-title,
+.ooh-generator__overlay-actions .close-btn {
+  color: rgba(218, 246, 246, 0.82);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.24);
+}
+
+.ooh-generator__overlay-card,
+.ooh-generator__overlay-actions .close-btn {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.028);
+}
+
+/* Phase 82 — Residual Highlight Suppression Layer */
+.ooh-generator__message,
+.ooh-generator__overlay-card,
+.ooh-generator__overlay-copy,
+.ooh-generator__overlay-actions .close-btn {
+  border-color: rgba(120, 245, 255, 0.12);
+}
+
+.ooh-generator__overlay-card,
+.ooh-generator__overlay-actions .close-btn {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.018),
+    0 8px 26px rgba(0, 0, 0, 0.24);
+}
+
+.ooh-generator__message,
+.ooh-generator__overlay-copy,
+.ooh-generator__overlay-title,
+.ooh-generator__overlay-actions .close-btn {
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* Phase 84 — Post-Resolution Return Path Clarity */
+.ooh-generator__overlay-btn,
+.ooh-generator__overlay-close,
+.ooh-generator__overlay-actions .close-btn {
+  border-color: rgba(120, 245, 255, 0.14);
+  background: rgba(6, 16, 20, 0.78);
+  color: rgba(216, 246, 246, 0.8);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.016);
+}
+
+.ooh-generator__overlay-btn:hover,
+.ooh-generator__overlay-close:hover,
+.ooh-generator__overlay-btn:focus-visible,
+.ooh-generator__overlay-close:focus-visible,
+.ooh-generator__overlay-actions .close-btn:hover,
+.ooh-generator__overlay-actions .close-btn:focus-visible {
+  border-color: rgba(120, 245, 255, 0.22);
+  background: rgba(8, 20, 24, 0.84);
+  color: rgba(228, 252, 252, 0.86);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.024);
+}
+
+/* Phase 87 — Transition Back to Pre-Engagement Readiness */
+.ooh-generator__overlay-btn,
+.ooh-generator__overlay-close,
+.ooh-generator__overlay-actions .close-btn {
+  border-color: rgba(120, 245, 255, 0.16);
+  color: rgba(222, 250, 250, 0.82);
+}
+
+.ooh-generator__overlay-btn:hover,
+.ooh-generator__overlay-close:hover,
+.ooh-generator__overlay-btn:focus-visible,
+.ooh-generator__overlay-close:focus-visible,
+.ooh-generator__overlay-actions .close-btn:hover,
+.ooh-generator__overlay-actions .close-btn:focus-visible {
+  border-color: rgba(120, 245, 255, 0.24);
+  background: rgba(8, 22, 26, 0.82);
+  color: rgba(232, 255, 255, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.026),
+    0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* Phase 89 — Readiness Affordance Consistency Layer */
+.ooh-generator__overlay-btn,
+.ooh-generator__overlay-close,
+.ooh-generator__overlay-actions .close-btn {
+  border-color: rgba(120, 245, 255, 0.15);
+  background: rgba(7, 18, 22, 0.8);
+  color: rgba(222, 250, 250, 0.82);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+}
+
+.ooh-generator__overlay-btn:hover,
+.ooh-generator__overlay-close:hover,
+.ooh-generator__overlay-btn:focus-visible,
+.ooh-generator__overlay-close:focus-visible,
+.ooh-generator__overlay-actions .close-btn:hover,
+.ooh-generator__overlay-actions .close-btn:focus-visible {
+  border-color: rgba(120, 245, 255, 0.23);
+  background: rgba(8, 21, 25, 0.84);
+  color: rgba(230, 254, 254, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.022),
+    0 5px 16px rgba(0, 0, 0, 0.16);
+}
+
+/* Phase 90 — Pre-Engagement Baseline Lock */
+.ooh-generator__overlay-btn,
+.ooh-generator__overlay-close,
+.ooh-generator__overlay-actions .close-btn {
+  border-color: rgba(120, 245, 255, 0.14);
+  background: rgba(7, 17, 21, 0.78);
+  color: rgba(220, 248, 248, 0.8);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.018);
+}
+
+.ooh-generator__overlay-btn:hover,
+.ooh-generator__overlay-close:hover,
+.ooh-generator__overlay-btn:focus-visible,
+.ooh-generator__overlay-close:focus-visible,
+.ooh-generator__overlay-actions .close-btn:hover,
+.ooh-generator__overlay-actions .close-btn:focus-visible {
+  border-color: rgba(120, 245, 255, 0.21);
+  background: rgba(8, 20, 24, 0.82);
+  color: rgba(228, 252, 252, 0.86);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    0 4px 14px rgba(0, 0, 0, 0.14);
+}
+
+/* Phase 94 — Pre-Engagement Signal Layer */
+.ooh-generator__overlay-btn,
+.ooh-generator__overlay-close,
+.ooh-generator__overlay-actions .close-btn {
+  opacity: 0.94;
+  border-color: rgba(120, 245, 255, 0.17);
+  background: rgba(8, 19, 23, 0.8);
+  color: rgba(224, 250, 250, 0.83);
+}
+
+.ooh-generator__overlay-btn:hover,
+.ooh-generator__overlay-close:hover,
+.ooh-generator__overlay-btn:focus-visible,
+.ooh-generator__overlay-close:focus-visible,
+.ooh-generator__overlay-actions .close-btn:hover,
+.ooh-generator__overlay-actions .close-btn:focus-visible {
+  opacity: 1;
+  border-color: rgba(120, 245, 255, 0.24);
+  background: rgba(9, 22, 26, 0.84);
+  color: rgba(232, 254, 254, 0.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.024),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Phase 95 — Pre-Engagement Signal Consistency Layer */
+.ooh-generator__overlay-btn,
+.ooh-generator__overlay-close,
+.ooh-generator__overlay-actions .close-btn {
+  opacity: 0.95;
+  border-color: rgba(120, 245, 255, 0.18);
+  background: rgba(8, 19, 23, 0.8);
+  color: rgba(224, 250, 250, 0.84);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.ooh-generator__overlay-btn:hover,
+.ooh-generator__overlay-close:hover,
+.ooh-generator__overlay-btn:focus-visible,
+.ooh-generator__overlay-close:focus-visible,
+.ooh-generator__overlay-actions .close-btn:hover,
+.ooh-generator__overlay-actions .close-btn:focus-visible {
+  opacity: 0.98;
+  border-color: rgba(120, 245, 255, 0.22);
+  background: rgba(9, 21, 25, 0.82);
+  color: rgba(230, 252, 252, 0.87);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.022),
+    0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Phase 96 — Pre-Engagement Signal Containment Layer */
+.ooh-generator__overlay-btn,
+.ooh-generator__overlay-close,
+.ooh-generator__overlay-actions .close-btn {
+  opacity: 0.95;
+  border-color: rgba(120, 245, 255, 0.18);
+  background: rgba(8, 19, 23, 0.8);
+  color: rgba(224, 250, 250, 0.84);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.ooh-generator__overlay-btn:hover,
+.ooh-generator__overlay-close:hover,
+.ooh-generator__overlay-btn:focus-visible,
+.ooh-generator__overlay-close:focus-visible,
+.ooh-generator__overlay-actions .close-btn:hover,
+.ooh-generator__overlay-actions .close-btn:focus-visible {
+  opacity: 0.97;
+  transform: none;
+  border-color: rgba(120, 245, 255, 0.2);
+  background: rgba(9, 20, 24, 0.81);
+  color: rgba(228, 252, 252, 0.86);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.022);
+}
+
+/* Phase 97 — Pre-Engagement Re-Entry Calm Layer */
+.ooh-generator__overlay-btn,
+.ooh-generator__overlay-close,
+.ooh-generator__overlay-actions .close-btn {
+  opacity: 0.94;
+  border-color: rgba(120, 245, 255, 0.16);
+  background: rgba(8, 18, 22, 0.79);
+  color: rgba(222, 248, 248, 0.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.018);
+}
+
+.ooh-generator__overlay-btn:hover,
+.ooh-generator__overlay-close:hover,
+.ooh-generator__overlay-btn:focus-visible,
+.ooh-generator__overlay-close:focus-visible,
+.ooh-generator__overlay-actions .close-btn:hover,
+.ooh-generator__overlay-actions .close-btn:focus-visible {
+  opacity: 0.96;
+  transform: none;
+  border-color: rgba(120, 245, 255, 0.18);
+  background: rgba(9, 19, 23, 0.8);
+  color: rgba(226, 250, 250, 0.84);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
