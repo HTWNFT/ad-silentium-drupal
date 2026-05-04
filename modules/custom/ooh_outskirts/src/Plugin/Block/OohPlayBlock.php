@@ -199,6 +199,7 @@ final class OohPlayBlock extends BlockBase {
         <div class="ooh-row">
           <button class="ooh-btn" type="button" data-ooh-assemble>Assemble Run</button>
           <button class="ooh-btn ooh-btn--ghost" type="button" data-ooh-reset>Reset</button>
+          <a class="ooh-btn ooh-btn--ghost" href="/dossier">CHANGE PLAYLIST</a>
         </div>
 
         <div class="ooh-stage2__assembled" data-ooh-assembled hidden>
