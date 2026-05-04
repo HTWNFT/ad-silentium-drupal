@@ -5210,3 +5210,36 @@ body.page-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generato
   border-color: rgba(248, 255, 255, 0.94);
   text-shadow: 0 0 11px rgba(218, 255, 250, 0.22);
 }
+
+/* Phase 63 — Transition Arrival Conditioning */
+
+body.path-play .ooh-play-session .ooh-play-scene__briefing-panel,
+body.page-play .ooh-play-session .ooh-play-scene__briefing-panel {
+  border-color: rgba(202, 255, 248, 0.22);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(126, 244, 255, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+body.path-play .ooh-play-scene__briefing-panel .ooh-generator__panel-head::after,
+body.page-play .ooh-play-scene__briefing-panel .ooh-generator__panel-head::after {
+  border-top-color: rgba(202, 255, 248, 0.18);
+  color: rgba(204, 255, 250, 0.68);
+  text-shadow: 0 0 10px rgba(126, 244, 255, 0.16);
+}
+
+body.path-play .ooh-play-mission__briefing,
+body.page-play .ooh-play-mission__briefing {
+  border-color: rgba(126, 244, 255, 0.22);
+  box-shadow:
+    inset 3px 0 0 rgba(126, 244, 255, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+body.path-play .ooh-play-mission__continuity-stamp,
+body.page-play .ooh-play-mission__continuity-stamp {
+  border-top-color: rgba(202, 255, 248, 0.2);
+  color: rgba(210, 255, 250, 0.66);
+  text-shadow: 0 0 10px rgba(126, 244, 255, 0.16);
+}
