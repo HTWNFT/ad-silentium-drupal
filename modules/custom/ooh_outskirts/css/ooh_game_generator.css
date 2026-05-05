@@ -5894,3 +5894,56 @@ body.page-play .ooh-play-session.is-combat-shell .ooh-play-combat-telemetry {
     0 0 0 1px rgba(255, 160, 132, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
+
+/* Phase 87: dossier-to-play cohesion */
+
+body.path-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__panel--enter,
+body.page-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__panel--enter {
+  border-color: rgba(202, 255, 248, 0.24);
+  background:
+    linear-gradient(180deg, rgba(29, 121, 132, 0.12), rgba(4, 15, 20, 0.8)),
+    rgba(3, 13, 18, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(202, 255, 248, 0.08),
+    0 0 30px rgba(89, 243, 255, 0.1),
+    inset 0 0 20px rgba(202, 255, 248, 0.035);
+}
+
+body.path-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__panel--enter .ooh-generator__panel-kicker,
+body.page-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__panel--enter .ooh-generator__panel-kicker,
+body.path-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__panel--enter .ooh-generator__panel-title,
+body.page-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__panel--enter .ooh-generator__panel-title {
+  color: rgba(238, 255, 252, 0.94);
+  text-shadow: 0 0 12px rgba(89, 243, 255, 0.14);
+}
+
+body.path-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__enter.is-premium-ready:not(.is-disabled):not([disabled]),
+body.page-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__enter.is-premium-ready:not(.is-disabled):not([disabled]) {
+  border-color: rgba(202, 255, 248, 0.58);
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.15), rgba(6, 27, 34, 0.78)),
+    rgba(4, 16, 22, 0.88);
+  box-shadow:
+    0 0 0 1px rgba(202, 255, 248, 0.1),
+    0 0 24px rgba(89, 243, 255, 0.16),
+    inset 0 0 18px rgba(202, 255, 248, 0.055);
+}
+
+body.path-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__enter.is-premium-ready:not(.is-disabled):not([disabled]):hover,
+body.page-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__enter.is-premium-ready:not(.is-disabled):not([disabled]):hover {
+  border-color: rgba(202, 255, 248, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(202, 255, 248, 0.14),
+    0 0 30px rgba(89, 243, 255, 0.22),
+    inset 0 0 20px rgba(202, 255, 248, 0.07);
+}
+
+body.path-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__enter.is-premium-ready:not(.is-disabled):not([disabled]):focus-visible,
+body.page-dossier .ooh-generator:has([data-ooh-section="playlist"] .ooh-generator__option.is-selected):has([data-ooh-section="recruiter"] .ooh-generator__option.is-selected):has([data-ooh-section="campaignRoute"] .ooh-generator__option.is-selected):has([data-ooh-section="mission"] .ooh-generator__option.is-selected) .ooh-generator__enter.is-premium-ready:not(.is-disabled):not([disabled]):focus-visible {
+  outline: 0;
+  border-color: rgba(202, 255, 248, 0.78);
+  box-shadow:
+    0 0 0 3px rgba(89, 243, 255, 0.16),
+    0 0 30px rgba(89, 243, 255, 0.2),
+    inset 0 0 20px rgba(202, 255, 248, 0.07);
+}

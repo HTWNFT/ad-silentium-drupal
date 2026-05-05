@@ -332,7 +332,7 @@ class OohGameGeneratorBlock extends BlockBase {
         'lockedBody' => 'Authorization required for this system package.',
         'enterIncomplete' => 'Select playlist, recruiter path, campaign route, at least 3 attributes, and mission type.',
         'enterLocked' => 'Upgrade required for selected package.',
-        'enterReady' => 'Dossier assembled. Credits authorize launch.',
+        'enterReady' => 'PAYLOAD VERIFIED // READY FOR STAGING',
       ],
       'storage' => [
         'stateKey' => 'ooh_game_generator_state_v1',
