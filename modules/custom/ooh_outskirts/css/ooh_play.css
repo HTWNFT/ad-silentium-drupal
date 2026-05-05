@@ -81,3 +81,40 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
     inset 0 0 16px rgba(126, 244, 255, 0.045),
     0 0 18px rgba(126, 244, 255, 0.075);
 }
+
+/* Phase 99: unified readiness field cohesion. */
+
+body.path-play .ooh-play-session.ooh-play-briefing::before,
+body.page-play .ooh-play-session.ooh-play-briefing::before {
+  border-color: rgba(128, 244, 255, 0.036);
+  background:
+    linear-gradient(90deg, rgba(128, 244, 255, 0.024), transparent 14%, transparent 86%, rgba(128, 244, 255, 0.022)),
+    linear-gradient(180deg, rgba(216, 250, 255, 0.02), transparent 28%, transparent 72%, rgba(128, 244, 255, 0.018)),
+    radial-gradient(ellipse at 50% 88%, rgba(154, 246, 255, 0.026), transparent 46%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.01),
+    inset 0 0 64px rgba(84, 225, 255, 0.014),
+    0 0 38px rgba(84, 225, 255, 0.012);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing::after,
+body.page-play .ooh-play-session.ooh-play-briefing::after {
+  background:
+    radial-gradient(ellipse at 18% 18%, rgba(128, 244, 255, 0.03), transparent 30%),
+    radial-gradient(ellipse at 82% 78%, rgba(216, 250, 255, 0.022), transparent 32%),
+    linear-gradient(180deg, rgba(244, 255, 255, 0.014), transparent 24%, transparent 58%, rgba(128, 244, 255, 0.018)),
+    linear-gradient(90deg, transparent 8%, rgba(128, 244, 255, 0.012) 50%, transparent 92%);
+  opacity: 0.64;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions::before,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions::before {
+  border-color: rgba(154, 246, 255, 0.052);
+  background:
+    linear-gradient(90deg, rgba(154, 246, 255, 0.022), transparent 22%, transparent 78%, rgba(154, 246, 255, 0.02)),
+    linear-gradient(180deg, rgba(244, 255, 255, 0.014), rgba(84, 225, 255, 0.01)),
+    radial-gradient(ellipse at 50% 0%, rgba(216, 250, 255, 0.018), transparent 62%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.01),
+    0 0 26px rgba(84, 225, 255, 0.016);
+}
