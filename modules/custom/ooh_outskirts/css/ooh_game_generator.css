@@ -5296,6 +5296,46 @@ body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .
   transform: none;
 }
 
+/* Phase 76: pre-activation visual boundary */
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene.has-scene-asset .ooh-play-scene__visual,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene.has-scene-asset .ooh-play-scene__visual {
+  animation: none;
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__asset-video,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__asset-video {
+  opacity: 0.24;
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker {
+  border-color: rgba(190, 255, 248, 0.52);
+  box-shadow:
+    0 0 0 6px rgba(126, 244, 255, 0.025),
+    0 0 14px rgba(126, 244, 255, 0.08);
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker::before,
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker::after,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker::before,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker::after {
+  background: rgba(190, 255, 248, 0.42);
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__mission-label,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__mission-label {
+  border-color: rgba(184, 255, 248, 0.20);
+  background: rgba(4, 14, 18, 0.58);
+  color: rgba(226, 255, 252, 0.68);
+  box-shadow: none;
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__scanlines,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__scanlines {
+  opacity: 0.24;
+}
+
 body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-card,
 body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-card {
   border-color: rgba(184, 255, 248, 0.24);
