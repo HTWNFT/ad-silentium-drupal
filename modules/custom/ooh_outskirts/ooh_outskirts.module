@@ -6,6 +6,20 @@
  */
 
 /**
+ * Phase 95: persistent progression planning scaffold.
+ *
+ * Future saved operator progression may connect to these existing surfaces only
+ * after an explicit persistence/schema phase:
+ * - Dossier path selection -> operator_path.
+ * - Dossier selectedAttributes -> operator_attribute_signals.
+ * - /play read-only evolution/channel readouts -> operator_channel_stability.
+ * - Account/credits utility surfaces -> operator_clearance_tier.
+ *
+ * Not implemented in Phase 95: no database writes, no database schema, no user
+ * fields, no new localStorage keys, no unlock logic, and no gameplay effects.
+ */
+
+/**
  * Implements hook_theme().
  */
 
