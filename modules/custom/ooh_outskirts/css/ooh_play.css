@@ -395,3 +395,25 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--readout .ooh-play__hud-value {
   text-shadow: 0 0 6px rgba(216, 250, 255, 0.028);
 }
+
+/* Phase 109: active readiness clarity pass. */
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before {
+  border-color: rgba(216, 250, 255, 0.032);
+  background:
+    linear-gradient(90deg, rgba(154, 246, 255, 0.011), transparent 30%, transparent 70%, rgba(154, 246, 255, 0.009)),
+    linear-gradient(180deg, rgba(244, 255, 255, 0.01), rgba(84, 225, 255, 0.005));
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--command .ooh-play__hud-value,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--readout .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--command .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--readout .ooh-play__hud-value {
+  color: rgba(238, 254, 255, 0.88);
+  text-shadow: 0 0 5px rgba(216, 250, 255, 0.026);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
