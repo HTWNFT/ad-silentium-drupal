@@ -5279,6 +5279,75 @@ body.page-play .ooh-play-scene__briefing-panel .ooh-generator__panel-head::after
   letter-spacing: 0.17em;
 }
 
+/* Phase 75 — Calm Staged Readiness */
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene {
+  border-color: rgba(184, 255, 248, 0.22);
+  box-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(126, 244, 255, 0.055),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__visual,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__visual {
+  filter: brightness(0.86) contrast(0.96) saturate(0.82);
+  transform: none;
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-card {
+  border-color: rgba(184, 255, 248, 0.24);
+  background:
+    linear-gradient(180deg, rgba(10, 26, 32, 0.78), rgba(4, 12, 17, 0.82)),
+    rgba(4, 12, 17, 0.82);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+    0 0 18px rgba(126, 244, 255, 0.055);
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-kicker,
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-kicker,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-copy {
+  color: rgba(218, 255, 252, 0.78);
+  text-shadow: 0 0 8px rgba(126, 244, 255, 0.10);
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene[data-path="DOOMED"] .ooh-play-scene__marker,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene[data-path="DOOMED"] .ooh-play-scene__marker {
+  border-color: rgba(184, 255, 248, 0.62);
+  box-shadow:
+    0 0 0 8px rgba(126, 244, 255, 0.035),
+    0 0 20px rgba(126, 244, 255, 0.10);
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene[data-path="DOOMED"] .ooh-play-scene__visual::after,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene[data-path="DOOMED"] .ooh-play-scene__visual::after {
+  opacity: 0.42;
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__activate,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__activate {
+  border-color: rgba(202, 255, 248, 0.64);
+  background: linear-gradient(180deg, rgba(12, 38, 44, 0.88), rgba(5, 18, 24, 0.92));
+  color: rgba(236, 255, 252, 0.94);
+  box-shadow:
+    inset 0 0 16px rgba(126, 244, 255, 0.045),
+    0 0 18px rgba(126, 244, 255, 0.08);
+}
+
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__activate:hover,
+body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__activate:focus-visible,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__activate:hover,
+body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__activate:focus-visible {
+  border-color: rgba(236, 255, 252, 0.86);
+  box-shadow:
+    inset 0 0 18px rgba(126, 244, 255, 0.06),
+    0 0 22px rgba(126, 244, 255, 0.12);
+}
+
 /* Phase 65 — Combat Shell Perception Calibration */
 
 body.path-play .ooh-play-session .ooh-play-scene.is-combat-shell,

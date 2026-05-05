@@ -2786,7 +2786,7 @@ function passiveBehaviorPreviewLabel() {
         }
 
         if (sceneStatus) {
-          sceneStatus.textContent = buildSceneStatus(routeId, pathKey, missionLabel) + (payloadAudit.routeFallbackUsed ? ' Route fallback used: TERRA.' : '');
+          sceneStatus.textContent = 'MISSION STAGED // PAYLOAD VERIFIED // AWAITING ACTIVATION' + (payloadAudit.routeFallbackUsed ? ' // ROUTE FALLBACK: TERRA' : '');
         }
 
         if (activateButton) {
