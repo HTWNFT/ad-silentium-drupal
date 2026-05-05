@@ -3,6 +3,8 @@
 /* Phase 98 hover/focus confirmation remains unchanged and non-combat scoped. */
 /* Phase 120 final audit: Phase 96-119 non-combat perception arc is stable, scoped, and complete. */
 /* No persistence, gameplay, state behavior, or combat-shell styling is represented in this CSS arc. */
+/* Phase 121 combat gate: .is-combat-shell remains isolated from the completed non-combat arc. */
+/* Future combat-shell perception work must begin from explicit .is-combat-shell selectors. */
 
 /* Phase 96: passive system presence scaffold. */
 
