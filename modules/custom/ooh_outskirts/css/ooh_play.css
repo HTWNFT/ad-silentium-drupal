@@ -1,6 +1,8 @@
 /* Non-combat perception map: all readiness layers must stay outside .is-combat-shell. */
 /* Phase 119 integrity: neutral, active, and shared non-combat scopes verified before final audit. */
 /* Phase 98 hover/focus confirmation remains unchanged and non-combat scoped. */
+/* Phase 120 final audit: Phase 96-119 non-combat perception arc is stable, scoped, and complete. */
+/* No persistence, gameplay, state behavior, or combat-shell styling is represented in this CSS arc. */
 
 /* Phase 96: passive system presence scaffold. */
 
