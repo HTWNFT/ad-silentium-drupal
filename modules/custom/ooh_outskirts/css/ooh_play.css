@@ -570,3 +570,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
   color: rgba(238, 254, 255, 0.86);
   text-shadow: 0 0 4px rgba(216, 250, 255, 0.021);
 }
+
+/* Phase 122: combat shell selector foundation. */
+/* Future combat-shell perception root: .ooh-play-session.ooh-play-briefing.is-combat-shell */
+/* Keep future combat-shell rules isolated to .is-combat-shell and separate from the non-combat arc. */
+/* Foundation only: no declarations, no visual output, no behavior changes. */
