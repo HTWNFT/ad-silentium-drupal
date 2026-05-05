@@ -3,8 +3,8 @@
 /* Phase 96: passive system presence scaffold. */
 
 /* Combat-shell boundary: base briefing shell field is non-combat only. */
-body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before,
-body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before {
+body.path-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell)::before,
+body.page-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell)::before {
   content: "";
   position: absolute;
   inset: 18px;
@@ -21,8 +21,8 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before
     0 0 34px rgba(84, 225, 255, 0.018);
 }
 
-body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after,
-body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after {
+body.path-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell)::after,
+body.page-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell)::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -35,8 +35,8 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after 
   opacity: 0.72;
 }
 
-body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__inner,
-body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__inner {
+body.path-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell) .ooh-generator__inner,
+body.page-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell) .ooh-generator__inner {
   position: relative;
   z-index: 1;
 }
@@ -44,14 +44,14 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-ge
 /* Phase 97: calm pre-engagement decision-weight presence. */
 
 /* Neutral/active action area scaffold; later phases tune state-specific ceilings. */
-body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions,
-body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions {
+body.path-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell) .ooh-play-scene__actions,
+body.page-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell) .ooh-play-scene__actions {
   position: relative;
   isolation: isolate;
 }
 
-body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions::before,
-body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions::before {
+body.path-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell) .ooh-play-scene__actions::before,
+body.page-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell) .ooh-play-scene__actions::before {
   content: "";
   position: absolute;
   inset: -9px -10px;
@@ -67,8 +67,8 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
     0 0 20px rgba(84, 225, 255, 0.024);
 }
 
-body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions > *,
-body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions > * {
+body.path-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell) .ooh-play-scene__actions > *,
+body.page-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), .is-mission-active):not(.is-combat-shell) .ooh-play-scene__actions > * {
   position: relative;
   z-index: 1;
 }
