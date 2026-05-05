@@ -308,6 +308,22 @@ final class OohPlayBlock extends BlockBase {
             <span class="ooh-generator__status-value" data-ooh-briefing-field="path">Pending</span>
           </div>
           <div class="ooh-play-scene__field">
+            <span class="ooh-generator__status-label">Operator Evolution</span>
+            <span class="ooh-generator__status-value" data-ooh-briefing-field="operatorEvolution">Pending</span>
+          </div>
+          <div class="ooh-play-scene__field">
+            <span class="ooh-generator__status-label">Path Resonance</span>
+            <span class="ooh-generator__status-value" data-ooh-briefing-field="pathResonance">Pending</span>
+          </div>
+          <div class="ooh-play-scene__field">
+            <span class="ooh-generator__status-label">Channel Stability</span>
+            <span class="ooh-generator__status-value" data-ooh-briefing-field="channelStability">Pending</span>
+          </div>
+          <div class="ooh-play-scene__field">
+            <span class="ooh-generator__status-label">Observed Signals</span>
+            <span class="ooh-generator__status-value" data-ooh-briefing-field="observedSignals">Pending</span>
+          </div>
+          <div class="ooh-play-scene__field">
             <span class="ooh-generator__status-label">Recruiter</span>
             <span class="ooh-generator__status-value" data-ooh-briefing-field="recruiter">Pending</span>
           </div>

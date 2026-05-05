@@ -157,6 +157,51 @@
     return attributes.slice(0, 3).join(' / ');
   }
 
+  function capabilitySignalText(payload) {
+    const attributes = Array.isArray(payload.selectedAttributes) ? payload.selectedAttributes : [];
+    const normalized = attributes.map(function (attribute) {
+      return String(attribute || '')
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toUpperCase();
+    }).filter(Boolean);
+
+    if (!normalized.length) {
+      return 'OBSERVED SIGNALS // BASELINE DISCIPLINE';
+    }
+
+    return 'OBSERVED SIGNALS // ' + normalized.slice(0, 4).join(' / ');
+  }
+
+  // Phase 90: non-persistent operator evolution preview.
+  function buildOperatorEvolutionPreview(payload, routeId, pathKey) {
+    const missionKey = cleanId(payload.missionType || ((payload.mission || {}).id), 'mission');
+    const moodKey = playlistMoodAttribute(payload);
+    const routeKey = routeId || routeIdFromPayload(payload);
+    const pressureSignal = /assault|strike|breach|survive|hold|endure/.test(missionKey) ||
+      moodKey === 'impact' ||
+      moodKey === 'pulse';
+    let pathResonance = 'PATH RESONANCE // ' + pathKey;
+    let channelStability = pressureSignal ? 'CHANNEL STABILITY // LOW' : 'CHANNEL STABILITY // BASELINE';
+
+    if (pathKey === 'DOOMED') {
+      pathResonance = 'PATH RESONANCE // VOLATILE';
+      channelStability = pressureSignal ? 'CHANNEL STABILITY // UNSTABLE BUT RESPONSIVE' : 'CHANNEL STABILITY // LOW';
+    }
+    else if (pathKey === 'MERGED') {
+      pathResonance = 'PATH RESONANCE // SYNCHRONIZED';
+      channelStability = pressureSignal ? 'CHANNEL STABILITY // CLEAN SIGNAL UNDER LOAD' : 'CHANNEL STABILITY // CLEAN SIGNAL';
+    }
+
+    return {
+      operatorEvolution: 'OPERATOR EVOLUTION // BASELINE OBSERVED',
+      pathResonance: pathResonance,
+      channelStability: channelStability + ' // ' + routeLabel(routeKey).toUpperCase(),
+      observedSignals: capabilitySignalText(payload)
+    };
+  }
+
   function getMissionObjective(missionType, routeId) {
     const route = getRouteLanguage(routeId);
     const missionKey = cleanId(missionType, 'mission');
@@ -2765,6 +2810,7 @@ function passiveBehaviorPreviewLabel() {
         const scene = sceneCopy(routeId, payload, selectedPrompt);
         const assembly = buildMissionAssembly(payload);
         const pathKey = recruiterPathKey(payload);
+        const evolutionPreview = buildOperatorEvolutionPreview(payload, routeId, pathKey);
         const missionLabel = payloadAudit.missingFields.indexOf('mission') === -1 ? itemLabel(payload.mission, payload.missionType || 'Unconfirmed') : 'MISSION // UNCONFIRMED';
         const combatState = createCombatState();
 
@@ -2834,6 +2880,10 @@ function passiveBehaviorPreviewLabel() {
           route: routeLabel(routeId),
           mission: missionLabel,
           path: payloadAudit.missingFields.indexOf('path') === -1 ? itemLabel(payload.path, 'Unconfirmed') : 'PATH // UNCONFIRMED',
+          operatorEvolution: evolutionPreview.operatorEvolution,
+          pathResonance: evolutionPreview.pathResonance,
+          channelStability: evolutionPreview.channelStability,
+          observedSignals: evolutionPreview.observedSignals,
           recruiter: [recruiter.name || ((payload.character || {}).recruiterName), recruiter.title || ((payload.character || {}).recruiterTitle)].filter(Boolean).join(' / ') || 'Unassigned',
           playlist: payloadAudit.missingFields.indexOf('playlist') === -1 ? itemLabel(payload.playlist, 'Unselected') : 'PLAYLIST // UNCONFIRMED',
           prompt: selectedPrompt ? (selectedPrompt.title || selectedPrompt.id || 'Prompt Block') : 'Unavailable'
