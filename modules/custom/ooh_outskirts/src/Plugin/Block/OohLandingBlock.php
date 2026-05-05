@@ -93,7 +93,7 @@ HTML;
     <h1 class="ooh-hero__title ooh-game-title">AD SILENTIUM</h1>
 
     <p class="ooh-hero__subtitle">
-      Enter the dead zone. Build your path. Select your signal.
+      Enter the system. Assemble your dossier. Confirm your signal.
     </p>
 
     <div class="ooh-hero__actions">

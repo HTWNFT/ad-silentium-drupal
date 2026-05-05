@@ -383,7 +383,7 @@
               creditForm.hidden = true;
               if (creditStatusMessage) {
                 creditStatusMessage.textContent =
-                  'Starter credits reserved. Create or log in to attach them to your account.';
+                  'CREDITS // ACCESS RESERVED. LOGIN TO ATTACH ACCESS TO ACCOUNT.';
               }
             });
           }

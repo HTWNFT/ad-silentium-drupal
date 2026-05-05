@@ -59,7 +59,7 @@ final class OohPlayBlock extends BlockBase {
   public function defaultConfiguration(): array {
     return [
       'title' => 'Mission Briefing',
-      'subtitle' => 'Dossier accepted. Mission environment renderer online.',
+      'subtitle' => 'Dossier accepted. Mission staging renderer online.',
       'require_login' => FALSE,
       'playlist_options' => "rap|War Bangaz\nrock|War Rock",
       'recruiter_options' => "merged|Merged\ndoomed|Doomed",
@@ -148,10 +148,10 @@ final class OohPlayBlock extends BlockBase {
       $markup = '
 <section class="ooh-shell">
   <div class="ooh-card">
-    <h2 class="ooh-title">Access Required</h2>
-    <p class="ooh-subtitle">Sign in before entering the Stage 2 assembly flow.</p>
+    <h2 class="ooh-title">ACCESS REQUIRED</h2>
+    <p class="ooh-subtitle">LOGIN before mission staging.</p>
     <div class="ooh-row">
-      <a class="ooh-btn" href="' . htmlspecialchars($login_url, ENT_QUOTES, 'UTF-8') . '">Log in</a>
+      <a class="ooh-btn" href="' . htmlspecialchars($login_url, ENT_QUOTES, 'UTF-8') . '">LOGIN</a>
     </div>
   </div>
 </section>';
@@ -203,7 +203,7 @@ final class OohPlayBlock extends BlockBase {
         <div class="ooh-play-scene__mission-label" data-ooh-scene-mission-label>MISSION TYPE // PENDING</div>
         <div class="ooh-play-scene__staging-card">
           <span class="ooh-play-scene__staging-kicker">MISSION STATUS</span>
-          <span class="ooh-play-scene__staging-copy" data-ooh-scene-status>Scene staged. Awaiting activation order.</span>
+          <span class="ooh-play-scene__staging-copy" data-ooh-scene-status>MISSION STAGED // PAYLOAD VERIFIED // AWAITING ACTIVATION</span>
         </div>
         <aside class="ooh-play__hud" data-ooh-active-hud aria-label="Active mission HUD" aria-hidden="true">
           <div class="ooh-play__hud-panel ooh-play__hud-panel--command">

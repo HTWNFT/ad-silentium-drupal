@@ -716,8 +716,8 @@
         }
 
         function updateEnterState() {
-          const incompleteText = ((settings.labels || {}).enterIncomplete) || 'Select playlist, path, campaign route, and mission.';
-          const readyText = ((settings.labels || {}).enterReady) || 'Dossier assembled. Credits authorize launch.';
+          const incompleteText = ((settings.labels || {}).enterIncomplete) || 'ASSEMBLY INCOMPLETE // COMPLETE PRIOR DOSSIER STEPS';
+          const readyText = ((settings.labels || {}).enterReady) || 'PAYLOAD VERIFIED // READY FOR STAGING';
 
           enterBtn.classList.remove('is-disabled', 'is-premium-ready');
 

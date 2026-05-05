@@ -330,7 +330,7 @@ class OohGameGeneratorBlock extends BlockBase {
       'labels' => [
         'lockedTitle' => 'ACCESS RESTRICTED',
         'lockedBody' => 'Authorization required for this system package.',
-        'enterIncomplete' => 'Select playlist, recruiter path, campaign route, at least 3 attributes, and mission type.',
+        'enterIncomplete' => 'ASSEMBLY INCOMPLETE // COMPLETE PRIOR DOSSIER STEPS',
         'enterLocked' => 'Upgrade required for selected package.',
         'enterReady' => 'PAYLOAD VERIFIED // READY FOR STAGING',
       ],
@@ -358,7 +358,7 @@ class OohGameGeneratorBlock extends BlockBase {
       <p class="ooh-generator__eyebrow">SELECTED OPERATIONS // DOSSIER ASSEMBLY</p>
       <h2 class="ooh-generator__title">DOSSIER</h2>
       <p class="ooh-generator__intro">
-        Recruiters are standing by. Select soundtrack, path, and mission profile, then begin deployment.
+        Recruiters are standing by. Select soundtrack, path, and mission profile, then verify the payload for staging.
       </p>
     </div>
 
