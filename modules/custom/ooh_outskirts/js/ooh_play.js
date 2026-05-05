@@ -2107,6 +2107,15 @@ function passiveBehaviorPreviewLabel() {
       strikeOutcome.textContent = 'STRIKE EXECUTED: TARGET SUPPRESSED';
       renderCombatFoundationAudits();
       strikeOutcome.hidden = false;
+      const strikeRoot = executeStrikeButton.closest('[data-ooh-play]');
+      const strikeShell = strikeRoot ? strikeRoot.querySelector('[data-ooh-scene-shell]') : null;
+      const strikeRouteId = cleanId(strikeShell ? strikeShell.getAttribute('data-route') : '', 'terra');
+      const strikePathKey = strikeShell ? (strikeShell.getAttribute('data-path') || 'UNASSIGNED') : 'UNASSIGNED';
+      showSessionEvolutionFeedback(
+        strikeRoot,
+        sessionEvolutionFeedbackText(strikeRoot, strikePathKey, strikeRouteId) + ' // SIGNAL PATTERN RECORDED',
+        'STRIKE RESPONSE REGISTERED // SESSION LOCAL'
+      );
     });
 
     armButton.addEventListener('click', function () {
@@ -2340,6 +2349,36 @@ function passiveBehaviorPreviewLabel() {
     }, 780);
   }
 
+  // Phase 93: session-based evolution feedback loop.
+  function showSessionEvolutionFeedback(root, message, settleText) {
+    const readout = root ? root.querySelector('[data-ooh-action-readout]') : null;
+    if (!readout) {
+      return;
+    }
+
+    if (readout.oohEvolutionFeedbackTimer) {
+      window.clearTimeout(readout.oohEvolutionFeedbackTimer);
+    }
+
+    readout.textContent = message;
+    readout.oohEvolutionFeedbackTimer = window.setTimeout(function () {
+      readout.textContent = settleText;
+      readout.oohEvolutionFeedbackTimer = null;
+    }, 1400);
+  }
+
+  function sessionEvolutionFeedbackText(root, pathKey, routeId) {
+    const observedSignals = root ? root.querySelector('[data-ooh-briefing-field="observedSignals"]') : null;
+    const hasAttributeSignals = observedSignals &&
+      String(observedSignals.textContent || '').toUpperCase().indexOf('BASELINE DISCIPLINE') === -1;
+
+    if (hasAttributeSignals) {
+      return 'CAPABILITY SIGNAL STRENGTHENED // ' + pathKey + ' CHANNEL RESPONSE // ' + routeLabel(routeId).toUpperCase();
+    }
+
+    return 'OPERATOR RESPONSE REGISTERED // CHANNEL STABILITY INCREASED // ' + routeLabel(routeId).toUpperCase();
+  }
+
   function syncEncounterState(encounter, combatState) {
     if (!encounter || !combatState) {
       return;
@@ -2507,6 +2546,7 @@ function passiveBehaviorPreviewLabel() {
     if (actionReadout) {
       actionReadout.textContent = message + ' Passive inputs remain online.';
     }
+    showSessionEvolutionFeedback(root, sessionEvolutionFeedbackText(root, pathKey, routeId), message + ' Passive inputs remain online.');
     if (gateStatus) {
       gateStatus.textContent = message;
     }
