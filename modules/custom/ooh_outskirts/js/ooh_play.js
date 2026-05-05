@@ -179,6 +179,7 @@
     const missionKey = cleanId(payload.missionType || ((payload.mission || {}).id), 'mission');
     const moodKey = playlistMoodAttribute(payload);
     const routeKey = routeId || routeIdFromPayload(payload);
+    const attributes = Array.isArray(payload.selectedAttributes) ? payload.selectedAttributes : [];
     const pressureSignal = /assault|strike|breach|survive|hold|endure/.test(missionKey) ||
       moodKey === 'impact' ||
       moodKey === 'pulse';
@@ -195,7 +196,7 @@
     }
 
     return {
-      operatorEvolution: 'OPERATOR EVOLUTION // BASELINE OBSERVED',
+      operatorEvolution: attributes.length ? 'OPERATOR EVOLUTION // ATTRIBUTE SIGNALS OBSERVED' : 'OPERATOR EVOLUTION // BASELINE OBSERVED',
       pathResonance: pathResonance,
       channelStability: channelStability + ' // ' + routeLabel(routeKey).toUpperCase(),
       observedSignals: capabilitySignalText(payload)
