@@ -1,5 +1,8 @@
+/* Non-combat perception map: all readiness layers must stay outside .is-combat-shell. */
+
 /* Phase 96: passive system presence scaffold. */
 
+/* Combat-shell boundary: base briefing shell field is non-combat only. */
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before,
 body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before {
   content: "";
@@ -40,6 +43,7 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-ge
 
 /* Phase 97: calm pre-engagement decision-weight presence. */
 
+/* Neutral/active action area scaffold; later phases tune state-specific ceilings. */
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions,
 body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions {
   position: relative;
@@ -71,6 +75,7 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
 
 /* Phase 98: operator focus confirmation. */
 
+/* Hover/focus confirmation stays shared across non-combat states. */
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions .ooh-generator__overlay-btn:not(:disabled):hover,
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions .ooh-generator__overlay-btn:not(:disabled):focus-visible,
 body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions .ooh-generator__overlay-btn:not(:disabled):hover,
@@ -84,6 +89,7 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
 
 /* Phase 100: calm pre-activation gravity threshold. */
 
+/* Neutral pre-engagement commitment affordance before mission-active. */
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__activate:not(:disabled),
 body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__activate:not(:disabled) {
   border-color: rgba(216, 250, 255, 0.24);
@@ -98,6 +104,7 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
 
 /* Phase 101: activation commitment acknowledgement. */
 
+/* Active non-combat acknowledgement; not a combat shell signal. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before {
   border-color: rgba(216, 250, 255, 0.058);
@@ -124,6 +131,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 
 /* Phase 102: post-activation stability field. */
 
+/* Active non-combat shell field: settles after commitment. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::before,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::before {
   border-color: rgba(216, 250, 255, 0.032);
@@ -185,6 +193,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 
 /* Phase 104: active readout settling layer. */
 
+/* Active non-combat readout/panel integration. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-generator__panel,
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-card,
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
@@ -324,6 +333,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 
 /* Phase 108: active signal restraint layer. */
 
+/* Active restraint pass: caps panel and action-area visual energy. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before {
   border-color: rgba(216, 250, 255, 0.03);
@@ -361,6 +371,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 
 /* Phase 109: active readiness clarity pass. */
 
+/* Active readability pass; preserve restrained non-combat tone. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before {
   border-color: rgba(216, 250, 255, 0.032);
@@ -435,6 +446,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 
 /* Phase 111: active baseline lock. */
 
+/* Active baseline/ceiling lock: prevents drift after final balance. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::before,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::before {
   background:
@@ -446,6 +458,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 
 /* Phase 112: pre-engagement re-entry neutralization. */
 
+/* Neutral re-entry surface: keeps active visual weight from leaking backward. */
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell)::after,
 body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell)::after {
   background:
@@ -472,6 +485,7 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.
 
 /* Phase 113: neutral-to-active boundary calibration. */
 
+/* Boundary calibration: final neutral and active ceilings before combat shell. */
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell)::before,
 body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell)::before {
   border-color: rgba(128, 244, 255, 0.032);
