@@ -321,3 +321,40 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--readout .ooh-play__hud-value {
   text-shadow: 0 0 8px rgba(216, 250, 255, 0.038);
 }
+
+/* Phase 107: active non-combat continuity lock. */
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before {
+  border-color: rgba(216, 250, 255, 0.034);
+  background:
+    linear-gradient(90deg, rgba(154, 246, 255, 0.012), transparent 28%, transparent 72%, rgba(154, 246, 255, 0.01)),
+    linear-gradient(180deg, rgba(244, 255, 255, 0.01), rgba(84, 225, 255, 0.006));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.006),
+    0 0 14px rgba(84, 225, 255, 0.006);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--command,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--readout,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--command,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--readout {
+  border-color: rgba(216, 250, 255, 0.048);
+  background:
+    linear-gradient(180deg, rgba(244, 255, 255, 0.011), rgba(84, 225, 255, 0.005)),
+    linear-gradient(90deg, rgba(128, 244, 255, 0.004), transparent 32%, transparent 68%, rgba(128, 244, 255, 0.004));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.007),
+    0 0 12px rgba(84, 225, 255, 0.005);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--command .ooh-play__hud-value,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--readout .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--command .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--readout .ooh-play__hud-value {
+  text-shadow: 0 0 7px rgba(216, 250, 255, 0.032);
+}
