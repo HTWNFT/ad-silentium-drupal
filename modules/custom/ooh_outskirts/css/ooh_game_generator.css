@@ -5777,6 +5777,85 @@ body.page-play .ooh-play-session.is-combat-shell .ooh-play-trigger-selector__exe
     0 12px 28px rgba(0, 0, 0, 0.28);
 }
 
+/* Phase 86: landing-to-dossier cohesion */
+
+body.path-dossier .ooh-generator,
+body.page-dossier .ooh-generator {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.30), rgba(0, 6, 12, 0.82)),
+    radial-gradient(circle at 50% 0%, rgba(89, 243, 255, 0.15), transparent 36%),
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.035), transparent 28%),
+    linear-gradient(180deg, rgba(3, 8, 14, 0.98), rgba(0, 2, 6, 0.99));
+}
+
+body.path-dossier .ooh-generator__inner,
+body.page-dossier .ooh-generator__inner {
+  animation-duration: 420ms;
+}
+
+body.path-dossier .ooh-generator__header,
+body.page-dossier .ooh-generator__header {
+  margin-bottom: 30px;
+}
+
+body.path-dossier .ooh-generator__title,
+body.page-dossier .ooh-generator__title {
+  color: #59f3ff;
+  text-shadow:
+    0 0 18px rgba(89, 243, 255, 0.30),
+    0 0 42px rgba(89, 243, 255, 0.16);
+}
+
+body.path-dossier .ooh-generator__intro,
+body.page-dossier .ooh-generator__intro {
+  color: rgba(226, 255, 255, 0.76);
+}
+
+body.path-dossier .ooh-generator__status,
+body.page-dossier .ooh-generator__status {
+  margin-bottom: 30px;
+}
+
+body.path-dossier .ooh-generator__panel[data-ooh-section="playlist"],
+body.page-dossier .ooh-generator__panel[data-ooh-section="playlist"] {
+  border-color: rgba(188, 255, 250, 0.30);
+  box-shadow:
+    0 20px 54px rgba(0, 0, 0, 0.30),
+    0 0 34px rgba(89, 243, 255, 0.075),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.028);
+}
+
+body.path-dossier .ooh-generator__panel[data-ooh-section="playlist"] .ooh-generator__panel-kicker,
+body.page-dossier .ooh-generator__panel[data-ooh-section="playlist"] .ooh-generator__panel-kicker {
+  border-color: rgba(188, 255, 250, 0.46);
+  background: rgba(9, 28, 36, 0.76);
+  color: rgba(238, 255, 252, 0.94);
+}
+
+body.path-dossier .ooh-generator__panel.is-step-locked,
+body.page-dossier .ooh-generator__panel.is-step-locked {
+  opacity: 0.42;
+  filter: saturate(0.68);
+}
+
+body.path-dossier .ooh-generator__enter:not(.is-premium-ready),
+body.page-dossier .ooh-generator__enter:not(.is-premium-ready) {
+  border-color: rgba(169, 255, 255, 0.26);
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.08), rgba(8, 20, 28, 0.72)),
+    rgba(3, 10, 16, 0.88);
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.035),
+    0 0 18px rgba(89, 243, 255, 0.055);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.path-dossier .ooh-generator__inner,
+  body.page-dossier .ooh-generator__inner {
+    animation: none;
+  }
+}
+
 body.path-play .ooh-play-session.is-combat-shell .ooh-play-trigger-selector__confirmation,
 body.page-play .ooh-play-session.is-combat-shell .ooh-play-trigger-selector__confirmation,
 body.path-play .ooh-play-session.is-combat-shell .ooh-play-trigger-selector__engagement-confirmed,
