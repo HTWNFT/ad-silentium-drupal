@@ -12,14 +12,59 @@
     }
   }
 
+  function humanizeId(value) {
+    return String(value || '')
+      .replace(/[_-]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .replace(/\b\w/g, function (letter) {
+        return letter.toUpperCase();
+      });
+  }
+
   function itemLabel(item, fallback) {
-    return item && item.label ? item.label : fallback;
+    if (item && item.label) {
+      return item.label;
+    }
+    if (typeof item === 'string' && item.trim()) {
+      return humanizeId(item);
+    }
+    return fallback;
   }
 
   function routeIdFromPayload(payload) {
-    const route = payload.campaignRoute || {};
-    const routeId = route.id || payload.campaignRouteId || '';
+    const route = payload.route || payload.campaignRoute || {};
+    const routeId = payload.routeId || ((payload.mission || {}).campaignRoute) || route.id || payload.campaignRouteId || '';
     return ['aer', 'mare', 'terra'].indexOf(routeId) !== -1 ? routeId : 'terra';
+  }
+
+  function payloadRouteId(payload) {
+    const route = payload.route || payload.campaignRoute || {};
+    const routeId = payload.routeId || ((payload.mission || {}).campaignRoute) || route.id || payload.campaignRouteId || '';
+    return ['aer', 'mare', 'terra'].indexOf(routeId) !== -1 ? routeId : '';
+  }
+
+  function auditPayload(payload) {
+    const missingFields = [];
+
+    if (!payload.playlist || !payload.playlist.id || !payload.playlist.label) {
+      missingFields.push('playlist');
+    }
+    if (!payload.path || !payload.path.id || !payload.path.label) {
+      missingFields.push('path');
+    }
+    if (!payload.mission || !payload.mission.id || !payload.mission.label) {
+      missingFields.push('mission');
+    }
+    if (!payloadRouteId(payload)) {
+      missingFields.push('route');
+    }
+
+    return {
+      payloadStatus: missingFields.length ? 'INCOMPLETE' : 'VALID',
+      missingFields: missingFields,
+      routeFallbackUsed: !payloadRouteId(payload)
+    };
   }
 
   function routeLabel(routeId) {
@@ -2706,6 +2751,7 @@ function passiveBehaviorPreviewLabel() {
         // Hydrate the /play scene from the Dossier payload stored before routing.
         const storedState = safeJsonParse(window.localStorage.getItem(stateKey), {}) || {};
         const payload = storedState.payload || {};
+        const payloadAudit = auditPayload(payload);
         const promptLibrary = (((drupalSettings || {}).ooh_outskirts || {}).missionPrompts) || {};
         const selectedPrompt = selectPromptBlock(payload, promptLibrary);
         payload.selectedPrompt = selectedPrompt;
@@ -2719,7 +2765,7 @@ function passiveBehaviorPreviewLabel() {
         const scene = sceneCopy(routeId, payload, selectedPrompt);
         const assembly = buildMissionAssembly(payload);
         const pathKey = recruiterPathKey(payload);
-        const missionLabel = itemLabel(payload.mission, payload.missionType || 'Unconfirmed');
+        const missionLabel = payloadAudit.missingFields.indexOf('mission') === -1 ? itemLabel(payload.mission, payload.missionType || 'Unconfirmed') : 'MISSION // UNCONFIRMED';
         const combatState = createCombatState();
 
         if (shell) {
@@ -2740,7 +2786,7 @@ function passiveBehaviorPreviewLabel() {
         }
 
         if (sceneStatus) {
-          sceneStatus.textContent = buildSceneStatus(routeId, pathKey, missionLabel);
+          sceneStatus.textContent = buildSceneStatus(routeId, pathKey, missionLabel) + (payloadAudit.routeFallbackUsed ? ' Route fallback used: TERRA.' : '');
         }
 
         if (activateButton) {
@@ -2787,9 +2833,9 @@ function passiveBehaviorPreviewLabel() {
         const fields = {
           route: routeLabel(routeId),
           mission: missionLabel,
-          path: itemLabel(payload.path, 'Unconfirmed'),
+          path: payloadAudit.missingFields.indexOf('path') === -1 ? itemLabel(payload.path, 'Unconfirmed') : 'PATH // UNCONFIRMED',
           recruiter: [recruiter.name || ((payload.character || {}).recruiterName), recruiter.title || ((payload.character || {}).recruiterTitle)].filter(Boolean).join(' / ') || 'Unassigned',
-          playlist: itemLabel(payload.playlist, 'Unselected'),
+          playlist: payloadAudit.missingFields.indexOf('playlist') === -1 ? itemLabel(payload.playlist, 'Unselected') : 'PLAYLIST // UNCONFIRMED',
           prompt: selectedPrompt ? (selectedPrompt.title || selectedPrompt.id || 'Prompt Block') : 'Unavailable'
         };
 
@@ -2820,6 +2866,9 @@ function passiveBehaviorPreviewLabel() {
         const debugEl = root.querySelector('[data-ooh-briefing-debug]');
         if (debugEl) {
           debugEl.textContent = JSON.stringify({
+            payloadStatus: payloadAudit.payloadStatus,
+            missingFields: payloadAudit.missingFields,
+            routeFallbackUsed: payloadAudit.routeFallbackUsed,
             payload: payload,
             selectedPrompt: selectedPrompt,
             missionAssembly: assembly

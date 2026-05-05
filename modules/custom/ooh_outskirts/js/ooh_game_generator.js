@@ -42,6 +42,18 @@
         let foundersUnlocked = Boolean(accessSettings.foundersUnlocked);
         const allowPreviewSelections = accessSettings.allowPreviewSelections !== false;
         const minimumAttributes = 3;
+        const playlistDiagnostics = {};
+        let payloadReadoutTimer = null;
+
+        function logPlaylistDiagnostic(key, message) {
+          if (playlistDiagnostics[key]) {
+            return;
+          }
+          playlistDiagnostics[key] = true;
+          if (window.console && typeof window.console.log === 'function') {
+            window.console.log(message);
+          }
+        }
 
         function getCredits() {
           const fallbackCredits = parseInt(((settings.credits || {}).initial || 60), 10);
@@ -307,6 +319,7 @@
 
         function updateSpotifyPreview(playlistItem) {
           if (!spotifyPreview || !spotifyPlayer) {
+            logPlaylistDiagnostic('preview-unavailable', 'OOH playlist preview unavailable — continuing without crash');
             return;
           }
 
@@ -336,6 +349,13 @@
           container.innerHTML = '';
 
           items.forEach(function (item) {
+            if (!item || !item.id) {
+              if (groupName === 'playlist') {
+                logPlaylistDiagnostic('invalid-option', 'OOH playlist option missing stable identifier — skipping option');
+              }
+              return;
+            }
+
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'ooh-generator__option';
@@ -758,8 +778,9 @@
           const selectedCampaignRoute = findItem('campaignRoute', state.campaignRoute);
           const missionResolvedRouteId = resolveCampaignRoute(selectedMission);
           const fallbackCampaignRoute = findItem('campaignRoute', missionResolvedRouteId) || findItem('campaignRoute', 'terra');
+          const selectedRoute = selectedCampaignRoute && selectedCampaignRoute.id !== 'mixed' ? selectedCampaignRoute : fallbackCampaignRoute;
           const finalRoute = selectedCampaignRoute || fallbackCampaignRoute;
-          const resolvedRouteId = finalRoute ? finalRoute.id : 'terra';
+          const resolvedRouteId = selectedRoute ? selectedRoute.id : missionResolvedRouteId;
           const recruiter = selectedPath ? (selectedPath.recruiter || null) : null;
           const selectedAttributes = (state.selectedAttributes && state.selectedAttributes.length) ?
             state.selectedAttributes.slice() :
@@ -783,6 +804,13 @@
             routeCreditTypes: (finalRoute.routeCreditTypes || []).slice(),
             description: finalRoute.description || ''
           } : null;
+          const route = selectedRoute ? {
+            id: selectedRoute.id,
+            label: selectedRoute.label,
+            environments: (selectedRoute.environments || []).slice(),
+            routeCreditTypes: (selectedRoute.routeCreditTypes || []).slice(),
+            description: selectedRoute.description || ''
+          } : null;
 
           return {
             playlist: findItem('playlist', state.playlist),
@@ -791,7 +819,10 @@
             selectedAttributes: selectedAttributes,
             character: character,
             campaignRoute: campaignRoute,
-            campaignRouteId: resolvedRouteId,
+            campaignRouteId: selectedCampaignRoute ? selectedCampaignRoute.id : resolvedRouteId,
+            route: route,
+            routeId: resolvedRouteId,
+            missionRouteId: missionResolvedRouteId,
             missionType: selectedMission ? selectedMission.id : null,
             mission: selectedMission,
             missionPrompts: missionPrompts,
@@ -800,6 +831,49 @@
             credits: getCredits(),
             generatedAt: new Date().toISOString()
           };
+        }
+
+        function validatePayload(payload) {
+          const missingFields = [];
+
+          if (!payload.playlist || !payload.playlist.id || !payload.playlist.label) {
+            missingFields.push('playlist');
+          }
+          if (!payload.path || !payload.path.id || !payload.path.label) {
+            missingFields.push('path');
+          }
+          if (!payload.mission || !payload.mission.id || !payload.mission.label) {
+            missingFields.push('mission');
+          }
+          if (!payload.routeId && !(payload.route && payload.route.id) && !(payload.campaignRoute && payload.campaignRoute.id)) {
+            missingFields.push('route');
+          }
+
+          return {
+            valid: missingFields.length === 0,
+            missingFields: missingFields
+          };
+        }
+
+        function showPayloadIncomplete() {
+          const message = 'PAYLOAD INCOMPLETE // COMPLETE DOSSIER SELECTIONS';
+          if (messageEl) {
+            messageEl.textContent = message;
+            return;
+          }
+
+          if (!enterBtn) {
+            return;
+          }
+
+          enterBtn.textContent = message;
+          if (payloadReadoutTimer) {
+            window.clearTimeout(payloadReadoutTimer);
+          }
+          payloadReadoutTimer = window.setTimeout(function () {
+            enterBtn.textContent = 'BEGIN';
+            payloadReadoutTimer = null;
+          }, 1800);
         }
 
         function escapeHtml(value) {
@@ -855,6 +929,14 @@
             }
 
             const payload = buildPayload();
+            const payloadValidation = validatePayload(payload);
+            if (!payloadValidation.valid) {
+              showPayloadIncomplete();
+              if (window.console && typeof window.console.log === 'function') {
+                window.console.log('OOH Dossier payload incomplete:', payloadValidation.missingFields);
+              }
+              return;
+            }
 
             try {
               // Persist the assembled payload for /play to hydrate the route scene and briefing.
@@ -881,6 +963,7 @@
         }
 
         refresh();
+        logPlaylistDiagnostic('initialized', 'OOH playlist selection initialized');
       });
     }
   };

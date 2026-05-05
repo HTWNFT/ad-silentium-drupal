@@ -1,4 +1,16 @@
 (function () {
+  const diagnostics = {};
+
+  function logOnce(key, message) {
+    if (diagnostics[key]) {
+      return;
+    }
+    diagnostics[key] = true;
+    if (window.console && typeof window.console.log === 'function') {
+      window.console.log(message);
+    }
+  }
+
   function spotifyEmbedUrl(spotifyUrl) {
     let parsed;
     const rawUrl = String(spotifyUrl || '').trim();
@@ -34,8 +46,11 @@
 
   document.addEventListener('click', function (e) {
 
-    const btn = e.target.closest('[data-ooh-playlist]');
-    if (!btn) return;
+    const target = e.target && typeof e.target.closest === 'function' ? e.target : null;
+    const btn = target ? target.closest('[data-ooh-playlist]') : null;
+    if (!btn) {
+      return;
+    }
 
     const spotifyUrl = btn.getAttribute('data-ooh-spotify');
     const shell = btn.closest('[data-ooh-generator]') || document;
@@ -45,11 +60,16 @@
     const embedUrl = spotifyEmbedUrl(spotifyUrl);
 
     if (!playerWrap || !player) {
+      logOnce('preview-unavailable', 'OOH playlist preview unavailable — continuing without crash');
       return;
     }
 
-    if (player && embedUrl) {
+    if (embedUrl) {
       player.setAttribute('src', embedUrl);
+    }
+    else {
+      player.removeAttribute('src');
+      logOnce('spotify-unavailable', 'OOH playlist Spotify data unavailable — continuing without crash');
     }
 
     if (playerName) {
@@ -61,7 +81,7 @@
       playerWrap.hidden = !embedUrl;
     }
 
-    console.log('Spotify loaded:', embedUrl || spotifyUrl);
+    // Future phase: optional in-game radio-style playlist switching after Dossier payload stability is confirmed.
 
   });
 })();
