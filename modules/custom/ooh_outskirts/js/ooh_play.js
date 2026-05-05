@@ -2114,7 +2114,8 @@ function passiveBehaviorPreviewLabel() {
       showSessionEvolutionFeedback(
         strikeRoot,
         sessionEvolutionFeedbackText(strikeRoot, strikePathKey, strikeRouteId) + ' // SIGNAL PATTERN RECORDED',
-        'STRIKE RESPONSE REGISTERED // SESSION LOCAL'
+        'STRIKE RESPONSE REGISTERED // SESSION LOCAL',
+        sessionContinuityText(strikePathKey)
       );
     });
 
@@ -2350,7 +2351,7 @@ function passiveBehaviorPreviewLabel() {
   }
 
   // Phase 93: session-based evolution feedback loop.
-  function showSessionEvolutionFeedback(root, message, settleText) {
+  function showSessionEvolutionFeedback(root, message, settleText, continuityText) {
     const readout = root ? root.querySelector('[data-ooh-action-readout]') : null;
     if (!readout) {
       return;
@@ -2359,11 +2360,20 @@ function passiveBehaviorPreviewLabel() {
     if (readout.oohEvolutionFeedbackTimer) {
       window.clearTimeout(readout.oohEvolutionFeedbackTimer);
     }
+    if (readout.oohEvolutionContinuityTimer) {
+      window.clearTimeout(readout.oohEvolutionContinuityTimer);
+    }
 
     readout.textContent = message;
     readout.oohEvolutionFeedbackTimer = window.setTimeout(function () {
       readout.textContent = settleText;
       readout.oohEvolutionFeedbackTimer = null;
+      if (continuityText) {
+        readout.oohEvolutionContinuityTimer = window.setTimeout(function () {
+          readout.textContent = continuityText;
+          readout.oohEvolutionContinuityTimer = null;
+        }, 1600);
+      }
     }, 1400);
   }
 
@@ -2377,6 +2387,18 @@ function passiveBehaviorPreviewLabel() {
     }
 
     return 'OPERATOR RESPONSE REGISTERED // CHANNEL STABILITY INCREASED // ' + routeLabel(routeId).toUpperCase();
+  }
+
+  // Phase 94: session return motivation signal.
+  function sessionContinuityText(pathKey) {
+    if (pathKey === 'DOOMED') {
+      return 'VOLATILE CHANNEL REMAINS AVAILABLE // OPERATOR PROFILE AWAITING NEXT STAGING';
+    }
+    if (pathKey === 'MERGED') {
+      return 'SYNCHRONIZED CHANNEL REMAINS AVAILABLE // OPERATOR PROFILE AWAITING NEXT STAGING';
+    }
+
+    return 'SIGNAL REMAINS AVAILABLE // OPERATOR PROFILE AWAITING NEXT STAGING';
   }
 
   function syncEncounterState(encounter, combatState) {
@@ -2546,7 +2568,7 @@ function passiveBehaviorPreviewLabel() {
     if (actionReadout) {
       actionReadout.textContent = message + ' Passive inputs remain online.';
     }
-    showSessionEvolutionFeedback(root, sessionEvolutionFeedbackText(root, pathKey, routeId), message + ' Passive inputs remain online.');
+    showSessionEvolutionFeedback(root, sessionEvolutionFeedbackText(root, pathKey, routeId), message + ' Passive inputs remain online.', sessionContinuityText(pathKey));
     if (gateStatus) {
       gateStatus.textContent = message;
     }
