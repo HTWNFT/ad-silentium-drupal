@@ -90,8 +90,8 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
 /* Phase 100: calm pre-activation gravity threshold. */
 
 /* Neutral pre-engagement commitment affordance before mission-active. */
-body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__activate:not(:disabled),
-body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__activate:not(:disabled) {
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__activate:not(:disabled),
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__activate:not(:disabled) {
   border-color: rgba(216, 250, 255, 0.24);
   background:
     linear-gradient(180deg, rgba(244, 255, 255, 0.024), rgba(84, 225, 255, 0.014)),
