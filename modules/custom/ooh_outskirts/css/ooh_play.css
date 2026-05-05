@@ -1,7 +1,7 @@
 /* Phase 96: passive system presence scaffold. */
 
-body.path-play .ooh-play-session.ooh-play-briefing::before,
-body.page-play .ooh-play-session.ooh-play-briefing::before {
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before {
   content: "";
   position: absolute;
   inset: 18px;
@@ -18,8 +18,8 @@ body.page-play .ooh-play-session.ooh-play-briefing::before {
     0 0 34px rgba(84, 225, 255, 0.018);
 }
 
-body.path-play .ooh-play-session.ooh-play-briefing::after,
-body.page-play .ooh-play-session.ooh-play-briefing::after {
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -32,8 +32,8 @@ body.page-play .ooh-play-session.ooh-play-briefing::after {
   opacity: 0.72;
 }
 
-body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__inner,
-body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__inner {
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__inner,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__inner {
   position: relative;
   z-index: 1;
 }
@@ -84,8 +84,8 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
 
 /* Phase 99: unified readiness field cohesion. */
 
-body.path-play .ooh-play-session.ooh-play-briefing::before,
-body.page-play .ooh-play-session.ooh-play-briefing::before {
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before {
   border-color: rgba(128, 244, 255, 0.036);
   background:
     linear-gradient(90deg, rgba(128, 244, 255, 0.024), transparent 14%, transparent 86%, rgba(128, 244, 255, 0.022)),
@@ -97,8 +97,8 @@ body.page-play .ooh-play-session.ooh-play-briefing::before {
     0 0 38px rgba(84, 225, 255, 0.012);
 }
 
-body.path-play .ooh-play-session.ooh-play-briefing::after,
-body.page-play .ooh-play-session.ooh-play-briefing::after {
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after {
   background:
     radial-gradient(ellipse at 18% 18%, rgba(128, 244, 255, 0.03), transparent 30%),
     radial-gradient(ellipse at 82% 78%, rgba(216, 250, 255, 0.022), transparent 32%),
