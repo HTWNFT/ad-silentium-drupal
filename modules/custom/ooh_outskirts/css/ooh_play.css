@@ -158,3 +158,43 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
     inset 0 0 14px rgba(126, 244, 255, 0.018),
     0 0 14px rgba(84, 225, 255, 0.018);
 }
+
+/* Phase 102: post-activation stability field. */
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::before,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::before {
+  border-color: rgba(216, 250, 255, 0.032);
+  background:
+    linear-gradient(90deg, rgba(128, 244, 255, 0.018), transparent 18%, transparent 82%, rgba(128, 244, 255, 0.016)),
+    linear-gradient(180deg, rgba(244, 255, 255, 0.018), transparent 34%, transparent 68%, rgba(128, 244, 255, 0.014)),
+    radial-gradient(ellipse at 50% 72%, rgba(216, 250, 255, 0.018), transparent 54%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.008),
+    inset 0 0 72px rgba(84, 225, 255, 0.01),
+    0 0 30px rgba(84, 225, 255, 0.008);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::after,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::after {
+  background:
+    linear-gradient(180deg, rgba(244, 255, 255, 0.012), transparent 30%, transparent 70%, rgba(128, 244, 255, 0.012)),
+    radial-gradient(ellipse at 50% 50%, rgba(216, 250, 255, 0.014), transparent 62%),
+    linear-gradient(90deg, transparent 10%, rgba(128, 244, 255, 0.008) 50%, transparent 90%);
+  opacity: 0.52;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__actions::before {
+  border-color: rgba(216, 250, 255, 0.046);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.01),
+    0 0 20px rgba(84, 225, 255, 0.01);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__activate:disabled,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__activate:disabled {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.018),
+    inset 0 0 12px rgba(126, 244, 255, 0.014),
+    0 0 12px rgba(84, 225, 255, 0.014);
+}
