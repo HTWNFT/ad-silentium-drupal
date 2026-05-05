@@ -93,11 +93,9 @@
             window.drupalSettings &&
             window.drupalSettings.ooh &&
             window.drupalSettings.ooh.credits;
-          const credits =
+          const creditCount =
             drupalSettingsCredits ??
-            landing.getAttribute('data-ooh-credits') ??
-            landing.getAttribute('data-ooh-placeholder-credits') ??
-            STARTER_CREDITS;
+            landing.getAttribute('data-ooh-credits');
 
           const loginDialog = document.getElementById('ooh-login-intent-dialog');
           const creditDropDialog = document.getElementById('ooh-credit-drop-dialog');
@@ -284,8 +282,10 @@
           }
 
           creditStatuses.forEach((creditStatus) => {
-            creditStatus.textContent = `CREDITS: ${credits}`;
-            creditStatus.setAttribute('title', 'Temporary placeholder credits until the credits ledger is implemented.');
+            creditStatus.textContent = creditCount !== null && creditCount !== undefined && creditCount !== '' ?
+              `CREDITS: ${creditCount}` :
+              'CREDITS // ACCESS READY';
+            creditStatus.setAttribute('title', 'Clearance credits are available for expanded access.');
           });
 
           buyCreditsButtons.forEach((button) => {
@@ -341,8 +341,6 @@
               openDialog(creditDropDialog);
             }, attempts ? 1800 : 3200);
           };
-
-          scheduleCreditDrop();
 
           if (creditYes && creditForm && creditChoice) {
             creditYes.addEventListener('click', () => {

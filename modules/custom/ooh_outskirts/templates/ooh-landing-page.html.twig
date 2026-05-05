@@ -1,7 +1,8 @@
 {% set ooh_logged_in = logged_in|default(false) %}
 {% set ooh_display_name = ooh_logged_in ? user.displayname|default('Operator') : '' %}
 {% set ooh_starter_credits = 60 %}
-{% set ooh_credits = credits|default(ooh_starter_credits) %}
+{% set ooh_has_credit_count = credits is defined %}
+{% set ooh_credits = credits|default('') %}
 {% set ooh_site_base_path = path('ooh_outskirts.credits')|replace({'/clearance/credits': ''}) %}
 {% set ooh_wind_src = ooh_site_base_path ~ '/modules/custom/ooh_outskirts/audio/wind-ambient.mp3' %}
 
@@ -9,7 +10,7 @@
   data-ooh-landing-ui
   data-ooh-logged-in="{{ ooh_logged_in ? '1' : '0' }}"
   data-ooh-display-name="{{ ooh_display_name }}"
-  data-ooh-credits="{{ ooh_credits }}"
+  {% if ooh_has_credit_count %}data-ooh-credits="{{ ooh_credits }}"{% endif %}
   data-ooh-placeholder-credits="{{ ooh_starter_credits }}"
   data-ooh-login-url="{{ path('user.login') }}"
   data-ooh-credits-url="{{ path('ooh_outskirts.credits') }}"
@@ -25,14 +26,22 @@
   <div class="ooh-account-cluster" aria-label="Account and credits">
     {% if ooh_logged_in %}
       <a class="ooh-utility-button ooh-credit-status" href="{{ path('ooh_outskirts.credits') }}" data-ooh-credit-status>
-        CREDITS: {{ ooh_credits|default(60) }}
+        {% if ooh_has_credit_count %}
+          CREDITS: {{ ooh_credits }}
+        {% else %}
+          CREDITS // ACCESS READY
+        {% endif %}
       </a>
       <a class="ooh-utility-button ooh-account-status" href="{{ path('user.page') }}" data-ooh-action="login">
         {{ ooh_display_name }}
       </a>
     {% else %}
       <a class="ooh-utility-button ooh-credit-status" href="{{ path('ooh_outskirts.credits') }}" data-ooh-credit-status>
-        CREDITS: {{ ooh_credits|default(60) }}
+        {% if ooh_has_credit_count %}
+          CREDITS: {{ ooh_credits }}
+        {% else %}
+          CREDITS // ACCESS READY
+        {% endif %}
       </a>
       <a class="ooh-utility-button ooh-buy-credits" href="{{ path('ooh_outskirts.credits') }}" data-ooh-buy-credits data-ooh-action="credits">
         BUY CREDITS
