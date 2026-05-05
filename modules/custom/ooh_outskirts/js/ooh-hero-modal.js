@@ -300,10 +300,6 @@
             query.get('ooh_login') === '1' ||
             query.has('email') ||
             query.has('return');
-          const hasPurchaseIntent =
-            query.get('buy_credits') === '1' ||
-            query.get('credits_offer') === 'starter';
-
           const loginConfirm = landing.querySelector('[data-ooh-login-confirm]');
           if (loginConfirm) {
             loginConfirm.setAttribute('href', loginUrl);
@@ -312,35 +308,6 @@
           if (hasLoginIntent && !isLoggedIn) {
             window.setTimeout(() => openDialog(loginDialog), 500);
           }
-          else if (hasPurchaseIntent) {
-            window.setTimeout(() => openDialog(purchaseDialog), 500);
-          }
-
-          const shouldShowCreditDrop = () => {
-            if (isLoggedIn || hasLoginIntent || hasPurchaseIntent) {
-              return false;
-            }
-            try {
-              return !window.localStorage.getItem(creditDropDismissedKey) &&
-                !window.localStorage.getItem(starterCreditsReservedKey);
-            }
-            catch (error) {
-              return false;
-            }
-          };
-
-          const scheduleCreditDrop = (attempts = 0) => {
-            if (!shouldShowCreditDrop() || attempts > 80) {
-              return;
-            }
-            window.setTimeout(() => {
-              if ((modal && modal.classList.contains('is-open')) || isAnyDialogOpen()) {
-                scheduleCreditDrop(attempts + 1);
-                return;
-              }
-              openDialog(creditDropDialog);
-            }, attempts ? 1800 : 3200);
-          };
 
           if (creditYes && creditForm && creditChoice) {
             creditYes.addEventListener('click', () => {

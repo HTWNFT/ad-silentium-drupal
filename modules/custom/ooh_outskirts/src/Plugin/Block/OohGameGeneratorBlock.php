@@ -421,7 +421,7 @@ class OohGameGeneratorBlock extends BlockBase {
           <h3 id="ooh-panel-campaign" class="ooh-generator__panel-title">Campaign Route</h3>
         </div>
         <p class="ooh-generator__panel-copy">
-          Select the deployment route before mission type assignment.
+          Select the staging route before mission type assignment.
         </p>
         <div class="ooh-generator__options" data-ooh-group="campaignRoute"></div>
       </section>
