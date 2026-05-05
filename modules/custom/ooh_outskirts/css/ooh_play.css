@@ -219,3 +219,40 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
     repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.003) 0 1px, transparent 1px 26px);
   opacity: 0.5;
 }
+
+/* Phase 104: active readout settling layer. */
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout {
+  border-color: rgba(216, 250, 255, 0.064);
+  background:
+    linear-gradient(180deg, rgba(244, 255, 255, 0.014), rgba(84, 225, 255, 0.008)),
+    linear-gradient(90deg, rgba(128, 244, 255, 0.008), transparent 24%, transparent 76%, rgba(128, 244, 255, 0.006));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.008),
+    0 0 18px rgba(84, 225, 255, 0.008);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-generator__status-value,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-value,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-generator__status-value,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-copy {
+  text-shadow: 0 0 10px rgba(216, 250, 255, 0.045);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-mission__debug {
+  background:
+    linear-gradient(180deg, rgba(244, 255, 255, 0.01), rgba(84, 225, 255, 0.006));
+  box-shadow: inset 0 0 18px rgba(84, 225, 255, 0.008);
+}
