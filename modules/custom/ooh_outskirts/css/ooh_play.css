@@ -1,0 +1,40 @@
+/* Phase 96: passive system presence scaffold. */
+
+body.path-play .ooh-play-session.ooh-play-briefing::before,
+body.page-play .ooh-play-session.ooh-play-briefing::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  z-index: 0;
+  pointer-events: none;
+  border: 1px solid rgba(128, 244, 255, 0.045);
+  border-radius: 10px;
+  background:
+    linear-gradient(90deg, rgba(128, 244, 255, 0.035), transparent 11%, transparent 89%, rgba(128, 244, 255, 0.03)),
+    linear-gradient(180deg, rgba(216, 250, 255, 0.026), transparent 18%, transparent 82%, rgba(128, 244, 255, 0.022));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.012),
+    inset 0 0 48px rgba(84, 225, 255, 0.018),
+    0 0 34px rgba(84, 225, 255, 0.018);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing::after,
+body.page-play .ooh-play-session.ooh-play-briefing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 22%, rgba(128, 244, 255, 0.038), transparent 24%),
+    radial-gradient(circle at 88% 76%, rgba(216, 250, 255, 0.026), transparent 28%),
+    linear-gradient(90deg, transparent, rgba(128, 244, 255, 0.014) 50%, transparent);
+  opacity: 0.72;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__inner,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__inner {
+  position: relative;
+  z-index: 1;
+}
+

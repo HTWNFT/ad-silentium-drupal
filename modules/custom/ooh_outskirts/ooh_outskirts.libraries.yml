@@ -43,6 +43,7 @@ play:
   css:
     theme:
       css/ooh_game_generator.css: {}
+      css/ooh_play.css: {}
   js:
     js/ooh_play.js: {}
   dependencies:
