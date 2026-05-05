@@ -909,3 +909,122 @@ body.path-dossier main {
   filter: blur(6px);
   opacity: 0.25;
 }
+
+/* Phase 80: landing button system */
+
+body:has(.ooh-landing-page) .ooh-hero__actions {
+  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button,
+body:has(.ooh-landing-page) .ooh-utility-button,
+body:has(.ooh-landing-page) .ooh-landing-dialog__button {
+  border-radius: 16px;
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button--primary {
+  min-width: min(100%, 260px);
+  min-height: 58px;
+  padding: 17px 34px;
+  border-color: rgba(188, 255, 250, 0.92);
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.20), rgba(8, 28, 36, 0.82)),
+    rgba(4, 16, 22, 0.86);
+  color: rgba(238, 255, 252, 0.98);
+  font-size: 15px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    inset 0 0 22px rgba(126, 244, 255, 0.08),
+    0 0 24px rgba(89, 243, 255, 0.32),
+    0 0 54px rgba(89, 243, 255, 0.16);
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button--secondary {
+  min-width: min(100%, 210px);
+  min-height: 42px;
+  border-color: rgba(169, 255, 255, 0.38);
+  background: rgba(0, 8, 16, 0.18);
+  color: rgba(202, 255, 250, 0.78);
+  box-shadow: none;
+}
+
+body:has(.ooh-landing-page) .ooh-account-cluster .ooh-utility-button {
+  min-height: 34px;
+  padding: 9px 13px;
+  border-color: rgba(169, 255, 255, 0.42);
+  background: rgba(0, 8, 16, 0.54);
+  color: rgba(202, 255, 250, 0.84);
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.05),
+    0 0 12px rgba(89, 243, 255, 0.10);
+}
+
+body:has(.ooh-landing-page) .ooh-account-cluster .ooh-buy-credits,
+body:has(.ooh-landing-page) .ooh-account-cluster .ooh-login-link,
+body:has(.ooh-landing-page) .ooh-account-cluster .ooh-account-status {
+  border-color: rgba(188, 255, 250, 0.54);
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.06),
+    0 0 16px rgba(89, 243, 255, 0.14);
+}
+
+body:has(.ooh-landing-page) .ooh-credit-status {
+  border-color: rgba(169, 255, 255, 0.24);
+  color: rgba(202, 255, 250, 0.58);
+  box-shadow: none;
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button:hover,
+body:has(.ooh-landing-page) .ooh-hero__button:focus-visible,
+body:has(.ooh-landing-page) .ooh-utility-button:hover,
+body:has(.ooh-landing-page) .ooh-utility-button:focus-visible,
+body:has(.ooh-landing-page) .ooh-landing-dialog__button:hover,
+body:has(.ooh-landing-page) .ooh-landing-dialog__button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(218, 255, 252, 0.98);
+  background: rgba(89, 243, 255, 0.18);
+  color: rgba(238, 255, 252, 0.98);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18),
+    0 0 22px rgba(89, 243, 255, 0.30);
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button--primary:hover,
+body:has(.ooh-landing-page) .ooh-hero__button--primary:focus-visible {
+  background:
+    linear-gradient(180deg, rgba(126, 244, 255, 0.28), rgba(10, 36, 44, 0.90)),
+    rgba(4, 18, 24, 0.92);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.20),
+    inset 0 0 24px rgba(126, 244, 255, 0.10),
+    0 0 32px rgba(89, 243, 255, 0.42),
+    0 0 68px rgba(89, 243, 255, 0.20);
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button--secondary:hover,
+body:has(.ooh-landing-page) .ooh-hero__button--secondary:focus-visible {
+  background: rgba(89, 243, 255, 0.10);
+  color: rgba(238, 255, 252, 0.94);
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button:active,
+body:has(.ooh-landing-page) .ooh-utility-button:active,
+body:has(.ooh-landing-page) .ooh-landing-dialog__button:active {
+  transform: translateY(0) scale(0.985);
+  box-shadow:
+    inset 0 0 18px rgba(126, 244, 255, 0.08),
+    0 0 14px rgba(89, 243, 255, 0.16);
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button:disabled,
+body:has(.ooh-landing-page) .ooh-hero__button[aria-disabled="true"],
+body:has(.ooh-landing-page) .ooh-utility-button:disabled,
+body:has(.ooh-landing-page) .ooh-utility-button[aria-disabled="true"],
+body:has(.ooh-landing-page) .ooh-landing-dialog__button:disabled,
+body:has(.ooh-landing-page) .ooh-landing-dialog__button[aria-disabled="true"] {
+  opacity: 0.48;
+  pointer-events: none;
+  box-shadow: none;
+}

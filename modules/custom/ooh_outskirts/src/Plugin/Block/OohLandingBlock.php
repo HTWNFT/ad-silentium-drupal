@@ -97,11 +97,11 @@ HTML;
     </p>
 
     <div class="ooh-hero__actions">
-      <a class="ooh-hero__button ooh-hero__button--primary" href="{$dossier_url}">
-        ENTER DOSSIER
+      <a class="ooh-hero__button ooh-hero__button--primary" href="{$dossier_url}" data-ooh-action="enter">
+        ENTER
       </a>
 
-      <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue" type="button">
+      <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue" type="button" data-ooh-action="prologue">
         READ PROLOGUE
       </button>
     </div>

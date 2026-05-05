@@ -27,17 +27,17 @@
       <a class="ooh-utility-button ooh-credit-status" href="{{ path('ooh_outskirts.credits') }}" data-ooh-credit-status>
         CREDITS: {{ ooh_credits|default(60) }}
       </a>
-      <a class="ooh-utility-button ooh-account-status" href="{{ path('user.page') }}">
+      <a class="ooh-utility-button ooh-account-status" href="{{ path('user.page') }}" data-ooh-action="login">
         {{ ooh_display_name }}
       </a>
     {% else %}
       <a class="ooh-utility-button ooh-credit-status" href="{{ path('ooh_outskirts.credits') }}" data-ooh-credit-status>
         CREDITS: {{ ooh_credits|default(60) }}
       </a>
-      <a class="ooh-utility-button ooh-buy-credits" href="{{ path('ooh_outskirts.credits') }}" data-ooh-buy-credits>
+      <a class="ooh-utility-button ooh-buy-credits" href="{{ path('ooh_outskirts.credits') }}" data-ooh-buy-credits data-ooh-action="credits">
         BUY CREDITS
       </a>
-      <a class="ooh-utility-button ooh-login-link" href="{{ path('user.login') }}" data-ooh-login-link>
+      <a class="ooh-utility-button ooh-login-link" href="{{ path('user.login') }}" data-ooh-login-link data-ooh-action="login">
         LOGIN
       </a>
     {% endif %}
@@ -68,11 +68,11 @@
       <h1 class="ooh-hero__title ooh-game-title">AD SILENTIUM</h1>
 
       <div class="ooh-hero__actions">
-        <a class="ooh-hero__button ooh-hero__button--primary" href="{{ path('ooh_outskirts.dossier') }}">
-          ENTER DOSSIER
+        <a class="ooh-hero__button ooh-hero__button--primary" href="{{ path('ooh_outskirts.dossier') }}" data-ooh-action="enter">
+          ENTER
         </a>
 
-        <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue" type="button">
+        <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue" type="button" data-ooh-action="prologue">
           READ PROLOGUE
         </button>
       </div>
@@ -165,7 +165,7 @@
         Buy credits and continue into the dossier.
       </p>
       <div class="ooh-landing-dialog__actions">
-        <a class="ooh-landing-dialog__button" href="{{ path('ooh_outskirts.credits') }}">BUY CREDITS</a>
+        <a class="ooh-landing-dialog__button" href="{{ path('ooh_outskirts.credits') }}" data-ooh-action="credits">BUY CREDITS</a>
         <button class="ooh-landing-dialog__button ooh-landing-dialog__button--ghost" type="button" data-ooh-dialog-close>NOT NOW</button>
       </div>
     </div>

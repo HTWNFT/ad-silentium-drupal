@@ -13,7 +13,6 @@
         const modal = document.getElementById('ooh-prologue-modal');
         const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
         const crawl = document.getElementById('ooh-prologue-crawl');
-        const prologueSeenKey = 'ooh_prologue_seen_landing_v1';
 
         const restartCrawl = () => {
           if (!crawl) {
@@ -51,16 +50,6 @@
         }
         if (backdrop) {
           backdrop.addEventListener('click', closeModal);
-        }
-
-        try {
-          if (!window.localStorage.getItem(prologueSeenKey)) {
-            window.localStorage.setItem(prologueSeenKey, '1');
-            window.setTimeout(openModal, 900);
-          }
-        }
-        catch (error) {
-          window.setTimeout(openModal, 900);
         }
 
         document.addEventListener('keydown', (event) => {

@@ -19,7 +19,6 @@
         const modal = landing.querySelector('#ooh-prologue-modal');
         const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
         const crawl = landing.querySelector('#ooh-prologue-crawl');
-        const prologueSeenKey = 'ooh_prologue_seen_landing_v1';
 
         if (!root) {
           warnOnce('hero-missing', 'OOH landing: hero root not found.');
@@ -67,16 +66,6 @@
         }
         if (backdrop) {
           backdrop.addEventListener('click', closeModal);
-        }
-
-        try {
-          if (!window.localStorage.getItem(prologueSeenKey)) {
-            window.localStorage.setItem(prologueSeenKey, '1');
-            window.setTimeout(openModal, 900);
-          }
-        }
-        catch (error) {
-          window.setTimeout(openModal, 900);
         }
 
         document.addEventListener('keydown', (event) => {
