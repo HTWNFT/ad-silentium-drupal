@@ -465,6 +465,13 @@
           return attributes.slice();
         }
 
+        function attributeSignalRuleText() {
+          const count = Array.isArray(state.selectedAttributes) ? state.selectedAttributes.length : 0;
+          return count ?
+            'ATTRIBUTE SIGNALS DETECTED // REFLECTED IN STAGING' :
+            'ATTRIBUTE SIGNALS // BASELINE DISCIPLINE';
+        }
+
         function renderRecruiterPanel() {
           if (!recruiterPanel) {
             return;
@@ -521,12 +528,12 @@
               '<pre class="ooh-generator__recruiter-script" data-ooh-recruiter-script aria-live="polite"></pre>' +
               '<div class="ooh-generator__recruiter-meta">' +
                 '<div>' +
-                  '<div class="ooh-generator__recruiter-label">Attributes</div>' +
+                  '<div class="ooh-generator__recruiter-label">Attribute Signals</div>' +
                   '<div class="ooh-generator__attribute-chips" data-ooh-attribute-chips>' + attributes.map(function (attribute) {
                     const isSelected = state.selectedAttributes.indexOf(attribute) !== -1;
                     return '<button type="button" class="ooh-generator__attribute-chip' + (isSelected ? ' is-selected' : '') + '" data-ooh-attribute="' + escapeHtml(attribute) + '" aria-pressed="' + (isSelected ? 'true' : 'false') + '">' + escapeHtml(attribute) + '</button>';
                   }).join('') + '</div>' +
-                  '<div class="ooh-generator__attribute-rule" data-ooh-attribute-rule>Minimum ' + minimumAttributes + ' attributes required.</div>' +
+                  '<div class="ooh-generator__attribute-rule" data-ooh-attribute-rule>' + attributeSignalRuleText() + '</div>' +
                 '</div>' +
                 '<div>' +
                   '<div class="ooh-generator__recruiter-label">Recommended For</div>' +
@@ -561,7 +568,7 @@
 
               if (index !== -1) {
                 if (selected.length <= minimumAttributes) {
-                  showAttributeRule('Minimum ' + minimumAttributes + ' attributes required before BEGIN.');
+                  showAttributeRule('ATTRIBUTE SIGNALS // MINIMUM ' + minimumAttributes + ' REQUIRED FOR STAGING');
                   return;
                 }
                 selected.splice(index, 1);
@@ -592,6 +599,11 @@
             chip.classList.toggle('is-selected', isSelected);
             chip.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
           });
+
+          const rule = recruiterPanel.querySelector('[data-ooh-attribute-rule]');
+          if (rule && !rule.classList.contains('is-warning')) {
+            rule.textContent = attributeSignalRuleText();
+          }
         }
 
         function showAttributeRule(message) {
@@ -603,7 +615,7 @@
           rule.textContent = message;
           rule.classList.add('is-warning');
           window.setTimeout(function () {
-            rule.textContent = 'Minimum ' + minimumAttributes + ' attributes required.';
+            rule.textContent = attributeSignalRuleText();
             rule.classList.remove('is-warning');
           }, 1800);
         }
