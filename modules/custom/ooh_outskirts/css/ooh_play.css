@@ -198,3 +198,24 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
     inset 0 0 12px rgba(126, 244, 255, 0.014),
     0 0 12px rgba(84, 225, 255, 0.014);
 }
+
+/* Phase 103: operational readiness quiet life. */
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::before,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::before {
+  background:
+    linear-gradient(90deg, rgba(128, 244, 255, 0.016), transparent 20%, transparent 80%, rgba(128, 244, 255, 0.014)),
+    linear-gradient(180deg, rgba(244, 255, 255, 0.016), transparent 36%, transparent 66%, rgba(128, 244, 255, 0.012)),
+    radial-gradient(ellipse at 50% 70%, rgba(216, 250, 255, 0.016), transparent 56%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.004) 0 1px, transparent 1px 16px);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::after,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)::after {
+  background:
+    linear-gradient(180deg, rgba(244, 255, 255, 0.01), transparent 32%, transparent 70%, rgba(128, 244, 255, 0.01)),
+    radial-gradient(ellipse at 50% 52%, rgba(216, 250, 255, 0.012), transparent 64%),
+    repeating-linear-gradient(90deg, rgba(128, 244, 255, 0.003) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.003) 0 1px, transparent 1px 26px);
+  opacity: 0.5;
+}
