@@ -5414,8 +5414,14 @@ body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .
 
 body.path-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene[data-path="DOOMED"] .ooh-play-scene__visual::after,
 body.page-play .ooh-play-session:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene[data-path="DOOMED"] .ooh-play-scene__visual::after {
+  background:
+    radial-gradient(circle at 28% 58%, rgba(190, 255, 248, 0.07), transparent 24%),
+    repeating-linear-gradient(92deg, rgba(190, 255, 248, 0.035) 0 2px, transparent 2px 48px),
+    linear-gradient(90deg, rgba(98, 247, 255, 0.035) 1px, transparent 1px);
   opacity: 0.42;
 }
+
+/* Phase 79: /play state boundary audit */
 
 /* Phase 78: context-aware staged signal */
 
