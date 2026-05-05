@@ -38,3 +38,33 @@ body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__inner {
   z-index: 1;
 }
 
+/* Phase 97: calm pre-engagement decision-weight presence. */
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions {
+  position: relative;
+  isolation: isolate;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions::before,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions::before {
+  content: "";
+  position: absolute;
+  inset: -9px -10px;
+  z-index: -1;
+  pointer-events: none;
+  border: 1px solid rgba(154, 246, 255, 0.075);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(154, 246, 255, 0.032), transparent 18%, transparent 82%, rgba(154, 246, 255, 0.026)),
+    linear-gradient(180deg, rgba(244, 255, 255, 0.018), rgba(84, 225, 255, 0.012));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.012),
+    0 0 20px rgba(84, 225, 255, 0.024);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions > *,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions > * {
+  position: relative;
+  z-index: 1;
+}
