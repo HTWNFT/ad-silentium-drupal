@@ -1133,3 +1133,32 @@ body:has(.ooh-landing-page) .ooh-account-cluster .ooh-account-status {
     max-width: 100%;
   }
 }
+
+/* Phase 85: primary CTA composition */
+
+body:has(.ooh-landing-page) .ooh-hero__actions {
+  gap: 14px;
+  margin-top: 42px;
+  max-width: min(100%, 320px);
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button--primary {
+  width: min(100%, 280px);
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button--secondary {
+  width: min(100%, 210px);
+  border-color: rgba(169, 255, 255, 0.28);
+  background: rgba(0, 8, 16, 0.10);
+  color: rgba(202, 255, 250, 0.64);
+}
+
+body:has(.ooh-landing-page) .ooh-hero__button--secondary:hover,
+body:has(.ooh-landing-page) .ooh-hero__button--secondary:focus-visible {
+  border-color: rgba(188, 255, 250, 0.58);
+  background: rgba(89, 243, 255, 0.08);
+  color: rgba(238, 255, 252, 0.88);
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.05),
+    0 0 14px rgba(89, 243, 255, 0.14);
+}
