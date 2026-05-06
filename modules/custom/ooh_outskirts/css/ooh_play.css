@@ -1853,6 +1853,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains lifecycle-neutral, stable, and free of lifecycle dependency. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 283 is documentation-only and enforces lifecycle neutrality constraints. */
+/* Phase 284 audit: strict visibility neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce show/hide logic or conditional visibility. */
+/* No display toggling, visibility switching, or conditional rendering is permitted. */
+/* Elements must not appear, disappear, or change presence under any condition. */
+/* No hidden states, reveal patterns, or conditional existence may be introduced. */
+/* Visual presence must remain constant and invariant at all times. */
+/* The current system remains visibility-neutral, stable, and free of presence toggling. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 284 is documentation-only and enforces visibility neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
