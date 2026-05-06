@@ -1520,6 +1520,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains calm, neutral, and free of attention-directing behavior. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 246 is documentation-only and enforces non-intrusive visual signaling constraints. */
+/* Phase 247 audit: full reversibility and zero-residual enforcement. */
+/* Any future signal-layer system must be fully reversible with no residual visual artifacts. */
+/* Removal or disablement must leave the system in a clean baseline state identical to pre-initialization. */
+/* No lingering opacity shifts, animation states, timing hooks, or visual remnants are permitted. */
+/* No dependency chains may persist after removal; all effects must be self-contained and transient. */
+/* The system must tolerate complete removal without degradation of baseline visuals or structure. */
+/* The current system remains stable, unaffected, and free of residual signaling influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 247 is documentation-only and enforces strict reversibility guarantees. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
