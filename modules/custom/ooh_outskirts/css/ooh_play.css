@@ -1799,6 +1799,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains fallback-neutral, stable, and free of alternate behavior paths. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 277 is documentation-only and enforces fallback neutrality constraints. */
+/* Phase 278 audit: strict extensibility neutrality of signal-layer systems. */
+/* Future signal-layer systems must not include hooks, extension points, or anticipatory structures. */
+/* No placeholders, reserved patterns, or future-facing scaffolding is permitted. */
+/* No design may imply future expansion, augmentation, or modular extension. */
+/* All systems must remain complete, closed, and non-extensible in structure. */
+/* No implicit or explicit extension pathways may be introduced. */
+/* The current system remains extensibility-neutral, stable, and free of forward-looking structure. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 278 is documentation-only and enforces extensibility neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
