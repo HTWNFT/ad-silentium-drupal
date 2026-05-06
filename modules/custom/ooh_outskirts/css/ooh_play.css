@@ -1763,6 +1763,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains specificity-neutral, stable, and free of selector dependency. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 273 is documentation-only and enforces specificity neutrality constraints. */
+/* Phase 274 audit: strict timing neutrality of signal-layer systems. */
+/* Future signal-layer systems must not depend on timing functions, delays, or durations. */
+/* No synchronization, sequencing, or time-based coordination mechanisms are permitted. */
+/* Visual behavior must not rely on elapsed time, timing curves, or temporal alignment. */
+/* No dependency on requestAnimationFrame, CSS timing functions, or timing orchestration is allowed. */
+/* All presence must remain temporally constant and independent of time progression. */
+/* The current system remains timing-neutral, stable, and free of temporal dependency. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 274 is documentation-only and enforces timing neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
