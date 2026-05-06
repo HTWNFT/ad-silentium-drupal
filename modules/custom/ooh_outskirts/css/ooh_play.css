@@ -964,3 +964,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Phase 149 deferred: no safe single-property containment layer was added. */
 /* box-shadow, background, and filter are already occupied by locked combat-shell layers and would override existing values. */
 /* Internal containment refinement remains reserved for a separately audited additive path. */
+
+/* Phase 150 audit: Phase 149 correctly deferred instead of overriding locked layers. */
+/* box-shadow, background, and filter remain occupied/reserved; no internal containment property was added. */
+/* Future containment work requires a separately audited additive path. */
