@@ -1781,6 +1781,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains resource-neutral, stable, and free of external dependencies. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 275 is documentation-only and enforces resource neutrality constraints. */
+/* Phase 276 audit: strict persistence neutrality of signal-layer systems. */
+/* Future signal-layer systems must not store, cache, or persist any state across time or sessions. */
+/* No memory of prior conditions, states, or visual output is permitted. */
+/* No localStorage, sessionStorage, cookies, or cached state dependencies may be introduced. */
+/* Visual output must remain stateless and identical across reloads and re-entry. */
+/* No continuity, recall, or historical influence may affect signal-layer behavior. */
+/* The current system remains persistence-neutral, stable, and fully stateless. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 276 is documentation-only and enforces persistence neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
