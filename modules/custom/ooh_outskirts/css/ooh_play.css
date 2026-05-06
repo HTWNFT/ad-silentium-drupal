@@ -1817,6 +1817,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains dependency-neutral, stable, and free of external reliance. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 279 is documentation-only and enforces dependency neutrality constraints. */
+/* Phase 280 audit: strict configuration neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce configuration flags, toggles, or settings. */
+/* No adjustable parameters, runtime options, or user/system configuration is permitted. */
+/* All behavior must remain fixed, unconditional, and non-configurable. */
+/* No variation based on environment variables, feature flags, or configuration inputs is allowed. */
+/* Signal-layer systems must not expose or depend on configurable state. */
+/* The current system remains configuration-neutral, stable, and free of adjustable behavior. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 280 is documentation-only and enforces configuration neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
