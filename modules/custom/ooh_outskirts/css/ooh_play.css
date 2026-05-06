@@ -906,3 +906,6 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Combat-shell exit/re-entry leaves no CSS residue and requires no persistence, JS, gameplay, or backend behavior. */
 /* Phase 134 integrity: Phase 133 audit map remains accurate after final combat-shell CSS review. */
 /* Combat-shell visual ceilings remain baseline-locked with no animation, pulse, warning escalation, or gameplay behavior. */
+/* Phase 135 completion: Phase 123-134 combat-shell perception arc is complete and stable. */
+/* Combat-shell styling remains isolated to .is-combat-shell; the non-combat arc remains unaffected. */
+/* No gameplay systems exist in CSS, and future combat-shell work must build from this locked baseline. */
