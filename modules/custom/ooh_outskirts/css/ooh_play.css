@@ -1181,3 +1181,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No readiness channel is selected, activated, or exposed. */
 /* No checkpoint cue, affordance, or escalation is introduced. */
 /* Future readiness exposure requires a separate audited phase. */
+
+/* Phase 193 audit: readiness exposure prerequisites only are defined. */
+/* Readiness remains inactive, unselected, and non-player-facing. */
+/* No visual output, cue, affordance, or escalation is introduced. */
+/* Checkpoint execution remains unavailable. */
+/* Future exposure requires explicit selector and declaration changes in a separate audited phase. */
