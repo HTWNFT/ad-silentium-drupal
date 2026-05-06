@@ -1147,3 +1147,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No checkpoint was executed in Phase 186. */
 /* No selector, declaration, or readiness channel was introduced. */
 /* Future activation still requires explicit checkpoint validation in a separately audited phase. */
+
+/* Phase 187 prerequisites: checkpoint execution requires an explicit future phase. */
+/* The future phase must re-confirm property safety, selector isolation, and cascade safety. */
+/* No selector or declaration may be introduced during prerequisite definition. */
+/* No checkpoint is executed and no readiness channel is selected or activated in Phase 187. */
