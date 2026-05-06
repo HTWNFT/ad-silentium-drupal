@@ -968,3 +968,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Phase 150 audit: Phase 149 correctly deferred instead of overriding locked layers. */
 /* box-shadow, background, and filter remain occupied/reserved; no internal containment property was added. */
 /* Future containment work requires a separately audited additive path. */
+
+/* Phase 151 marker: Phase 145-150 readiness/deferral arc is closed. */
+/* Future readiness work must use a separately audited additive path without overriding occupied properties. */
+/* Combat-shell work remains .is-combat-shell scoped and non-combat locked. */
