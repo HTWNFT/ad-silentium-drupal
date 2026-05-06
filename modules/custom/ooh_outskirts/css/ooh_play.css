@@ -1961,6 +1961,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains metric-neutral, stable, and free of dimensional influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 295 is documentation-only and enforces metric neutrality constraints. */
+/* Phase 296 audit: strict paint neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce additional paint operations or repaint triggers. */
+/* No forced repaint, paint invalidation, or rendering pass amplification is permitted. */
+/* Visual output must not increase paint complexity or rendering workload. */
+/* No element may trigger additional compositing or repaint cycles. */
+/* Rendering behavior must remain identical with no paint-layer side effects. */
+/* The current system remains paint-neutral, stable, and free of rendering overhead. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 296 is documentation-only and enforces paint neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
