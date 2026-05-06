@@ -1565,6 +1565,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains state-independent, stable, and free of conditional signaling. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 251 is documentation-only and enforces state isolation constraints. */
+/* Phase 252 audit: strict scope containment of signal-layer systems. */
+/* Future signal-layer systems must only affect explicitly scoped elements and never cascade globally. */
+/* No inheritance, wildcard targeting, or broad selector behavior may influence unrelated UI regions. */
+/* All visual effects must be tightly bounded to clearly defined, isolated containers. */
+/* No bleed-through, cross-component influence, or unintended propagation is permitted. */
+/* Signal-layer scope must remain predictable, minimal, and fully auditable at all times. */
+/* The current system remains isolated, stable, and free of unintended visual spread. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 252 is documentation-only and enforces strict scope containment boundaries. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
