@@ -1047,3 +1047,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No pseudo-element, wrapper surface, selector, or declaration has been introduced. */
 /* Protected properties remain locked and unmodified. */
 /* The channel remains subject to future separately audited activation; no visual readiness layer is added in Phase 166. */
+
+/* Phase 167 checklist: future channel activation must identify the exact selector before adding declarations. */
+/* The selector must remain .is-combat-shell scoped and avoid protected properties. */
+/* The channel must remain independently removable and visually subordinate. */
+/* No readiness channel is activated in Phase 167. */
