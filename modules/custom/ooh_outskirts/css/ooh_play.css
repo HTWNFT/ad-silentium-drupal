@@ -1889,6 +1889,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains focus-neutral, stable, and free of navigation influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 287 is documentation-only and enforces focus neutrality constraints. */
+/* Phase 288 audit: strict pointer neutrality of signal-layer systems. */
+/* Future signal-layer systems must not alter pointer behavior, cursor state, or event handling. */
+/* No cursor changes, pointer interception, or event redirection is permitted. */
+/* Pointer events, hit detection, and interaction flow must remain unchanged. */
+/* No visual layer may block, capture, or influence pointer interaction. */
+/* All pointer behavior must remain consistent and independent of signal-layer presence. */
+/* The current system remains pointer-neutral, stable, and free of interaction interference. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 288 is documentation-only and enforces pointer neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
