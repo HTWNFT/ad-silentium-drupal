@@ -1211,3 +1211,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No implicit or accidental activation is permitted through styling or inheritance. */
 /* No checkpoint cue, affordance, escalation, or execution is introduced. */
 /* Future activation requires an explicit, audited phase with selector and declaration changes. */
+
+/* Phase 198 audit: readiness channel selection constraints only are defined. */
+/* No readiness channel is selected, exposed, activated, or implemented. */
+/* Readiness remains inactive, isolated, and non-player-facing. */
+/* No checkpoint cue, affordance, escalation, or execution is introduced. */
+/* Future channel selection requires a separate audited phase with explicit selector and declaration changes. */
