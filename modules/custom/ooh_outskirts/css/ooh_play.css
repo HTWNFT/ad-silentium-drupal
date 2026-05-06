@@ -1077,3 +1077,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No exact readiness channel was selected or activated. */
 /* No pseudo-element, wrapper surface, selector, declaration, or custom property was introduced. */
 /* Future activation still requires a separately audited additive phase. */
+
+/* Phase 173 decision: future work must explicitly choose activate or defer before adding declarations. */
+/* Any activation must identify one exact isolated readiness channel first. */
+/* Any deferral must explain which constraint prevented activation. */
+/* No readiness channel is selected or activated in Phase 173. */
