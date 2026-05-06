@@ -1844,6 +1844,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains context-neutral, stable, and free of environmental awareness. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 282 is documentation-only and enforces context neutrality constraints. */
+/* Phase 283 audit: strict lifecycle neutrality of signal-layer systems. */
+/* Future signal-layer systems must not depend on initialization, teardown, or lifecycle events. */
+/* No mount, unmount, load, unload, or render-phase behaviors are permitted. */
+/* No lifecycle hooks, sequencing, or execution stages may influence visual output. */
+/* Visual presence must remain constant and independent of system lifecycle transitions. */
+/* No state change may occur as a result of lifecycle progression. */
+/* The current system remains lifecycle-neutral, stable, and free of lifecycle dependency. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 283 is documentation-only and enforces lifecycle neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
