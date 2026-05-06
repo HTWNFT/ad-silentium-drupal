@@ -960,3 +960,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Phase 148 audit: Phase 145-147 added only calm combat-shell visual readiness affordance. */
 /* Readiness layering remains scoped to .is-combat-shell with no animation, pulse, motion, urgency, escalation, or combat logic. */
 /* Future work must remain additive, visual-only, and keep the non-combat arc locked. */
+
+/* Phase 149 deferred: no safe single-property containment layer was added. */
+/* box-shadow, background, and filter are already occupied by locked combat-shell layers and would override existing values. */
+/* Internal containment refinement remains reserved for a separately audited additive path. */
