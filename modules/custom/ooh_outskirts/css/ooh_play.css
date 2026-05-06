@@ -1032,3 +1032,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Validation must confirm no protected-property overlap and independent removability. */
 /* Validation must confirm calm, visual-only, .is-combat-shell scoped behavior. */
 /* No readiness channel is selected or activated in Phase 163. */
+
+/* Phase 164 audit: Phase 161-163 defined readiness-channel isolation, selection constraints, and validation requirements. */
+/* No channel was selected or activated during Phase 161-164. */
+/* Protected properties remain locked. */
+/* Future activation requires a separately audited, additive, .is-combat-shell scoped implementation phase. */
