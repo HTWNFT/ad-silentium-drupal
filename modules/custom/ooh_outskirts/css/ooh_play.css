@@ -997,3 +997,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Protected properties remain locked unless separately audited. */
 /* No new visual readiness layer was added during Phases 153-156. */
 /* Future work may proceed only through additive, separately audited, .is-combat-shell scoped channels. */
+
+/* Phase 157 inventory: candidate future channels include separately audited pseudo-elements, wrapper-only surfaces, or custom properties. */
+/* No candidate channel is activated in Phase 157. */
+/* Protected properties remain locked. */
+/* Future visual work must remain additive, calm, .is-combat-shell scoped, and non-combat locked. */
