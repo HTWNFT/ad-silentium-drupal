@@ -1646,6 +1646,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains naming-neutral, stable, and free of semantic influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 260 is documentation-only and enforces naming neutrality constraints. */
+/* Phase 261 audit: strict activation neutrality of signal-layer systems. */
+/* Future signal-layer systems must never activate implicitly or automatically. */
+/* No default-on states, auto-initialization, or passive activation behaviors are permitted. */
+/* All activation must be explicit, isolated, and independently controlled. */
+/* No environmental, temporal, or contextual condition may trigger activation. */
+/* Absence of activation must remain the default and expected baseline state. */
+/* The current system remains inactive, stable, and free of implicit activation paths. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 261 is documentation-only and enforces activation neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
