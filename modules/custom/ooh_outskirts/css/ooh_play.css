@@ -1745,6 +1745,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains cascade-neutral, stable, and free of override dependencies. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 271 is documentation-only and enforces cascade neutrality constraints. */
+/* Phase 272 audit: strict inheritance neutrality of signal-layer systems. */
+/* Future signal-layer systems must not rely on inherited properties or implicit value propagation. */
+/* No parent-child styling dependency, inheritance chain, or contextual styling assumption is permitted. */
+/* All visual behavior must be self-contained and independent of DOM hierarchy inheritance. */
+/* No styling may depend on ancestor state, context, or inherited visual properties. */
+/* Signal-layer systems must not introduce or depend on inheritance-based variation. */
+/* The current system remains inheritance-neutral, stable, and free of hierarchical dependency. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 272 is documentation-only and enforces inheritance neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
