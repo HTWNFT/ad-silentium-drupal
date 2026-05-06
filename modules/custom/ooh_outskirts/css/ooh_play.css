@@ -1871,6 +1871,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains interaction-neutral, stable, and free of surface alteration. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 285 is documentation-only and enforces interaction-surface neutrality constraints. */
+/* Phase 286 audit: strict scroll neutrality of signal-layer systems. */
+/* Future signal-layer systems must not influence scroll behavior or viewport interaction. */
+/* No scroll locking, offset manipulation, or scroll-triggered variation is permitted. */
+/* No element may shift position relative to scroll or viewport changes. */
+/* No parallax, fixed-position behavior, or scroll-based transformation may be introduced. */
+/* The scrolling experience must remain unchanged and unaffected at all times. */
+/* The current system remains scroll-neutral, stable, and free of viewport interaction influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 286 is documentation-only and enforces scroll neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
