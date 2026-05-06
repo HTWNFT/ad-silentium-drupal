@@ -1673,6 +1673,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains input-neutral, stable, and free of interaction-driven variation. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 263 is documentation-only and enforces input neutrality constraints. */
+/* Phase 264 audit: strict layering neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce new stacking contexts or compositing layers. */
+/* No z-index manipulation, transform stacking, or rendering layer promotion is permitted. */
+/* Signal-layer visuals must not alter paint order, stacking hierarchy, or compositing behavior. */
+/* No GPU promotion, isolation contexts, or rendering side effects may be introduced. */
+/* All visual presence must coexist within existing layering without modification. */
+/* The current system remains layering-neutral, stable, and free of rendering hierarchy changes. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 264 is documentation-only and enforces rendering-layer neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
