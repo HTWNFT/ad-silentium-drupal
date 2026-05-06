@@ -916,3 +916,6 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Phase 137 readiness: Phase 123-136 combat-shell baseline can support future isolated visual extensions. */
 /* Future extensions must stay .is-combat-shell scoped while the non-combat arc remains locked and untouched. */
 /* Gameplay systems, persistence, and backend behavior do not belong in this CSS layer. */
+/* Phase 138 sequencing: Phase 123-135 is the initial combat-shell perception arc. */
+/* Phase 136-138 define extension gates and readiness for future phased combat-shell work. */
+/* Future combat-shell work must follow phased sequencing without retroactive baseline changes. */
