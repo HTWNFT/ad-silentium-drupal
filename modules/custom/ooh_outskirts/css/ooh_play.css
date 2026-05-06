@@ -1042,3 +1042,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* The channel is nominated only, not activated. */
 /* It must avoid protected properties: outline, outline-offset, transition, filter, box-shadow, and background. */
 /* Future implementation must remain calm, visual-only, additive, independently removable, and non-combat locked. */
+
+/* Phase 166 audit: the nominated readiness channel remains unactivated. */
+/* No pseudo-element, wrapper surface, selector, or declaration has been introduced. */
+/* Protected properties remain locked and unmodified. */
+/* The channel remains subject to future separately audited activation; no visual readiness layer is added in Phase 166. */
