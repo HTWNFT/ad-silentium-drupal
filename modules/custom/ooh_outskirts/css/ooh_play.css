@@ -1718,6 +1718,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains opacity-neutral, stable, and free of transparency effects. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 268 is documentation-only and enforces opacity neutrality constraints. */
+/* Phase 269 audit: strict effect neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce filters, distortions, or post-processing effects. */
+/* No blur, brightness, contrast, grayscale, or visual filter manipulation is permitted. */
+/* No visual warping, distortion, or rendering alteration may be introduced. */
+/* All rendering must remain raw, unfiltered, and visually unmodified. */
+/* No composited effect layers or post-render transformations are allowed. */
+/* The current system remains effect-neutral, stable, and free of visual processing influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 269 is documentation-only and enforces effect neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
