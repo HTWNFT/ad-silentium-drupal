@@ -1619,6 +1619,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains fully isolated, stable, and free of cross-system linkage. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 257 is documentation-only and enforces total system isolation boundaries. */
+/* Phase 258 audit: strict optionality and non-assumptive presence of signal-layer systems. */
+/* Future signal-layer systems must be fully optional and never assumed to exist. */
+/* No baseline UI, layout, or visual expectation may depend on signal-layer presence. */
+/* Absence of any signal-layer must produce a complete and correct baseline experience. */
+/* No fallback, placeholder, or degraded mode may imply missing signal-layer functionality. */
+/* Systems must not signal their own absence, failure, or inactive state. */
+/* The current system remains complete, self-sufficient, and independent of any signal-layer presence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 258 is documentation-only and enforces strict optionality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
