@@ -1970,6 +1970,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains paint-neutral, stable, and free of rendering overhead. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 296 is documentation-only and enforces paint neutrality constraints. */
+/* Phase 297 audit: strict compositing neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce compositing changes or layer promotion. */
+/* No GPU acceleration triggers, compositing boundaries, or pipeline alterations are permitted. */
+/* No will-change usage, isolation contexts, or hardware acceleration hints may be introduced. */
+/* Rendering must remain within the existing compositing model without modification. */
+/* No additional compositing layers or rendering pipeline branches are allowed. */
+/* The current system remains composite-neutral, stable, and free of GPU/rendering pipeline influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 297 is documentation-only and enforces compositing neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
