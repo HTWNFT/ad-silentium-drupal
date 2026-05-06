@@ -1574,6 +1574,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains isolated, stable, and free of unintended visual spread. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 252 is documentation-only and enforces strict scope containment boundaries. */
+/* Phase 253 audit: strict determinism of signal-layer systems. */
+/* Future signal-layer systems must produce identical visual output under identical conditions. */
+/* No randomness, variance, or time-based drift in visual presentation is permitted. */
+/* No stochastic animation timing, noise functions, or unpredictable visual states may be introduced. */
+/* All behavior must be consistent, repeatable, and fully predictable across sessions. */
+/* The system must remain visually stable regardless of runtime duration or re-entry. */
+/* The current system remains deterministic, stable, and free of visual variance. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 253 is documentation-only and enforces deterministic visual constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
