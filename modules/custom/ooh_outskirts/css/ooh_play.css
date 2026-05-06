@@ -897,3 +897,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
     inset 0 0 10px rgba(126, 244, 255, 0.012),
     0 0 10px rgba(126, 244, 255, 0.014);
 }
+
+/* Phase 130 audit: Phase 123-129 combat-shell perception is isolated to .is-combat-shell. */
+/* Non-combat selectors remain unmodified by this combat arc. */
+/* CSS contains no gameplay systems; combat-shell behavior remains outside this layer. */
+/* Initial combat-shell perception arc is contained, scoped, and baseline-locked. */
