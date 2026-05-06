@@ -1062,3 +1062,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* It must not override existing .is-combat-shell rules through cascade dominance. */
 /* It must remain visually subordinate regardless of cascade order and require no !important. */
 /* No readiness channel is activated in Phase 169. */
+
+/* Phase 170 audit: Phase 168-169 established selector isolation and cascade safety requirements. */
+/* No readiness channel was selected or activated during Phase 168-170. */
+/* Protected properties remain locked and unaffected. */
+/* Future activation must occur through a separately audited, additive, .is-combat-shell scoped phase. */
