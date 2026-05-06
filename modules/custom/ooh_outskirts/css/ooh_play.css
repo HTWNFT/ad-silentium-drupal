@@ -1007,3 +1007,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No pseudo-element, wrapper surface, custom property, selector, or declaration was activated. */
 /* Protected properties remain locked. */
 /* Future channel activation requires a separately audited additive phase. */
+
+/* Phase 159 gating: a readiness channel may activate only if it avoids protected-property overrides. */
+/* It must be strictly additive, independently scoped, and introduce no motion, urgency, or escalation. */
+/* It must remain visually subordinate to existing readiness layers. */
+/* Activation must occur in a separate audited phase; no channel is activated in Phase 159. */
