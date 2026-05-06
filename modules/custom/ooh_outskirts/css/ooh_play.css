@@ -982,3 +982,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* outline, outline-offset, transition, filter, box-shadow, and background are protected unless separately audited. */
 /* No new visual layer is added in Phase 153. */
 /* Future work remains additive, visual-only, .is-combat-shell scoped, and non-combat locked. */
+
+/* Phase 154 property map: outline and outline-offset are occupied by Phase 145. */
+/* transition is occupied by Phase 145; filter is occupied by Phase 147. */
+/* box-shadow and background remain protected by existing locked combat-shell layers. */
+/* Future readiness extensions must avoid overriding protected properties unless separately audited. */
