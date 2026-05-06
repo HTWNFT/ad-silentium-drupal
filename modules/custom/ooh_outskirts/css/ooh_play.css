@@ -1988,6 +1988,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains z-order-neutral, stable, and free of depth manipulation. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 298 is documentation-only and enforces z-order neutrality constraints. */
+/* Phase 299 audit: strict alias neutrality of signal-layer systems. */
+/* Future signal-layer systems must not rename, alias, or re-label any constructs. */
+/* No alternate naming, duplication of identifiers, or reference indirection is permitted. */
+/* No semantic or structural aliasing of existing or prior systems may be introduced. */
+/* All constructs must remain uniquely identified with no parallel naming schemes. */
+/* No abstraction layer may obscure or reinterpret original definitions. */
+/* The current system remains alias-neutral, stable, and free of naming indirection. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 299 is documentation-only and enforces alias neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
