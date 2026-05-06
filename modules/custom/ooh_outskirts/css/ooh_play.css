@@ -1538,6 +1538,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains structurally stable and visually unchanged. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 248 is documentation-only and enforces structural isolation of visual signaling. */
+/* Phase 249 audit: strict performance neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce measurable rendering, repaint, or reflow overhead. */
+/* No continuous animation loops, forced reflow triggers, or timing-dependent visual updates are permitted. */
+/* Any visual effect must remain lightweight, non-blocking, and performance-stable across all states. */
+/* The system must maintain baseline frame stability with or without signal-layer presence. */
+/* No dependency on timing cycles, polling behavior, or visual refresh amplification is allowed. */
+/* The current system remains performance-stable, idle-efficient, and free of signaling overhead. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 249 is documentation-only and enforces performance neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
