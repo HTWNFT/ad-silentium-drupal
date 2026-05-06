@@ -1247,3 +1247,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No readiness channel is exposed, activated, or implemented. */
 /* No checkpoint cue, affordance, escalation, or execution is introduced. */
 /* Future channel selection requires a separate audited phase with explicit selector and declaration changes. */
+
+/* Phase 204 audit: candidate readiness channel isolation continuity constraints only are defined. */
+/* Any candidate readiness channel remains isolated from visual, behavioral, and state layers. */
+/* No readiness channel is selected, exposed, activated, or implemented. */
+/* No checkpoint cue, affordance, escalation, or execution is introduced. */
+/* Future channel integration requires a separate audited phase with explicit selector and declaration changes. */
