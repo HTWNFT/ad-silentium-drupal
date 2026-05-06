@@ -898,17 +898,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
     0 0 10px rgba(126, 244, 255, 0.014);
 }
 
-/* Phase 130 audit: Phase 123-129 combat-shell perception is isolated to .is-combat-shell. */
-/* Non-combat selectors remain unmodified by this combat arc. */
-/* CSS contains no gameplay systems; combat-shell behavior remains outside this layer. */
-/* Initial combat-shell perception arc is contained, scoped, and baseline-locked. */
-
-/* Phase 131 audit: combat-shell exit leaves no CSS residue in neutral or active non-combat states. */
-/* Neutral rules remain scoped to :not(.is-mission-active):not(.is-combat-shell). */
-/* Active non-combat rules remain scoped to .is-mission-active:not(.is-combat-shell). */
-/* Combat-shell perception cannot apply after .is-combat-shell is removed. */
-
-/* Phase 132 audit: re-entry from combat shell returns to the documented non-combat baselines. */
+/* Phase 133 audit map: Phase 123-129 combat-shell perception is contained and baseline-locked. */
+/* Combat-shell rules stay isolated to .is-combat-shell; non-combat selectors remain unmodified. */
 /* Shared non-combat scaffolds continue to exclude .is-combat-shell. */
-/* Neutral pre-engagement and active non-combat states remain selector-isolated from combat. */
-/* Combat-shell re-entry/exit requires no CSS persistence, JS, gameplay, or backend behavior. */
+/* Neutral baseline: :not(.is-mission-active):not(.is-combat-shell). */
+/* Active non-combat baseline: .is-mission-active:not(.is-combat-shell). */
+/* Combat-shell exit/re-entry leaves no CSS residue and requires no persistence, JS, gameplay, or backend behavior. */
