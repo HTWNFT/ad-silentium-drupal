@@ -1772,6 +1772,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains timing-neutral, stable, and free of temporal dependency. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 274 is documentation-only and enforces timing neutrality constraints. */
+/* Phase 275 audit: strict resource neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce new assets, files, or external dependencies. */
+/* No images, fonts, media, or external resource references are permitted. */
+/* No additional network requests, asset loading, or dependency chains may be introduced. */
+/* All visual presence must rely solely on existing baseline resources. */
+/* Signal-layer systems must not increase load complexity or resource footprint. */
+/* The current system remains resource-neutral, stable, and free of external dependencies. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 275 is documentation-only and enforces resource neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
