@@ -946,3 +946,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
   outline-offset: -7px;
   transition: outline-color 1400ms ease, box-shadow 1400ms ease;
 }
+
+/* Phase 146 audit: Phase 145 remains visual-only and scoped to .is-combat-shell. */
+/* Phase 145 adds no animation, pulse, urgency, combat logic, or gameplay systems. */
+/* Future work must remain additive and keep the non-combat arc locked. */
