@@ -1235,3 +1235,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Readiness remains inactive, isolated, and non-player-facing. */
 /* No checkpoint cue, affordance, escalation, or execution is introduced. */
 /* Future channel definition must be explicit, singular, and audited in a separate phase. */
+
+/* Phase 202 audit: candidate readiness channel naming constraints only are defined. */
+/* Any named channel remains candidate-only, inactive, and non-player-facing. */
+/* No readiness channel is selected, exposed, activated, or implemented. */
+/* No checkpoint cue, affordance, escalation, or execution is introduced. */
+/* Future channel implementation requires a separate audited phase with explicit selector and declaration changes. */
