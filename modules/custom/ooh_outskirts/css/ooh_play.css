@@ -1727,6 +1727,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains effect-neutral, stable, and free of visual processing influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 269 is documentation-only and enforces effect neutrality constraints. */
+/* Phase 270 audit: strict compositional neutrality of signal-layer systems. */
+/* Future signal-layer systems must not alter element grouping, containment, or compositional relationships. */
+/* No restructuring of visual grouping, stacking relationships, or containment logic is permitted. */
+/* No introduction of wrapper assumptions, grouping hierarchies, or compositional dependencies is allowed. */
+/* Visual composition must remain identical regardless of signal-layer presence. */
+/* No element grouping or segmentation may be influenced or reinterpreted. */
+/* The current system remains compositionally neutral, stable, and structurally consistent. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 270 is documentation-only and enforces compositional neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
