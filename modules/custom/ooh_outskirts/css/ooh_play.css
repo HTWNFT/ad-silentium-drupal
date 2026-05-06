@@ -1175,3 +1175,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No checkpoint affordance, cue, or escalation is introduced. */
 /* Neutral baseline remains the enforced player-facing state. */
 /* Future readiness activation requires a separate audited phase. */
+
+/* Phase 192 audit: checkpoint readiness isolation constraints only are defined. */
+/* Readiness remains inactive and isolated from visual output. */
+/* No readiness channel is selected, activated, or exposed. */
+/* No checkpoint cue, affordance, or escalation is introduced. */
+/* Future readiness exposure requires a separate audited phase. */
