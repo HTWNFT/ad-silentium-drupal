@@ -1475,6 +1475,13 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The primary and secondary channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
 /* No selector, declaration, custom property, or runtime behavior is introduced. */
 /* Any future work requires a completely new system outside the archived readiness model. */
+/* Phase 241 audit: readiness system historical finalization only is audited. */
+/* The readiness system is now a finalized historical construct within the codebase. */
+/* No further modification, extension, reinterpretation, or reactivation is permitted. */
+/* The system remains isolated from gameplay, state logic, and checkpoint execution. */
+/* The primary and secondary channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
+/* No selector, declaration, custom property, or runtime behavior is introduced. */
+/* Any future work must occur in a new system outside this finalized readiness architecture. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
