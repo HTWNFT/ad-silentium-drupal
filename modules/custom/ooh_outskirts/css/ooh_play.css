@@ -1835,6 +1835,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains boundary-neutral, stable, and free of segmentation influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 281 is documentation-only and enforces boundary neutrality constraints. */
+/* Phase 282 audit: strict context neutrality of signal-layer systems. */
+/* Future signal-layer systems must not depend on page context, route, or view conditions. */
+/* No awareness of application state, environment, or rendering context is permitted. */
+/* Visual behavior must remain identical regardless of location within the application. */
+/* No conditional variation based on route, template, or page-level state may be introduced. */
+/* Signal-layer systems must remain globally invariant and context-independent. */
+/* The current system remains context-neutral, stable, and free of environmental awareness. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 282 is documentation-only and enforces context neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
