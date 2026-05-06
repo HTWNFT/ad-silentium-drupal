@@ -904,3 +904,5 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Neutral baseline: :not(.is-mission-active):not(.is-combat-shell). */
 /* Active non-combat baseline: .is-mission-active:not(.is-combat-shell). */
 /* Combat-shell exit/re-entry leaves no CSS residue and requires no persistence, JS, gameplay, or backend behavior. */
+/* Phase 134 integrity: Phase 133 audit map remains accurate after final combat-shell CSS review. */
+/* Combat-shell visual ceilings remain baseline-locked with no animation, pulse, warning escalation, or gameplay behavior. */
