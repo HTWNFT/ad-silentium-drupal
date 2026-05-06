@@ -1503,6 +1503,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current primary and secondary channels remain calm, removable, and .is-combat-shell scoped. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 244 is documentation-only and preserves the post-decommission isolation boundary. */
+/* Phase 245 audit: independent initialization of all future signal-layer systems. */
+/* Any future pre-engagement or signal-layer system must initialize from a neutral baseline with no inherited state. */
+/* No timing, animation cadence, opacity behavior, or visual rhythm may be derived from prior systems. */
+/* No dependency on previously removed readiness constructs is permitted at any level. */
+/* All future systems must be self-contained, opt-in, and removable without affecting current visual stability. */
+/* The current system remains calm, baseline-stable, and free of pre-engagement signaling. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 245 is documentation-only and enforces clean initialization boundaries for future systems. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
