@@ -1072,3 +1072,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* The channel must avoid protected properties and not depend on specificity or cascade dominance. */
 /* The channel must remain calm, visual-only, .is-combat-shell scoped, independently removable, and non-combat locked. */
 /* No readiness channel is activated in Phase 171. */
+
+/* Phase 172 audit: Phase 171 defined activation prerequisites only. */
+/* No exact readiness channel was selected or activated. */
+/* No pseudo-element, wrapper surface, selector, declaration, or custom property was introduced. */
+/* Future activation still requires a separately audited additive phase. */
