@@ -1376,6 +1376,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The channel is subordinate to the primary readiness channel (Phase 220-221). */
 /* No escalation, motion, or gameplay behavior is introduced. */
 /* Future expansion requires a separate audited phase. */
+/* Phase 225 audit: multi-channel readiness coexistence only is audited. */
+/* The primary (Phase 220-221) and secondary (Phase 223-224) channels coexist without conflict. */
+/* Both channels remain calm, visual-only, and .is-combat-shell scoped. */
+/* The secondary channel remains subordinate and non-dominant. */
+/* No escalation, motion, or gameplay behavior is introduced. */
+/* Future expansion requires a separate audited phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
