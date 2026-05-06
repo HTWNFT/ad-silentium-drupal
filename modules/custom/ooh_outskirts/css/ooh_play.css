@@ -1489,6 +1489,13 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The primary and secondary channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
 /* No selector, declaration, custom property, or runtime behavior is introduced. */
 /* Any future development must occur in a completely separate system architecture. */
+/* Phase 243 audit: readiness system post-decommission isolation only is audited. */
+/* The decommissioned readiness system remains fully isolated, inactive, and unavailable. */
+/* No current or future development path may reactivate or reinterpret it. */
+/* The system remains isolated from gameplay, state logic, and checkpoint execution. */
+/* The primary and secondary channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
+/* No selector, declaration, custom property, or runtime behavior is introduced. */
+/* Any future development must occur in a completely separate system architecture. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
