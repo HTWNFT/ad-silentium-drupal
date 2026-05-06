@@ -1628,6 +1628,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains complete, self-sufficient, and independent of any signal-layer presence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 258 is documentation-only and enforces strict optionality constraints. */
+/* Phase 259 audit: strict environment neutrality of signal-layer systems. */
+/* Future signal-layer systems must behave identically across devices, screen sizes, and rendering environments. */
+/* No responsive divergence, device-specific behavior, or conditional rendering paths are permitted. */
+/* No reliance on viewport size, pixel density, hardware capability, or platform-specific features is allowed. */
+/* Visual output must remain consistent and invariant regardless of execution context. */
+/* The system must not degrade, enhance, or alter behavior based on environment conditions. */
+/* The current system remains environment-neutral, stable, and consistent across all contexts. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 259 is documentation-only and enforces environment neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
