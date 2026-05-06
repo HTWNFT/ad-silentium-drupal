@@ -1117,3 +1117,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No implicit activation path exists through cascade, inheritance, or selector interaction. */
 /* No readiness channel was selected, activated, or implemented. */
 /* Future activation still requires explicit selector and declaration introduction in a separately audited additive phase. */
+
+/* Phase 181 planning: future readiness-channel work must start from the dormant baseline. */
+/* No implicit activation path may be reused. */
+/* Any future work must explicitly choose activate or defer again. */
+/* No readiness channel is selected or activated in Phase 181. */
