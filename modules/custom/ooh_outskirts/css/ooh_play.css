@@ -909,3 +909,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Phase 135 completion: Phase 123-134 combat-shell perception arc is complete and stable. */
 /* Combat-shell styling remains isolated to .is-combat-shell; the non-combat arc remains unaffected. */
 /* No gameplay systems exist in CSS, and future combat-shell work must build from this locked baseline. */
+/* Phase 136 extension gate: Phase 123-135 combat-shell baseline is locked. */
+/* Future combat-shell visual work must be additive, audited, and scoped to .is-combat-shell. */
+/* Future phases must not alter the non-combat arc or place gameplay systems in CSS. */
+/* Any future escalation must be explicitly phased, isolated, and audited before expansion. */
