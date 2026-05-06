@@ -1241,3 +1241,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No readiness channel is selected, exposed, activated, or implemented. */
 /* No checkpoint cue, affordance, escalation, or execution is introduced. */
 /* Future channel implementation requires a separate audited phase with explicit selector and declaration changes. */
+
+/* Phase 203 audit: candidate readiness channel non-selection constraints only are defined. */
+/* Any candidate readiness channel remains unselected, inactive, and non-player-facing. */
+/* No readiness channel is exposed, activated, or implemented. */
+/* No checkpoint cue, affordance, escalation, or execution is introduced. */
+/* Future channel selection requires a separate audited phase with explicit selector and declaration changes. */
