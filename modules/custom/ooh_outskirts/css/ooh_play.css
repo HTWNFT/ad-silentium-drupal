@@ -987,3 +987,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* transition is occupied by Phase 145; filter is occupied by Phase 147. */
 /* box-shadow and background remain protected by existing locked combat-shell layers. */
 /* Future readiness extensions must avoid overriding protected properties unless separately audited. */
+
+/* Phase 155 strategy: future readiness work should use only separately audited additive channels. */
+/* Protected properties must not be overridden by later combat-shell readiness layers. */
+/* Any future pseudo-element, wrapper, or custom property requires its own audited phase. */
+/* Combat-shell readiness remains .is-combat-shell scoped, visual-only, calm, and non-combat locked. */
