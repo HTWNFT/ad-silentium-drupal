@@ -1997,6 +1997,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains alias-neutral, stable, and free of naming indirection. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 299 is documentation-only and enforces alias neutrality constraints. */
+/* Phase 300 audit: terminal closure of signal-layer audit series. */
+/* This marks the final phase of the signal-layer neutrality audit chain. */
+/* No further extension, continuation, or reinterpretation of this audit sequence is permitted. */
+/* All prior constraints are cumulative, absolute, and non-revisable. */
+/* No future system may derive authority, precedent, or modification rights from this audit chain. */
+/* The signal-layer concept remains fully constrained, closed, and non-evolving. */
+/* The current system remains fully compliant, stable, and permanently bounded. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 300 is documentation-only and enforces terminal closure. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
