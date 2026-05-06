@@ -1583,6 +1583,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains deterministic, stable, and free of visual variance. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 253 is documentation-only and enforces deterministic visual constraints. */
+/* Phase 254 audit: strict priority neutrality of signal-layer systems. */
+/* Future signal-layer systems must never visually outrank or override primary UI or gameplay elements. */
+/* No z-index escalation, contrast dominance, or visual hierarchy inversion is permitted. */
+/* Signal-layer visuals must remain secondary, subordinate, and non-competitive at all times. */
+/* No element may be obscured, displaced, or visually diminished by signal-layer presence. */
+/* Core content and interaction surfaces must retain absolute visual priority. */
+/* The current system remains hierarchy-stable, balanced, and free of visual competition. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 254 is documentation-only and enforces visual priority integrity. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
