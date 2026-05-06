@@ -1205,3 +1205,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Readiness remains inactive, unselected, and non-player-facing. */
 /* No checkpoint cue, affordance, escalation, or execution is introduced. */
 /* No selector, declaration, custom property, or runtime behavior is changed. */
+
+/* Phase 197 audit: readiness deferred activation constraints only are defined. */
+/* Readiness remains inactive, unselected, and non-player-facing. */
+/* No implicit or accidental activation is permitted through styling or inheritance. */
+/* No checkpoint cue, affordance, escalation, or execution is introduced. */
+/* Future activation requires an explicit, audited phase with selector and declaration changes. */
