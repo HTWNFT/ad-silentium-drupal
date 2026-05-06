@@ -691,3 +691,33 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play__hu
   color: rgba(238, 254, 255, 0.88);
   text-shadow: 0 0 4px rgba(216, 250, 255, 0.018);
 }
+
+/* Phase 126: combat shell readout stabilization. */
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__staging-card,
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play__hud-readout {
+  border-color: rgba(216, 250, 255, 0.05);
+  background:
+    linear-gradient(180deg, rgba(244, 255, 255, 0.011), rgba(84, 225, 255, 0.006)),
+    linear-gradient(90deg, rgba(128, 244, 255, 0.006), transparent 24%, transparent 76%, rgba(128, 244, 255, 0.005));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.006),
+    0 0 12px rgba(84, 225, 255, 0.005);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__staging-copy,
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-generator__status-value,
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play__hud-panel--command .ooh-play__hud-value,
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play__hud-panel--readout .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__staging-copy,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-generator__status-value,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play__hud-panel--command .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play__hud-panel--readout .ooh-play__hud-value {
+  color: rgba(238, 254, 255, 0.89);
+  text-shadow: 0 0 4px rgba(216, 250, 255, 0.016);
+}
