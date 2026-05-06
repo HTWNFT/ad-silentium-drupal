@@ -928,3 +928,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Phase 141 scaffold: second-wave combat-shell visual work begins after the locked Phase 123-140 baseline. */
 /* New visual rules must be additive, audited, and scoped to .is-combat-shell. */
 /* Future work must not alter non-combat arc selectors or values, and gameplay systems do not belong in CSS. */
+/* Phase 142 intake: future selectors start from .ooh-play-session.ooh-play-briefing.is-combat-shell. */
+/* Intake surfaces: combat action area, combat readout/panel surfaces, and combat button/focus surfaces. */
+/* No declarations are added in Phase 142; future additions must be additive and .is-combat-shell scoped. */
+/* Non-combat arc selectors and values remain locked. */
