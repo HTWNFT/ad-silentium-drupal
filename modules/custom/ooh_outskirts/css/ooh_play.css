@@ -1424,6 +1424,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Both channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
 /* No selector, declaration, custom property, or runtime behavior is introduced. */
 /* Future expansion requires a separate audited phase. */
+/* Phase 233 audit: multi-channel readiness lock isolation permanence only is audited. */
+/* The readiness system remains permanently isolated from gameplay, state logic, and checkpoint execution. */
+/* The primary and secondary channels remain stable, contained, and non-escalatory. */
+/* Both channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
+/* No selector, declaration, custom property, or runtime behavior is introduced. */
+/* Future expansion requires a separate audited phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
