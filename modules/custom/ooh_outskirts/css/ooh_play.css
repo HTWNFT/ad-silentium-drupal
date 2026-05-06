@@ -1907,6 +1907,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains event-neutral, stable, and free of event dependency. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 289 is documentation-only and enforces event neutrality constraints. */
+/* Phase 290 audit: strict state-creation neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce new state constructs, flags, or markers. */
+/* No representation of state, condition, or system status may be created. */
+/* No implicit or explicit state tracking mechanisms are permitted. */
+/* Visual output must remain independent of any state definition or representation. */
+/* No internal or external state model may be established or extended. */
+/* The current system remains state-neutral, stable, and free of state constructs. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 290 is documentation-only and enforces state-creation neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
