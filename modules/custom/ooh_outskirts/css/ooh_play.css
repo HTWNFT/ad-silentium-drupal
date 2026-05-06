@@ -1880,6 +1880,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains scroll-neutral, stable, and free of viewport interaction influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 286 is documentation-only and enforces scroll neutrality constraints. */
+/* Phase 287 audit: strict focus neutrality of signal-layer systems. */
+/* Future signal-layer systems must not alter focus order, focus visibility, or navigation flow. */
+/* No focus interception, redirection, or modification is permitted. */
+/* Keyboard navigation paths must remain unchanged and uninterrupted. */
+/* No visual element may obscure, replace, or distort focus indicators. */
+/* Focus behavior must remain fully consistent and independent of signal-layer presence. */
+/* The current system remains focus-neutral, stable, and free of navigation influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 287 is documentation-only and enforces focus neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
