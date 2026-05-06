@@ -1952,6 +1952,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains rendering-path neutral, stable, and free of engine dependency. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 294 is documentation-only and enforces rendering-path neutrality constraints. */
+/* Phase 295 audit: strict metric neutrality of signal-layer systems. */
+/* Future signal-layer systems must not alter layout metrics or box model calculations. */
+/* No width, height, margin, padding, border, or dimensional adjustments are permitted. */
+/* No influence on computed layout measurements or rendering dimensions is allowed. */
+/* All spatial metrics must remain identical regardless of signal-layer presence. */
+/* No recalculation or distortion of layout geometry may be introduced. */
+/* The current system remains metric-neutral, stable, and free of dimensional influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 295 is documentation-only and enforces metric neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
