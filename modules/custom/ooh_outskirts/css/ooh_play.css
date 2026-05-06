@@ -972,3 +972,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Phase 151 marker: Phase 145-150 readiness/deferral arc is closed. */
 /* Future readiness work must use a separately audited additive path without overriding occupied properties. */
 /* Combat-shell work remains .is-combat-shell scoped and non-combat locked. */
+
+/* Phase 152 audit: Phase 151 extension path is open but inactive. */
+/* No readiness properties were added in Phase 151 or Phase 152. */
+/* Occupied properties remain protected from override. */
+/* Future combat-shell work must be separately audited, additive, visual-only, .is-combat-shell scoped, and non-combat locked. */
