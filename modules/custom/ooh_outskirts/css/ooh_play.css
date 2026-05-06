@@ -950,3 +950,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Phase 146 audit: Phase 145 remains visual-only and scoped to .is-combat-shell. */
 /* Phase 145 adds no animation, pulse, urgency, combat logic, or gameplay systems. */
 /* Future work must remain additive and keep the non-combat arc locked. */
+
+/* Phase 147: secondary calm combat shell readiness layer. */
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
+  filter: drop-shadow(0 0 1px rgba(128, 244, 255, 0.008));
+}
