@@ -1137,3 +1137,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No assumptions from Phases 145-180 may be reused without revalidation. */
 /* Property safety, selector isolation, and cascade safety remain mandatory. */
 /* No readiness channel is selected or activated in Phase 184. */
+
+/* Phase 185 checkpoint: a future activation attempt must explicitly pass a readiness checkpoint before implementation. */
+/* The checkpoint must confirm revalidation of property safety, selector isolation, and cascade safety. */
+/* No selector or declaration may be introduced before checkpoint validation. */
+/* No readiness channel is selected or activated in Phase 185. */
