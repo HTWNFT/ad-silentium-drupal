@@ -1637,6 +1637,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains environment-neutral, stable, and consistent across all contexts. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 259 is documentation-only and enforces environment neutrality constraints. */
+/* Phase 260 audit: strict naming neutrality of signal-layer systems. */
+/* Future signal-layer systems must not use naming that implies behavior, intent, or semantic meaning. */
+/* No descriptive, thematic, or suggestive naming conventions are permitted. */
+/* Naming must remain abstract, neutral, and free of interpretive cues. */
+/* No naming pattern may imply system role, priority, or interaction expectation. */
+/* All identifiers must avoid conveying narrative, state, or functional implication. */
+/* The current system remains naming-neutral, stable, and free of semantic influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 260 is documentation-only and enforces naming neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
