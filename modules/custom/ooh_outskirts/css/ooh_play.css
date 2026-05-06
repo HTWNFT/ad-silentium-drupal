@@ -1449,6 +1449,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The primary and secondary channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
 /* No selector, declaration, custom property, or runtime behavior is introduced. */
 /* Any future evolution requires a new, separately audited phase. */
+/* Phase 237 audit: the readiness system lifecycle boundary is sealed. */
+/* The readiness system cannot progress further within the current architecture. */
+/* The system remains isolated from gameplay, state logic, and checkpoint execution. */
+/* The primary and secondary channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
+/* No selector, declaration, custom property, or runtime behavior is introduced. */
+/* Any future work requires a new architectural phase outside the current readiness system. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
