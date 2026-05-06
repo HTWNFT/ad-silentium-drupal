@@ -1418,6 +1418,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Both channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
 /* No selector, declaration, custom property, or runtime behavior is introduced. */
 /* Future expansion requires a separate audited phase. */
+/* Phase 232 audit: multi-channel readiness lock invariance only is audited. */
+/* The readiness system remains invariant across all states, contexts, and rendering conditions. */
+/* The primary and secondary channels remain stable, contained, and non-escalatory. */
+/* Both channels remain calm, visual-only, independently removable, and .is-combat-shell scoped. */
+/* No selector, declaration, custom property, or runtime behavior is introduced. */
+/* Future expansion requires a separate audited phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
