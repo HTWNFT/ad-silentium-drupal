@@ -1082,3 +1082,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Any activation must identify one exact isolated readiness channel first. */
 /* Any deferral must explain which constraint prevented activation. */
 /* No readiness channel is selected or activated in Phase 173. */
+
+/* Phase 174 audit: Phase 173 marked the activation/defer decision point only. */
+/* No activate/defer decision is executed in Phase 174. */
+/* No readiness channel is selected, activated, or implemented. */
+/* Future work must still choose activate or defer in a separately audited phase before declarations are added. */
