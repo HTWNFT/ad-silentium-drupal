@@ -907,3 +907,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Neutral rules remain scoped to :not(.is-mission-active):not(.is-combat-shell). */
 /* Active non-combat rules remain scoped to .is-mission-active:not(.is-combat-shell). */
 /* Combat-shell perception cannot apply after .is-combat-shell is removed. */
+
+/* Phase 132 audit: re-entry from combat shell returns to the documented non-combat baselines. */
+/* Shared non-combat scaffolds continue to exclude .is-combat-shell. */
+/* Neutral pre-engagement and active non-combat states remain selector-isolated from combat. */
+/* Combat-shell re-entry/exit requires no CSS persistence, JS, gameplay, or backend behavior. */
