@@ -1057,3 +1057,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* The selector must not introduce specificity conflicts. */
 /* The selector must be safely removable without impacting other .is-combat-shell styles. */
 /* No readiness channel is activated in Phase 168. */
+
+/* Phase 169 cascade: the future readiness channel must not rely on higher specificity to function. */
+/* It must not override existing .is-combat-shell rules through cascade dominance. */
+/* It must remain visually subordinate regardless of cascade order and require no !important. */
+/* No readiness channel is activated in Phase 169. */
