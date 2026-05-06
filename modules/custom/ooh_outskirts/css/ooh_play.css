@@ -1700,6 +1700,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains typography-neutral, stable, and free of textual influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 266 is documentation-only and enforces typography neutrality constraints. */
+/* Phase 267 audit: strict motion neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce movement, animation, or transition effects. */
+/* No transforms, transitions, keyframes, or perceived motion patterns are permitted. */
+/* Visual presentation must remain completely static and motionless at all times. */
+/* No illusion of motion, drift, or temporal change may be introduced. */
+/* All visual elements must remain fixed, stable, and non-animated. */
+/* The current system remains motion-neutral, stable, and free of any movement. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 267 is documentation-only and enforces motion neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
