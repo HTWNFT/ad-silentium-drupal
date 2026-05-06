@@ -1382,6 +1382,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The secondary channel remains subordinate and non-dominant. */
 /* No escalation, motion, or gameplay behavior is introduced. */
 /* Future expansion requires a separate audited phase. */
+/* Phase 226 audit: multi-channel readiness containment only is audited. */
+/* The primary and secondary readiness channels remain contained and independently removable. */
+/* Both channels remain calm, visual-only, and .is-combat-shell scoped. */
+/* No channel is permitted to escalate, dominate, or execute checkpoint behavior. */
+/* No selector, declaration, custom property, or runtime behavior is introduced. */
+/* Future expansion requires a separate audited phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
