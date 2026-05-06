@@ -1087,3 +1087,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No activate/defer decision is executed in Phase 174. */
 /* No readiness channel is selected, activated, or implemented. */
 /* Future work must still choose activate or defer in a separately audited phase before declarations are added. */
+
+/* Phase 175 deferral: readiness-channel activation is deferred. */
+/* No exact readiness channel is selected. */
+/* Deferral preserves protected-property and cascade safety. */
+/* Future activation still requires a separately audited additive phase. */
