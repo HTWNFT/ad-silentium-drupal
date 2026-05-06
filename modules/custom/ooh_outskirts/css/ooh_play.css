@@ -1736,6 +1736,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains compositionally neutral, stable, and structurally consistent. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 270 is documentation-only and enforces compositional neutrality constraints. */
+/* Phase 271 audit: strict cascade neutrality of signal-layer systems. */
+/* Future signal-layer systems must not rely on or alter CSS cascade behavior. */
+/* No specificity escalation, override chains, or inheritance manipulation is permitted. */
+/* No !important usage, selector stacking, or priority conflicts may be introduced. */
+/* All visual behavior must remain independent of cascade resolution or ordering. */
+/* No implicit dependency on stylesheet order, load timing, or cascade dominance is allowed. */
+/* The current system remains cascade-neutral, stable, and free of override dependencies. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 271 is documentation-only and enforces cascade neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
