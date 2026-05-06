@@ -1682,6 +1682,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains layering-neutral, stable, and free of rendering hierarchy changes. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 264 is documentation-only and enforces rendering-layer neutrality constraints. */
+/* Phase 265 audit: strict color neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce new color dependencies or palette shifts. */
+/* No contrast manipulation, hue signaling, or color-based emphasis is permitted. */
+/* No color may imply meaning, status, urgency, or interaction priority. */
+/* All visual presence must remain independent of color interpretation or palette influence. */
+/* Existing color systems must remain untouched and unaffected. */
+/* The current system remains color-neutral, stable, and free of chromatic influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 265 is documentation-only and enforces color neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
