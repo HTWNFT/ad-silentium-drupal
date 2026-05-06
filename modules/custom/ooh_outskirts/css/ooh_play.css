@@ -956,3 +956,7 @@ body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
   filter: drop-shadow(0 0 1px rgba(128, 244, 255, 0.008));
 }
+
+/* Phase 148 audit: Phase 145-147 added only calm combat-shell visual readiness affordance. */
+/* Readiness layering remains scoped to .is-combat-shell with no animation, pulse, motion, urgency, escalation, or combat logic. */
+/* Future work must remain additive, visual-only, and keep the non-combat arc locked. */
