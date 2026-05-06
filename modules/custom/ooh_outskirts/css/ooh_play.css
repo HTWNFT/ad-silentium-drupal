@@ -1511,6 +1511,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains calm, baseline-stable, and free of pre-engagement signaling. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 245 is documentation-only and enforces clean initialization boundaries for future systems. */
+/* Phase 246 audit: non-intrusive signal-layer behavior enforcement. */
+/* Future signal-layer systems must not create urgency, pressure, or attention-forcing visual states. */
+/* No pulsing, flashing, aggressive glow, or escalation patterns may be introduced. */
+/* All visual signaling must remain passive, ambient, and secondary to the stable baseline. */
+/* The system must never demand interaction; it may only suggest availability without emphasis. */
+/* Any signal-layer presence must be subtle, reversible, and fully removable without trace. */
+/* The current system remains calm, neutral, and free of attention-directing behavior. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 246 is documentation-only and enforces non-intrusive visual signaling constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
