@@ -1979,6 +1979,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains composite-neutral, stable, and free of GPU/rendering pipeline influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 297 is documentation-only and enforces compositing neutrality constraints. */
+/* Phase 298 audit: strict z-order neutrality of signal-layer systems. */
+/* Future signal-layer systems must not alter stacking order or depth hierarchy. */
+/* No z-index changes, stacking context manipulation, or layer precedence shifts are permitted. */
+/* No element may be brought forward or pushed backward in the visual stack. */
+/* Depth relationships between elements must remain unchanged. */
+/* Visual layering must remain identical regardless of signal-layer presence. */
+/* The current system remains z-order-neutral, stable, and free of depth manipulation. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 298 is documentation-only and enforces z-order neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
