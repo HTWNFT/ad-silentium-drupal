@@ -1107,3 +1107,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No channel is selected, activated, or implemented. */
 /* Protected-property, selector isolation, and cascade safety remain intact. */
 /* Future activation still requires a separately audited additive phase. */
+
+/* Phase 179 dormancy guarantee: the readiness-channel candidate cannot activate implicitly through cascade, inheritance, or selector interaction. */
+/* No existing or future CSS changes may unintentionally trigger the channel. */
+/* Activation requires explicit selector and declaration introduction in a separately audited phase. */
+/* No readiness channel is activated in Phase 179. */
