@@ -919,6 +919,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Phase 138 sequencing: Phase 123-135 is the initial combat-shell perception arc. */
 /* Phase 136-138 define extension gates and readiness for future phased combat-shell work. */
 /* Future combat-shell work must follow phased sequencing without retroactive baseline changes. */
+/* Phase 139 reserved audit slot: no CSS behavior exists in this phase. */
+/* Sequencing continuity is preserved before the Phase 140 final extension lock. */
 /* Phase 140 final lock: Phase 123-135 combat-shell baseline remains locked. */
 /* Phase 136-138 extension gates are complete; Phase 139 is reserved for future audit use. */
 /* Future combat-shell extensions must be additive, isolated, and explicitly phased. */
