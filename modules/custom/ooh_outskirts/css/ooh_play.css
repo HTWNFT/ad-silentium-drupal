@@ -1337,3 +1337,20 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No readiness channel is selected, exposed, activated, or implemented. */
 /* No checkpoint cue, affordance, escalation, or execution is introduced. */
 /* The next phase must explicitly introduce the first readiness channel via audited selector and declaration changes. */
+
+/* Phase 220 audit: the first controlled readiness channel is introduced. */
+/* The channel is visual-only, calm, and .is-combat-shell scoped. */
+/* No checkpoint execution, gameplay logic, backend behavior, or persistence is introduced. */
+/* The channel is independently removable and does not modify existing readiness layers. */
+/* Future expansion requires a separate audited phase. */
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::after,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::after {
+  content: "";
+  position: absolute;
+  inset: -4px -6px;
+  z-index: -1;
+  pointer-events: none;
+  border-left: 1px solid rgba(128, 244, 255, 0.055);
+  border-right: 1px solid rgba(128, 244, 255, 0.028);
+  border-radius: 8px;
+}
