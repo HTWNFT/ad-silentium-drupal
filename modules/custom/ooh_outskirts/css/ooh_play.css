@@ -932,3 +932,6 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Intake surfaces: combat action area, combat readout/panel surfaces, and combat button/focus surfaces. */
 /* No declarations are added in Phase 142; future additions must be additive and .is-combat-shell scoped. */
 /* Non-combat arc selectors and values remain locked. */
+/* Phase 143 constraints: second-wave combat-shell work must remain visual-only. */
+/* Future declarations must be .is-combat-shell scoped and must not alter non-combat selectors or values. */
+/* Gameplay, persistence, backend, AI, damage, health, turns, behaviorState, and allegianceState do not belong in CSS. */
