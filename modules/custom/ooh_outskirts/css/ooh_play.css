@@ -913,3 +913,6 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Future combat-shell visual work must be additive, audited, and scoped to .is-combat-shell. */
 /* Future phases must not alter the non-combat arc or place gameplay systems in CSS. */
 /* Any future escalation must be explicitly phased, isolated, and audited before expansion. */
+/* Phase 137 readiness: Phase 123-136 combat-shell baseline can support future isolated visual extensions. */
+/* Future extensions must stay .is-combat-shell scoped while the non-combat arc remains locked and untouched. */
+/* Gameplay systems, persistence, and backend behavior do not belong in this CSS layer. */
