@@ -1691,6 +1691,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains color-neutral, stable, and free of chromatic influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 265 is documentation-only and enforces color neutrality constraints. */
+/* Phase 266 audit: strict typography neutrality of signal-layer systems. */
+/* Future signal-layer systems must not alter font rendering, size, weight, spacing, or hierarchy. */
+/* No typographic emphasis, distortion, or readability influence is permitted. */
+/* Text clarity, legibility, and flow must remain fully unaffected at all times. */
+/* No overlay or effect may interfere with text perception or reading experience. */
+/* All typography must remain consistent, stable, and independent of signal-layer presence. */
+/* The current system remains typography-neutral, stable, and free of textual influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 266 is documentation-only and enforces typography neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
