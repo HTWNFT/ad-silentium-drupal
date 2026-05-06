@@ -1259,3 +1259,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No readiness channel is integrated, selected, exposed, activated, or implemented. */
 /* No checkpoint cue, affordance, escalation, or execution is introduced. */
 /* Future integration requires a separate audited phase with explicit selector and declaration changes. */
+
+/* Phase 206 audit: candidate readiness channel integration deferral constraints only are defined. */
+/* Readiness channel integration remains deferred and unavailable. */
+/* Any candidate readiness channel remains isolated, inactive, and non-player-facing. */
+/* No checkpoint cue, affordance, escalation, or execution is introduced. */
+/* Future integration still requires a separate audited phase with explicit selector and declaration changes. */
