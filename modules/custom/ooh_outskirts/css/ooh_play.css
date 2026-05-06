@@ -1353,6 +1353,11 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* The channel remains subordinate, non-escalatory, and independently removable. */
 /* No selector, declaration, custom property, or runtime behavior is introduced. */
 /* Future expansion requires a separate audited phase. */
+/* Phase 223 audit: a secondary readiness channel layer is introduced. */
+/* The layer is calm, visual-only, and .is-combat-shell scoped. */
+/* The layer is subordinate to the Phase 220-221 channel. */
+/* No escalation, motion, or gameplay behavior is introduced. */
+/* Future expansion requires a separate audited phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::after,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::after {
   content: "";
@@ -1364,4 +1369,10 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
   border-left: 1px solid rgba(128, 244, 255, 0.055);
   border-right: 1px solid rgba(128, 244, 255, 0.028);
   border-radius: 8px;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
+  content: "";
+  opacity: 0.12;
 }
