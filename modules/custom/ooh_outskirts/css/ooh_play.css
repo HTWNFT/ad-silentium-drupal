@@ -1547,6 +1547,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains performance-stable, idle-efficient, and free of signaling overhead. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 249 is documentation-only and enforces performance neutrality constraints. */
+/* Phase 250 audit: strict accessibility neutrality of signal-layer systems. */
+/* Future signal-layer systems must not reduce readability, contrast clarity, or text legibility. */
+/* No visual behavior may interfere with focus states, keyboard navigation, or assistive technologies. */
+/* No flashing, flickering, or motion patterns that could trigger sensitivity or distraction are permitted. */
+/* All signaling must remain non-blocking, non-obstructive, and secondary to core content visibility. */
+/* The system must remain fully usable and understandable with or without any signal-layer presence. */
+/* The current system remains accessible, stable, and free of disruptive visual influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 250 is documentation-only and enforces accessibility-safe visual constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
