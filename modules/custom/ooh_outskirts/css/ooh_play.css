@@ -1916,6 +1916,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains state-neutral, stable, and free of state constructs. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 290 is documentation-only and enforces state-creation neutrality constraints. */
+/* Phase 291 audit: strict redundancy neutrality of signal-layer systems. */
+/* Future signal-layer systems must not duplicate or parallel any existing or prior constructs. */
+/* No overlapping visual mechanisms, mirrored systems, or redundant layers are permitted. */
+/* No alternative implementations of identical behavior may be introduced. */
+/* Each system must remain singular, non-redundant, and independently defined. */
+/* No coexistence of equivalent systems or competing representations is allowed. */
+/* The current system remains redundancy-neutral, stable, and free of duplication. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 291 is documentation-only and enforces redundancy neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
