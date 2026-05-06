@@ -1052,3 +1052,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* The selector must remain .is-combat-shell scoped and avoid protected properties. */
 /* The channel must remain independently removable and visually subordinate. */
 /* No readiness channel is activated in Phase 167. */
+
+/* Phase 168 isolation: the future readiness channel must not depend on modifying existing selector chains. */
+/* The selector must not introduce specificity conflicts. */
+/* The selector must be safely removable without impacting other .is-combat-shell styles. */
+/* No readiness channel is activated in Phase 168. */
