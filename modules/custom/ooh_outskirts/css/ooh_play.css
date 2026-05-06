@@ -902,3 +902,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Non-combat selectors remain unmodified by this combat arc. */
 /* CSS contains no gameplay systems; combat-shell behavior remains outside this layer. */
 /* Initial combat-shell perception arc is contained, scoped, and baseline-locked. */
+
+/* Phase 131 audit: combat-shell exit leaves no CSS residue in neutral or active non-combat states. */
+/* Neutral rules remain scoped to :not(.is-mission-active):not(.is-combat-shell). */
+/* Active non-combat rules remain scoped to .is-mission-active:not(.is-combat-shell). */
+/* Combat-shell perception cannot apply after .is-combat-shell is removed. */
