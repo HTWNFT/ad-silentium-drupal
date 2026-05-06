@@ -1826,6 +1826,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains configuration-neutral, stable, and free of adjustable behavior. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 280 is documentation-only and enforces configuration neutrality constraints. */
+/* Phase 281 audit: strict boundary neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce new DOM boundaries or segmentation. */
+/* No partitioning, isolation wrappers, or implicit interface divisions are permitted. */
+/* No visual or structural separation of elements may be implied or created. */
+/* The interface must remain continuous, unsegmented, and structurally unified. */
+/* Signal-layer presence must not define or imply boundaries within the UI. */
+/* The current system remains boundary-neutral, stable, and free of segmentation influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 281 is documentation-only and enforces boundary neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
