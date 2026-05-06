@@ -977,3 +977,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No readiness properties were added in Phase 151 or Phase 152. */
 /* Occupied properties remain protected from override. */
 /* Future combat-shell work must be separately audited, additive, visual-only, .is-combat-shell scoped, and non-combat locked. */
+
+/* Phase 153 planning: future readiness work requires a property-occupancy map first. */
+/* outline, outline-offset, transition, filter, box-shadow, and background are protected unless separately audited. */
+/* No new visual layer is added in Phase 153. */
+/* Future work remains additive, visual-only, .is-combat-shell scoped, and non-combat locked. */
