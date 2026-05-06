@@ -938,3 +938,11 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Phase 144 readiness seal: Phases 141-144 prepare the second-wave combat-shell extension path. */
 /* No declarations were added by this scaffold arc. */
 /* Future work must remain additive, visual-only, audited, .is-combat-shell scoped, and non-combat locked. */
+
+/* Phase 145: calm combat shell readiness affordance. */
+body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before,
+body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
+  outline: 1px solid rgba(128, 244, 255, 0.012);
+  outline-offset: -7px;
+  transition: outline-color 1400ms ease, box-shadow 1400ms ease;
+}
