@@ -1027,3 +1027,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* It must not overlap outline, filter, background, box-shadow, or transition. */
 /* It must be independently removable, require no existing selector modification, and maintain zero motion or escalation. */
 /* Channel selection must be validated in a separate audited phase; no readiness channel is activated in Phase 162. */
+
+/* Phase 163 validation: readiness-channel validation must precede activation. */
+/* Validation must confirm no protected-property overlap and independent removability. */
+/* Validation must confirm calm, visual-only, .is-combat-shell scoped behavior. */
+/* No readiness channel is selected or activated in Phase 163. */
