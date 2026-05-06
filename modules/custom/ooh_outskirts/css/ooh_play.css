@@ -1808,6 +1808,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains extensibility-neutral, stable, and free of forward-looking structure. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 278 is documentation-only and enforces extensibility neutrality constraints. */
+/* Phase 279 audit: strict dependency neutrality of signal-layer systems. */
+/* Future signal-layer systems must not rely on external libraries, frameworks, or shared utilities. */
+/* No dependency on third-party code, internal modules, or shared infrastructure is permitted. */
+/* All behavior must remain fully self-contained with zero external reliance. */
+/* No implicit or explicit linkage to external systems, services, or utilities may be introduced. */
+/* Signal-layer systems must remain isolated from all dependency chains. */
+/* The current system remains dependency-neutral, stable, and free of external reliance. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 279 is documentation-only and enforces dependency neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
