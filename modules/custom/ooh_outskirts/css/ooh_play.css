@@ -1709,6 +1709,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains motion-neutral, stable, and free of any movement. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 267 is documentation-only and enforces motion neutrality constraints. */
+/* Phase 268 audit: strict opacity neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce opacity, transparency, or visibility modulation. */
+/* No fades, overlays, alpha blending, or visual dimming effects are permitted. */
+/* All elements must remain fully opaque and visually constant at all times. */
+/* No partial visibility, ghosting, or layered transparency may be introduced. */
+/* Visual presentation must not vary in intensity or visibility under any condition. */
+/* The current system remains opacity-neutral, stable, and free of transparency effects. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 268 is documentation-only and enforces opacity neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
