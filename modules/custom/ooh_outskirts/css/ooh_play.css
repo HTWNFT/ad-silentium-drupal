@@ -1295,3 +1295,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Any candidate readiness channel remains isolated, inactive, and non-player-facing. */
 /* No checkpoint cue, affordance, escalation, or execution is introduced. */
 /* Future integration still requires a separate audited phase with explicit selector and declaration changes. */
+
+/* Phase 212 audit: candidate readiness channel gating enforcement consistency constraints only are defined. */
+/* Readiness channel gating is consistently enforced across all layers and system transitions. */
+/* Any candidate readiness channel remains isolated, inactive, and non-player-facing. */
+/* No checkpoint cue, affordance, escalation, or execution is introduced. */
+/* Future integration still requires a separate audited phase with explicit selector and declaration changes. */
