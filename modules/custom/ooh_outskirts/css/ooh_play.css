@@ -1664,6 +1664,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains stable, intact, and free of failure signaling. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 262 is documentation-only and enforces failure neutrality constraints. */
+/* Phase 263 audit: strict input neutrality of signal-layer systems. */
+/* Future signal-layer systems must not respond to user input, interaction, or control signals. */
+/* No hover, focus, click, keypress, or gesture-based variation is permitted. */
+/* Visual output must remain constant regardless of user behavior or interaction patterns. */
+/* No feedback loop between user input and signal-layer presentation is allowed. */
+/* Signal-layer presence must remain passive, non-reactive, and fully independent of interaction. */
+/* The current system remains input-neutral, stable, and free of interaction-driven variation. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 263 is documentation-only and enforces input neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
