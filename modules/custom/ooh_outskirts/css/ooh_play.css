@@ -2009,7 +2009,7 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Phase 301 CLS: system initialization and domain separation. */
 /* The Clearance Layer System (CLS) is introduced as a separate architectural domain. */
 /* CLS is responsible for monetization, access control, and credit-based gating. */
-/* CLS operates independently of the signal-layer system and does not inherit its constraints. */
+/* CLS is independent of the signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* The signal-layer system remains permanently closed and immutable. */
 /* CLS may introduce authoritative UI behavior, including interruption and gating. */
 /* CLS establishes monetization as a primary system priority moving forward. */
