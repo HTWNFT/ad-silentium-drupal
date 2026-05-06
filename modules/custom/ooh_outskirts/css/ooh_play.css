@@ -1610,6 +1610,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains meaning-neutral, stable, and free of interpretive influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 256 is documentation-only and enforces identity neutrality constraints. */
+/* Phase 257 audit: complete isolation of signal-layer systems. */
+/* Future signal-layer systems must not share variables, tokens, or inheritance chains with any existing system. */
+/* No CSS variable reuse, cascade dependency, or cross-module linkage is permitted. */
+/* All signal-layer definitions must exist in full isolation with no external reliance. */
+/* No shared naming conventions may imply coupling or hidden dependency paths. */
+/* Each system must remain independently removable with zero impact on any other system. */
+/* The current system remains fully isolated, stable, and free of cross-system linkage. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 257 is documentation-only and enforces total system isolation boundaries. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
