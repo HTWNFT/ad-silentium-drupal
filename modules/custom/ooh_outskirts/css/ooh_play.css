@@ -1187,3 +1187,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No visual output, cue, affordance, or escalation is introduced. */
 /* Checkpoint execution remains unavailable. */
 /* Future exposure requires explicit selector and declaration changes in a separate audited phase. */
+
+/* Phase 195 audit: readiness non-exposure continuity constraints only are defined. */
+/* Readiness remains inactive, unselected, and non-player-facing. */
+/* No readiness channel is exposed, activated, or implemented. */
+/* No checkpoint cue, affordance, escalation, or execution is introduced. */
+/* Future exposure still requires explicit selector and declaration changes in a separate audited phase. */
