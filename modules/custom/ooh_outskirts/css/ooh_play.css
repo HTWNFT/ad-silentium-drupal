@@ -992,3 +992,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* Protected properties must not be overridden by later combat-shell readiness layers. */
 /* Any future pseudo-element, wrapper, or custom property requires its own audited phase. */
 /* Combat-shell readiness remains .is-combat-shell scoped, visual-only, calm, and non-combat locked. */
+
+/* Phase 156 audit: Phase 153-155 established the property map and safe-extension strategy. */
+/* Protected properties remain locked unless separately audited. */
+/* No new visual readiness layer was added during Phases 153-156. */
+/* Future work may proceed only through additive, separately audited, .is-combat-shell scoped channels. */
