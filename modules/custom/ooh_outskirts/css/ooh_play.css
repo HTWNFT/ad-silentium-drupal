@@ -1556,6 +1556,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains accessible, stable, and free of disruptive visual influence. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 250 is documentation-only and enforces accessibility-safe visual constraints. */
+/* Phase 251 audit: strict state-independence of signal-layer systems. */
+/* Future signal-layer systems must not depend on gameplay state, UI state, or conditional transitions. */
+/* No coupling to engagementState, behaviorState, allegianceState, or any runtime state model is permitted. */
+/* Signal-layer behavior must remain static, unconditional, and visually self-contained. */
+/* No triggers, thresholds, or reactive conditions may influence signal-layer visibility or behavior. */
+/* The system must present identical baseline output regardless of internal or external state changes. */
+/* The current system remains state-independent, stable, and free of conditional signaling. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 251 is documentation-only and enforces state isolation constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
