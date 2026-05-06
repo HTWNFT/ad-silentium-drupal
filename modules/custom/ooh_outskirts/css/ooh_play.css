@@ -1122,3 +1122,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No implicit activation path may be reused. */
 /* Any future work must explicitly choose activate or defer again. */
 /* No readiness channel is selected or activated in Phase 181. */
+
+/* Phase 182 reset condition: any future activation attempt must be treated as a clean start. */
+/* No assumptions from Phases 145-180 may be reused without re-validation. */
+/* Property safety, selector isolation, and cascade safety must all be re-confirmed. */
+/* No readiness channel is selected or activated in Phase 182. */
