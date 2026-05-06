@@ -1022,3 +1022,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* The chosen channel must not override protected properties. */
 /* The channel must remain visually subordinate, calm, and .is-combat-shell scoped. */
 /* No readiness channel is activated in Phase 161. */
+
+/* Phase 162 constraint: the first activated readiness channel must use a non-conflicting rendering layer. */
+/* It must not overlap outline, filter, background, box-shadow, or transition. */
+/* It must be independently removable, require no existing selector modification, and maintain zero motion or escalation. */
+/* Channel selection must be validated in a separate audited phase; no readiness channel is activated in Phase 162. */
