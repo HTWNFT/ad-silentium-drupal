@@ -1037,3 +1037,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No channel was selected or activated during Phase 161-164. */
 /* Protected properties remain locked. */
 /* Future activation requires a separately audited, additive, .is-combat-shell scoped implementation phase. */
+
+/* Phase 165 nomination: preferred future channel is an independently audited .is-combat-shell scoped pseudo-element or wrapper-only surface. */
+/* The channel is nominated only, not activated. */
+/* It must avoid protected properties: outline, outline-offset, transition, filter, box-shadow, and background. */
+/* Future implementation must remain calm, visual-only, additive, independently removable, and non-combat locked. */
