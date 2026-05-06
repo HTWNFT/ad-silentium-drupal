@@ -1348,6 +1348,11 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* The channel is visually subordinate and non-escalatory. */
 /* No checkpoint execution or gameplay logic is introduced. */
 /* Future expansion requires a separate audited phase. */
+/* Phase 222 audit: the first readiness channel stabilization only is audited. */
+/* The Phase 220-221 readiness channel remains calm, visual-only, and .is-combat-shell scoped. */
+/* The channel remains subordinate, non-escalatory, and independently removable. */
+/* No selector, declaration, custom property, or runtime behavior is introduced. */
+/* Future expansion requires a separate audited phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::after,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::after {
   content: "";
