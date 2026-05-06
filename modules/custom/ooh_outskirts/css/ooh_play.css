@@ -1102,3 +1102,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No readiness channel was selected, activated, or implemented. */
 /* Protected-property, selector isolation, and cascade safety remain intact. */
 /* Future activation remains reserved for a separately audited additive phase. */
+
+/* Phase 178 dormant-state seal: the readiness-channel candidate remains dormant. */
+/* No channel is selected, activated, or implemented. */
+/* Protected-property, selector isolation, and cascade safety remain intact. */
+/* Future activation still requires a separately audited additive phase. */
