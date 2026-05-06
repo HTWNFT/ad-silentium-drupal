@@ -1017,3 +1017,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No pseudo-element, wrapper surface, custom property, selector, or declaration was activated. */
 /* Protected properties remain locked. */
 /* Any future activation must occur through a separately audited, additive, .is-combat-shell scoped phase. */
+
+/* Phase 161 planning: future readiness-channel activation requires choosing one isolated channel first. */
+/* The chosen channel must not override protected properties. */
+/* The channel must remain visually subordinate, calm, and .is-combat-shell scoped. */
+/* No readiness channel is activated in Phase 161. */
