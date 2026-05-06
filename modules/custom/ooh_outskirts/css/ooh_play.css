@@ -1388,6 +1388,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* No channel is permitted to escalate, dominate, or execute checkpoint behavior. */
 /* No selector, declaration, custom property, or runtime behavior is introduced. */
 /* Future expansion requires a separate audited phase. */
+/* Phase 227 audit: multi-channel readiness equilibrium only is audited. */
+/* The primary and secondary readiness channels remain in stable visual balance. */
+/* No channel exhibits drift, escalation, or dominance shift. */
+/* Both channels remain calm, visual-only, and .is-combat-shell scoped. */
+/* No selector, declaration, custom property, or runtime behavior is introduced. */
+/* Future expansion requires a separate audited phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
