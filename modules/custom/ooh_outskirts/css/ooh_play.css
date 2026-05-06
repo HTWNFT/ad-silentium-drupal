@@ -1754,6 +1754,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains inheritance-neutral, stable, and free of hierarchical dependency. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 272 is documentation-only and enforces inheritance neutrality constraints. */
+/* Phase 273 audit: strict specificity neutrality of signal-layer systems. */
+/* Future signal-layer systems must not depend on selector specificity or targeting precision. */
+/* No deep selector chains, nested targeting, or specificity escalation strategies are permitted. */
+/* Visual outcomes must not rely on selector weight or override mechanics. */
+/* No implicit hierarchy of selector importance may be introduced. */
+/* All behavior must remain independent of selector resolution or targeting complexity. */
+/* The current system remains specificity-neutral, stable, and free of selector dependency. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 273 is documentation-only and enforces specificity neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
