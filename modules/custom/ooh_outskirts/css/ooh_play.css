@@ -1169,3 +1169,9 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No visual escalation, signaling, or affordance is introduced. */
 /* The system must remain in neutral baseline with no tension or drift. */
 /* Future activation requires explicit, audited selector and declaration changes. */
+
+/* Phase 191 audit: pre-permissive checkpoint review constraints only are defined. */
+/* Readiness remains non-visual, non-behavioral, and non-stateful. */
+/* No checkpoint affordance, cue, or escalation is introduced. */
+/* Neutral baseline remains the enforced player-facing state. */
+/* Future readiness activation requires a separate audited phase. */
