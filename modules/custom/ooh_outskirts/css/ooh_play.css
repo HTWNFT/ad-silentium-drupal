@@ -1943,6 +1943,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains ordering-neutral, stable, and free of sequence dependency. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 293 is documentation-only and enforces ordering neutrality constraints. */
+/* Phase 294 audit: strict rendering-path neutrality of signal-layer systems. */
+/* Future signal-layer systems must not depend on browser rendering paths or engine-specific behavior. */
+/* No reliance on implementation quirks, vendor-specific handling, or rendering optimizations is permitted. */
+/* Visual output must remain consistent across all rendering engines without conditional handling. */
+/* No fallback to engine-specific behavior or rendering-path variation is allowed. */
+/* All behavior must remain invariant regardless of browser or rendering pipeline. */
+/* The current system remains rendering-path neutral, stable, and free of engine dependency. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 294 is documentation-only and enforces rendering-path neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
