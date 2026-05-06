@@ -1898,6 +1898,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains pointer-neutral, stable, and free of interaction interference. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 288 is documentation-only and enforces pointer neutrality constraints. */
+/* Phase 289 audit: strict event neutrality of signal-layer systems. */
+/* Future signal-layer systems must not emit, listen to, or handle events of any kind. */
+/* No DOM events, custom events, or internal signaling mechanisms are permitted. */
+/* No event propagation, interception, or modification may be introduced. */
+/* Visual behavior must remain completely independent of event systems. */
+/* No reactive or event-driven behavior is allowed under any condition. */
+/* The current system remains event-neutral, stable, and free of event dependency. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 289 is documentation-only and enforces event neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
