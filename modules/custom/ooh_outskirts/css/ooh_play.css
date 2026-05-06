@@ -1862,6 +1862,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains visibility-neutral, stable, and free of presence toggling. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 284 is documentation-only and enforces visibility neutrality constraints. */
+/* Phase 285 audit: strict interaction-surface neutrality of signal-layer systems. */
+/* Future signal-layer systems must not alter interactive hit areas or clickable regions. */
+/* No expansion, contraction, or shifting of interaction surfaces is permitted. */
+/* No overlay or visual element may intercept, block, or redirect user interaction. */
+/* Pointer behavior, hit testing, and interaction mapping must remain unchanged. */
+/* No implicit or explicit modification of user interaction zones is allowed. */
+/* The current system remains interaction-neutral, stable, and free of surface alteration. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 285 is documentation-only and enforces interaction-surface neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
