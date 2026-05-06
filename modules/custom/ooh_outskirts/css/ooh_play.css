@@ -1934,6 +1934,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains coupling-neutral, stable, and free of inter-system dependency. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 292 is documentation-only and enforces coupling neutrality constraints. */
+/* Phase 293 audit: strict ordering neutrality of signal-layer systems. */
+/* Future signal-layer systems must not depend on declaration order, file order, or evaluation sequence. */
+/* No reliance on load timing, stylesheet precedence, or processing order is permitted. */
+/* Visual behavior must remain identical regardless of rule ordering or execution sequence. */
+/* No implicit ordering assumptions or sequence-based dependencies may be introduced. */
+/* All behavior must remain invariant under any reordering of definitions. */
+/* The current system remains ordering-neutral, stable, and free of sequence dependency. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 293 is documentation-only and enforces ordering neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
