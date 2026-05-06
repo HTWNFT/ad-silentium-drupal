@@ -1601,6 +1601,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains time-neutral, stable, and free of implied progression. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 255 is documentation-only and enforces temporal neutrality constraints. */
+/* Phase 256 audit: strict identity neutrality of signal-layer systems. */
+/* Future signal-layer systems must not introduce thematic, narrative, or semantic interpretation. */
+/* No visual cue may imply status, intent, danger, readiness, or system meaning. */
+/* Signal-layer presence must remain abstract, non-representational, and interpretation-neutral. */
+/* No symbolic, color-coded, or pattern-based meaning assignment is permitted. */
+/* The system must not communicate state, outcome, or narrative progression through signal-layer visuals. */
+/* The current system remains meaning-neutral, stable, and free of interpretive influence. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 256 is documentation-only and enforces identity neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
