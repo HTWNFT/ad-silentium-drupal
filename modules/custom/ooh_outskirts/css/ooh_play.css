@@ -1925,6 +1925,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains redundancy-neutral, stable, and free of duplication. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 291 is documentation-only and enforces redundancy neutrality constraints. */
+/* Phase 292 audit: strict coupling neutrality of signal-layer systems. */
+/* Future signal-layer systems must not link, synchronize, or depend on other systems or layers. */
+/* No shared timing, shared state, or coordinated behavior across systems is permitted. */
+/* No inter-system awareness, communication, or dependency may be introduced. */
+/* Each system must operate in complete isolation with no coupling of any kind. */
+/* No chaining, sequencing, or synchronization between visual layers is allowed. */
+/* The current system remains coupling-neutral, stable, and free of inter-system dependency. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 292 is documentation-only and enforces coupling neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
