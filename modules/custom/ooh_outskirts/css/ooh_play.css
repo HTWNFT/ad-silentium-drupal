@@ -2006,6 +2006,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains fully compliant, stable, and permanently bounded. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 300 is documentation-only and enforces terminal closure. */
+/* Phase 301 CLS: system initialization and domain separation. */
+/* The Clearance Layer System (CLS) is introduced as a separate architectural domain. */
+/* CLS is responsible for monetization, access control, and credit-based gating. */
+/* CLS operates independently of the signal-layer system and does not inherit its constraints. */
+/* The signal-layer system remains permanently closed and immutable. */
+/* CLS may introduce authoritative UI behavior, including interruption and gating. */
+/* CLS establishes monetization as a primary system priority moving forward. */
+/* No functional implementation is introduced in this phase. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
