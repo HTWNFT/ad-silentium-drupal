@@ -1067,3 +1067,8 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell::before {
 /* No readiness channel was selected or activated during Phase 168-170. */
 /* Protected properties remain locked and unaffected. */
 /* Future activation must occur through a separately audited, additive, .is-combat-shell scoped phase. */
+
+/* Phase 171 prerequisites: future activation must identify one exact isolated channel. */
+/* The channel must avoid protected properties and not depend on specificity or cascade dominance. */
+/* The channel must remain calm, visual-only, .is-combat-shell scoped, independently removable, and non-combat locked. */
+/* No readiness channel is activated in Phase 171. */
