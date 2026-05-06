@@ -1592,6 +1592,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The current system remains hierarchy-stable, balanced, and free of visual competition. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 /* Phase 254 is documentation-only and enforces visual priority integrity. */
+/* Phase 255 audit: strict temporal neutrality of signal-layer systems. */
+/* Future signal-layer systems must not imply sequencing, buildup, escalation, or progression over time. */
+/* No staged timing, phased reveals, or anticipatory animation patterns are permitted. */
+/* Visual states must not suggest imminent action, readiness escalation, or countdown behavior. */
+/* No temporal dependency may create perceived forward motion or narrative tension. */
+/* All signal-layer presence must remain temporally flat, constant, and non-directional. */
+/* The current system remains time-neutral, stable, and free of implied progression. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 255 is documentation-only and enforces temporal neutrality constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
