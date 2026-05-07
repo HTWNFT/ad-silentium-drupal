@@ -2171,6 +2171,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce payment logic, credit accounting, account logic, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 322 CLS: Account Presence Passive Recognition Layer documentation. */
+/* Future account presence systems must remain passive operational recognition only, not active identity management, authority validation, or behavioral control. */
+/* Account presence must remain passive, recognition-oriented, non-authoritative, non-enforcing, non-surveillant, and non-coercive. */
+/* Future account presence language must remain free from identity-pressure language, dependency mechanics, urgency mechanics, or enforcement framing. */
+/* Account presence depends on future explicit account infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce authentication checks, account logic, payment logic, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
