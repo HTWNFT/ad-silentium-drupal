@@ -3380,3 +3380,263 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.
       0 0 6px rgba(84, 225, 255, 0.003);
   }
 }
+
+/* Phase 385: passive scene ambiance consistency pass. */
+/* CSS-only passive atmosphere refinement; no animation, state, markup, content, controls, or behavior are introduced. */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::before {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(96, 220, 255, 0.035), transparent 36%),
+    linear-gradient(180deg, rgba(4, 12, 18, 0.32), rgba(1, 5, 8, 0.46));
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after {
+  background:
+    linear-gradient(180deg, rgba(216, 250, 255, 0.018), transparent 34%),
+    radial-gradient(circle at 50% 76%, rgba(84, 225, 255, 0.018), transparent 42%);
+  opacity: 0.46;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__visual {
+  background-color: rgba(2, 9, 13, 0.86);
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 250, 255, 0.026),
+    inset 0 42px 76px rgba(24, 87, 104, 0.055),
+    inset 0 -38px 62px rgba(1, 6, 9, 0.38);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__scanlines,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__scanlines {
+  opacity: 0.085;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__marker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__marker {
+  border-color: rgba(216, 250, 255, 0.22);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    0 0 8px rgba(84, 225, 255, 0.025);
+  opacity: 0.58;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__briefing-panel {
+  background:
+    linear-gradient(180deg, rgba(6, 18, 24, 0.68), rgba(3, 10, 14, 0.76));
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions::before,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions::before {
+  background:
+    linear-gradient(90deg, transparent, rgba(216, 250, 255, 0.028), transparent);
+  opacity: 0.42;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)::after {
+    opacity: 0.38;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__visual,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__visual {
+    box-shadow:
+      inset 0 0 0 1px rgba(216, 250, 255, 0.022),
+      inset 0 28px 46px rgba(24, 87, 104, 0.04),
+      inset 0 -30px 48px rgba(1, 6, 9, 0.34);
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__scanlines,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__scanlines {
+    opacity: 0.07;
+  }
+}
+
+/* Phase 386: inactive control readability pass. */
+/* CSS-only inactive control clarity; no controls, states, labels, interaction logic, or behavior are introduced. */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__overlay-btn,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-combat-gate__button,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__action,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__overlay-btn,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-combat-gate__button,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__action {
+  color: rgba(235, 254, 255, 0.78);
+  border-color: rgba(216, 250, 255, 0.088);
+  background:
+    linear-gradient(180deg, rgba(216, 250, 255, 0.035), rgba(8, 22, 28, 0.18));
+  text-shadow: 0 0 5px rgba(216, 250, 255, 0.018);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__overlay-btn:disabled,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action:disabled,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-combat-gate__button:disabled,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__action:disabled,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__overlay-btn:disabled,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action:disabled,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-combat-gate__button:disabled,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__action:disabled {
+  color: rgba(216, 250, 255, 0.64);
+  border-color: rgba(216, 250, 255, 0.074);
+  background:
+    linear-gradient(180deg, rgba(216, 250, 255, 0.022), rgba(4, 13, 17, 0.14));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.006),
+    0 0 7px rgba(84, 225, 255, 0.004);
+  opacity: 0.82;
+  text-shadow: 0 0 4px rgba(216, 250, 255, 0.012);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__overlay-btn,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play__hud-action,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-combat-gate__button,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-encounter__action,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__overlay-btn,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play__hud-action,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-combat-gate__button,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-encounter__action {
+  border-color: rgba(216, 250, 255, 0.078);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.007),
+    0 0 8px rgba(84, 225, 255, 0.005);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-actions,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__actions,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-actions,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__actions {
+  row-gap: 0.78rem;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__overlay-btn,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-combat-gate__button,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__action,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__overlay-btn,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-combat-gate__button,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__action {
+    line-height: 1.28;
+    text-shadow: 0 0 4px rgba(216, 250, 255, 0.014);
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-actions,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__actions,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-actions,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__actions {
+    row-gap: 0.82rem;
+  }
+}
+
+/* PHASE 387 — OPERATIONAL CONTINUITY REFINEMENT */
+/* CSS-only passive continuity refinement; no animation, interaction states, behavior, persistence, or authority are introduced. */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field {
+  border-color: rgba(216, 250, 255, 0.052);
+  background-color: rgba(3, 12, 16, 0.58);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel--command,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel--readout,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel--command,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel--readout,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__briefing-panel {
+  border-color: rgba(216, 250, 255, 0.058);
+  background-color: rgba(4, 14, 18, 0.62);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-band,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-band {
+  border-color: rgba(216, 250, 255, 0.048);
+  background-color: rgba(3, 12, 16, 0.44);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-label,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-label,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel-kicker,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-kicker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-label,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-label,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel-kicker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-kicker {
+  color: rgba(216, 250, 255, 0.6);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug {
+  color: rgba(235, 254, 255, 0.8);
+  line-height: 1.46;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card {
+  row-gap: 0.88rem;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__overlay-btn,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-combat-gate__button,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__action,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__overlay-btn,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-combat-gate__button,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-encounter__action {
+  border-color: rgba(216, 250, 255, 0.08);
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field {
+    border-color: rgba(216, 250, 255, 0.046);
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-copy,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-copy,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug {
+    line-height: 1.5;
+  }
+}
