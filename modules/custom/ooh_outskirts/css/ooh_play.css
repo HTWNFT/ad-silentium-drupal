@@ -2251,6 +2251,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce payment infrastructure, payment logic, transaction assumptions, transaction coupling, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 332 CLS: Provider Neutrality Boundary Layer documentation. */
+/* Future payment provider decisions must remain explicitly undecided infrastructure choices only, not current provider commitments, assumptions, or integration paths. */
+/* Provider decisions must remain undecided, explicit, infrastructure-scoped, non-committed, provider-neutral, and non-transactional at this phase. */
+/* Future provider language must remain free from Stripe, Plaid, crypto, card, provider, integration-path, purchase-flow, or transaction assumptions. */
+/* Provider decisions depend on future explicit payment infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce provider assumptions, payment infrastructure, payment logic, transaction assumptions, transaction coupling, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
