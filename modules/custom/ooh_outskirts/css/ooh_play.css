@@ -2203,6 +2203,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce payment logic, credit accounting, account logic, persistence, UI, access gates, lockouts, redirects, modal behavior, interruption behavior, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 326 CLS: Access Continuity Non-Dependency Layer documentation. */
+/* Future access continuity must remain operational continuity only, not emotional dependency, habitual retention pressure, or forced recurring engagement. */
+/* Access continuity systems must remain operational, continuity-oriented, non-addictive, non-dependent, non-coercive, and non-retention-driven. */
+/* Future access continuity language must remain free from habitual pressure mechanics, emotional dependency language, forced recurring engagement patterns, urgency mechanics, or countdown mechanics. */
+/* Access continuity depends on future explicit account, clearance, and session infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce retention mechanics, dependency mechanics, habitual engagement mechanics, persistence, session storage, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
