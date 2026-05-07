@@ -2162,6 +2162,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce persistence, session storage, authentication checks, account logic, payment logic, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 321 CLS: Purchase Pathway Context Isolation Layer documentation. */
+/* Future purchase pathways must remain contextual affordances only, not integrated monetization behavior or transactional flow logic. */
+/* Purchase pathways must remain isolated from gameplay systems and isolated from the closed signal-layer system. */
+/* Purchase pathways are non-transactional at the current phase, non-coercive, non-punitive, and free from pressure escalation. */
+/* Future purchase pathway framing must remain free from monetization-driven interruption, urgency mechanics, redirects, lockouts, or coercive gating. */
+/* Purchase pathways depend on future explicit payment infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce payment logic, credit accounting, account logic, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
