@@ -2309,6 +2309,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, backend coupling, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 340 CLS: Purchase-Entry Pathway Boundary Layer documentation. */
+/* Current CLS purchase-entry visuals are representational only and must not imply real purchase flow, payment processing, account charging, credit delivery, entitlement creation, or backend transaction authority. */
+/* CLS purchase-entry pathways are future-authorized only and are not implemented by this phase. */
+/* This phase introduces documentation only and does not introduce persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, checkout redirects, payment-provider references, backend coupling, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
