@@ -2015,6 +2015,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* CLS establishes monetization as a primary system priority moving forward. */
 /* No functional implementation is introduced in this phase. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 302 CLS: Credit Presence Layer documentation. */
+/* The Credit Presence Layer defines future visibility for access units, clearance time, or operational credit counts. */
+/* Credit presence must remain calm, diegetic, and operational in tone. */
+/* Credit presence must not resemble casino currency, reward loops, urgency mechanics, or aggressive scarcity messaging. */
+/* This layer may later support persistent visibility such as ACCESS UNITS, CLEARANCE TIME, or REMAINING indicators. */
+/* This phase does not create counters, values, state, persistence, UI behavior, or consumption logic. */
+/* No functional implementation is introduced in this phase. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, routing, payment behavior, or gameplay behavior. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
