@@ -2275,6 +2275,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce subsystem boundary collapse, payment infrastructure, payment logic, transaction assumptions, transaction coupling, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 335 CLS: Implementation Authority Explicitness Layer documentation. */
+/* Future CLS implementation authority must remain explicit and phase-authorized only, preventing silent expansion, inferred behavior, or undocumented subsystem activation. */
+/* CLS implementation authority must remain explicit, phase-authorized, auditable, subsystem-scoped, non-implicit, and non-inferred. */
+/* Future authority language must remain free from silent feature expansion, undocumented subsystem activation, hidden authority assumptions, or implicit implementation authority. */
+/* CLS implementation authority depends on future explicitly declared implementation phases before any activation may be introduced. */
+/* This phase introduces documentation only and does not introduce implicit implementation authority, payment infrastructure, payment logic, transaction assumptions, transaction coupling, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
