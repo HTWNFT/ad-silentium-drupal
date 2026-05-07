@@ -2130,6 +2130,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce account logic, authentication checks, payment logic, persistence, UI, or enforcement. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 317 CLS: Session Continuity Neutrality Layer documentation. */
+/* Future session continuity systems must describe operational continuity without retention pressure or engagement coercion. */
+/* Session continuity must remain operational, calm, continuity-oriented, non-addictive, non-coercive, and non-retention-driven. */
+/* Future continuity language must remain free from urgency mechanics, loss-pressure language, countdown framing, or return-pressure prompts. */
+/* Session continuity depends on future infrastructure phases before any storage, account recovery, or runtime implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce session storage, localStorage, cookies, event listeners, payment logic, credit accounting, or engagement loops. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
