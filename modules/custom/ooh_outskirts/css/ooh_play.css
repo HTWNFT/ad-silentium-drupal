@@ -2227,6 +2227,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce surveillance mechanics, behavioral tracking assumptions, authentication checks, account logic, persistence, session storage, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 329 CLS: Access Presence Non-Scarcity Layer documentation. */
+/* Future access presence must remain stable operational availability only, not scarcity signaling, fear-of-loss pressure, or limited-access manipulation. */
+/* Access presence systems must remain stable, operational, availability-oriented, non-scarcity-driven, non-coercive, and non-exclusive. */
+/* Future access presence language must remain free from fear-of-loss language, limited-access pressure, artificial rarity mechanics, scarcity mechanics, or urgency mechanics. */
+/* Access presence depends on future explicit account, clearance, and session infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce limited-access pressure mechanics, scarcity mechanics, authentication checks, account logic, persistence, session storage, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
