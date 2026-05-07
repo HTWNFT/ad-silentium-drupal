@@ -2154,6 +2154,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce credit accounting, payment logic, account logic, persistence, UI, access gates, lockouts, or redirects. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 320 CLS: Clearance Persistence Non-Implementation Layer documentation. */
+/* Future clearance persistence remains a planned continuity concept only, not current storage, authentication, enforcement, or access behavior. */
+/* Clearance persistence must remain planned only, non-implemented, non-storing, non-authoritative, and non-enforcing. */
+/* Future persistence framing must remain free from hidden state, automatic access assumptions, session storage, localStorage, cookies, or implicit account continuity. */
+/* Clearance persistence depends on future explicit infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce persistence, session storage, authentication checks, account logic, payment logic, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
