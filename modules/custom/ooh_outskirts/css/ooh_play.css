@@ -2088,6 +2088,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase establishes naming philosophy only and does not introduce states, UI, routing, runtime behavior, or enforcement. */
 /* No actual clearance states, permissions, balances, account reads, session values, purchases, or persistence mechanisms exist in this phase. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* Phase 312 CLS: Non-Punitive Access Language Layer documentation. */
+/* Non-punitive access language means future CLS wording that describes operational dependency without framing the user as failing. */
+/* Future access messaging should describe operational dependency, not user failure, blame, or fault. */
+/* Unavailable or limited access should feel procedural, calm, and contextual. */
+/* CLS language must avoid blame, shame, urgency, scarcity pressure, countdown pressure, casino energy, or aggressive monetization phrasing. */
+/* This phase establishes language discipline only and does not introduce rules, checks, UI, routing, runtime behavior, or enforcement. */
+/* No actual access rules, clearance checks, permissions, balances, account reads, session values, purchase pathways, or persistence mechanisms exist in this phase. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
