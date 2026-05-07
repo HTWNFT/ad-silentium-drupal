@@ -2048,6 +2048,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase does not create persistence, sessions, authentication systems, account systems, routing behavior, payment systems, or UI logic. */
 /* No functional implementation is introduced in this phase. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 306 CLS: Access-State Visibility Layer documentation. */
+/* Access-state visibility means future CLS vocabulary for communicating whether clearance access is available, limited, gated, or awaiting clearance. */
+/* The interface may eventually show access availability, limited access, gated access, or awaiting-clearance presence as operational information. */
+/* This phase introduces vocabulary only and does not introduce behavior, visibility rules, or UI implementation. */
+/* No actual access decision is made in this phase. */
+/* No user account, payment, credit balance, session value, persistence, or backend authorization value is read or stored. */
+/* Future access-state visibility must remain calm, operational, and dependency-based, not punitive or casino-like. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
