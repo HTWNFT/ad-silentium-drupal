@@ -79,6 +79,24 @@ body.page-play .ooh-play-session.ooh-play-briefing:is(:not(.is-mission-active), 
   z-index: 1;
 }
 
+/* Phase 358: Payload Snapshot presentation containment. */
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__debug,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__debug {
+  min-width: 0;
+  overflow: hidden;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-mission__debug {
+  max-width: 100%;
+  max-height: min(42rem, 64vh);
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+  tab-size: 2;
+}
+
 /* Phase 98: operator focus confirmation. */
 
 /* Hover/focus confirmation stays shared across non-combat states. */
