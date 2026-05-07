@@ -2243,6 +2243,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce payment infrastructure, payment logic, transaction assumptions, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 331 CLS: Transaction Boundary Non-Coupling Layer documentation. */
+/* Future transaction boundaries must remain isolated infrastructure concerns only, not current gameplay, access, account, or credit behavior. */
+/* Transaction boundaries must remain isolated, explicit, infrastructure-scoped, non-coupled to gameplay, non-coupled to access UX, and non-coupled to credit visibility. */
+/* Transaction boundaries remain non-authoritative at this phase and must remain free from provider assumptions, purchase-flow assumptions, or transaction coupling. */
+/* Transaction boundaries depend on future explicit payment and account infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce payment infrastructure, payment logic, transaction assumptions, transaction coupling, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
