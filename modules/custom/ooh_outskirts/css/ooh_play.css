@@ -2235,6 +2235,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce limited-access pressure mechanics, scarcity mechanics, authentication checks, account logic, persistence, session storage, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 330 CLS: Payment Infrastructure Deferral Layer documentation. */
+/* Future payment infrastructure remains explicitly deferred until account, credit, clearance, and session context have meaningful implementation boundaries. */
+/* Payment infrastructure must remain deferred, explicit, non-implicit, non-transactional at this phase, and isolated from current CSS documentation layers. */
+/* Future payment infrastructure depends on future account, credit, clearance, and session implementation phases before any implementation may be introduced. */
+/* Payment infrastructure must remain free from payment-provider assumptions, purchase-flow assumptions, transaction assumptions, or monetization coupling. */
+/* This phase introduces documentation only and does not introduce payment infrastructure, payment logic, transaction assumptions, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
