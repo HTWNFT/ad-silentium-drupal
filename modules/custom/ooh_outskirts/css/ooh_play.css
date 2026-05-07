@@ -2315,6 +2315,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, checkout redirects, payment-provider references, backend coupling, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 341 CLS: Account-Linked Visibility Boundary Layer documentation. */
+/* Current CLS account-linked visibility is not implemented yet; visible clearance, credit, and account cues are static, representational, non-authoritative, and not connected to real user identity or account status. */
+/* CLS account-linked visibility is future-authorized only and is not implemented by this phase. */
+/* This phase introduces documentation only and does not introduce persistence, session continuity, account linkage, identity checks, user-role checks, entitlement logic, credit calculations, purchase logic, payment infrastructure, backend coupling, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
