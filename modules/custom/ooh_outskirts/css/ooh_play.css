@@ -2072,6 +2072,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* No actual clearance checks, restrictions, balances, purchases, account reads, or session continuity mechanisms exist in this phase. */
 /* CLS must remain calm, diegetic, operational, and separate from the closed signal-layer system. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 310 CLS: Account-Linked Visibility Boundary documentation. */
+/* Account-linked visibility means future CLS vocabulary for whether clearance context is associated with a user account. */
+/* Future visibility may eventually reflect account-associated clearance context without creating account behavior. */
+/* This phase defines a boundary only and does not introduce login state, account enforcement, UI, routing, or runtime behavior. */
+/* No login state, user entity, session value, credit balance, role, permission, payment record, or persistence is read or stored. */
+/* Future account-linked messaging must remain calm, operational, and dependency-based. */
+/* CLS must not assume payment infrastructure, account enforcement, purchase state, or authorization execution yet. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
