@@ -2122,6 +2122,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase establishes framing principles only and does not introduce access logic, UI, routing, runtime behavior, or enforcement. */
 /* No actual access logic, permissions, balances, purchases, account reads, session values, routing behavior, or persistence mechanisms exist in this phase. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* Phase 316 CLS: Account-Linked Visibility Boundary documentation. */
+/* Account-linked visibility remains future-facing context only and does not represent current identity logic or access enforcement. */
+/* Account-linked visibility must remain contextual, non-authoritative, and non-enforcing until later account and session phases define behavior. */
+/* This boundary is not tied to login state, credit balance, payment status, session continuity, or account validation yet. */
+/* Future account-linked visibility depends on future account/session phases before any runtime behavior may be introduced. */
+/* This phase introduces documentation only and does not introduce account logic, authentication checks, payment logic, persistence, UI, or enforcement. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
