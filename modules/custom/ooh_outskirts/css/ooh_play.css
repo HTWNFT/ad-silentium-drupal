@@ -2297,6 +2297,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce persistence, storage, session continuity, account logic, payment logic, backend coupling, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 338 CLS: Session-Continuity Boundary Layer documentation. */
+/* CLS session continuity is not implemented yet; current clearance and credit visuals must remain static, representational, and non-authoritative. */
+/* CLS session continuity is future-authorized only and is not implemented by this phase. */
+/* This phase introduces documentation only and does not introduce session continuity, persistence, credit calculations, access-state logic, backend coupling, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
