@@ -2369,6 +2369,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Additional documentation-only CLS phases should not continue unless they remove ambiguity, reduce future work, or add new architectural certainty. */
 /* This stop marker is documentation only and does not authorize CLS implementation. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 352 CLS: narrow non-persistent readiness marker. */
+body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-assembly-field="routeCreditType"],
+body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-assembly-field="routeCreditType"] {
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-color: rgba(216, 250, 255, 0.22);
+  text-underline-offset: 0.22em;
+}
+
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
