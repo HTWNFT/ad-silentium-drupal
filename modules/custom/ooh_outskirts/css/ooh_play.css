@@ -2283,6 +2283,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce implicit implementation authority, payment infrastructure, payment logic, transaction assumptions, transaction coupling, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 336 CLS: Documentation Closure Readiness Layer documentation. */
+/* The current CLS documentation arc is approaching closure while remaining documentation-only and preventing premature transition into implementation, persistence, payment, account, credit, or access behavior. */
+/* CLS documentation must remain documentation-only, closure-aware, implementation-deferred, phase-scoped, non-behavioral, and non-authoritative. */
+/* Future closure language must remain free from premature subsystem activation, transition-by-implication, hidden implementation assumptions, or implementation behavior. */
+/* CLS documentation closure depends on a future explicitly declared implementation arc before any behavior may be introduced. */
+/* This phase introduces documentation only and does not introduce implementation behavior, persistence, payment infrastructure, payment logic, account logic, credit accounting, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
