@@ -2333,6 +2333,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* The CLS boundary-completion audit is documentation only and does not authorize implementation. */
 /* CLS remains separate from the closed signal-layer system and does not reopen, extend, modify, merge with, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 344 CLS: Implementation-Readiness Hold Layer documentation. */
+/* The CLS boundary documentation pass is complete, but implementation remains on hold until a future phase explicitly authorizes a narrow, file-scoped implementation objective. */
+/* CLS implementation-readiness is documentation only and does not authorize implementation. */
+/* This phase introduces documentation only and does not introduce architectural assumptions, implementation placeholders, persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, backend coupling, or routing behavior. */
+/* CLS remains separate from the closed signal-layer system and does not reopen, extend, modify, merge with, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
