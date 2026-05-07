@@ -2146,6 +2146,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce access gates, authentication checks, account logic, payment logic, persistence, UI, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 319 CLS: Credit Presence Non-Accounting Layer documentation. */
+/* Future credit presence must remain visible as context only, not current balance tracking, spending logic, or account enforcement. */
+/* Credit presence must remain non-accounting, non-spending, non-deducting, non-punitive, and non-urgent. */
+/* Future credit language must remain free from balance-drain language, countdown pressure, scarcity pressure, or coercive framing. */
+/* Credit presence depends on future account, clearance, and purchase phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce credit accounting, payment logic, account logic, persistence, UI, access gates, lockouts, or redirects. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
