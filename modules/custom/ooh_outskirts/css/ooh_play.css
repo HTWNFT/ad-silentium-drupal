@@ -2187,6 +2187,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce hierarchy mechanics, authentication checks, account logic, payment logic, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 324 CLS: Credit Availability Calm Dependency Layer documentation. */
+/* Future credit availability must remain calm operational dependency only, not scarcity pressure, countdown behavior, or spending urgency. */
+/* Credit availability systems must remain calm, operational, dependency-oriented, non-scarcity-driven, non-countdown-based, non-draining, and non-punitive. */
+/* Future credit availability language must remain free from urgency language, loss-pressure language, balance-drain framing, countdown mechanics, or scarcity mechanics. */
+/* Credit availability depends on future explicit account, credit, and payment infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce credit accounting, payment logic, account logic, persistence, UI, access gates, lockouts, redirects, urgency mechanics, countdown mechanics, scarcity mechanics, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
