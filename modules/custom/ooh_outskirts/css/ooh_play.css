@@ -2113,6 +2113,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase establishes language discipline only and does not introduce payment behavior, UI, routing, runtime behavior, or enforcement. */
 /* No payment processor, checkout route, credit package, balance, account read, session value, purchase state, or persistence mechanism exists in this phase. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* Phase 315 CLS: Access Availability Framing Layer documentation. */
+/* Access availability framing means future CLS language for describing whether access is operationally ready without implying entitlement or denial. */
+/* Future availability messaging should communicate operational readiness rather than entitlement, rejection, or denial. */
+/* CLS should frame availability as infrastructure condition and continuity support. */
+/* Future messaging must remain calm, procedural, diegetic, and dependency-oriented. */
+/* CLS language must avoid punishment framing, urgency, scarcity pressure, casino energy, countdown pressure, or aggressive monetization phrasing. */
+/* This phase establishes framing principles only and does not introduce access logic, UI, routing, runtime behavior, or enforcement. */
+/* No actual access logic, permissions, balances, purchases, account reads, session values, routing behavior, or persistence mechanisms exist in this phase. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
