@@ -2064,6 +2064,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Future purchase-entry affordances must remain calm, diegetic, operational, and dependency-based. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 308 CLS: Clearance Dependency Framing Layer documentation. */
+/* Clearance dependency means future CLS vocabulary for contextual access readiness when continued access depends on clearance conditions. */
+/* Dependency is contextual access readiness, not punishment, failure, or user blame. */
+/* Future limitations should feel operational and systemic rather than restrictive, aggressive, or emotionally coercive. */
+/* This phase establishes conceptual framing only and does not introduce behavior, checks, UI, routing, or enforcement. */
+/* No actual clearance checks, restrictions, balances, purchases, account reads, or session continuity mechanisms exist in this phase. */
+/* CLS must remain calm, diegetic, operational, and separate from the closed signal-layer system. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
