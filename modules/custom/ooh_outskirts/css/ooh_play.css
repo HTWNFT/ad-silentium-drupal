@@ -2378,6 +2378,12 @@ body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-assembly-field="rou
   text-underline-offset: 0.22em;
 }
 
+/* Phase 354 CLS: narrow non-persistent visual continuity marker. */
+body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-assembly-field="routeCreditType"],
+body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-assembly-field="routeCreditType"] {
+  box-shadow: inset 0 -0.08em 0 rgba(216, 250, 255, 0.055);
+}
+
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
