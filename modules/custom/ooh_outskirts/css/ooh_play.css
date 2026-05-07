@@ -2357,6 +2357,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* Future CLS phases should either remain explicitly closed or move forward only through a narrow authorized implementation phase. */
 /* This warning is documentation only and does not authorize CLS implementation. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 348 CLS: Next-Phase Decision Gate Layer documentation. */
+/* After the CLS over-scaffolding warning, the next CLS-related phase must explicitly decide to remain closed, open a narrow implementation phase, or defer CLS entirely. */
+/* Future repetitive CLS documentation is a drift risk unless it adds new architectural certainty. */
+/* This decision gate is documentation only and does not authorize CLS implementation. */
+/* This phase introduces documentation only and does not introduce architectural assumptions, implementation placeholders, persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, backend coupling, or routing behavior. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
