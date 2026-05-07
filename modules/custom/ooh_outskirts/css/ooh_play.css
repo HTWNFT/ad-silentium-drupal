@@ -2179,6 +2179,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce authentication checks, account logic, payment logic, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 323 CLS: Clearance Visibility Operational Neutrality Layer documentation. */
+/* Future clearance visibility must remain calm operational context only, not status escalation, hierarchy signaling, or authority projection. */
+/* Clearance visibility systems must remain operational, calm, informational, non-hierarchical, non-authoritative, and non-coercive. */
+/* Future clearance visibility language must remain free from prestige signaling, superiority language, escalation pressure, urgency mechanics, or hierarchy mechanics. */
+/* Clearance visibility depends on future explicit clearance infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce hierarchy mechanics, authentication checks, account logic, payment logic, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
