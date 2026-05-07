@@ -2056,6 +2056,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* No user account, payment, credit balance, session value, persistence, or backend authorization value is read or stored. */
 /* Future access-state visibility must remain calm, operational, and dependency-based, not punitive or casino-like. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* Phase 307 CLS: Purchase-Entry Pathway Layer documentation. */
+/* A purchase-entry pathway means future CLS vocabulary for where clearance support may begin if additional access is needed. */
+/* Future purchase entry should feel like clearance support, not pressure, interruption, or urgency-based extraction. */
+/* This phase introduces vocabulary only and does not introduce UI, routing, payment behavior, purchase buttons, or transaction handling. */
+/* No payment processor, credit package, account check, session value, transaction state, persistence, or backend purchase value is introduced. */
+/* Future purchase-entry affordances must remain calm, diegetic, operational, and dependency-based. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
