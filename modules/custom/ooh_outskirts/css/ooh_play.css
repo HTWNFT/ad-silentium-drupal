@@ -2267,6 +2267,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce sequencing shortcuts, payment infrastructure, payment logic, transaction assumptions, transaction coupling, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 334 CLS: Architectural Boundary Preservation Layer documentation. */
+/* Future CLS architecture must keep architectural boundaries permanently explicit and isolated to prevent subsystem bleed between gameplay, signal-layer, clearance, account, credit, session, and payment systems. */
+/* CLS architecture must remain boundary-preserving, subsystem-isolated, explicitly scoped, non-collapsing, and non-cross-coupled. */
+/* Future architecture language must remain free from gameplay/payment blending, signal-layer reuse assumptions, hidden dependency chains, implicit infrastructure authority, or subsystem boundary collapse. */
+/* CLS architecture depends on future explicit implementation phases with preserved subsystem separation before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce subsystem boundary collapse, payment infrastructure, payment logic, transaction assumptions, transaction coupling, account logic, credit accounting, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
