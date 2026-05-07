@@ -2600,3 +2600,145 @@ body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__scanlines {
     width: 100%;
   }
 }
+
+/* Phase 378: dormant-state atmospheric cohesion polish pass. */
+/* Passive dormant visual cohesion only; no motion, authority, gameplay state, or signal-layer behavior is introduced. */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell)::before,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell)::before {
+  border-color: rgba(216, 250, 255, 0.04);
+  background:
+    linear-gradient(90deg, rgba(128, 244, 255, 0.024), transparent 14%, transparent 86%, rgba(128, 244, 255, 0.02)),
+    linear-gradient(180deg, rgba(216, 250, 255, 0.02), transparent 22%, transparent 78%, rgba(128, 244, 255, 0.018));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.01),
+    inset 0 0 44px rgba(84, 225, 255, 0.014),
+    0 0 26px rgba(84, 225, 255, 0.012);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell)::after,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell)::after {
+  opacity: 0.58;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene {
+  border-color: rgba(216, 250, 255, 0.07);
+  background-color: rgba(2, 10, 15, 0.38);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__visual {
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 250, 255, 0.035),
+    inset 0 -42px 70px rgba(1, 8, 12, 0.38);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__sky,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__horizon,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__terrain,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__structure,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__sky,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__horizon,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__terrain,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__structure,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker {
+  filter: saturate(0.9) contrast(0.96);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__marker {
+  opacity: 0.7;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__scanlines,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__scanlines {
+  opacity: 0.13;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-assembly__field,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-assembly__field {
+  border-color: rgba(216, 250, 255, 0.055);
+  background-color: rgba(3, 12, 17, 0.42);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.008),
+    0 0 14px rgba(84, 225, 255, 0.008);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__briefing-panel {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.01),
+    0 0 18px rgba(84, 225, 255, 0.01);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__panel-kicker,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__status-label,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-kicker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__panel-kicker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__status-label,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-kicker {
+  color: rgba(216, 250, 255, 0.62);
+  text-shadow: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__status-value,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-mission__briefing,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__status-value,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-copy,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-mission__briefing,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-mission__debug {
+  color: rgba(235, 254, 255, 0.84);
+  text-shadow: 0 0 8px rgba(216, 250, 255, 0.028);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-mission__briefing,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-mission__briefing,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-mission__debug {
+  background-color: rgba(1, 8, 12, 0.34);
+  border-color: rgba(216, 250, 255, 0.048);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__overlay-btn,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__overlay-btn {
+  border-color: rgba(216, 250, 255, 0.18);
+  background-color: rgba(3, 12, 17, 0.42);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.012),
+    0 0 12px rgba(84, 225, 255, 0.012);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__actions::before,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__actions::before {
+  border-color: rgba(216, 250, 255, 0.055);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.008),
+    0 0 14px rgba(84, 225, 255, 0.012);
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__visual,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__visual {
+    box-shadow:
+      inset 0 0 0 1px rgba(216, 250, 255, 0.032),
+      inset 0 -28px 52px rgba(1, 8, 12, 0.34);
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__panel,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-card,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-assembly__field,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-generator__panel,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-scene__staging-card,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-combat-shell) .ooh-play-assembly__field {
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.008),
+      0 0 10px rgba(84, 225, 255, 0.006);
+  }
+}
