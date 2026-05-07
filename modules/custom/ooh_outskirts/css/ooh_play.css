@@ -2339,6 +2339,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce architectural assumptions, implementation placeholders, persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, backend coupling, or routing behavior. */
 /* CLS remains separate from the closed signal-layer system and does not reopen, extend, modify, merge with, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 345 CLS: Phase-Transition Guard Layer documentation. */
+/* Any future transition from CLS documentation into CLS implementation must require a new explicit phase objective, new declared file scope, and renewed anti-drift review before any functional change is allowed. */
+/* This phase-transition guard is documentation only and does not authorize CLS implementation. */
+/* This phase introduces documentation only and does not introduce architectural assumptions, implementation placeholders, persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, backend coupling, or routing behavior. */
+/* CLS remains separate from the closed signal-layer system and does not reopen, extend, modify, merge with, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
