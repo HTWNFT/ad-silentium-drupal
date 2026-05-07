@@ -2363,6 +2363,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This decision gate is documentation only and does not authorize CLS implementation. */
 /* This phase introduces documentation only and does not introduce architectural assumptions, implementation placeholders, persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, backend coupling, or routing behavior. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 349 CLS: Documentation-Stop Marker Layer documentation. */
+/* Repetitive CLS documentation is now complete. */
+/* Future CLS documentation-only phases are allowed only if they reduce ambiguity or future work. */
+/* Additional documentation-only CLS phases should not continue unless they remove ambiguity, reduce future work, or add new architectural certainty. */
+/* This stop marker is documentation only and does not authorize CLS implementation. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
