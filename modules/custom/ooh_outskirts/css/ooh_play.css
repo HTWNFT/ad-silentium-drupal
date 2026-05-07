@@ -2327,6 +2327,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce persistence, session continuity, account linkage, identity checks, user-role checks, entitlement logic, credit calculations, purchase logic, payment infrastructure, checkout redirects, payment-provider references, backend coupling, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 343 CLS: Boundary-Completion Audit Layer documentation. */
+/* The current CLS documentation boundary pass is complete through payment-processing exclusion while CLS remains representational only. */
+/* CLS has not implemented persistence, session continuity, account linkage, entitlement logic, purchase logic, payment processing, backend authority, or routing behavior. */
+/* The CLS boundary-completion audit is documentation only and does not authorize implementation. */
+/* CLS remains separate from the closed signal-layer system and does not reopen, extend, modify, merge with, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
