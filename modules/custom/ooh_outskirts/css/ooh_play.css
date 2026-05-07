@@ -2211,6 +2211,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce retention mechanics, dependency mechanics, habitual engagement mechanics, persistence, session storage, UI, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 327 CLS: Credit Context Non-Entitlement Layer documentation. */
+/* Future credit context must remain operational availability only, not entitlement pressure, reward manipulation, or user-value ranking. */
+/* Credit context systems must remain operational, availability-oriented, non-entitlement-based, non-reward-driven, non-ranking, and non-punitive. */
+/* Future credit context language must remain free from user-value hierarchy language, earned-status pressure, reward manipulation patterns, entitlement mechanics, or reward mechanics. */
+/* Credit context depends on future explicit account, credit, and clearance infrastructure phases before any implementation may be introduced. */
+/* This phase introduces documentation only and does not introduce credit accounting, entitlement mechanics, reward mechanics, payment logic, account logic, persistence, UI, access gates, lockouts, redirects, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
