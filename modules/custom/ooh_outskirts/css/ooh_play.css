@@ -2351,6 +2351,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce architectural assumptions, implementation placeholders, persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, backend coupling, or routing behavior. */
 /* CLS remains separate from the closed signal-layer system and does not reopen, extend, modify, merge with, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 347 CLS: Over-Scaffolding Warning Layer documentation. */
+/* Repeated CLS documentation-only phases should stop once rules, exclusions, validation, file scope, and architectural assumptions become repetitive. */
+/* Repeated documentation-only CLS phases become a drift risk when they stop adding new architectural certainty. */
+/* Future CLS phases should either remain explicitly closed or move forward only through a narrow authorized implementation phase. */
+/* This warning is documentation only and does not authorize CLS implementation. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
