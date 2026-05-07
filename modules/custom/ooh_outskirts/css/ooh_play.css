@@ -2023,6 +2023,15 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase does not create counters, values, state, persistence, UI behavior, or consumption logic. */
 /* No functional implementation is introduced in this phase. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, routing, payment behavior, or gameplay behavior. */
+/* Phase 303 CLS: Credit Language Standard documentation. */
+/* Future CLS credit language must frame access as operational authorization, not arcade currency. */
+/* Approved future language may include ACCESS UNITS, CLEARANCE TIME, REMAINING, AUTHORIZATION, or SIGNAL WINDOW. */
+/* Disallowed future language includes coins, gems, tokens, loot, spins, streaks, jackpots, boosts, or casino-style urgency. */
+/* CLS scarcity language must remain calm, diegetic, and system-authoritative. */
+/* Credit language must support dependency and continuity, not punishment or aggressive extraction. */
+/* This phase does not create counters, values, UI elements, state, persistence, routing, payment behavior, or consumption logic. */
+/* No functional implementation is introduced in this phase. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
