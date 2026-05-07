@@ -2040,6 +2040,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase does not create persistence, counters, authorization systems, routing behavior, payment systems, or UI logic. */
 /* No functional implementation is introduced in this phase. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 305 CLS: Authorization Continuity Layer documentation. */
+/* The Authorization Continuity Layer defines future continuity concepts for maintained clearance access and uninterrupted authorization presence. */
+/* Future CLS systems may later support continuation-aware authorization states and controlled continuity indicators. */
+/* Authorization continuity must remain calm, operational, and system-authoritative in presentation. */
+/* Continuity language must reinforce controlled access presence, not emotional urgency or punishment mechanics. */
+/* This phase does not create persistence, sessions, authentication systems, account systems, routing behavior, payment systems, or UI logic. */
+/* No functional implementation is introduced in this phase. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
