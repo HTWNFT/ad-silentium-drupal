@@ -2408,3 +2408,195 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
   opacity: 0.10;
   opacity: 0.12;
 }
+
+/* Phase 377: cinematic readability and passive presence polish pass. */
+/* CSS-only containment and readability layer; no authority, persistence, state, timing, or signal behavior is introduced. */
+body.path-play .ooh-play-session.ooh-play-briefing,
+body.page-play .ooh-play-session.ooh-play-briefing {
+  text-rendering: geometricPrecision;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing *,
+body.path-play .ooh-play-session.ooh-play-briefing *::before,
+body.path-play .ooh-play-session.ooh-play-briefing *::after,
+body.page-play .ooh-play-session.ooh-play-briefing *,
+body.page-play .ooh-play-session.ooh-play-briefing *::before,
+body.page-play .ooh-play-session.ooh-play-briefing *::after {
+  box-sizing: border-box;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__inner,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__hud,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__visual,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-readout,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-assembly__field,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__inner,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__hud,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-assembly__field {
+  min-width: 0;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__intro,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__status-value,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__staging-copy,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-value,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate__note,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__status,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__intro,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__status-value,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__staging-copy,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate__note,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__status {
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__status-label,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-label,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__staging-kicker,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__kicker,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__status-label,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-label,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__staging-kicker,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__kicker {
+  line-height: 1.28;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__staging-card,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-readout,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-assembly__field,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-assembly__field {
+  border-color: rgba(216, 250, 255, 0.06);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout {
+  background-color: rgba(3, 12, 17, 0.48);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__telemetry,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__assembly,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__debug,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__telemetry,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__assembly,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__debug {
+  overflow: hidden;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__field,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-assembly__field,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__field,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-assembly__field {
+  gap: 0.42rem;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-grid,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-assembly__grid,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-grid,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-assembly__grid {
+  gap: clamp(0.72rem, 1.5vw, 1rem);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-band,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__actions,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__actions,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-band,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__actions,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__actions {
+  row-gap: 0.72rem;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__overlay-btn,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-action,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate__button,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__action,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__overlay-btn,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-action,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate__button,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__action {
+  line-height: 1.22;
+  white-space: normal;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-action:disabled,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate__button:disabled,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__action:disabled,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-action:disabled,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate__button:disabled,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__action:disabled {
+  color: rgba(216, 250, 255, 0.58);
+  border-color: rgba(216, 250, 255, 0.105);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__scanlines,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__scanlines {
+  opacity: 0.16;
+  mix-blend-mode: screen;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__inner,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__inner {
+    padding-inline: clamp(0.9rem, 4vw, 1.2rem);
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing::before,
+  body.page-play .ooh-play-session.ooh-play-briefing::before {
+    inset: 10px;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__title,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__panel-title,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__mission-label,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__title,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__panel-title,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__mission-label {
+    overflow-wrap: anywhere;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__actions,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-actions,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__actions,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__actions,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-actions,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__actions {
+    align-items: stretch;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-generator__overlay-btn,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-action,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate__button,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__action,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-generator__overlay-btn,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-play__hud-action,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-combat-gate__button,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-encounter__action {
+    min-width: 0;
+    width: 100%;
+  }
+}
