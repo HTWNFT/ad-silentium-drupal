@@ -2303,6 +2303,12 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase introduces documentation only and does not introduce session continuity, persistence, credit calculations, access-state logic, backend coupling, access gates, lockouts, redirects, or enforcement behavior. */
 /* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
 /* No functional implementation is introduced in this phase. */
+/* Phase 339 CLS: Access-State UX Boundary Layer documentation. */
+/* Current CLS access-state visuals are non-interactive, non-authoritative, and must not imply real user access, entitlement, account linkage, credit balance, or payment status. */
+/* CLS access-state UX is future-authorized only and is not implemented by this phase. */
+/* This phase introduces documentation only and does not introduce persistence, session continuity, account linkage, entitlement logic, credit calculations, purchase logic, payment infrastructure, backend coupling, or enforcement behavior. */
+/* CLS remains separate from the closed signal-layer system and does not extend, modify, or reinterpret signal-layer constraints. */
+/* No functional implementation is introduced in this phase. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
