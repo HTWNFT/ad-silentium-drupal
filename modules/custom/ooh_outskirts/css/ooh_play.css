@@ -2032,6 +2032,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-sce
 /* This phase does not create counters, values, UI elements, state, persistence, routing, payment behavior, or consumption logic. */
 /* No functional implementation is introduced in this phase. */
 /* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
+/* Phase 304 CLS: Access-State Visibility Layer documentation. */
+/* The Access-State Visibility Layer defines future operational visibility for authorization continuity and access presence. */
+/* Future CLS systems may later expose authorization state through calm, diegetic, system-level indicators. */
+/* Future visibility may include authorization continuity, remaining access presence, or clearance availability indicators. */
+/* Access-state visibility must remain informational and operational, not emotionally aggressive or casino-styled. */
+/* This phase does not create persistence, counters, authorization systems, routing behavior, payment systems, or UI logic. */
+/* No functional implementation is introduced in this phase. */
+/* This phase introduces no selectors, declarations, custom properties, runtime logic, or gameplay behavior. */
 body.path-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker,
 body.page-play .ooh-play-session.ooh-play-briefing.is-combat-shell .ooh-play-scene__actions::marker {
   content: "";
