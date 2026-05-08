@@ -4719,3 +4719,68 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.
     overflow-wrap: anywhere;
   }
 }
+
+/* PHASE 401 — AUTHORIAL IDENTITY TRANSITION */
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel--command,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel--readout,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel--command,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel--readout,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel {
+  padding-block: clamp(0.84rem, 1.7vw, 1.08rem);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-label,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-label,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel-kicker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-label,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-label,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel-kicker {
+  font-size: 0.72rem;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value {
+  font-weight: 520;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug {
+  border-inline-start: 1px solid rgba(216, 250, 255, 0.075);
+  padding-inline-start: clamp(0.78rem, 2vw, 1rem);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-actions,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-actions {
+  align-items: stretch;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-action {
+  min-height: 2.64rem;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-label,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-label,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel-kicker,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-label,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-label,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel-kicker {
+    font-size: 0.7rem;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug {
+    padding-inline-start: 0.78rem;
+  }
+}
