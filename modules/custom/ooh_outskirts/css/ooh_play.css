@@ -5422,3 +5422,38 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
     line-height: 1.5;
   }
 }
+
+/* PHASE 415 — HUD READOUT CONTINUITY BALANCE */
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status {
+  align-items: baseline;
+  gap: clamp(0.45rem, 1vw, 0.7rem);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  line-height: 1.42;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug {
+  margin-inline: 0 auto;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status {
+    gap: 0.5rem;
+  }
+}
