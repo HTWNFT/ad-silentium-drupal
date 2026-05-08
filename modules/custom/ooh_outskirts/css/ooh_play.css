@@ -5328,3 +5328,53 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
     line-height: 1.5;
   }
 }
+
+/* PHASE 413 — DOSSIER CONTAINMENT CONFIDENCE */
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-grid,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-grid,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field {
+  max-inline-size: 100%;
+  overflow-x: clip;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status-value,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-value,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug {
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout {
+    inline-size: 100%;
+  }
+}
