@@ -5531,3 +5531,48 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-ge
     padding-block: 0.16rem;
   }
 }
+
+/* PHASE 419 — /PLAY CONTAINMENT FREEZE PASS */
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission {
+  inline-size: 100%;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-assembly__field {
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status {
+  min-block-size: 2.35rem;
+  align-items: flex-start;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__briefing,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-mission__debug {
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-generator__status {
+    min-block-size: 2.15rem;
+    padding-block-end: 0.24rem;
+  }
+}
