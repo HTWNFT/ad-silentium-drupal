@@ -2,8 +2,81 @@
   Drupal.behaviors.oohHeroLanding = {
     attach(context) {
       once('oohHeroLanding', '[data-ooh-hero]', context).forEach((root) => {
-        // ----- Modal wiring -----
+        const landing = root.closest('.ooh-landing-page') || document;
+        const ambientAudio = landing.querySelector('[data-ooh-ambient-audio]');
+        const enterBtn = root.querySelector('.ooh-hero__button--primary[href]');
         const openBtn = document.getElementById('ooh-read-prologue');
+
+        const startAmbientAudio = () => {
+          if (!ambientAudio) {
+            return Promise.resolve(false);
+          }
+
+          ambientAudio.volume = 0.18;
+          ambientAudio.preload = 'auto';
+          ambientAudio.loop = true;
+          ambientAudio.load();
+
+          const playAttempt = ambientAudio.play();
+          if (!playAttempt || typeof playAttempt.then !== 'function') {
+            return Promise.resolve(!ambientAudio.paused);
+          }
+
+          return playAttempt
+            .then(() => !ambientAudio.paused)
+            .catch(() => false);
+        };
+
+        if (ambientAudio) {
+          const removeAmbientUnlockListeners = () => {
+            document.removeEventListener('pointerdown', unlockAmbientAudio);
+            document.removeEventListener('click', unlockAmbientAudio);
+            document.removeEventListener('keydown', unlockAmbientAudio);
+            document.removeEventListener('touchstart', unlockAmbientAudio);
+            if (enterBtn) {
+              enterBtn.removeEventListener('click', unlockAmbientAudio);
+            }
+            if (openBtn) {
+              openBtn.removeEventListener('click', unlockAmbientAudio);
+            }
+          };
+
+          const unlockAmbientAudio = () => {
+            startAmbientAudio().then((started) => {
+              if (started) {
+                removeAmbientUnlockListeners();
+              }
+            });
+          };
+
+          const attemptInitialAmbient = () => {
+            startAmbientAudio().then((started) => {
+              if (started) {
+                removeAmbientUnlockListeners();
+              }
+            });
+          };
+
+          document.addEventListener('pointerdown', unlockAmbientAudio, { once: true });
+          document.addEventListener('click', unlockAmbientAudio, { once: true });
+          document.addEventListener('keydown', unlockAmbientAudio, { once: true });
+          document.addEventListener('touchstart', unlockAmbientAudio, { once: true });
+          if (enterBtn) {
+            enterBtn.addEventListener('click', unlockAmbientAudio, { once: true });
+          }
+          if (openBtn) {
+            openBtn.addEventListener('click', unlockAmbientAudio, { once: true });
+          }
+
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', attemptInitialAmbient, { once: true });
+          }
+          else {
+            attemptInitialAmbient();
+          }
+        }
+
+        // ----- Modal wiring -----
         const closeBtn = document.getElementById('ooh-close-prologue');
         const modal = document.getElementById('ooh-prologue-modal');
         const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
