@@ -575,3 +575,160 @@ body.path-clearance .ooh-credits-checkout-page .ooh-return-link:focus-visible {
     transform: none;
   }
 }
+
+/* PHASE V3-Z1-8 — CLS CHECKOUT PRESENTATION POLISH */
+body.path-clearance .ooh-credits-checkout-page {
+  display: grid;
+  align-items: center;
+  padding-block: clamp(48px, 8vh, 76px);
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-cls-checkout-shell {
+  width: min(100%, 920px);
+  padding: clamp(30px, 5vw, 50px);
+  border-color: rgba(104, 240, 255, 0.3);
+  background:
+    linear-gradient(180deg, rgba(5, 10, 22, 0.96), rgba(1, 6, 15, 0.98));
+  box-shadow:
+    inset 0 0 0 1px rgba(158, 248, 255, 0.06),
+    0 18px 48px rgba(0, 0, 0, 0.54),
+    0 0 24px rgba(0, 220, 255, 0.1);
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-credits-eyebrow {
+  margin-bottom: 8px;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-credits-title {
+  margin: 0 0 14px;
+  font-size: clamp(2rem, 4.2vw, 2.65rem);
+  line-height: 1.12;
+  letter-spacing: 0.04em;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-credits-copy {
+  margin-bottom: 20px;
+  line-height: 1.65;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-checkout-summary {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 24px;
+  padding: 20px 22px;
+  border-radius: 10px;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-checkout-summary .ooh-status-label:not(:first-child) {
+  margin-top: 8px;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-checkout-summary strong {
+  color: #f4fdff;
+  line-height: 1.25;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-cls-handoff-grid {
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-payment-option--handoff {
+  min-height: 160px;
+  padding: 20px 22px;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-payment-option__title {
+  line-height: 1.3;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-payment-option__copy {
+  max-width: 34rem;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-cls-reserved-path {
+  margin-bottom: 16px;
+  border-color: rgba(104, 240, 255, 0.2);
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-cls-reserved-path::before,
+body.path-clearance .ooh-credits-checkout-page .ooh-cls-disclaimer::before {
+  content: "";
+  display: block;
+  height: 1px;
+  grid-column: 1 / -1;
+  background: linear-gradient(90deg, transparent, rgba(104, 240, 255, 0.24), transparent);
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-cls-disclaimer {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 18px 20px;
+  color: rgba(219, 248, 255, 0.74);
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-cls-disclaimer p + p {
+  margin-top: 0;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-credits-return {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 14px;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-return-link {
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border-color: rgba(73, 244, 255, 0.42);
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(207, 249, 255, 0.82);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-return-link:hover,
+body.path-clearance .ooh-credits-checkout-page .ooh-return-link:focus-visible {
+  border-color: rgba(181, 252, 255, 0.72);
+  background-color: rgba(2, 24, 42, 0.42);
+  box-shadow: none;
+  color: #f4fdff;
+}
+
+body.path-clearance .ooh-credits-checkout-page .ooh-payment-option--handoff:focus-visible,
+body.path-clearance .ooh-credits-checkout-page .ooh-return-link:focus-visible {
+  outline: 2px solid rgba(181, 252, 255, 0.86);
+  outline-offset: 4px;
+}
+
+@media (max-width: 768px) {
+  body.path-clearance .ooh-credits-checkout-page {
+    align-items: start;
+    padding: 42px 14px 24px;
+  }
+
+  body.path-clearance .ooh-credits-checkout-page .ooh-cls-checkout-shell {
+    padding: 26px 18px;
+  }
+
+  body.path-clearance .ooh-credits-checkout-page .ooh-credits-title {
+    font-size: clamp(1.8rem, 9vw, 2.25rem);
+  }
+
+  body.path-clearance .ooh-credits-checkout-page .ooh-payment-option--handoff {
+    min-height: 136px;
+  }
+
+  body.path-clearance .ooh-credits-checkout-page .ooh-cls-reserved-path {
+    gap: 8px;
+    text-align: center;
+  }
+}
