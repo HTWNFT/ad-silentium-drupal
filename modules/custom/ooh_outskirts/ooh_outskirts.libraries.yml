@@ -90,7 +90,7 @@ clearance:
     - core/once
 
 credits:
-  version: 1.x
+  version: 1.0.1
   css:
     theme:
       css/ooh-credits.css: {}
@@ -100,3 +100,4 @@ credits:
     - ooh_outskirts/player_pages
     - core/drupal
     - core/once
+

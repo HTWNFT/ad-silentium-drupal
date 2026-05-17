@@ -1,3 +1,5 @@
+{{ attach_library('ooh_outskirts/credits') }}
+
 {% set pack_name = pack_label|default('Entry') %}
 {% set pack_amount = pack_amount|default(selected_pack|default('60')) %}
 {% set pack_display = pack_amount ~ ' Credits' %}
@@ -5,42 +7,49 @@
 {% set checkout_enabled = checkout_enabled|default(false) %}
 {% set invalid_pack = invalid_pack|default(false) %}
 
-<section class="ooh-credits-checkout-page">
-  <div class="ooh-credits-checkout-shell">
-    <div class="ooh-credits-eyebrow">CHECKOUT</div>
+<section class="ooh-credits-checkout-page" aria-labelledby="ooh-cls-checkout-title">
+  <div class="ooh-credits-checkout-shell ooh-cls-checkout-shell">
+    <div class="ooh-credits-eyebrow">CLEARANCE LAYER SYSTEM</div>
 
-    <h1 class="ooh-credits-title">CONFIRM CREDIT PACK</h1>
+    <h1 id="ooh-cls-checkout-title" class="ooh-credits-title">STAGED CHECKOUT HANDOFF</h1>
 
     <p class="ooh-credits-copy">
-      Selected package: <strong>{{ pack_name }} / {{ pack_display }}</strong>
+      Selected package: <strong>{{ pack_name }} / {{ pack_display }}</strong>. Provider routing is present for review; live authorization remains offline.
     </p>
 
-    <div class="ooh-checkout-summary">
+    <div class="ooh-checkout-summary" aria-label="Selected credit package summary">
       <span class="ooh-status-label">PACKAGE</span>
       <strong>{{ pack_display }}</strong>
       <span class="ooh-status-label">PRODUCT CODE</span>
       <strong>{{ product_code }}</strong>
       <span class="ooh-status-label">LAUNCH STATE</span>
-      <strong>{{ checkout_enabled ? 'Payment handoff enabled' : 'Payment handoff disabled' }}</strong>
+      <strong>{{ checkout_enabled ? 'Staged handoff visible' : 'Payment handoff disabled' }}</strong>
     </div>
 
-    <div class="ooh-payment-option-grid" aria-label="Payment options">
-      <a class="ooh-payment-option" href="{{ path('ooh_outskirts.clearance_checkout_card', {}, {'query': {'pack': selected_pack}}) }}">
-        CREDIT / DEBIT CARD
+    <div class="ooh-cls-handoff-grid" aria-label="Staged checkout handoff paths">
+      <a class="ooh-payment-option ooh-payment-option--handoff" href="{{ path('ooh_outskirts.clearance_checkout_card', {}, {'query': {'pack': selected_pack}}) }}">
+        <span class="ooh-payment-option__kicker">CARD PATHWAY</span>
+        <span class="ooh-payment-option__title">Credit / Debit Card</span>
+        <span class="ooh-payment-option__copy">Routes to the staged card handoff screen. No persistent credit authorization occurs here.</span>
       </a>
 
-      <button class="ooh-payment-option" type="button" disabled aria-disabled="true">
-        BANK ACCOUNT / PLAID ACH
-      </button>
-
-      <a class="ooh-payment-option" href="{{ path('ooh_outskirts.clearance_checkout_crypto', {}, {'query': {'pack': selected_pack}}) }}">
-        BTC / ETH
+      <a class="ooh-payment-option ooh-payment-option--handoff" href="{{ path('ooh_outskirts.clearance_checkout_crypto', {}, {'query': {'pack': selected_pack}}) }}">
+        <span class="ooh-payment-option__kicker">CRYPTO PATHWAY</span>
+        <span class="ooh-payment-option__title">BTC / ETH</span>
+        <span class="ooh-payment-option__copy">Routes to the staged crypto handoff screen. No wallet linkage or token logic is active.</span>
       </a>
     </div>
 
-    <p class="ooh-checkout-note">
-      Card and BTC / ETH handoff routes are staged for provider connection. ACH remains reserved for a later path.
-    </p>
+    <div class="ooh-cls-reserved-path" aria-label="Reserved checkout path">
+      <span class="ooh-status-label">RESERVED PATH</span>
+      <span>BANK ACCOUNT / PLAID ACH</span>
+      <strong>Not active in this phase</strong>
+    </div>
+
+    <div class="ooh-cls-disclaimer" role="note" aria-label="Checkout phase notice">
+      <p>Transactions are staged for future clearance integration.</p>
+      <p>No persistent credit authorization occurs during this phase.</p>
+    </div>
 
     {% if invalid_pack %}
       <p class="ooh-checkout-note">
