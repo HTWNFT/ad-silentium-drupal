@@ -3021,7 +3021,7 @@ function passiveBehaviorPreviewLabel() {
         }
 
         if (sceneStatus) {
-          sceneStatus.textContent = 'MISSION STAGED // PAYLOAD VERIFIED // AWAITING ACTIVATION' + (payloadAudit.routeFallbackUsed ? ' // ROUTE FALLBACK: TERRA' : '');
+          sceneStatus.textContent = 'MISSION STAGED // PAYLOAD STAGED // AWAITING ACTIVATION' + (payloadAudit.routeFallbackUsed ? ' // ROUTE FALLBACK: TERRA' : '');
         }
 
         if (activateButton) {
