@@ -21,21 +21,21 @@
   }
 
   function bindCreditPackButtons(context) {
-    const packButtons = once('ooh-credit-pack-button', '[data-ooh-credit-pack]', context);
+    const packButtons = once('ooh-credit-pack-button', '.js-ooh-credit-select, [data-ooh-credit-pack]', context);
 
     packButtons.forEach(function (button) {
       button.addEventListener('click', function (event) {
         event.preventDefault();
 
         const packName = button.getAttribute('data-credit-package');
-        const packAmount = button.getAttribute('data-credit-amount');
+        const packAmount = button.getAttribute('data-credits') || button.getAttribute('data-credit-amount');
         const productCode = button.getAttribute('data-product-code');
 
         if (!packName || !packAmount || !productCode) {
           return;
         }
 
-        const statusMessage = document.querySelector('[data-ooh-credit-status]');
+        const statusMessage = document.querySelector('#checkout-placeholder, .ooh-credits-feedback, [data-ooh-credit-status]');
         if (statusMessage) {
           statusMessage.textContent =
             'Checkout coming soon. ' +
