@@ -1,6 +1,0 @@
-name: 'Ad Silentium'
-type: module
-description: 'Landing + dossier generator + play overlay blocks for Ad Silentium.'
-package: Custom
-core_version_requirement: '^10 || ^11'
-version: '1.0.0'
