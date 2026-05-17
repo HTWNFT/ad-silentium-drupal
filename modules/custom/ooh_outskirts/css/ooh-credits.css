@@ -365,6 +365,7 @@ body.path-clearance .ooh-credits-checkout-page .ooh-checkout-summary strong {
   font-size: 22px;
 }
 
+/* Archived selector: retained for legacy checkout markup; active template uses .ooh-cls-handoff-grid. */
 body.path-clearance .ooh-credits-checkout-page .ooh-payment-option-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -400,6 +401,7 @@ body.path-clearance .ooh-credits-checkout-page .ooh-checkout-note {
     padding: 28px;
   }
 
+  /* Archived selector: retained for legacy checkout markup; active template uses .ooh-cls-handoff-grid. */
   body.path-clearance .ooh-credits-checkout-page .ooh-payment-option-grid {
     grid-template-columns: 1fr;
   }

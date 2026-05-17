@@ -10,6 +10,7 @@
 #}
 
 {% set pack_name = pack_label|default('Entry') %}
+{% set selected_pack = selected_pack|default('60') %}
 {% set pack_amount = pack_amount|default(selected_pack|default('60')) %}
 {% set pack_display = pack_amount ~ ' Credits' %}
 {% set product_code = product_code|default('credits_entry_60') %}
