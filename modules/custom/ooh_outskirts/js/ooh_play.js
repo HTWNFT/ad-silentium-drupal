@@ -2026,10 +2026,10 @@ function passiveBehaviorPreviewLabel() {
     applicationLock.setAttribute('data-ooh-transition-application-lock', '');
     applicationLock.textContent = 'TRANSITION APPLICATION LOCKED: MANUAL REVIEW REQUIRED // NO STATE APPLIED';
 
-    const applicationExecuted = document.createElement('span');
-    applicationExecuted.className = 'ooh-play-trigger-selector__application-executed';
-    applicationExecuted.setAttribute('data-ooh-transition-application-executed', '');
-    applicationExecuted.textContent = 'TRANSITION DISPLAY APPLIED: NOT RUN';
+    const displayApplied = document.createElement('span');
+    displayApplied.className = 'ooh-play-trigger-selector__display-applied';
+    displayApplied.setAttribute('data-ooh-transition-display-applied', '');
+    displayApplied.textContent = 'TRANSITION DISPLAY APPLIED: NOT RUN';
 
     const allegianceCompatibility = document.createElement('span');
     allegianceCompatibility.className = 'ooh-play-trigger-selector__allegiance-compatibility';
@@ -2051,10 +2051,10 @@ function passiveBehaviorPreviewLabel() {
     allegianceReviewLock.hidden = true;
     allegianceReviewLock.textContent = 'ALLEGIANCE REVIEW LOCKED: MANUAL CONFIRMATION REQUIRED // NO ALLEGIANCE CHANGE APPLIED';
 
-    const allegianceApplicationExecuted = document.createElement('span');
-    allegianceApplicationExecuted.className = 'ooh-play-trigger-selector__allegiance-application-executed';
-    allegianceApplicationExecuted.setAttribute('data-ooh-allegiance-application-executed', '');
-    allegianceApplicationExecuted.hidden = true;
+    const allegianceDisplayApplied = document.createElement('span');
+    allegianceDisplayApplied.className = 'ooh-play-trigger-selector__allegiance-display-applied';
+    allegianceDisplayApplied.setAttribute('data-ooh-allegiance-display-applied', '');
+    allegianceDisplayApplied.hidden = true;
 
     const phase10FinalAudit = document.createElement('pre');
     phase10FinalAudit.className = 'ooh-play-trigger-selector__phase-10-final-audit';
@@ -2138,8 +2138,8 @@ function passiveBehaviorPreviewLabel() {
       allegianceReviewButton.disabled = true;
       allegianceReviewButton.setAttribute('aria-disabled', 'true');
       allegianceReviewLock.hidden = true;
-      allegianceApplicationExecuted.hidden = true;
-      allegianceApplicationExecuted.textContent = '';
+      allegianceDisplayApplied.hidden = true;
+      allegianceDisplayApplied.textContent = '';
       phase10FinalAudit.hidden = true;
       phase10FinalAudit.textContent = '';
       engagementStatus.hidden = true;
@@ -2169,8 +2169,8 @@ function passiveBehaviorPreviewLabel() {
       const allegianceState = derivedAllegianceState(archetype);
       archetype.profile.allegianceState = allegianceState;
       allegianceCompatibility.textContent = allegianceCompatibilityReviewText(archetype);
-      allegianceApplicationExecuted.textContent = 'ALLEGIANCE APPLICATION EXECUTED: ' + allegianceState + ' // NO COMBAT SYSTEMS ENGAGED';
-      allegianceApplicationExecuted.hidden = false;
+      allegianceDisplayApplied.textContent = 'ALLEGIANCE DISPLAY APPLIED: ' + allegianceState + ' // NO COMBAT SYSTEMS ENGAGED';
+      allegianceDisplayApplied.hidden = false;
       allegianceReviewChecklist.textContent = allegianceReviewChecklistText(true, allegianceState !== 'NEUTRAL');
       phase10FinalAudit.textContent = phase10FinalAuditText(archetype);
       phase10FinalAudit.hidden = false;
@@ -2239,15 +2239,15 @@ function passiveBehaviorPreviewLabel() {
       }
       archetype.profile.behaviorState = previewState;
       applicationChecklist.textContent = transitionApplicationChecklistText(true, true);
-      applicationExecuted.textContent = 'TRANSITION DISPLAY APPLIED: BEHAVIOR STATE ONLY // NO OTHER SYSTEMS ENGAGED';
+      displayApplied.textContent = 'TRANSITION DISPLAY APPLIED: BEHAVIOR STATE ONLY // NO OTHER SYSTEMS ENGAGED';
       allegianceCompatibility.textContent = allegianceCompatibilityReviewText(archetype);
       allegianceCompatibility.hidden = false;
       allegianceReviewButton.hidden = false;
       allegianceReviewButton.disabled = false;
       allegianceReviewButton.setAttribute('aria-disabled', 'false');
       allegianceReviewLock.hidden = false;
-      allegianceApplicationExecuted.hidden = true;
-      allegianceApplicationExecuted.textContent = '';
+      allegianceDisplayApplied.hidden = true;
+      allegianceDisplayApplied.textContent = '';
       phase10FinalAudit.hidden = true;
       phase10FinalAudit.textContent = '';
       engagementStatus.hidden = true;
@@ -2278,11 +2278,11 @@ function passiveBehaviorPreviewLabel() {
     selectorWrap.appendChild(pendingReview);
     selectorWrap.appendChild(armButton);
     selectorWrap.appendChild(applicationLock);
-    selectorWrap.appendChild(applicationExecuted);
+    selectorWrap.appendChild(displayApplied);
     selectorWrap.appendChild(allegianceCompatibility);
     selectorWrap.appendChild(allegianceReviewButton);
     selectorWrap.appendChild(allegianceReviewLock);
-    selectorWrap.appendChild(allegianceApplicationExecuted);
+    selectorWrap.appendChild(allegianceDisplayApplied);
     selectorWrap.appendChild(phase10FinalAudit);
     selectorWrap.appendChild(engagementStatus);
     selectorWrap.appendChild(engageHostileButton);
