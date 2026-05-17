@@ -125,7 +125,7 @@
           const audio = landing.querySelector('[data-ooh-ambient-audio]');
           const dossierLink = landing.querySelector('.ooh-hero__button--primary[href]');
           const buyCreditsButtons = landing.querySelectorAll('[data-ooh-buy-credits]');
-          const creditStatuses = landing.querySelectorAll('[data-ooh-credit-status]');
+          const creditStatuses = landing.querySelectorAll('[data-ooh-credit-status-message]');
           const memberLink = landing.querySelector('.ooh-account-status[href]');
           const loginUrl = landing.getAttribute('data-ooh-login-url') || '';
           const creditsUrl = landing.getAttribute('data-ooh-credits-url') || '';

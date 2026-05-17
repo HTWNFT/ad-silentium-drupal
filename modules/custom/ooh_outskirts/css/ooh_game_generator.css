@@ -1305,7 +1305,7 @@ body.page-dossier .ooh-generator__panel-title {
 }
 
 .ooh-play-scene__briefing-panel .ooh-generator__panel-head::after {
-  content: "TRANSMISSION VERIFIED // BRIEFING CHANNEL STABILIZED";
+  content: "TRANSMISSION STAGED // BRIEFING CHANNEL STABILIZED";
   flex: 1 0 100%;
   padding-top: 8px;
   border-top: 1px solid rgba(126, 244, 255, 0.14);
@@ -1799,7 +1799,7 @@ body.page-dossier .ooh-generator__panel-title {
   text-transform: uppercase;
 }
 
-.ooh-play-mission-authority-stamp {
+.ooh-play-mission-display-stamp {
   display: block;
   width: 100%;
   max-width: 100%;
