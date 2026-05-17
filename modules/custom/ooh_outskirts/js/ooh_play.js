@@ -1364,15 +1364,15 @@ function passiveBehaviorPreviewLabel() {
     return null;
   }
 
-  const existing = encounter.querySelector('[data-ooh-mission-authority-stamp]');
+  const existing = encounter.querySelector('[data-ooh-mission-display-stamp]');
   if (existing) {
     return existing;
   }
 
   const stamp = document.createElement('span');
-  stamp.className = 'ooh-play-mission-authority-stamp';
-  stamp.setAttribute('data-ooh-mission-authority-stamp', '');
-  stamp.textContent = 'CLASSIFIED // VERIFIED // LOCKED';
+  stamp.className = 'ooh-play-mission-display-stamp';
+  stamp.setAttribute('data-ooh-mission-display-stamp', '');
+  stamp.textContent = 'CLASSIFIED // STAGED // LOCAL';
 
   const lock = encounter.querySelector('[data-ooh-generated-contact-lock]');
   if (lock) {
@@ -1407,7 +1407,7 @@ function passiveBehaviorPreviewLabel() {
   presence.className = 'ooh-play-generated-contact-presence';
   presence.setAttribute('data-ooh-generated-contact-presence', '');
 
-  const stamp = encounter.querySelector('[data-ooh-mission-authority-stamp]');
+  const stamp = encounter.querySelector('[data-ooh-mission-display-stamp]');
   if (stamp) {
     encounter.insertBefore(presence, stamp.nextSibling);
     return presence;
@@ -2029,7 +2029,7 @@ function passiveBehaviorPreviewLabel() {
     const applicationExecuted = document.createElement('span');
     applicationExecuted.className = 'ooh-play-trigger-selector__application-executed';
     applicationExecuted.setAttribute('data-ooh-transition-application-executed', '');
-    applicationExecuted.textContent = 'TRANSITION APPLICATION EXECUTED: NOT RUN';
+    applicationExecuted.textContent = 'TRANSITION DISPLAY APPLIED: NOT RUN';
 
     const allegianceCompatibility = document.createElement('span');
     allegianceCompatibility.className = 'ooh-play-trigger-selector__allegiance-compatibility';
@@ -2239,7 +2239,7 @@ function passiveBehaviorPreviewLabel() {
       }
       archetype.profile.behaviorState = previewState;
       applicationChecklist.textContent = transitionApplicationChecklistText(true, true);
-      applicationExecuted.textContent = 'TRANSITION APPLICATION EXECUTED: BEHAVIOR STATE ONLY // NO OTHER SYSTEMS ENGAGED';
+      applicationExecuted.textContent = 'TRANSITION DISPLAY APPLIED: BEHAVIOR STATE ONLY // NO OTHER SYSTEMS ENGAGED';
       allegianceCompatibility.textContent = allegianceCompatibilityReviewText(archetype);
       allegianceCompatibility.hidden = false;
       allegianceReviewButton.hidden = false;
@@ -2627,7 +2627,7 @@ function passiveBehaviorPreviewLabel() {
     auditOutput.textContent = [
       'PHASE 15 STRIKE AUDIT:',
       '- Engagement state: ENGAGED',
-      '- Strike executed: YES',
+      '- Strike simulation active: YES',
       '- Outcome local only: YES',
       '- Damage system active: NO',
       '- Health system active: NO',
