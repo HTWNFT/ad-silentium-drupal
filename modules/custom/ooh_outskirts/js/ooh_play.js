@@ -2099,7 +2099,7 @@ function passiveBehaviorPreviewLabel() {
     executeStrikeButton.type = 'button';
     executeStrikeButton.setAttribute('data-ooh-execute-strike', '');
     executeStrikeButton.hidden = true;
-    executeStrikeButton.textContent = 'EXECUTE STRIKE';
+    executeStrikeButton.textContent = 'SIMULATE STRIKE';
 
     const strikeOutcome = document.createElement('span');
     strikeOutcome.className = 'ooh-play-trigger-selector__strike-outcome';
@@ -2216,7 +2216,7 @@ function passiveBehaviorPreviewLabel() {
       if (engagementState !== 'ENGAGED') {
         return;
       }
-      strikeOutcome.textContent = 'STRIKE EXECUTED: TARGET SUPPRESSED';
+      strikeOutcome.textContent = 'LOCAL STRIKE SIMULATION: DISPLAY ONLY // NO AUTHORITATIVE OUTCOME RECORDED';
       renderCombatFoundationAudits();
       strikeOutcome.hidden = false;
       const strikeRoot = executeStrikeButton.closest('[data-ooh-play]');
@@ -2226,7 +2226,7 @@ function passiveBehaviorPreviewLabel() {
       showSessionEvolutionFeedback(
         strikeRoot,
         sessionEvolutionFeedbackText(strikeRoot, strikePathKey, strikeRouteId) + ' // SIGNAL PATTERN RECORDED',
-        'STRIKE RESPONSE REGISTERED // SESSION LOCAL',
+        'CONTACT RESPONSE SIMULATED // SESSION LOCAL DISPLAY ONLY',
         sessionContinuityText(strikePathKey)
       );
     });
