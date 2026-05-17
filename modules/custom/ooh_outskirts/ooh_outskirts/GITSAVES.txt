@@ -1,0 +1,33 @@
+cd C:\XAMPP11032025\htdocs\STIKWALLET11202025
+
+git status --short
+git diff --stat
+git diff --check
+
+if IT LOOks good: 
+
+git add modules/custom/ooh_outskirts
+git commit -m "Phase 74 payload integrity lock"
+git status --short
+
+Clean result should be:
+
+nothing to commit, working tree clean
+
+For future threads, do this before starting Codex:
+
+git status --short
+
+If anything appears, either commit it first:
+
+git add modules/custom/ooh_outskirtsgit commit -m "Checkpoint before Phase 75"
+
+Or stash it if you are unsure:
+git stash push -u -m "pre-phase-75 uncommitted work"
+
+Then confirm clean:
+git status --short
+
+Best routine:
+git status --shortgit diff --checkgit add modules/custom/ooh_outskirtsgit commit -m "Phase XX short description"git status --short
+That gives you one clean save per phase and prevents old edits from bleeding into the next Codex thread.

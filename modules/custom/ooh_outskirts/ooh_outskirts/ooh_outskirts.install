@@ -1,0 +1,124 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall hooks for the ooh_outskirts module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function ooh_outskirts_schema() {
+  $schema['ooh_outskirts_enter_payload'] = [
+    'description' => 'Stores canonical ENTER payload snapshots saved by the server.',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary payload record ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'uuid' => [
+        'description' => 'Stable UUID for the payload record.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => 'Drupal user ID that saved the payload, or 0 for anonymous.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'payload_version' => [
+        'description' => 'Canonical ENTER payload schema version.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+      'playlist_id' => [
+        'description' => 'Selected playlist machine ID.',
+        'type' => 'varchar',
+        'length' => 96,
+        'not null' => TRUE,
+      ],
+      'path_id' => [
+        'description' => 'Selected path machine ID.',
+        'type' => 'varchar',
+        'length' => 96,
+        'not null' => TRUE,
+      ],
+      'campaign_route_id' => [
+        'description' => 'Selected campaign route machine ID.',
+        'type' => 'varchar',
+        'length' => 96,
+        'not null' => TRUE,
+      ],
+      'route_id' => [
+        'description' => 'Resolved route machine ID.',
+        'type' => 'varchar',
+        'length' => 96,
+        'not null' => TRUE,
+      ],
+      'mission_route_id' => [
+        'description' => 'Mission-derived route machine ID.',
+        'type' => 'varchar',
+        'length' => 96,
+        'not null' => TRUE,
+      ],
+      'mission_type' => [
+        'description' => 'Selected mission type machine ID.',
+        'type' => 'varchar',
+        'length' => 96,
+        'not null' => TRUE,
+      ],
+      'mission_id' => [
+        'description' => 'Selected mission machine ID.',
+        'type' => 'varchar',
+        'length' => 96,
+        'not null' => TRUE,
+      ],
+      'selected_attributes' => [
+        'description' => 'JSON encoded selected attribute labels.',
+        'type' => 'text',
+        'size' => 'normal',
+        'not null' => TRUE,
+      ],
+      'payload_snapshot' => [
+        'description' => 'JSON encoded canonical payload snapshot for audit and later hydration.',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'created' => [
+        'description' => 'Unix timestamp when this payload was saved.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'uuid' => ['uuid'],
+    ],
+    'indexes' => [
+      'uid_created' => ['uid', 'created'],
+    ],
+  ];
+
+  return $schema;
+}
+/**
+ * Creates the ENTER payload save table for existing installations.
+ */
+function ooh_outskirts_update_9301() {
+  $schema = \Drupal::database()->schema();
+  if ($schema->tableExists('ooh_outskirts_enter_payload')) {
+    return;
+  }
+
+  $module_schema = ooh_outskirts_schema();
+  $schema->createTable('ooh_outskirts_enter_payload', $module_schema['ooh_outskirts_enter_payload']);
+}
+

@@ -1,0 +1,56 @@
+{% set pack_name = pack_label|default('Entry') %}
+{% set pack_amount = pack_amount|default(selected_pack|default('60')) %}
+{% set pack_display = pack_amount ~ ' Credits' %}
+{% set product_code = product_code|default('credits_entry_60') %}
+{% set checkout_enabled = checkout_enabled|default(false) %}
+{% set invalid_pack = invalid_pack|default(false) %}
+
+<section class="ooh-credits-checkout-page">
+  <div class="ooh-credits-checkout-shell">
+    <div class="ooh-credits-eyebrow">CHECKOUT</div>
+
+    <h1 class="ooh-credits-title">CONFIRM CREDIT PACK</h1>
+
+    <p class="ooh-credits-copy">
+      Selected package: <strong>{{ pack_name }} / {{ pack_display }}</strong>
+    </p>
+
+    <div class="ooh-checkout-summary">
+      <span class="ooh-status-label">PACKAGE</span>
+      <strong>{{ pack_display }}</strong>
+      <span class="ooh-status-label">PRODUCT CODE</span>
+      <strong>{{ product_code }}</strong>
+      <span class="ooh-status-label">LAUNCH STATE</span>
+      <strong>{{ checkout_enabled ? 'Payment handoff enabled' : 'Payment handoff disabled' }}</strong>
+    </div>
+
+    <div class="ooh-payment-option-grid" aria-label="Payment options">
+      <a class="ooh-payment-option" href="{{ path('ooh_outskirts.clearance_checkout_card', {}, {'query': {'pack': selected_pack}}) }}">
+        CREDIT / DEBIT CARD
+      </a>
+
+      <button class="ooh-payment-option" type="button" disabled aria-disabled="true">
+        BANK ACCOUNT / PLAID ACH
+      </button>
+
+      <a class="ooh-payment-option" href="{{ path('ooh_outskirts.clearance_checkout_crypto', {}, {'query': {'pack': selected_pack}}) }}">
+        BTC / ETH
+      </a>
+    </div>
+
+    <p class="ooh-checkout-note">
+      Card and BTC / ETH handoff routes are staged for provider connection. ACH remains reserved for a later path.
+    </p>
+
+    {% if invalid_pack %}
+      <p class="ooh-checkout-note">
+        The requested package was unavailable. Checkout has returned to the Entry package.
+      </p>
+    {% endif %}
+
+    <div class="ooh-credits-return">
+      <a class="ooh-return-link" href="{{ path('ooh_outskirts.credits') }}">Back to Credits</a>
+      <a class="ooh-return-link" href="{{ path('ooh_outskirts.clearance') }}">Back to Clearance</a>
+    </div>
+  </div>
+</section>
