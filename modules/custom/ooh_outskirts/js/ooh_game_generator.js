@@ -726,7 +726,7 @@
 
         function updateEnterState() {
           const incompleteText = ((settings.labels || {}).enterIncomplete) || 'ASSEMBLY INCOMPLETE // COMPLETE PRIOR DOSSIER STEPS';
-          const readyText = ((settings.labels || {}).enterReady) || 'PAYLOAD VERIFIED // READY FOR STAGING';
+          const readyText = ((settings.labels || {}).enterReady) || 'PAYLOAD STAGED // LOCAL DISPLAY READY';
 
           enterBtn.classList.remove('is-disabled', 'is-premium-ready');
 

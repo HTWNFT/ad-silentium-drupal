@@ -328,11 +328,11 @@ class OohGameGeneratorBlock extends BlockBase {
         'initial' => 60,
       ],
       'labels' => [
-        'lockedTitle' => 'ACCESS RESTRICTED',
-        'lockedBody' => 'Authorization required for this system package.',
+        'lockedTitle' => 'CLEARANCE STAGED',
+        'lockedBody' => 'Clearance preview is available for this staged package.',
         'enterIncomplete' => 'ASSEMBLY INCOMPLETE // COMPLETE PRIOR DOSSIER STEPS',
-        'enterLocked' => 'Upgrade required for selected package.',
-        'enterReady' => 'PAYLOAD VERIFIED // READY FOR STAGING',
+        'enterLocked' => 'Clearance preview available for selected package.',
+        'enterReady' => 'PAYLOAD STAGED // LOCAL DISPLAY READY',
       ],
       'storage' => [
         'stateKey' => 'ooh_game_generator_state_v1',
@@ -388,6 +388,7 @@ class OohGameGeneratorBlock extends BlockBase {
         <span class="ooh-generator__status-value" data-ooh-summary="credits">60</span>
       </div>
     </div>
+    <p class="ooh-generator__message" data-ooh-message>ASSEMBLY INCOMPLETE // COMPLETE PRIOR DOSSIER STEPS</p>
 
     <div class="ooh-generator__grid">
       <section class="ooh-generator__panel" aria-labelledby="ooh-panel-playlist" data-ooh-section="playlist">
@@ -443,13 +444,13 @@ class OohGameGeneratorBlock extends BlockBase {
 
     <div class="ooh-generator__overlay" data-ooh-locked-overlay hidden>
       <div class="ooh-generator__overlay-card">
-        <div class="ooh-generator__overlay-kicker">ACCESS RESTRICTED</div>
-        <h3 class="ooh-generator__overlay-title">Authorization Required</h3>
+        <div class="ooh-generator__overlay-kicker">CLEARANCE STAGED</div>
+        <h3 class="ooh-generator__overlay-title">Clearance Preview</h3>
         <p class="ooh-generator__overlay-copy">
-          This package is reserved for operators with Founders clearance.
+          This package is staged for operators reviewing Founders preview options.
         </p>
         <div class="ooh-generator__overlay-actions">
-          <a class="ooh-generator__overlay-btn" id="unlock-clearance-link" href="' . $paywall_url . '">UNLOCK CLEARANCE</a>
+          <a class="ooh-generator__overlay-btn" id="unlock-clearance-link" href="' . $paywall_url . '">VIEW CLEARANCE OPTIONS</a>
         </div>
       </div>
     </div>
