@@ -1,5 +1,14 @@
 {{ attach_library('ooh_outskirts/credits') }}
 
+{#
+  PHASE V3-Z1-10 — CLS CHECKOUT ARCHITECTURE FREEZE
+
+  This template is a staged handoff surface only. It must not grant credits,
+  confirm payments, load provider SDKs, persist entitlement authority, or bridge
+  into gameplay, dossier, /play, or mission assembly systems. Future provider
+  integration belongs in isolated server-side verification paths.
+#}
+
 {% set pack_name = pack_label|default('Entry') %}
 {% set pack_amount = pack_amount|default(selected_pack|default('60')) %}
 {% set pack_display = pack_amount ~ ' Credits' %}

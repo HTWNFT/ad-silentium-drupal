@@ -440,6 +440,21 @@ body.path-clearance .ooh-credits-checkout-page .ooh-payment-option {
   }
 }
 
+/*
+ * PHASE V3-Z1-10 — CLS CHECKOUT ARCHITECTURE FREEZE
+ *
+ * Boundary:
+ * - This layer is staged and non-authoritative.
+ * - Credits are never granted client-side.
+ * - Provider verification must remain server-side only.
+ * - No provider SDKs, wallet authority, entitlement persistence, or payment
+ *   hooks belong in this presentation layer.
+ * - Localhost/Twig cache repairs are runtime-only and must not be promoted
+ *   through checkout CSS or template changes.
+ * - Future provider integrations must remain isolated from gameplay, dossier,
+ *   /play, and mission assembly systems.
+ */
+
 /* PHASE V3-Z1-3 — CLS CHECKOUT HANDOFF STABILIZATION */
 body.path-clearance .ooh-credits-checkout-page .ooh-cls-checkout-shell {
   max-width: 920px;
