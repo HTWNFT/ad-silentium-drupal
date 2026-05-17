@@ -25,7 +25,7 @@
       </a>
     {% else %}
       <a class="ooh-utility-button ooh-buy-credits" href="{{ path('ooh_outskirts.credits') }}" data-ooh-buy-credits data-ooh-action="credits">
-        BUY CREDITS
+        VIEW CREDITS
       </a>
       <a
         class="ooh-utility-button ooh-system-reset-link"
@@ -136,10 +136,10 @@
     <div class="ooh-landing-dialog__backdrop" data-ooh-dialog-close></div>
     <div class="ooh-landing-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="ooh-credit-drop-title">
       <button class="ooh-landing-dialog__close" type="button" data-ooh-dialog-close aria-label="Close">CLOSE</button>
-      <p class="ooh-landing-dialog__eyebrow">CREDITS // ACCESS READY</p>
-      <h2 class="ooh-landing-dialog__title" id="ooh-credit-drop-title">Reserve access credits?</h2>
+      <p class="ooh-landing-dialog__eyebrow">CREDITS // PREVIEW READY</p>
+      <h2 class="ooh-landing-dialog__title" id="ooh-credit-drop-title">Preview staged credits?</h2>
       <p class="ooh-landing-dialog__copy">
-        Enter your email to attach access credits to your account.
+        Enter your email to preview staged credits without recorded entitlement.
       </p>
       <div class="ooh-landing-dialog__actions" data-ooh-credit-choice>
         <button class="ooh-landing-dialog__button" type="button" data-ooh-credit-yes>YES</button>
@@ -148,7 +148,7 @@
       <form class="ooh-credit-email-form" data-ooh-credit-form hidden>
         <label class="visually-hidden" for="ooh-credit-email">Email</label>
         <input id="ooh-credit-email" class="ooh-credit-email-input" type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
-        <button class="ooh-landing-dialog__button" type="submit">RESERVE ACCESS</button>
+        <button class="ooh-landing-dialog__button" type="submit">PREVIEW CREDITS</button>
       </form>
       <p class="ooh-landing-dialog__status" data-ooh-credit-status-message aria-live="polite"></p>
     </div>
@@ -158,13 +158,13 @@
     <div class="ooh-landing-dialog__backdrop" data-ooh-dialog-close></div>
     <div class="ooh-landing-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="ooh-purchase-cta-title">
       <button class="ooh-landing-dialog__close" type="button" data-ooh-dialog-close aria-label="Close">CLOSE</button>
-      <p class="ooh-landing-dialog__eyebrow">CLEARANCE ACCESS</p>
-      <h2 class="ooh-landing-dialog__title" id="ooh-purchase-cta-title">Clearance credits available.</h2>
+      <p class="ooh-landing-dialog__eyebrow">CLEARANCE PREVIEW</p>
+      <h2 class="ooh-landing-dialog__title" id="ooh-purchase-cta-title">Staged credits available.</h2>
       <p class="ooh-landing-dialog__copy">
-        Buy credits to expand access.
+        View credits for staged access previews.
       </p>
       <div class="ooh-landing-dialog__actions">
-        <a class="ooh-landing-dialog__button" href="{{ path('ooh_outskirts.credits') }}" data-ooh-action="credits">BUY CREDITS</a>
+        <a class="ooh-landing-dialog__button" href="{{ path('ooh_outskirts.credits') }}" data-ooh-action="credits">VIEW CREDITS</a>
         <button class="ooh-landing-dialog__button ooh-landing-dialog__button--ghost" type="button" data-ooh-dialog-close>NOT NOW</button>
       </div>
     </div>

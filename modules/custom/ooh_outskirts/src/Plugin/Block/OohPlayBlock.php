@@ -203,7 +203,7 @@ final class OohPlayBlock extends BlockBase {
         <div class="ooh-play-scene__mission-label" data-ooh-scene-mission-label>MISSION TYPE // PENDING</div>
         <div class="ooh-play-scene__staging-card">
           <span class="ooh-play-scene__staging-kicker">MISSION STATUS</span>
-          <span class="ooh-play-scene__staging-copy" data-ooh-scene-status>MISSION STAGED // PAYLOAD VERIFIED // AWAITING ACTIVATION</span>
+          <span class="ooh-play-scene__staging-copy" data-ooh-scene-status>MISSION STAGED // PAYLOAD STAGED // AWAITING ACTIVATION</span>
         </div>
         <aside class="ooh-play__hud" data-ooh-active-hud aria-label="Active mission HUD" aria-hidden="true">
           <div class="ooh-play__hud-panel ooh-play__hud-panel--command">

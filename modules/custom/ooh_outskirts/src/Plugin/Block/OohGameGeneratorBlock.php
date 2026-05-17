@@ -358,7 +358,7 @@ class OohGameGeneratorBlock extends BlockBase {
       <p class="ooh-generator__eyebrow">SELECTED OPERATIONS // DOSSIER ASSEMBLY</p>
       <h2 class="ooh-generator__title">DOSSIER</h2>
       <p class="ooh-generator__intro">
-        Recruiters are standing by. Select soundtrack, path, and mission profile, then verify the payload for staging.
+        Recruiters are standing by. Select soundtrack, path, and mission profile, then stage the payload for local display.
       </p>
     </div>
 
