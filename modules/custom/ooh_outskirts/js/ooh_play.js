@@ -252,6 +252,185 @@
     };
     return actions[action] || 'active';
   }
+  const signalIntegrityRuntime = {
+    initial: 100,
+    degradedThreshold: 35,
+    tickMs: 1000,
+    baseDecay: 1.4,
+    cushionDecay: 0.35,
+    holdRestore: 8,
+    holdMs: 4500
+  };
+
+  function runtimeStateAttribute(state) {
+    return String(state || '').toLowerCase().replace(/\s+/g, '-');
+  }
+
+  function setRuntimeField(root, field, value) {
+    if (!root) {
+      return;
+    }
+
+    root.querySelectorAll('[data-ooh-runtime-field="' + field + '"]').forEach(function (el) {
+      el.textContent = value;
+    });
+  }
+
+  function signalRuntime(root) {
+    if (!root) {
+      return null;
+    }
+
+    if (!root.oohSignalRuntime) {
+      root.oohSignalRuntime = {
+        timer: null,
+        integrity: signalIntegrityRuntime.initial,
+        cushionUntil: 0,
+        degradedAnnounced: false,
+        lost: false
+      };
+    }
+
+    return root.oohSignalRuntime;
+  }
+
+  function signalIntegrityLabel(root) {
+    const runtime = signalRuntime(root);
+    const value = runtime ? Math.max(0, Math.round(runtime.integrity)) : signalIntegrityRuntime.initial;
+
+    if (!runtime || runtime.lost || value <= 0) {
+      return '0% // LOST';
+    }
+    if (runtime.cushionUntil && Date.now() < runtime.cushionUntil) {
+      return value + '% // SIGNAL HOLD';
+    }
+    if (value < signalIntegrityRuntime.degradedThreshold) {
+      return value + '% // DEGRADED';
+    }
+    return value + '% // STABLE';
+  }
+
+  function syncSignalIntegrityHud(root, stateKey, readoutOverride) {
+    setOperationalRuntimeState(root, stateKey, readoutOverride);
+    setRuntimeField(root, 'signalIntegrity', signalIntegrityLabel(root));
+
+    if (stateKey === 'lost') {
+      setRuntimeField(root, 'extractionReadiness', 'UNAVAILABLE');
+    }
+  }
+
+  function clearSignalIntegrityRuntime(root) {
+    const runtime = root ? root.oohSignalRuntime : null;
+    if (runtime && runtime.timer) {
+      window.clearInterval(runtime.timer);
+    }
+
+    if (root) {
+      root.oohSignalRuntime = null;
+    }
+  }
+
+  function signalIntegrityStateKey(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost || runtime.integrity <= 0) {
+      return 'lost';
+    }
+    if (runtime.integrity < signalIntegrityRuntime.degradedThreshold) {
+      return 'degraded';
+    }
+    return 'active';
+  }
+
+  function stopSignalIntegrityLoop(root) {
+    const runtime = signalRuntime(root);
+    if (runtime && runtime.timer) {
+      window.clearInterval(runtime.timer);
+      runtime.timer = null;
+    }
+  }
+
+  function failSignalIntegrity(root) {
+    const runtime = signalRuntime(root);
+    runtime.integrity = 0;
+    runtime.lost = true;
+    stopSignalIntegrityLoop(root);
+    stopLocalTelemetryPulse(root);
+    clearLocalCadenceBeat(root);
+    root.classList.remove('is-mission-active');
+
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    if (shell) {
+      shell.classList.remove('is-mission-active');
+      shell.setAttribute('data-mission-state', 'signal-lost');
+    }
+
+    const sceneStatus = root.querySelector('[data-ooh-scene-status]');
+    if (sceneStatus) {
+      sceneStatus.textContent = 'SIGNAL LOST // RUNTIME COHESION FAILING // OPERATION HALTED';
+    }
+
+    root.querySelectorAll('[data-ooh-action]').forEach(function (button) {
+      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
+    });
+
+    syncSignalIntegrityHud(root, 'lost', 'SIGNAL LOST. Runtime cohesion failing. Operation halted without persistence.');
+  }
+
+  function tickSignalIntegrity(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost || !root.classList.contains('is-mission-active')) {
+      stopSignalIntegrityLoop(root);
+      return;
+    }
+
+    const cushioned = runtime.cushionUntil && Date.now() < runtime.cushionUntil;
+    runtime.integrity = Math.max(0, runtime.integrity - (cushioned ? signalIntegrityRuntime.cushionDecay : signalIntegrityRuntime.baseDecay));
+
+    if (runtime.integrity <= 0) {
+      failSignalIntegrity(root);
+      return;
+    }
+
+    if (runtime.integrity < signalIntegrityRuntime.degradedThreshold) {
+      if (!runtime.degradedAnnounced) {
+        runtime.degradedAnnounced = true;
+        showLocalCadenceBeat(root, 'SIGNAL DEGRADING', 'Runtime cohesion failing. Use SIGNAL HOLD to stabilize.', 260);
+      }
+      syncSignalIntegrityHud(root, 'degraded');
+      return;
+    }
+
+    syncSignalIntegrityHud(root, cushioned ? 'pressure' : 'active');
+  }
+
+  function startSignalIntegrityLoop(root) {
+    clearSignalIntegrityRuntime(root);
+    const runtime = signalRuntime(root);
+    runtime.integrity = signalIntegrityRuntime.initial;
+    runtime.cushionUntil = 0;
+    runtime.degradedAnnounced = false;
+    runtime.lost = false;
+    syncSignalIntegrityHud(root, 'active', 'Operation active. Signal integrity at 100%.');
+    runtime.timer = window.setInterval(function () {
+      tickSignalIntegrity(root);
+    }, signalIntegrityRuntime.tickMs);
+  }
+
+  function applySignalHold(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost || !root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    runtime.integrity = Math.min(signalIntegrityRuntime.initial, runtime.integrity + signalIntegrityRuntime.holdRestore);
+    runtime.cushionUntil = Date.now() + signalIntegrityRuntime.holdMs;
+    if (runtime.integrity >= signalIntegrityRuntime.degradedThreshold) {
+      runtime.degradedAnnounced = false;
+    }
+    syncSignalIntegrityHud(root, signalIntegrityStateKey(root) === 'degraded' ? 'degraded' : 'pressure', 'SIGNAL HOLD. Channel stabilized. Runtime cohesion cushioned.');
+    showLocalCadenceBeat(root, 'CHANNEL STABILIZED', 'Signal hold active. Decay temporarily cushioned.', 220);
+  }
 
   function setOperationalRuntimeState(root, stateKey, readoutOverride) {
     if (!root) {
@@ -259,11 +438,12 @@
     }
 
     const state = runtimeStateLabels[stateKey] || runtimeStateLabels.standby;
-    root.setAttribute('data-ooh-runtime-state', state.state.toLowerCase().replace(/\s+/g, '-'));
+    const stateAttribute = runtimeStateAttribute(state.state);
+    root.setAttribute('data-ooh-runtime-state', stateAttribute);
 
     const shell = root.querySelector('[data-ooh-scene-shell]');
     if (shell) {
-      shell.setAttribute('data-ooh-runtime-state', state.state.toLowerCase().replace(/\s+/g, '-'));
+      shell.setAttribute('data-ooh-runtime-state', stateAttribute);
     }
 
     const fields = {
@@ -275,9 +455,7 @@
     };
 
     Object.keys(fields).forEach(function (field) {
-      root.querySelectorAll('[data-ooh-runtime-field="' + field + '"]').forEach(function (el) {
-        el.textContent = fields[field];
-      });
+      setRuntimeField(root, field, fields[field]);
     });
 
     root.querySelectorAll('[data-ooh-hud-field="status"]').forEach(function (el) {
@@ -299,6 +477,7 @@
 
     stopLocalTelemetryPulse(root);
     clearLocalCadenceBeat(root);
+    clearSignalIntegrityRuntime(root);
     setOperationalRuntimeState(root, 'standby');
     root.classList.remove('is-mission-active', 'is-combat-shell');
     if (shell) {
@@ -710,7 +889,12 @@
     }
 
     const readoutText = passiveActionText(action, routeId, pathKey);
-    setOperationalRuntimeState(root, runtimeStateKeyFromAction(action), readoutText);
+    if (action === 'hold') {
+      applySignalHold(root);
+    }
+    else {
+      syncSignalIntegrityHud(root, runtimeStateKeyFromAction(action), readoutText);
+    }
     nudgeLocalTelemetryPulse(root, 'TELEMETRY REFRESH: LOCAL');
 
     if (!shell) {
@@ -3004,7 +3188,7 @@ function passiveBehaviorPreviewLabel() {
     }
 
     root.classList.add('is-mission-active');
-    setOperationalRuntimeState(root, 'active');
+    startSignalIntegrityLoop(root);
     if (shell) {
       shell.classList.add('is-mission-active');
       shell.setAttribute('data-mission-state', 'active');
