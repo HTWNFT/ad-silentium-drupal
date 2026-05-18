@@ -200,3 +200,21 @@ function ooh_outskirts_update_9302() {
   $schema->createTable('ooh_outskirts_mission_instance', $module_schema['ooh_outskirts_mission_instance']);
 }
 
+/**
+ * Ensures ENTER payload and mission instance tables exist.
+ */
+function ooh_outskirts_update_9303() {
+  $schema = \Drupal::database()->schema();
+  $module_schema = ooh_outskirts_schema();
+  $tables = [
+    'ooh_outskirts_enter_payload',
+    'ooh_outskirts_mission_instance',
+  ];
+
+  foreach ($tables as $table) {
+    if (!$schema->tableExists($table)) {
+      $schema->createTable($table, $module_schema[$table]);
+    }
+  }
+}
+
