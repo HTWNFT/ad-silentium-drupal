@@ -21,6 +21,49 @@
     }
   }
 
+  function drupalPath(path) {
+    if (Drupal && typeof Drupal.url === 'function') {
+      return Drupal.url(path);
+    }
+
+    const baseUrl = ((((drupalSettings || {}).path || {}).baseUrl) || '/');
+    return baseUrl.replace(/\/$/, '') + '/' + String(path || '').replace(/^\//, '');
+  }
+
+  function csrfToken() {
+    return fetch(drupalPath('session/token'), {
+      credentials: 'same-origin'
+    }).then(function (response) {
+      if (!response.ok) {
+        throw new Error('CSRF token request failed');
+      }
+      return response.text();
+    });
+  }
+
+  function lookupMissionPayload(missionUuid) {
+    return csrfToken().then(function (token) {
+      return fetch(drupalPath('ooh/mission-lookup'), {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': token
+        },
+        body: JSON.stringify({
+          missionUuid: missionUuid
+        })
+      });
+    }).then(function (response) {
+      return response.json().then(function (data) {
+        if (!response.ok || !data || data.success !== true || !data.payload) {
+          throw new Error((data && data.error) || 'Mission lookup failed');
+        }
+        return data;
+      });
+    });
+  }
+
   function humanizeId(value) {
     return String(value || '')
       .replace(/[_-]+/g, ' ')
@@ -2971,6 +3014,156 @@ function passiveBehaviorPreviewLabel() {
     ].join('\n');
   }
 
+  function renderMissionPayload(root, payload, missionUuid, payloadAudit, hydrationMeta) {
+    root.setAttribute('data-ooh-payload-status', 'valid');
+    if (missionUuid) {
+      root.setAttribute('data-ooh-mission-uuid', missionUuid);
+    }
+
+    const promptLibrary = (((drupalSettings || {}).ooh_outskirts || {}).missionPrompts) || {};
+    const selectedPrompt = selectPromptBlock(payload, promptLibrary);
+    payload.selectedPrompt = selectedPrompt;
+    const routeId = routeIdFromPayload(payload);
+    const recruiter = payload.recruiter || {};
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    const routeHeader = root.querySelector('[data-ooh-scene-route-label]');
+    const sceneMissionLabel = root.querySelector('[data-ooh-scene-mission-label]');
+    const sceneStatus = root.querySelector('[data-ooh-scene-status]');
+    const activateButton = root.querySelector('[data-ooh-activate-mission]');
+    const scene = sceneCopy(routeId, payload, selectedPrompt);
+    const assembly = buildMissionAssembly(payload);
+    const pathKey = recruiterPathKey(payload);
+    const evolutionPreview = buildOperatorEvolutionPreview(payload, routeId, pathKey);
+    const missionLabel = payloadAudit.missingFields.indexOf('mission') === -1 ? itemLabel(payload.mission, payload.missionType || 'Unconfirmed') : 'MISSION // UNCONFIRMED';
+    const combatState = createCombatState();
+
+    if (shell) {
+      shell.setAttribute('data-route', routeAttribute(routeId));
+      shell.setAttribute('data-path', pathKey);
+      shell.setAttribute('data-mission-type', missionTypeAttribute(payload));
+      shell.setAttribute('data-playlist-mood', playlistMoodAttribute(payload));
+      shell.setAttribute('data-prompt-block', selectedPrompt ? (selectedPrompt.id || 'prompt_block') : 'unavailable');
+      if (missionUuid) {
+        shell.setAttribute('data-ooh-mission-uuid', missionUuid);
+      }
+      bindSceneAssets(shell, routeId);
+    }
+
+    if (routeHeader) {
+      routeHeader.textContent = scene.label + ' // ' + scene.location;
+    }
+
+    if (sceneMissionLabel) {
+      sceneMissionLabel.textContent = 'MISSION TYPE // ' + missionLabel.toUpperCase();
+    }
+
+    if (sceneStatus) {
+      sceneStatus.textContent = 'MISSION STAGED // PAYLOAD STAGED // AWAITING ACTIVATION' + (payloadAudit.routeFallbackUsed ? ' // ROUTE FALLBACK: TERRA' : '');
+    }
+
+    if (activateButton) {
+      activateButton.addEventListener('click', function () {
+        if (activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel, assembly)) {
+          window.setTimeout(function () {
+            scrollToMissionBriefing(root);
+          }, 60);
+        }
+      });
+    }
+
+    root.querySelectorAll('[data-ooh-action]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        triggerPassiveAction(root, shell, button.getAttribute('data-ooh-action'), routeId, pathKey);
+      });
+    });
+
+    const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
+    if (combatGateButton) {
+      combatGateButton.addEventListener('click', function () {
+        activateCombatShell(root, shell, sceneStatus, routeId, pathKey, missionLabel, combatState);
+      });
+    }
+
+    root.querySelectorAll('.ooh-play-encounter__action').forEach(function (button) {
+      button.addEventListener('click', function () {
+        triggerEncounterAction(root, button, combatState);
+      });
+    });
+
+    document.addEventListener('keydown', function (event) {
+      const tagName = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : '';
+      if (tagName === 'input' || tagName === 'textarea' || tagName === 'select' || event.ctrlKey || event.altKey || event.metaKey) {
+        return;
+      }
+
+      const key = String(event.key || '').toLowerCase();
+      const action = key === 's' ? 'scan' : (key === 'h' ? 'hold' : (key === 'c' ? 'signal' : ''));
+      if (action) {
+        triggerPassiveAction(root, shell, action, routeId, pathKey);
+      }
+    });
+
+    const fields = {
+      route: routeLabel(routeId),
+      mission: missionLabel,
+      path: payloadAudit.missingFields.indexOf('path') === -1 ? itemLabel(payload.path, 'Unconfirmed') : 'PATH // UNCONFIRMED',
+      operatorEvolution: evolutionPreview.operatorEvolution,
+      pathResonance: evolutionPreview.pathResonance,
+      channelStability: evolutionPreview.channelStability,
+      observedSignals: evolutionPreview.observedSignals,
+      recruiter: [recruiter.name || ((payload.character || {}).recruiterName), recruiter.title || ((payload.character || {}).recruiterTitle)].filter(Boolean).join(' / ') || 'Unassigned',
+      playlist: payloadAudit.missingFields.indexOf('playlist') === -1 ? itemLabel(payload.playlist, 'Unselected') : 'PLAYLIST // UNCONFIRMED',
+      prompt: selectedPrompt ? (selectedPrompt.title || selectedPrompt.id || 'Prompt Block') : 'Unavailable'
+    };
+
+    Object.keys(fields).forEach(function (field) {
+      const el = root.querySelector('[data-ooh-briefing-field="' + field + '"]');
+      if (el) {
+        el.textContent = fields[field];
+      }
+    });
+
+    const briefingEl = root.querySelector('[data-ooh-generated-briefing]');
+    if (briefingEl) {
+      briefingEl.textContent = buildBriefing(payload, selectedPrompt);
+    }
+
+    Object.keys(assembly).forEach(function (field) {
+      const el = root.querySelector('[data-ooh-assembly-field="' + field + '"]');
+      if (el) {
+        const labelEl = el.parentElement ? el.parentElement.querySelector('.ooh-generator__status-label') : null;
+        const labels = assemblyLabels();
+        if (labelEl && labels[field]) {
+          labelEl.textContent = labels[field];
+        }
+        el.textContent = assembly[field];
+      }
+    });
+
+    const debugEl = root.querySelector('[data-ooh-briefing-debug]');
+    if (debugEl) {
+      const debugPayload = {
+        payloadStatus: payloadAudit.payloadStatus,
+        missingFields: payloadAudit.missingFields,
+        routeFallbackUsed: payloadAudit.routeFallbackUsed,
+        missionUuid: missionUuid,
+        payload: payload,
+        selectedPrompt: selectedPrompt,
+        missionAssembly: assembly
+      };
+      if (hydrationMeta && hydrationMeta.payloadUuid) {
+        debugPayload.payloadUuid = hydrationMeta.payloadUuid;
+      }
+      if (hydrationMeta && hydrationMeta.lifecycleState) {
+        debugPayload.lifecycleState = hydrationMeta.lifecycleState;
+      }
+      if (hydrationMeta && hydrationMeta.hydrationSource) {
+        debugPayload.hydrationSource = hydrationMeta.hydrationSource;
+      }
+      debugEl.textContent = JSON.stringify(debugPayload, null, 2);
+    }
+  }
+
   Drupal.behaviors.oohPlayBriefing = {
     attach: function (context) {
       once('ooh-play-briefing', '[data-ooh-play]', context).forEach(function (root) {
@@ -2982,146 +3175,29 @@ function passiveBehaviorPreviewLabel() {
         const playSettings = (((drupalSettings || {}).ooh_outskirts || {}).play) || {};
         const dossierTarget = (((playSettings.urls || {}).dossierTarget) || '').trim();
         if (payloadAudit.payloadStatus !== 'VALID') {
-          recoverIncompletePayload(root, payloadAudit, dossierTarget);
-          return;
-        }
-        root.setAttribute('data-ooh-payload-status', 'valid');
-        if (missionUuid) {
-          root.setAttribute('data-ooh-mission-uuid', missionUuid);
-        }
-
-        const promptLibrary = (((drupalSettings || {}).ooh_outskirts || {}).missionPrompts) || {};
-        const selectedPrompt = selectPromptBlock(payload, promptLibrary);
-        payload.selectedPrompt = selectedPrompt;
-        const routeId = routeIdFromPayload(payload);
-        const recruiter = payload.recruiter || {};
-        const shell = root.querySelector('[data-ooh-scene-shell]');
-        const routeHeader = root.querySelector('[data-ooh-scene-route-label]');
-        const sceneMissionLabel = root.querySelector('[data-ooh-scene-mission-label]');
-        const sceneStatus = root.querySelector('[data-ooh-scene-status]');
-        const activateButton = root.querySelector('[data-ooh-activate-mission]');
-        const scene = sceneCopy(routeId, payload, selectedPrompt);
-        const assembly = buildMissionAssembly(payload);
-        const pathKey = recruiterPathKey(payload);
-        const evolutionPreview = buildOperatorEvolutionPreview(payload, routeId, pathKey);
-        const missionLabel = payloadAudit.missingFields.indexOf('mission') === -1 ? itemLabel(payload.mission, payload.missionType || 'Unconfirmed') : 'MISSION // UNCONFIRMED';
-        const combatState = createCombatState();
-
-        if (shell) {
-          shell.setAttribute('data-route', routeAttribute(routeId));
-          shell.setAttribute('data-path', pathKey);
-          shell.setAttribute('data-mission-type', missionTypeAttribute(payload));
-          shell.setAttribute('data-playlist-mood', playlistMoodAttribute(payload));
-          shell.setAttribute('data-prompt-block', selectedPrompt ? (selectedPrompt.id || 'prompt_block') : 'unavailable');
-          if (missionUuid) {
-            shell.setAttribute('data-ooh-mission-uuid', missionUuid);
-          }
-          bindSceneAssets(shell, routeId);
-        }
-
-        if (routeHeader) {
-          routeHeader.textContent = scene.label + ' // ' + scene.location;
-        }
-
-        if (sceneMissionLabel) {
-          sceneMissionLabel.textContent = 'MISSION TYPE // ' + missionLabel.toUpperCase();
-        }
-
-        if (sceneStatus) {
-          sceneStatus.textContent = 'MISSION STAGED // PAYLOAD STAGED // AWAITING ACTIVATION' + (payloadAudit.routeFallbackUsed ? ' // ROUTE FALLBACK: TERRA' : '');
-        }
-
-        if (activateButton) {
-          activateButton.addEventListener('click', function () {
-            if (activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel, assembly)) {
-              window.setTimeout(function () {
-                scrollToMissionBriefing(root);
-              }, 60);
-            }
-          });
-        }
-
-        root.querySelectorAll('[data-ooh-action]').forEach(function (button) {
-          button.addEventListener('click', function () {
-            triggerPassiveAction(root, shell, button.getAttribute('data-ooh-action'), routeId, pathKey);
-          });
-        });
-
-        const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
-        if (combatGateButton) {
-          combatGateButton.addEventListener('click', function () {
-            activateCombatShell(root, shell, sceneStatus, routeId, pathKey, missionLabel, combatState);
-          });
-        }
-
-        root.querySelectorAll('.ooh-play-encounter__action').forEach(function (button) {
-          button.addEventListener('click', function () {
-            triggerEncounterAction(root, button, combatState);
-          });
-        });
-
-        document.addEventListener('keydown', function (event) {
-          const tagName = event.target && event.target.tagName ? event.target.tagName.toLowerCase() : '';
-          if (tagName === 'input' || tagName === 'textarea' || tagName === 'select' || event.ctrlKey || event.altKey || event.metaKey) {
+          if (!missionUuid) {
+            recoverIncompletePayload(root, payloadAudit, dossierTarget);
             return;
           }
 
-          const key = String(event.key || '').toLowerCase();
-          const action = key === 's' ? 'scan' : (key === 'h' ? 'hold' : (key === 'c' ? 'signal' : ''));
-          if (action) {
-            triggerPassiveAction(root, shell, action, routeId, pathKey);
-          }
-        });
-
-        const fields = {
-          route: routeLabel(routeId),
-          mission: missionLabel,
-          path: payloadAudit.missingFields.indexOf('path') === -1 ? itemLabel(payload.path, 'Unconfirmed') : 'PATH // UNCONFIRMED',
-          operatorEvolution: evolutionPreview.operatorEvolution,
-          pathResonance: evolutionPreview.pathResonance,
-          channelStability: evolutionPreview.channelStability,
-          observedSignals: evolutionPreview.observedSignals,
-          recruiter: [recruiter.name || ((payload.character || {}).recruiterName), recruiter.title || ((payload.character || {}).recruiterTitle)].filter(Boolean).join(' / ') || 'Unassigned',
-          playlist: payloadAudit.missingFields.indexOf('playlist') === -1 ? itemLabel(payload.playlist, 'Unselected') : 'PLAYLIST // UNCONFIRMED',
-          prompt: selectedPrompt ? (selectedPrompt.title || selectedPrompt.id || 'Prompt Block') : 'Unavailable'
-        };
-
-        Object.keys(fields).forEach(function (field) {
-          const el = root.querySelector('[data-ooh-briefing-field="' + field + '"]');
-          if (el) {
-            el.textContent = fields[field];
-          }
-        });
-
-        const briefingEl = root.querySelector('[data-ooh-generated-briefing]');
-        if (briefingEl) {
-          briefingEl.textContent = buildBriefing(payload, selectedPrompt);
-        }
-
-        Object.keys(assembly).forEach(function (field) {
-          const el = root.querySelector('[data-ooh-assembly-field="' + field + '"]');
-          if (el) {
-            const labelEl = el.parentElement ? el.parentElement.querySelector('.ooh-generator__status-label') : null;
-            const labels = assemblyLabels();
-            if (labelEl && labels[field]) {
-              labelEl.textContent = labels[field];
+          lookupMissionPayload(missionUuid).then(function (missionData) {
+            const hydratedPayload = missionData.payload || {};
+            const hydratedAudit = auditPayload(hydratedPayload);
+            if (hydratedAudit.payloadStatus !== 'VALID') {
+              recoverIncompletePayload(root, hydratedAudit, dossierTarget);
+              return;
             }
-            el.textContent = assembly[field];
-          }
-        });
-
-        const debugEl = root.querySelector('[data-ooh-briefing-debug]');
-        if (debugEl) {
-          debugEl.textContent = JSON.stringify({
-            payloadStatus: payloadAudit.payloadStatus,
-            missingFields: payloadAudit.missingFields,
-            routeFallbackUsed: payloadAudit.routeFallbackUsed,
-            missionUuid: missionUuid,
-            payload: payload,
-            selectedPrompt: selectedPrompt,
-            missionAssembly: assembly
-          }, null, 2);
+            renderMissionPayload(root, hydratedPayload, missionData.missionUuid || missionUuid, hydratedAudit, {
+              payloadUuid: missionData.payloadUuid || '',
+              lifecycleState: missionData.lifecycleState || '',
+              hydrationSource: 'mission_lookup'
+            });
+          }).catch(function () {
+            recoverIncompletePayload(root, payloadAudit, dossierTarget);
+          });
+          return;
         }
+        renderMissionPayload(root, payload, missionUuid, payloadAudit, null);
       });
     }
   };
