@@ -191,6 +191,7 @@ class OohPageController extends ControllerBase {
 
     $payload = $canonical['payload'];
     $uuid = \Drupal::service('uuid')->generate();
+    $mission_uuid = \Drupal::service('uuid')->generate();
     $created = \Drupal::time()->getRequestTime();
     $uid = (int) \Drupal::currentUser()->id();
 
@@ -219,6 +220,18 @@ class OohPageController extends ControllerBase {
           'created' => $created,
         ])
         ->execute();
+
+      \Drupal::database()->insert('ooh_outskirts_mission_instance')
+        ->fields([
+          'uuid' => $mission_uuid,
+          'enter_payload_id' => (int) $id,
+          'enter_payload_uuid' => $uuid,
+          'uid' => $uid,
+          'lifecycle_state' => 'created',
+          'created' => $created,
+          'updated' => $created,
+        ])
+        ->execute();
     }
     catch (\Exception $e) {
       \Drupal::logger('ooh_outskirts')->error('ENTER payload save failed: @message', [
@@ -234,6 +247,7 @@ class OohPageController extends ControllerBase {
       'success' => TRUE,
       'id' => (int) $id,
       'uuid' => $uuid,
+      'missionUuid' => $mission_uuid,
     ]);
   }
 
