@@ -262,7 +262,11 @@
     holdMs: 4500,
     objectiveInitial: 0,
     objectiveThreshold: 60,
-    objectiveRate: 0.85
+    objectiveRate: 0.85,
+    interferenceInitial: 0,
+    interferenceRate: 1.15,
+    interferenceDecayFactor: 0.55,
+    scanAwarenessMs: 3500
   };
 
   function runtimeStateAttribute(state) {
@@ -291,6 +295,8 @@
         objectiveProgress: signalIntegrityRuntime.objectiveInitial,
         objectiveReady: false,
         objectiveAnnounced: false,
+        interferencePressure: signalIntegrityRuntime.interferenceInitial,
+        scanAwarenessUntil: 0,
         cushionUntil: 0,
         degradedAnnounced: false,
         lost: false
@@ -335,10 +341,80 @@
     }
     return runtime.objectiveReady ? 'AVAILABLE' : 'LOCKED';
   }
+  function interferenceBand(value) {
+    const pressure = Math.max(0, Math.min(100, Number(value) || 0));
+    if (pressure >= 78) {
+      return 'CRITICAL';
+    }
+    if (pressure >= 52) {
+      return 'ELEVATED';
+    }
+    if (pressure >= 24) {
+      return 'RISING';
+    }
+    return 'LOW';
+  }
+
+  function interferencePressureLabel(root) {
+    const runtime = signalRuntime(root);
+    const value = runtime ? Math.max(0, Math.min(100, Math.round(runtime.interferencePressure))) : signalIntegrityRuntime.interferenceInitial;
+    const band = interferenceBand(value);
+
+    if (!runtime || runtime.lost) {
+      return band + ' // FIELD HALTED';
+    }
+    return band + ' // ' + value + '%';
+  }
+
+  function pressureReadoutText(root) {
+    const runtime = signalRuntime(root);
+    const band = interferenceBand(runtime ? runtime.interferencePressure : 0);
+    const copy = {
+      LOW: 'SCAN RETURNED. Interference low. Signal field stable.',
+      RISING: 'SCAN RETURNED. INTERFERENCE RISING. Channel pressure increasing.',
+      ELEVATED: 'SCAN RETURNED. CHANNEL PRESSURE ELEVATED. Maintain signal hold discipline.',
+      CRITICAL: 'SCAN RETURNED. CRITICAL INTERFERENCE. Signal field unstable.'
+    };
+    return copy[band] || copy.LOW;
+  }
+
+  function syncInterferencePressureHud(root) {
+    setRuntimeField(root, 'interferencePressure', interferencePressureLabel(root));
+  }
+
+  function advanceInterferencePressure(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost) {
+      return;
+    }
+
+    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + signalIntegrityRuntime.interferenceRate);
+  }
+
+  function signalDecayAmount(root, cushioned) {
+    const runtime = signalRuntime(root);
+    const pressure = runtime ? Math.max(0, Math.min(100, runtime.interferencePressure)) : 0;
+    const scanAware = runtime && runtime.scanAwarenessUntil && Date.now() < runtime.scanAwarenessUntil;
+    const baseDecay = cushioned ? signalIntegrityRuntime.cushionDecay : signalIntegrityRuntime.baseDecay;
+    const pressureFactor = scanAware ? signalIntegrityRuntime.interferenceDecayFactor * 0.55 : signalIntegrityRuntime.interferenceDecayFactor;
+    return baseDecay + ((pressure / 100) * pressureFactor);
+  }
+
+  function applyInterferenceScan(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost || !root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    runtime.scanAwarenessUntil = Date.now() + signalIntegrityRuntime.scanAwarenessMs;
+    syncSignalIntegrityHud(root, signalIntegrityStateKey(root), pressureReadoutText(root));
+    showLocalCadenceBeat(root, 'SCAN RETURNED', pressureReadoutText(root), 220);
+  }
 
   function syncObjectiveProgressHud(root) {
     setRuntimeField(root, 'objectiveStatus', objectiveProgressLabel(root));
     setRuntimeField(root, 'extractionReadiness', extractionReadinessLabel(root));
+    syncInterferencePressureHud(root);
   }
 
   function effectiveRuntimeStateKey(root, stateKey) {
@@ -446,8 +522,9 @@
       return;
     }
 
+    advanceInterferencePressure(root);
     const cushioned = runtime.cushionUntil && Date.now() < runtime.cushionUntil;
-    runtime.integrity = Math.max(0, runtime.integrity - (cushioned ? signalIntegrityRuntime.cushionDecay : signalIntegrityRuntime.baseDecay));
+    runtime.integrity = Math.max(0, runtime.integrity - signalDecayAmount(root, cushioned));
 
     if (runtime.integrity <= 0) {
       failSignalIntegrity(root);
@@ -475,6 +552,8 @@
     runtime.objectiveProgress = signalIntegrityRuntime.objectiveInitial;
     runtime.objectiveReady = false;
     runtime.objectiveAnnounced = false;
+    runtime.interferencePressure = signalIntegrityRuntime.interferenceInitial;
+    runtime.scanAwarenessUntil = 0;
     runtime.cushionUntil = 0;
     runtime.degradedAnnounced = false;
     runtime.lost = false;
@@ -958,6 +1037,9 @@
     const readoutText = passiveActionText(action, routeId, pathKey);
     if (action === 'hold') {
       applySignalHold(root);
+    }
+    else if (action === 'scan') {
+      applyInterferenceScan(root);
     }
     else {
       syncSignalIntegrityHud(root, runtimeStateKeyFromAction(action), readoutText);
