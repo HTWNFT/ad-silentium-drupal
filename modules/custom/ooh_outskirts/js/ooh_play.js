@@ -259,7 +259,10 @@
     baseDecay: 1.4,
     cushionDecay: 0.35,
     holdRestore: 8,
-    holdMs: 4500
+    holdMs: 4500,
+    objectiveInitial: 0,
+    objectiveThreshold: 60,
+    objectiveRate: 0.85
   };
 
   function runtimeStateAttribute(state) {
@@ -285,6 +288,9 @@
       root.oohSignalRuntime = {
         timer: null,
         integrity: signalIntegrityRuntime.initial,
+        objectiveProgress: signalIntegrityRuntime.objectiveInitial,
+        objectiveReady: false,
+        objectiveAnnounced: false,
         cushionUntil: 0,
         degradedAnnounced: false,
         lost: false
@@ -309,10 +315,66 @@
     }
     return value + '% // STABLE';
   }
+  function objectiveProgressLabel(root) {
+    const runtime = signalRuntime(root);
+    const value = runtime ? Math.max(0, Math.min(100, Math.round(runtime.objectiveProgress))) : signalIntegrityRuntime.objectiveInitial;
+
+    if (!runtime || runtime.lost) {
+      return value + '% // CHANNEL NOT READY';
+    }
+    if (runtime.objectiveReady) {
+      return 'OBJECTIVE WINDOW COMPLETE';
+    }
+    return value + '% // OBJECTIVE SYNCHRONIZING';
+  }
+
+  function extractionReadinessLabel(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost) {
+      return 'UNAVAILABLE';
+    }
+    return runtime.objectiveReady ? 'AVAILABLE' : 'LOCKED';
+  }
+
+  function syncObjectiveProgressHud(root) {
+    setRuntimeField(root, 'objectiveStatus', objectiveProgressLabel(root));
+    setRuntimeField(root, 'extractionReadiness', extractionReadinessLabel(root));
+  }
+
+  function effectiveRuntimeStateKey(root, stateKey) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost || stateKey === 'lost') {
+      return 'lost';
+    }
+    if (runtime.objectiveReady) {
+      return 'extraction';
+    }
+    return stateKey;
+  }
+
+  function advanceObjectiveProgress(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost || runtime.objectiveReady) {
+      return;
+    }
+
+    runtime.objectiveProgress = Math.min(signalIntegrityRuntime.objectiveThreshold, runtime.objectiveProgress + signalIntegrityRuntime.objectiveRate);
+    if (runtime.objectiveProgress < signalIntegrityRuntime.objectiveThreshold) {
+      return;
+    }
+
+    runtime.objectiveReady = true;
+    runtime.objectiveProgress = signalIntegrityRuntime.objectiveThreshold;
+    if (!runtime.objectiveAnnounced) {
+      runtime.objectiveAnnounced = true;
+      showLocalCadenceBeat(root, 'OBJECTIVE WINDOW COMPLETE', 'EXTRACTION WINDOW AVAILABLE. No extraction input is active.', 280);
+    }
+  }
 
   function syncSignalIntegrityHud(root, stateKey, readoutOverride) {
-    setOperationalRuntimeState(root, stateKey, readoutOverride);
+    setOperationalRuntimeState(root, effectiveRuntimeStateKey(root, stateKey), readoutOverride);
     setRuntimeField(root, 'signalIntegrity', signalIntegrityLabel(root));
+    syncObjectiveProgressHud(root);
 
     if (stateKey === 'lost') {
       setRuntimeField(root, 'extractionReadiness', 'UNAVAILABLE');
@@ -392,6 +454,8 @@
       return;
     }
 
+    advanceObjectiveProgress(root);
+
     if (runtime.integrity < signalIntegrityRuntime.degradedThreshold) {
       if (!runtime.degradedAnnounced) {
         runtime.degradedAnnounced = true;
@@ -408,10 +472,13 @@
     clearSignalIntegrityRuntime(root);
     const runtime = signalRuntime(root);
     runtime.integrity = signalIntegrityRuntime.initial;
+    runtime.objectiveProgress = signalIntegrityRuntime.objectiveInitial;
+    runtime.objectiveReady = false;
+    runtime.objectiveAnnounced = false;
     runtime.cushionUntil = 0;
     runtime.degradedAnnounced = false;
     runtime.lost = false;
-    syncSignalIntegrityHud(root, 'active', 'Operation active. Signal integrity at 100%.');
+    syncSignalIntegrityHud(root, 'active', 'Operation active. Signal integrity at 100%. Relay alignment in progress.');
     runtime.timer = window.setInterval(function () {
       tickSignalIntegrity(root);
     }, signalIntegrityRuntime.tickMs);
