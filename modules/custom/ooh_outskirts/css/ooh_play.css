@@ -5619,3 +5619,9 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
     padding-inline-end: 0.58rem;
   }
 }
+
+/* PHASE 425 — PLAY BRIEFING UPPER SPACE TRIM */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__briefing-panel {
+  align-self: start;
+}
