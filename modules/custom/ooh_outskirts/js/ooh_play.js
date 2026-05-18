@@ -185,6 +185,110 @@
   function missionEntryReady(root) {
     return Boolean(root && root.getAttribute('data-ooh-payload-status') === 'valid');
   }
+  const runtimeStateLabels = {
+    standby: {
+      state: 'STANDBY',
+      signalIntegrity: 'STANDBY',
+      objectiveStatus: 'AWAITING PAYLOAD',
+      interferencePressure: 'QUIET',
+      extractionReadiness: 'LOCKED',
+      readout: 'Runtime shell standing by. Awaiting mission activation.'
+    },
+    active: {
+      state: 'OPERATION ACTIVE',
+      signalIntegrity: 'STABLE',
+      objectiveStatus: 'IN PROGRESS',
+      interferencePressure: 'LOW',
+      extractionReadiness: 'DORMANT',
+      readout: 'Operation active. Signal stable. Extraction remains dormant.'
+    },
+    pressure: {
+      state: 'PRESSURE RISING',
+      signalIntegrity: 'STABLE UNDER LOAD',
+      objectiveStatus: 'IN PROGRESS',
+      interferencePressure: 'RISING',
+      extractionReadiness: 'DORMANT',
+      readout: 'Pressure rising. Maintain cadence and keep the signal clean.'
+    },
+    degraded: {
+      state: 'SIGNAL DEGRADED',
+      signalIntegrity: 'DEGRADED',
+      objectiveStatus: 'IN PROGRESS',
+      interferencePressure: 'UNSTABLE',
+      extractionReadiness: 'DORMANT',
+      readout: 'Signal degraded. Stabilize before route conditions collapse.'
+    },
+    extraction: {
+      state: 'EXTRACTION AVAILABLE',
+      signalIntegrity: 'RECOVERING',
+      objectiveStatus: 'ROUTE SHIFT READY',
+      interferencePressure: 'CRESTING',
+      extractionReadiness: 'AVAILABLE',
+      readout: 'Extraction readiness visible. No extraction order has been issued.'
+    },
+    lost: {
+      state: 'SIGNAL LOST',
+      signalIntegrity: 'LOST',
+      objectiveStatus: 'INTERRUPTED',
+      interferencePressure: 'MAXIMUM',
+      extractionReadiness: 'UNAVAILABLE',
+      readout: 'Signal lost. Runtime shell holds presentation state only.'
+    },
+    complete: {
+      state: 'OPERATION COMPLETE',
+      signalIntegrity: 'ARCHIVED',
+      objectiveStatus: 'COMPLETE',
+      interferencePressure: 'CLEARED',
+      extractionReadiness: 'CLOSED',
+      readout: 'Operation complete. Result authority remains offline.'
+    }
+  };
+
+  function runtimeStateKeyFromAction(action) {
+    const actions = {
+      scan: 'pressure',
+      hold: 'extraction',
+      signal: 'degraded'
+    };
+    return actions[action] || 'active';
+  }
+
+  function setOperationalRuntimeState(root, stateKey, readoutOverride) {
+    if (!root) {
+      return;
+    }
+
+    const state = runtimeStateLabels[stateKey] || runtimeStateLabels.standby;
+    root.setAttribute('data-ooh-runtime-state', state.state.toLowerCase().replace(/\s+/g, '-'));
+
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    if (shell) {
+      shell.setAttribute('data-ooh-runtime-state', state.state.toLowerCase().replace(/\s+/g, '-'));
+    }
+
+    const fields = {
+      operationState: state.state,
+      signalIntegrity: state.signalIntegrity,
+      objectiveStatus: state.objectiveStatus,
+      interferencePressure: state.interferencePressure,
+      extractionReadiness: state.extractionReadiness
+    };
+
+    Object.keys(fields).forEach(function (field) {
+      root.querySelectorAll('[data-ooh-runtime-field="' + field + '"]').forEach(function (el) {
+        el.textContent = fields[field];
+      });
+    });
+
+    root.querySelectorAll('[data-ooh-hud-field="status"]').forEach(function (el) {
+      el.textContent = state.state;
+    });
+
+    const readout = root.querySelector('[data-ooh-action-readout]');
+    if (readout) {
+      readout.textContent = readoutOverride || state.readout;
+    }
+  }
 
   function resetMissionRuntime(root) {
     const shell = root.querySelector('[data-ooh-scene-shell]');
@@ -195,6 +299,7 @@
 
     stopLocalTelemetryPulse(root);
     clearLocalCadenceBeat(root);
+    setOperationalRuntimeState(root, 'standby');
     root.classList.remove('is-mission-active', 'is-combat-shell');
     if (shell) {
       shell.classList.remove('is-mission-active', 'is-combat-shell', 'is-combat-armed');
@@ -604,10 +709,8 @@
       return;
     }
 
-    const readout = root.querySelector('[data-ooh-action-readout]');
-    if (readout) {
-      readout.textContent = passiveActionText(action, routeId, pathKey);
-    }
+    const readoutText = passiveActionText(action, routeId, pathKey);
+    setOperationalRuntimeState(root, runtimeStateKeyFromAction(action), readoutText);
     nudgeLocalTelemetryPulse(root, 'TELEMETRY REFRESH: LOCAL');
 
     if (!shell) {
@@ -2901,6 +3004,7 @@ function passiveBehaviorPreviewLabel() {
     }
 
     root.classList.add('is-mission-active');
+    setOperationalRuntimeState(root, 'active');
     if (shell) {
       shell.classList.add('is-mission-active');
       shell.setAttribute('data-mission-state', 'active');

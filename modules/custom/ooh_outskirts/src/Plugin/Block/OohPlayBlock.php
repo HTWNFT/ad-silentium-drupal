@@ -224,8 +224,24 @@ final class OohPlayBlock extends BlockBase {
               <span class="ooh-play__hud-value" data-ooh-hud-field="path">Pending</span>
             </div>
             <div class="ooh-play__hud-readout">
-              <span class="ooh-play__hud-label">STATUS</span>
-              <span class="ooh-play__hud-value" data-ooh-hud-field="status">STAGED</span>
+              <span class="ooh-play__hud-label">OPERATION STATE</span>
+              <span class="ooh-play__hud-value" data-ooh-hud-field="status" data-ooh-runtime-field="operationState">STANDBY</span>
+            </div>
+            <div class="ooh-play__hud-readout ooh-play__hud-readout--runtime">
+              <span class="ooh-play__hud-label">SIGNAL INTEGRITY</span>
+              <span class="ooh-play__hud-value" data-ooh-runtime-field="signalIntegrity">STANDBY</span>
+            </div>
+            <div class="ooh-play__hud-readout ooh-play__hud-readout--runtime">
+              <span class="ooh-play__hud-label">OBJECTIVE STATUS</span>
+              <span class="ooh-play__hud-value" data-ooh-runtime-field="objectiveStatus">AWAITING PAYLOAD</span>
+            </div>
+            <div class="ooh-play__hud-readout ooh-play__hud-readout--runtime">
+              <span class="ooh-play__hud-label">INTERFERENCE PRESSURE</span>
+              <span class="ooh-play__hud-value" data-ooh-runtime-field="interferencePressure">QUIET</span>
+            </div>
+            <div class="ooh-play__hud-readout ooh-play__hud-readout--runtime">
+              <span class="ooh-play__hud-label">EXTRACTION READINESS</span>
+              <span class="ooh-play__hud-value" data-ooh-runtime-field="extractionReadiness">LOCKED</span>
             </div>
           </div>
           <div class="ooh-play__hud-panel">

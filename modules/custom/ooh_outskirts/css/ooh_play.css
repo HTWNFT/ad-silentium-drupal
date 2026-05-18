@@ -5625,3 +5625,40 @@ body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
 body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__briefing-panel {
   align-self: start;
 }
+
+/* PHASE OA-002 - OPERATIONAL HUD RUNTIME CONTAINMENT */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) [data-ooh-runtime-field],
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) [data-ooh-runtime-field] {
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout--runtime,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout--runtime {
+  border-color: rgba(216, 250, 255, 0.075);
+  background:
+    linear-gradient(180deg, rgba(244, 255, 255, 0.012), rgba(84, 225, 255, 0.006)),
+    linear-gradient(90deg, rgba(128, 244, 255, 0.006), transparent 30%, transparent 70%, rgba(128, 244, 255, 0.005));
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-runtime-state="pressure-rising"] .ooh-play__hud-readout--runtime,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-runtime-state="pressure-rising"] .ooh-play__hud-readout--runtime,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-runtime-state="signal-degraded"] .ooh-play__hud-readout--runtime,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-runtime-state="signal-degraded"] .ooh-play__hud-readout--runtime {
+  border-color: rgba(216, 250, 255, 0.12);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.012),
+    0 0 14px rgba(84, 225, 255, 0.012);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-runtime-state="extraction-available"] [data-ooh-runtime-field="extractionReadiness"],
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-runtime-state="extraction-available"] [data-ooh-runtime-field="extractionReadiness"] {
+  color: rgba(244, 255, 255, 0.88);
+  text-shadow: 0 0 10px rgba(216, 250, 255, 0.08);
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout--runtime,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__hud-readout--runtime {
+    min-block-size: 2.15rem;
+  }
+}
