@@ -96,3 +96,12 @@ ooh_outskirts.enter_payload_save:
     _permission: 'access content'
     _csrf_request_header_token: 'TRUE'
 
+ooh_outskirts.mission_lookup:
+  path: '/ooh/mission-lookup'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::lookupMission'
+  requirements:
+    _permission: 'access content'
+    _csrf_request_header_token: 'TRUE'
+

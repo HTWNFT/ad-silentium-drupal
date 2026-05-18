@@ -251,6 +251,68 @@ class OohPageController extends ControllerBase {
     ]);
   }
 
+  public function lookupMission(Request $request) {
+    $decoded = Json::decode($request->getContent() ?: '{}');
+    if (!is_array($decoded)) {
+      return new JsonResponse([
+        'success' => FALSE,
+        'error' => 'invalid_json',
+      ], 400);
+    }
+
+    $mission_uuid = trim((string) ($decoded['missionUuid'] ?? ''));
+    if ($mission_uuid === '') {
+      return new JsonResponse([
+        'success' => FALSE,
+        'error' => 'invalid_mission_uuid',
+      ], 400);
+    }
+
+    try {
+      $query = \Drupal::database()->select('ooh_outskirts_mission_instance', 'mission');
+      $query->innerJoin('ooh_outskirts_enter_payload', 'payload', 'mission.enter_payload_id = payload.id AND mission.enter_payload_uuid = payload.uuid');
+      $query->addField('mission', 'uuid', 'mission_uuid');
+      $query->addField('mission', 'lifecycle_state', 'lifecycle_state');
+      $query->addField('payload', 'uuid', 'payload_uuid');
+      $query->addField('payload', 'payload_snapshot', 'payload_snapshot');
+      $query->condition('mission.uuid', $mission_uuid);
+      $query->range(0, 1);
+      $record = $query->execute()->fetchAssoc();
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('ooh_outskirts')->error('Mission lookup failed: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      return new JsonResponse([
+        'success' => FALSE,
+        'error' => 'lookup_failed',
+      ], 500);
+    }
+
+    if (!$record) {
+      return new JsonResponse([
+        'success' => FALSE,
+        'error' => 'mission_not_found',
+      ], 404);
+    }
+
+    $payload = Json::decode($record['payload_snapshot'] ?? '{}');
+    if (!is_array($payload)) {
+      return new JsonResponse([
+        'success' => FALSE,
+        'error' => 'lookup_failed',
+      ], 500);
+    }
+
+    return new JsonResponse([
+      'success' => TRUE,
+      'missionUuid' => $record['mission_uuid'],
+      'payloadUuid' => $record['payload_uuid'],
+      'payload' => $payload,
+      'lifecycleState' => $record['lifecycle_state'],
+    ]);
+  }
+
   protected function canonicalEnterPayload(array $payload) {
     $errors = [];
     $playlist_id = $this->payloadNestedId($payload, 'playlist', 'playlistId');
