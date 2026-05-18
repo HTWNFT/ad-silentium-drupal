@@ -4398,12 +4398,12 @@ body.page-dossier .ooh-generator__panel[data-ooh-section="recruiter"] {
 
 body.path-dossier .ooh-generator__panel[data-ooh-section="mission"],
 body.page-dossier .ooh-generator__panel[data-ooh-section="mission"] {
-  order: 3;
+  order: 4;
 }
 
 body.path-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"],
 body.page-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"] {
-  order: 4;
+  order: 3;
 }
 
 body.path-dossier .ooh-generator__panel[data-ooh-section="enter"],
