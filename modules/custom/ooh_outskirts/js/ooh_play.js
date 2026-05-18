@@ -216,6 +216,9 @@
       combatGateButton.classList.remove('is-combat-armed');
       combatGateButton.disabled = true;
       combatGateButton.setAttribute('aria-disabled', 'true');
+      if (combatGateButton.nextElementSibling) {
+        combatGateButton.nextElementSibling.textContent = 'Combat systems offline.';
+      }
     }
     if (encounter) {
       encounter.hidden = true;
@@ -2945,6 +2948,9 @@ function passiveBehaviorPreviewLabel() {
     if (combatGateButton) {
       combatGateButton.disabled = false;
       combatGateButton.setAttribute('aria-disabled', 'false');
+      if (combatGateButton.nextElementSibling) {
+        combatGateButton.nextElementSibling.textContent = 'Combat systems standing by.';
+      }
     }
 
     return true;
