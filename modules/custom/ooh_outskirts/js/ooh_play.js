@@ -517,9 +517,9 @@
 
   function buildCombatShellSceneStatus(routeId, pathKey, missionLabel) {
     const routeStates = {
-      aer: 'COMBAT SHELL ARMED. Sky corridor contact confirmed. Maintain altitude discipline.',
-      mare: 'COMBAT SHELL ARMED. Pressure-zone contact confirmed. Maintain oxygen discipline.',
-      terra: 'COMBAT SHELL ARMED. Ground-route contact confirmed. Maintain signal discipline.'
+      aer: 'COMBAT SHELL PREVIEW ARMED. Sky corridor contact confirmed. Maintain altitude discipline.',
+      mare: 'COMBAT SHELL PREVIEW ARMED. Pressure-zone contact confirmed. Maintain oxygen discipline.',
+      terra: 'COMBAT SHELL PREVIEW ARMED. Ground-route contact confirmed. Maintain signal discipline.'
     };
     const pathTone = pathKey === 'DOOMED' ?
       ' DOOMED channel elevated.' :
@@ -1175,7 +1175,7 @@ function passiveBehaviorPreviewLabel() {
   function phase10FinalAuditText(archetype) {
     const profile = archetype ? archetype.profile : {};
     return [
-      'PHASE 10 AUDIT COMPLETE: BEHAVIOR STATE APPLIED // ALLEGIANCE REVIEWED // COMBAT SYSTEMS LOCKED',
+      'PHASE 10 AUDIT COMPLETE: BEHAVIOR DISPLAY PREVIEW APPLIED // ALLEGIANCE REVIEWED // COMBAT SYSTEMS LOCKED',
       'Current behaviorState: ' + (profile.behaviorState || 'UNKNOWN'),
       'Current allegianceState: ' + (profile.allegianceState || 'UNKNOWN'),
       'Combat systems engaged: NO'
@@ -2108,7 +2108,7 @@ function passiveBehaviorPreviewLabel() {
     engagementStatus.className = 'ooh-play-trigger-selector__engagement-status';
     engagementStatus.setAttribute('data-ooh-engagement-status', '');
     engagementStatus.hidden = true;
-    engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
+    engagementStatus.textContent = 'LOCAL ENGAGEMENT PREVIEW: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
 
     const engageHostileButton = document.createElement('button');
     engageHostileButton.className = 'ooh-play-trigger-selector__engage-hostile';
@@ -2186,7 +2186,7 @@ function passiveBehaviorPreviewLabel() {
       phase10FinalAudit.hidden = true;
       phase10FinalAudit.textContent = '';
       engagementStatus.hidden = true;
-      engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
+      engagementStatus.textContent = 'LOCAL ENGAGEMENT PREVIEW: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
       engageHostileButton.hidden = true;
       engageHostileButton.disabled = true;
       engageHostileButton.setAttribute('aria-disabled', 'true');
@@ -2217,7 +2217,7 @@ function passiveBehaviorPreviewLabel() {
       allegianceReviewChecklist.textContent = allegianceReviewChecklistText(true, allegianceState !== 'NEUTRAL');
       phase10FinalAudit.textContent = phase10FinalAuditText(archetype);
       phase10FinalAudit.hidden = false;
-      engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
+      engagementStatus.textContent = 'LOCAL ENGAGEMENT PREVIEW: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
       engagementStatus.hidden = false;
       engageHostileButton.hidden = false;
       engageHostileButton.disabled = allegianceState === 'NEUTRAL';
@@ -2245,8 +2245,8 @@ function passiveBehaviorPreviewLabel() {
         focusedEncounter.setAttribute('data-contact-focus', 'locked');
         focusedEncounter.classList.add('is-contact-focus-locked');
       }
-      engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState;
-      engagementConfirmed.textContent = 'ENGAGEMENT CONFIRMED: TARGET LOCKED // NO DAMAGE SYSTEM ACTIVE';
+      engagementStatus.textContent = 'LOCAL ENGAGEMENT PREVIEW: LOCKED';
+      engagementConfirmed.textContent = 'ENGAGEMENT PREVIEW CONFIRMED: TARGET LOCKED // NO DAMAGE SYSTEM ACTIVE';
       engagementConfirmed.hidden = false;
       contactLockConfirmation.hidden = false;
       combatLoopStatus.hidden = false;
@@ -2294,7 +2294,7 @@ function passiveBehaviorPreviewLabel() {
       phase10FinalAudit.hidden = true;
       phase10FinalAudit.textContent = '';
       engagementStatus.hidden = true;
-      engagementStatus.textContent = 'ENGAGEMENT STATUS: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
+      engagementStatus.textContent = 'LOCAL ENGAGEMENT PREVIEW: ' + engagementState + ' // COMBAT SYSTEMS NOT ACTIVE';
       engageHostileButton.hidden = true;
       engageHostileButton.disabled = true;
       engageHostileButton.setAttribute('aria-disabled', 'true');
@@ -2307,7 +2307,7 @@ function passiveBehaviorPreviewLabel() {
       strikeOutcome.textContent = '';
       allegianceReviewChecklist.textContent = allegianceReviewChecklistText(true, false);
       allegianceReviewChecklist.hidden = false;
-      auditStamp.textContent = 'PHASE 10 APPLICATION: BEHAVIOR STATE APPLIED // ' + previewState;
+      auditStamp.textContent = 'PHASE 10 APPLICATION: BEHAVIOR DISPLAY PREVIEW APPLIED // ' + previewState;
     });
 
     selectorWrap.appendChild(label);
@@ -2706,7 +2706,7 @@ function passiveBehaviorPreviewLabel() {
       return;
     }
 
-    const message = 'HOSTILE CONTACT CONFIRMED. COMBAT SHELL ARMED.';
+    const message = 'HOSTILE CONTACT CONFIRMED. COMBAT SHELL PREVIEW ARMED.';
     const actionReadout = root.querySelector('[data-ooh-action-readout]');
     const gateStatus = root.querySelector('[data-ooh-combat-gate-status]');
     const hudStatus = root.querySelector('[data-ooh-hud-field="status"]');
@@ -2734,7 +2734,7 @@ function passiveBehaviorPreviewLabel() {
       sceneStatus.textContent = buildCombatShellSceneStatus(routeId, pathKey, missionLabel);
     }
     if (gateButton) {
-      gateButton.textContent = 'COMBAT SHELL ARMED';
+      gateButton.textContent = 'COMBAT SHELL PREVIEW ARMED';
       gateButton.classList.add('is-combat-armed');
       gateButton.disabled = true;
       gateButton.setAttribute('aria-disabled', 'true');
