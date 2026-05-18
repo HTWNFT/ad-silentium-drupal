@@ -193,6 +193,7 @@
     const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
     const encounter = root.querySelector('[data-ooh-combat-encounter]');
 
+    stopLocalTelemetryPulse(root);
     root.classList.remove('is-mission-active', 'is-combat-shell');
     if (shell) {
       shell.classList.remove('is-mission-active', 'is-combat-shell', 'is-combat-armed');
@@ -603,6 +604,7 @@
     if (readout) {
       readout.textContent = passiveActionText(action, routeId, pathKey);
     }
+    nudgeLocalTelemetryPulse(root, 'TELEMETRY REFRESH: LOCAL');
 
     if (!shell) {
       return;
@@ -2532,6 +2534,76 @@ function passiveBehaviorPreviewLabel() {
     }, 1400);
   }
 
+  function localTelemetryPulseLines(routeId, pathKey, mode) {
+    const routeLines = {
+      aer: ['SIGNAL VARIANCE: LOW', 'CLOUDLINE ECHO STABLE', 'ALTITUDE CHANNEL HOLDING'],
+      mare: ['PRESSURE RIPPLE: LOCAL', 'OXYGEN CHANNEL HOLDING', 'CURRENT VECTOR DRIFT'],
+      terra: ['DUST INDEX SHIFT', 'GROUND SIGNAL FLICKER', 'RUIN VISIBILITY VARIANCE']
+    };
+    const pathLines = {
+      DOOMED: ['CHANNEL DRIFT: ELEVATED', 'VOLATILE ECHO PASSING'],
+      MERGED: ['SYNTHETIC CHANNEL CLEAN', 'ECHO ALIGNMENT HOLDING']
+    };
+    const lines = ['PAYLOAD ECHO STABLE', 'PASSIVE SCAN CYCLING', 'DISPLAY CHANNEL HOLDING']
+      .concat(routeLines[routeId] || routeLines.terra)
+      .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW']);
+
+    if (mode === 'combat') {
+      return ['LOCAL PREVIEW PULSE', 'CONTACT ECHO OBSERVED', 'SHELL DISPLAY REFRESH'].concat(lines);
+    }
+
+    return lines;
+  }
+
+  function stopLocalTelemetryPulse(root) {
+    if (!root) {
+      return;
+    }
+    if (root.oohTelemetryPulseTimer) {
+      window.clearTimeout(root.oohTelemetryPulseTimer);
+      root.oohTelemetryPulseTimer = null;
+    }
+  }
+
+  function startLocalTelemetryPulse(root, routeId, pathKey, mode) {
+    const readout = root ? root.querySelector('[data-ooh-action-readout]') : null;
+    if (!root || !readout) {
+      return;
+    }
+
+    const lines = localTelemetryPulseLines(routeId, pathKey, mode);
+    if (!lines.length) {
+      return;
+    }
+
+    stopLocalTelemetryPulse(root);
+    root.oohTelemetryPulseIndex = 0;
+
+    const tick = function () {
+      if (!missionEntryReady(root) || !root.classList.contains('is-mission-active')) {
+        stopLocalTelemetryPulse(root);
+        return;
+      }
+
+      if (!readout.oohEvolutionFeedbackTimer && !readout.oohEvolutionContinuityTimer) {
+        readout.textContent = lines[root.oohTelemetryPulseIndex % lines.length];
+        root.oohTelemetryPulseIndex += 1;
+      }
+
+      root.oohTelemetryPulseTimer = window.setTimeout(tick, mode === 'combat' ? 5200 : 6800);
+    };
+
+    root.oohTelemetryPulseTimer = window.setTimeout(tick, mode === 'combat' ? 1800 : 3200);
+  }
+
+  function nudgeLocalTelemetryPulse(root, message) {
+    const readout = root ? root.querySelector('[data-ooh-action-readout]') : null;
+    if (!readout || readout.oohEvolutionFeedbackTimer || readout.oohEvolutionContinuityTimer) {
+      return;
+    }
+    readout.textContent = message;
+  }
+
   function sessionEvolutionFeedbackText(root, pathKey, routeId) {
     const observedSignals = root ? root.querySelector('[data-ooh-briefing-field="observedSignals"]') : null;
     const hasAttributeSignals = observedSignals &&
@@ -2626,6 +2698,7 @@ function passiveBehaviorPreviewLabel() {
     }
 
     statusField.textContent = statusText;
+    nudgeLocalTelemetryPulse(root, 'CONTACT ECHO OBSERVED');
     triggerEncounterPulse(encounter, action);
     encounter.querySelectorAll('.ooh-play-encounter__action').forEach(function (actionButton) {
       actionButton.classList.remove('is-combat-action-active');
@@ -2747,6 +2820,7 @@ function passiveBehaviorPreviewLabel() {
       syncEncounterState(encounter, combatState);
       enableEncounterActions(encounter);
     }
+    startLocalTelemetryPulse(root, routeId, pathKey, 'combat');
     if (shell) {
       shell.classList.add('is-combat-shell', 'is-combat-armed');
       shell.setAttribute('data-combat-state', 'shell');
@@ -2828,6 +2902,7 @@ function passiveBehaviorPreviewLabel() {
       if (readout) {
         readout.textContent = 'Passive inputs online. Awaiting SCAN, HOLD POSITION, or CHECK SIGNAL.';
       }
+      startLocalTelemetryPulse(root, routeId, pathKey, 'mission');
     }
 
     const combatGate = root.querySelector('[data-ooh-combat-gate]');
