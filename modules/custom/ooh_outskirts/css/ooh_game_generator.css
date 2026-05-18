@@ -3841,6 +3841,16 @@ body.page-dossier .ooh-generator__panel-title {
     grid-template-columns: 1fr;
   }
 
+  body.path-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"],
+  body.page-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"] {
+    order: 3;
+  }
+
+  body.path-dossier .ooh-generator__panel[data-ooh-section="mission"],
+  body.page-dossier .ooh-generator__panel[data-ooh-section="mission"] {
+    order: 4;
+  }
+
   .ooh-generator__recruiter {
     grid-template-columns: minmax(140px, 220px) minmax(0, 1fr);
   }
@@ -3869,6 +3879,16 @@ body.page-dossier .ooh-generator__panel-title {
 
   .ooh-generator__status {
     grid-template-columns: 1fr;
+  }
+
+  body.path-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"],
+  body.page-dossier .ooh-generator__panel[data-ooh-section="campaignRoute"] {
+    order: 3;
+  }
+
+  body.path-dossier .ooh-generator__panel[data-ooh-section="mission"],
+  body.page-dossier .ooh-generator__panel[data-ooh-section="mission"] {
+    order: 4;
   }
 
   .ooh-generator__title {
