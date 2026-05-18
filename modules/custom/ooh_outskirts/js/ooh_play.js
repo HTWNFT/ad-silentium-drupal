@@ -2977,6 +2977,7 @@ function passiveBehaviorPreviewLabel() {
         // Hydrate the /play scene from the Dossier payload stored before routing.
         const storedState = readStoredState();
         const payload = storedState.payload || {};
+        const missionUuid = typeof storedState.serverMissionUuid === 'string' ? storedState.serverMissionUuid : '';
         const payloadAudit = auditPayload(payload);
         const playSettings = (((drupalSettings || {}).ooh_outskirts || {}).play) || {};
         const dossierTarget = (((playSettings.urls || {}).dossierTarget) || '').trim();
@@ -2985,6 +2986,9 @@ function passiveBehaviorPreviewLabel() {
           return;
         }
         root.setAttribute('data-ooh-payload-status', 'valid');
+        if (missionUuid) {
+          root.setAttribute('data-ooh-mission-uuid', missionUuid);
+        }
 
         const promptLibrary = (((drupalSettings || {}).ooh_outskirts || {}).missionPrompts) || {};
         const selectedPrompt = selectPromptBlock(payload, promptLibrary);
@@ -3009,6 +3013,9 @@ function passiveBehaviorPreviewLabel() {
           shell.setAttribute('data-mission-type', missionTypeAttribute(payload));
           shell.setAttribute('data-playlist-mood', playlistMoodAttribute(payload));
           shell.setAttribute('data-prompt-block', selectedPrompt ? (selectedPrompt.id || 'prompt_block') : 'unavailable');
+          if (missionUuid) {
+            shell.setAttribute('data-ooh-mission-uuid', missionUuid);
+          }
           bindSceneAssets(shell, routeId);
         }
 
@@ -3109,6 +3116,7 @@ function passiveBehaviorPreviewLabel() {
             payloadStatus: payloadAudit.payloadStatus,
             missingFields: payloadAudit.missingFields,
             routeFallbackUsed: payloadAudit.routeFallbackUsed,
+            missionUuid: missionUuid,
             payload: payload,
             selectedPrompt: selectedPrompt,
             missionAssembly: assembly

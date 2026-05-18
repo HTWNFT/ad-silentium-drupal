@@ -998,7 +998,8 @@
                   selectedAttributes: payload.selectedAttributes,
                   payload: payload,
                   serverPayloadId: savedPayload.id,
-                  serverPayloadUuid: savedPayload.uuid
+                  serverPayloadUuid: savedPayload.uuid,
+                  serverMissionUuid: savedPayload.missionUuid
                 }));
               }
               catch (e) {}
