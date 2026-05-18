@@ -194,6 +194,7 @@
     const encounter = root.querySelector('[data-ooh-combat-encounter]');
 
     stopLocalTelemetryPulse(root);
+    clearLocalCadenceBeat(root);
     root.classList.remove('is-mission-active', 'is-combat-shell');
     if (shell) {
       shell.classList.remove('is-mission-active', 'is-combat-shell', 'is-combat-armed');
@@ -2604,6 +2605,31 @@ function passiveBehaviorPreviewLabel() {
     readout.textContent = message;
   }
 
+  function clearLocalCadenceBeat(root) {
+    if (root && root.oohLocalCadenceTimer) {
+      window.clearTimeout(root.oohLocalCadenceTimer);
+      root.oohLocalCadenceTimer = null;
+    }
+    if (root && root.oohLocalCadenceFollowupTimer) {
+      window.clearTimeout(root.oohLocalCadenceFollowupTimer);
+      root.oohLocalCadenceFollowupTimer = null;
+    }
+  }
+
+  function showLocalCadenceBeat(root, message, settleText, delay) {
+    const readout = root ? root.querySelector('[data-ooh-action-readout]') : null;
+    if (!root || !readout) {
+      return;
+    }
+
+    clearLocalCadenceBeat(root);
+    readout.textContent = message;
+    root.oohLocalCadenceTimer = window.setTimeout(function () {
+      readout.textContent = settleText;
+      root.oohLocalCadenceTimer = null;
+    }, Math.min(delay || 180, 450));
+  }
+
   function sessionEvolutionFeedbackText(root, pathKey, routeId) {
     const observedSignals = root ? root.querySelector('[data-ooh-briefing-field="observedSignals"]') : null;
     const hasAttributeSignals = observedSignals &&
@@ -2698,7 +2724,7 @@ function passiveBehaviorPreviewLabel() {
     }
 
     statusField.textContent = statusText;
-    nudgeLocalTelemetryPulse(root, 'CONTACT ECHO OBSERVED');
+    showLocalCadenceBeat(root, 'CONTACT ECHO OBSERVED', 'TELEMETRY REFRESH: LOCAL', 160);
     triggerEncounterPulse(encounter, action);
     encounter.querySelectorAll('.ooh-play-encounter__action').forEach(function (actionButton) {
       actionButton.classList.remove('is-combat-action-active');
@@ -2796,7 +2822,12 @@ function passiveBehaviorPreviewLabel() {
     if (actionReadout) {
       actionReadout.textContent = message + ' Passive inputs remain online.';
     }
-    showSessionEvolutionFeedback(root, sessionEvolutionFeedbackText(root, pathKey, routeId), message + ' Passive inputs remain online.', sessionContinuityText(pathKey));
+    clearLocalCadenceBeat(root);
+    showLocalCadenceBeat(root, 'LOCAL PREVIEW PULSE', message + ' Passive inputs remain online.', 280);
+    root.oohLocalCadenceFollowupTimer = window.setTimeout(function () {
+      showSessionEvolutionFeedback(root, sessionEvolutionFeedbackText(root, pathKey, routeId), message + ' Passive inputs remain online.', sessionContinuityText(pathKey));
+      root.oohLocalCadenceFollowupTimer = null;
+    }, 300);
     if (gateStatus) {
       gateStatus.textContent = message;
     }
@@ -2900,7 +2931,7 @@ function passiveBehaviorPreviewLabel() {
       });
       const readout = hud.querySelector('[data-ooh-action-readout]');
       if (readout) {
-        readout.textContent = 'Passive inputs online. Awaiting SCAN, HOLD POSITION, or CHECK SIGNAL.';
+        showLocalCadenceBeat(root, 'PAYLOAD ECHO STABLE', 'Passive inputs online. Awaiting SCAN, HOLD POSITION, or CHECK SIGNAL.', 220);
       }
       startLocalTelemetryPulse(root, routeId, pathKey, 'mission');
     }
