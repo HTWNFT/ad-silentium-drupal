@@ -107,6 +107,71 @@ function ooh_outskirts_schema() {
     ],
   ];
 
+  $schema['ooh_outskirts_mission_instance'] = [
+    'description' => 'Stores inert mission instance identity and payload linkage records.',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary mission instance record ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'uuid' => [
+        'description' => 'Stable UUID for the mission instance record.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'enter_payload_id' => [
+        'description' => 'Linked ENTER payload record ID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'enter_payload_uuid' => [
+        'description' => 'Linked ENTER payload UUID.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => 'Drupal user ID associated with the mission instance, or 0 for anonymous.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'lifecycle_state' => [
+        'description' => 'Inert lifecycle placeholder label for future continuity phases.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ],
+      'created' => [
+        'description' => 'Unix timestamp when this mission instance was created.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'updated' => [
+        'description' => 'Unix timestamp when this mission instance was last updated.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'uuid' => ['uuid'],
+    ],
+    'indexes' => [
+      'enter_payload_id' => ['enter_payload_id'],
+      'enter_payload_uuid' => ['enter_payload_uuid'],
+      'uid' => ['uid'],
+      'lifecycle_state' => ['lifecycle_state'],
+    ],
+  ];
+
   return $schema;
 }
 /**
@@ -120,5 +185,18 @@ function ooh_outskirts_update_9301() {
 
   $module_schema = ooh_outskirts_schema();
   $schema->createTable('ooh_outskirts_enter_payload', $module_schema['ooh_outskirts_enter_payload']);
+}
+
+/**
+ * Creates the mission instance table for existing installations.
+ */
+function ooh_outskirts_update_9302() {
+  $schema = \Drupal::database()->schema();
+  if ($schema->tableExists('ooh_outskirts_mission_instance')) {
+    return;
+  }
+
+  $module_schema = ooh_outskirts_schema();
+  $schema->createTable('ooh_outskirts_mission_instance', $module_schema['ooh_outskirts_mission_instance']);
 }
 
