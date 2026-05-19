@@ -342,10 +342,10 @@
       id: 'operation_complete',
       label: 'OPERATION COMPLETE',
       conditionId: 'fog_dawn',
-      signalInitial: 74,
-      interferenceInitial: 36,
+      signalInitial: 66,
+      interferenceInitial: 48,
       objectiveInitial: 60,
-      extractionInitial: 68,
+      extractionInitial: 44,
       extractionPacing: 'extended',
       cadenceFlavor: 'Completion profile staged. Extraction synchronization remains live.'
     }
