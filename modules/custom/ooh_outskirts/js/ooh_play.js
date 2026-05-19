@@ -394,6 +394,64 @@
     return copy[band] || copy.LOW;
   }
 
+  function cadenceFlavor(root, phase, fallback) {
+    const runtime = signalRuntime(root);
+    const condition = root ? root.oohOperationCondition : null;
+    const conditionId = condition ? condition.id : 'neutral';
+    const pressure = runtime ? interferenceBand(runtime.interferencePressure) : 'LOW';
+    const conditionLines = {
+      fog_dawn: {
+        initialization: 'LOW VISIBILITY. Horizon loss contained.',
+        stabilization: 'Fog saturation present. Signal edges soft.',
+        signal_degradation: 'SIGNAL SATURATION RISING. Channel losing contrast.',
+        elevated_pressure: 'HORIZON LOSS DETECTED. Pressure line narrowing.',
+        extraction_available: 'Extraction window forming beyond low visibility.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Hold through fog saturation.',
+        critical_instability: 'Signal field unstable inside fog saturation.',
+        signal_lost: 'SIGNAL LOST. Horizon channel closed.',
+        operation_complete: 'OPERATION COMPLETE. Low visibility channel sealed.'
+      },
+      sodium_night: {
+        initialization: 'INDUSTRIAL FIELD ACTIVE. Visual channel stable.',
+        stabilization: 'Sodium field holding. Route exposure contained.',
+        signal_degradation: 'ROUTE EXPOSURE ELEVATED. Signal edge thinning.',
+        elevated_pressure: 'Industrial static rising across the surface route.',
+        extraction_available: 'Extraction window available under sodium field.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Hard silhouettes holding.',
+        critical_instability: 'CRITICAL INTERFERENCE. Surface channel exposed.',
+        signal_lost: 'SIGNAL LOST. Industrial field occluded.',
+        operation_complete: 'OPERATION COMPLETE. Sodium field synchronized.'
+      },
+      storm_blackout: {
+        initialization: 'STORM DISTORTION ACTIVE. Channel discipline required.',
+        stabilization: 'Blackout pressure contained. Signal margin narrow.',
+        signal_degradation: 'CHANNEL INSTABILITY RISING. Runtime cohesion thin.',
+        elevated_pressure: 'STORM DISTORTION RISING. Signal field unstable.',
+        extraction_available: 'Extraction window available. Channel narrowing.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Hold through blackout pressure.',
+        critical_instability: 'CRITICAL INTERFERENCE. Extraction window narrowing.',
+        signal_lost: 'SIGNAL LOST. Storm channel collapsed.',
+        operation_complete: 'OPERATION COMPLETE. Storm channel sealed.'
+      },
+      neutral: {}
+    };
+    const pressureLines = {
+      ELEVATED: {
+        stabilization: 'CHANNEL PRESSURE ELEVATED. Maintain clean cadence.',
+        elevated_pressure: 'INTERFERENCE RISING. Signal field tightening.',
+        extraction_sync: 'Pressure elevated. Synchronization window narrowing.'
+      },
+      CRITICAL: {
+        stabilization: 'CRITICAL INTERFERENCE. Signal field unstable.',
+        elevated_pressure: 'CRITICAL INTERFERENCE. Runtime cohesion failing.',
+        extraction_sync: 'Critical pressure. Extraction synchronization slowed.'
+      }
+    };
+    const conditionText = (conditionLines[conditionId] || conditionLines.neutral)[phase];
+    const pressureText = (pressureLines[pressure] || {})[phase];
+    return conditionText || pressureText || fallback;
+  }
+
   function syncInterferencePressureHud(root) {
     setRuntimeField(root, 'interferencePressure', interferencePressureLabel(root));
   }
@@ -424,7 +482,7 @@
 
     runtime.scanAwarenessUntil = Date.now() + signalIntegrityRuntime.scanAwarenessMs;
     syncSignalIntegrityHud(root, signalIntegrityStateKey(root), pressureReadoutText(root));
-    showLocalCadenceBeat(root, 'SCAN RETURNED', pressureReadoutText(root), 220);
+    showLocalCadenceBeat(root, 'SCAN RETURNED', cadenceFlavor(root, 'stabilization', pressureReadoutText(root)), 220);
   }
 
   function syncObjectiveProgressHud(root) {
@@ -463,7 +521,7 @@
     runtime.extractionProgress = signalIntegrityRuntime.extractionInitial;
     if (!runtime.objectiveAnnounced) {
       runtime.objectiveAnnounced = true;
-      showLocalCadenceBeat(root, 'OBJECTIVE WINDOW COMPLETE', 'EXTRACTION WINDOW AVAILABLE. Exfil synchronization beginning.', 280);
+      showLocalCadenceBeat(root, 'OBJECTIVE WINDOW COMPLETE', cadenceFlavor(root, 'extraction_available', 'EXTRACTION WINDOW AVAILABLE. Exfil synchronization beginning.'), 280);
     }
   }
 
@@ -502,8 +560,8 @@
       button.setAttribute('aria-disabled', 'true');
     });
 
-    syncSignalIntegrityHud(root, 'complete', 'OPERATION COMPLETE. Extraction synchronized. Runtime loop sealed without persistence.');
-    showLocalCadenceBeat(root, 'EXTRACTION SYNCHRONIZED', 'Operation complete. Runtime loop sealed.', 240);
+    syncSignalIntegrityHud(root, 'complete', cadenceFlavor(root, 'operation_complete', 'OPERATION COMPLETE. Extraction synchronized. Runtime loop sealed without persistence.'));
+    showLocalCadenceBeat(root, 'EXTRACTION SYNCHRONIZED', cadenceFlavor(root, 'operation_complete', 'Operation complete. Runtime loop sealed.'), 240);
   }
 
   function advanceExtractionSync(root) {
@@ -515,7 +573,7 @@
     runtime.extractionProgress = Math.min(100, runtime.extractionProgress + extractionSyncRate(root));
     if (!runtime.extractionAnnounced) {
       runtime.extractionAnnounced = true;
-      showLocalCadenceBeat(root, 'EXFIL SYNCHRONIZING', 'Hold the channel through the extraction window.', 260);
+      showLocalCadenceBeat(root, 'EXFIL SYNCHRONIZING', cadenceFlavor(root, 'extraction_sync', 'Hold the channel through the extraction window.'), 260);
     }
 
     if (runtime.extractionProgress >= 100) {
@@ -588,7 +646,7 @@
       button.setAttribute('aria-disabled', 'true');
     });
 
-    syncSignalIntegrityHud(root, 'lost', 'SIGNAL LOST. Runtime cohesion failing. Operation halted without persistence.');
+    syncSignalIntegrityHud(root, 'lost', cadenceFlavor(root, 'signal_lost', 'SIGNAL LOST. Runtime cohesion failing. Operation halted without persistence.'));
   }
 
   function tickSignalIntegrity(root) {
@@ -616,7 +674,7 @@
     if (runtime.integrity < signalIntegrityRuntime.degradedThreshold) {
       if (!runtime.degradedAnnounced) {
         runtime.degradedAnnounced = true;
-        showLocalCadenceBeat(root, 'SIGNAL DEGRADING', 'Runtime cohesion failing. Use SIGNAL HOLD to stabilize.', 260);
+        showLocalCadenceBeat(root, 'SIGNAL DEGRADING', cadenceFlavor(root, 'signal_degradation', 'Runtime cohesion failing. Use SIGNAL HOLD to stabilize.'), 260);
       }
       syncSignalIntegrityHud(root, 'degraded');
       return;
@@ -640,7 +698,7 @@
     runtime.cushionUntil = 0;
     runtime.degradedAnnounced = false;
     runtime.lost = false;
-    syncSignalIntegrityHud(root, 'active', 'Operation active. Signal integrity at 100%. Relay alignment in progress.');
+    syncSignalIntegrityHud(root, 'active', cadenceFlavor(root, 'initialization', 'Operation active. Signal integrity at 100%. Relay alignment in progress.'));
     runtime.timer = window.setInterval(function () {
       tickSignalIntegrity(root);
     }, signalIntegrityRuntime.tickMs);
@@ -658,7 +716,7 @@
       runtime.degradedAnnounced = false;
     }
     syncSignalIntegrityHud(root, signalIntegrityStateKey(root) === 'degraded' ? 'degraded' : 'pressure', 'SIGNAL HOLD. Channel stabilized. Runtime cohesion cushioned.');
-    showLocalCadenceBeat(root, 'CHANNEL STABILIZED', 'Signal hold active. Decay temporarily cushioned.', 220);
+    showLocalCadenceBeat(root, 'CHANNEL STABILIZED', cadenceFlavor(root, 'stabilization', 'Signal hold active. Decay temporarily cushioned.'), 220);
   }
 
   function setOperationalRuntimeState(root, stateKey, readoutOverride) {
@@ -3144,19 +3202,43 @@ function passiveBehaviorPreviewLabel() {
     }, 1400);
   }
 
-  function localTelemetryPulseLines(routeId, pathKey, mode) {
+  function localTelemetryPulseLines(root, routeId, pathKey, mode) {
+    const runtime = signalRuntime(root);
+    const condition = root ? root.oohOperationCondition : null;
+    const conditionId = condition ? condition.id : 'neutral';
     const routeLines = {
-      aer: ['CLOUDLINE ECHO STABLE', 'LOCAL ECHO QUIET', 'ALTITUDE VARIANCE: LOCAL', 'HORIZON CHANNEL CLEAR', 'SKY CHANNEL HOLDING', 'CLOUDLINE ECHO DRIFT', 'ALTITUDE CHANNEL HOLDING', 'SIGNAL VARIANCE: LOW'],
-      mare: ['CURRENT ECHO LOCAL', 'CURRENT HOLDING', 'PRESSURE RIPPLE: LOCAL', 'DEPTH CURRENT QUIET', 'OXYGEN CHANNEL HOLDING', 'PRESSURE INDEX SHIFT', 'DEPTH CHANNEL HOLDING', 'CURRENT VECTOR DRIFT'],
-      terra: ['GROUND ECHO LOCAL', 'FIELD STABLE', 'DUST INDEX SHIFT', 'FIELD DUST HOLDING', 'RUIN VISIBILITY VARIANCE', 'TERRAIN ECHO LOCAL', 'RUIN SIGNAL HOLDING', 'GROUND SIGNAL FLICKER']
+      aer: ['CLOUDLINE ECHO STABLE', 'LOCAL ECHO QUIET', 'ALTITUDE VARIANCE: LOCAL', 'HORIZON CHANNEL CLEAR', 'SKY CHANNEL HOLDING', 'THIN SIGNAL MARGIN', 'ALTITUDE CHANNEL HOLDING', 'EXPOSED ROUTE STABLE'],
+      mare: ['CURRENT ECHO LOCAL', 'CURRENT HOLDING', 'PRESSURE RIPPLE: LOCAL', 'DEPTH CURRENT QUIET', 'OXYGEN CHANNEL HOLDING', 'PRESSURE HAZE INDEX', 'DEPTH CHANNEL HOLDING', 'SUBMERGED SIGNAL DRIFT'],
+      terra: ['GROUND ECHO LOCAL', 'FIELD STABLE', 'DUST INDEX SHIFT', 'FIELD DUST HOLDING', 'RUIN VISIBILITY VARIANCE', 'SURFACE ROUTE TENSION', 'RUIN SIGNAL HOLDING', 'ASH STATIC LOCAL']
     };
     const pathLines = {
       DOOMED: ['PASSIVE SIGNAL HOLD', 'STATIC DRIFT LOCAL', 'CHANNEL DRIFT: ELEVATED', 'PRESSURE ECHO PASSING', 'VOLATILE CHANNEL DRIFT', 'VOLATILE ECHO PASSING'],
       MERGED: ['CHANNEL STABLE', 'SYNTHETIC FIELD STABLE', 'SYNTHETIC CHANNEL CLEAN', 'DISPLAY CHANNEL CLEAN', 'ECHO ALIGNMENT HOLDING', 'SYNTHETIC ECHO HOLDING']
     };
+    const conditionLines = {
+      fog_dawn: ['LOW VISIBILITY', 'HORIZON LOSS DETECTED', 'SIGNAL SATURATION RISING'],
+      sodium_night: ['INDUSTRIAL FIELD ACTIVE', 'ROUTE EXPOSURE ELEVATED', 'VISUAL CHANNEL STABLE'],
+      storm_blackout: ['STORM DISTORTION ACTIVE', 'CHANNEL INSTABILITY RISING', 'EXTRACTION WINDOW NARROWING'],
+      neutral: []
+    };
+    const pressureLines = {
+      LOW: ['INTERFERENCE LOW', 'SIGNAL FIELD STABLE'],
+      RISING: ['INTERFERENCE RISING', 'CHANNEL PRESSURE BUILDING'],
+      ELEVATED: ['CHANNEL PRESSURE ELEVATED', 'SIGNAL FIELD TIGHTENING'],
+      CRITICAL: ['CRITICAL INTERFERENCE', 'SIGNAL FIELD UNSTABLE']
+    };
+    const extractionLines = runtime && runtime.extractionComplete ?
+      ['OPERATION COMPLETE', 'EXTRACTION SYNCHRONIZED'] :
+      (runtime && runtime.objectiveReady ?
+        ['EXFIL SYNCHRONIZING', 'EXTRACTION WINDOW ACTIVE', cadenceFlavor(root, 'extraction_sync', 'HOLD THE CHANNEL')] :
+        ['RELAY ALIGNMENT IN PROGRESS', 'CHANNEL NOT READY']);
+    const pressure = interferenceBand(runtime ? runtime.interferencePressure : 0);
     const lines = ['PAYLOAD ECHO STABLE', 'LOCAL CHANNEL NORMAL', 'PASSIVE SCAN CYCLING', 'DISPLAY CHANNEL HOLDING']
       .concat(routeLines[routeId] || routeLines.terra)
-      .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW']);
+      .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW'])
+      .concat(conditionLines[conditionId] || conditionLines.neutral)
+      .concat(pressureLines[pressure] || pressureLines.LOW)
+      .concat(extractionLines);
 
     if (mode === 'combat') {
       return ['LOCAL PREVIEW PULSE', 'CONTACT ECHO OBSERVED', 'SHELL DISPLAY REFRESH'].concat(lines);
@@ -3181,11 +3263,6 @@ function passiveBehaviorPreviewLabel() {
       return;
     }
 
-    const lines = localTelemetryPulseLines(routeId, pathKey, mode);
-    if (!lines.length) {
-      return;
-    }
-
     stopLocalTelemetryPulse(root);
     root.oohTelemetryPulseIndex = 0;
 
@@ -3196,6 +3273,11 @@ function passiveBehaviorPreviewLabel() {
       }
 
       if (!readout.oohEvolutionFeedbackTimer && !readout.oohEvolutionContinuityTimer) {
+        const lines = localTelemetryPulseLines(root, routeId, pathKey, mode);
+        if (!lines.length) {
+          stopLocalTelemetryPulse(root);
+          return;
+        }
         readout.textContent = lines[root.oohTelemetryPulseIndex % lines.length];
         root.oohTelemetryPulseIndex += 1;
       }
