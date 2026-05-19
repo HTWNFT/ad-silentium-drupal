@@ -302,6 +302,8 @@
         extractionComplete: false,
         extractionAnnounced: false,
         interferencePressure: signalIntegrityRuntime.interferenceInitial,
+        peakInterferencePressure: signalIntegrityRuntime.interferenceInitial,
+        startedAt: 0,
         scanAwarenessUntil: 0,
         cushionUntil: 0,
         degradedAnnounced: false,
@@ -463,6 +465,7 @@
     }
 
     runtime.interferencePressure = Math.min(100, runtime.interferencePressure + signalIntegrityRuntime.interferenceRate);
+    runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
   }
 
   function signalDecayAmount(root, cushioned) {
@@ -562,6 +565,7 @@
 
     syncSignalIntegrityHud(root, 'complete', cadenceFlavor(root, 'operation_complete', 'OPERATION COMPLETE. Extraction synchronized. Runtime loop sealed without persistence.'));
     showLocalCadenceBeat(root, 'EXTRACTION SYNCHRONIZED', cadenceFlavor(root, 'operation_complete', 'Operation complete. Runtime loop sealed.'), 240);
+    showOperationSummary(root, 'EXTRACTION COMPLETE');
   }
 
   function advanceExtractionSync(root) {
@@ -600,6 +604,97 @@
     if (root) {
       root.oohSignalRuntime = null;
     }
+  }
+
+  function formatRuntimeDuration(startedAt) {
+    const elapsed = startedAt ? Math.max(0, Math.round((Date.now() - startedAt) / 1000)) : 0;
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed % 60;
+    return minutes + ':' + String(seconds).padStart(2, '0');
+  }
+
+  function routeSummaryLabel(root) {
+    const shell = root ? root.querySelector('[data-ooh-scene-shell]') : null;
+    return shell ? (shell.getAttribute('data-route') || 'UNASSIGNED') : 'UNASSIGNED';
+  }
+
+  function conditionSummaryLabel(root) {
+    const condition = root ? root.oohOperationCondition : null;
+    return condition ? condition.label : 'CONDITION UNASSIGNED';
+  }
+
+  function objectiveCompletionPercent(runtime) {
+    if (!runtime) {
+      return 0;
+    }
+    return Math.max(0, Math.min(100, Math.round((runtime.objectiveProgress / signalIntegrityRuntime.objectiveThreshold) * 100)));
+  }
+
+  function removeOperationSummary(root) {
+    if (!root) {
+      return;
+    }
+    const existing = root.querySelector('[data-ooh-operation-summary]');
+    if (existing) {
+      existing.remove();
+    }
+  }
+
+  function showOperationSummary(root, outcome) {
+    const runtime = signalRuntime(root);
+    if (!root || !runtime) {
+      return;
+    }
+
+    removeOperationSummary(root);
+
+    const summary = document.createElement('section');
+    summary.className = 'ooh-operation-summary';
+    summary.setAttribute('data-ooh-operation-summary', '');
+    summary.setAttribute('aria-label', 'Operation summary');
+
+    const fields = [
+      ['EXTRACTION STATUS', outcome],
+      ['ROUTE', routeSummaryLabel(root)],
+      ['ROUTE CONDITION', conditionSummaryLabel(root)],
+      ['SIGNAL CONDITION', Math.max(0, Math.round(runtime.integrity)) + '%'],
+      ['INTERFERENCE PEAK', Math.max(0, Math.round(runtime.peakInterferencePressure || runtime.interferencePressure || 0)) + '% // ' + interferenceBand(runtime.peakInterferencePressure || runtime.interferencePressure || 0)],
+      ['OBJECTIVE COMPLETION', objectiveCompletionPercent(runtime) + '%'],
+      ['EXTRACTION SYNCHRONIZATION', Math.max(0, Math.min(100, Math.round(runtime.extractionProgress || 0))) + '%'],
+      ['OPERATION DURATION', formatRuntimeDuration(runtime.startedAt)]
+    ];
+
+    const rows = fields.map(function (field) {
+      return '<div class="ooh-operation-summary__row"><span>' + field[0] + '</span><strong>' + field[1] + '</strong></div>';
+    }).join('');
+    const returnTarget = root.querySelector('.ooh-play-scene__actions a[href]');
+    const returnHref = returnTarget ? returnTarget.getAttribute('href') : '/dossier';
+
+    summary.innerHTML =
+      '<div class="ooh-operation-summary__shell">' +
+        '<div class="ooh-operation-summary__kicker">OPERATION SUMMARY</div>' +
+        '<h3 class="ooh-operation-summary__title">Runtime Debrief</h3>' +
+        '<div class="ooh-operation-summary__grid">' + rows + '</div>' +
+        '<div class="ooh-operation-summary__actions">' +
+          '<button class="ooh-operation-summary__button" type="button" data-ooh-summary-reset>RESET</button>' +
+          '<a class="ooh-operation-summary__button" href="' + returnHref + '">RETURN</a>' +
+        '</div>' +
+      '</div>';
+
+    const resetButton = summary.querySelector('[data-ooh-summary-reset]');
+    if (resetButton) {
+      resetButton.addEventListener('click', function () {
+        resetMissionRuntime(root);
+        const activateButton = root.querySelector('[data-ooh-activate-mission]');
+        if (activateButton && missionEntryReady(root)) {
+          activateButton.textContent = 'ACTIVATE MISSION';
+          activateButton.disabled = false;
+          activateButton.setAttribute('aria-disabled', 'false');
+        }
+      });
+    }
+
+    root.appendChild(summary);
   }
 
   function signalIntegrityStateKey(root) {
@@ -647,6 +742,7 @@
     });
 
     syncSignalIntegrityHud(root, 'lost', cadenceFlavor(root, 'signal_lost', 'SIGNAL LOST. Runtime cohesion failing. Operation halted without persistence.'));
+    showOperationSummary(root, 'SIGNAL LOST');
   }
 
   function tickSignalIntegrity(root) {
@@ -694,6 +790,8 @@
     runtime.extractionComplete = false;
     runtime.extractionAnnounced = false;
     runtime.interferencePressure = signalIntegrityRuntime.interferenceInitial;
+    runtime.peakInterferencePressure = signalIntegrityRuntime.interferenceInitial;
+    runtime.startedAt = Date.now();
     runtime.scanAwarenessUntil = 0;
     runtime.cushionUntil = 0;
     runtime.degradedAnnounced = false;
@@ -762,6 +860,7 @@
     const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
     const encounter = root.querySelector('[data-ooh-combat-encounter]');
 
+    removeOperationSummary(root);
     stopLocalTelemetryPulse(root);
     clearLocalCadenceBeat(root);
     clearSignalIntegrityRuntime(root);
