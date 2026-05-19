@@ -3567,7 +3567,7 @@ function passiveBehaviorPreviewLabel() {
       theater: assembly.routeTheater || routeLabel(routeId),
       mission: missionLabel,
       path: pathKey,
-      status: 'ACTIVE',
+      status: 'OPERATION ACTIVE',
       primary: assembly.primaryObjective || 'Pending',
       extraction: assembly.extractionCondition || 'Pending',
       telemetryA: telemetry[0],
