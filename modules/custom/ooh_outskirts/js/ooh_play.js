@@ -269,7 +269,13 @@
     scanAwarenessMs: 3500,
     extractionInitial: 0,
     extractionRate: 7.5,
-    extractionCriticalRate: 4.25
+    extractionCriticalRate: 4.25,
+    captureExtractionRate: 6.25,
+    captureExtractionCriticalRate: 3.65,
+    captureTelemetryInitialMs: 3800,
+    captureTelemetryIntervalMs: 8200,
+    captureCadenceDelayMultiplier: 1.35,
+    captureCadenceMaxDelay: 650
   };
 
   function runtimeStateAttribute(state) {
@@ -284,6 +290,78 @@
     root.querySelectorAll('[data-ooh-runtime-field="' + field + '"]').forEach(function (el) {
       el.textContent = value;
     });
+  }
+
+  function captureModeActive(root) {
+    return Boolean(root && root.oohCaptureMode);
+  }
+
+  function updateCaptureModeToggle(root) {
+    const toggle = root ? root.querySelector('[data-ooh-capture-toggle]') : null;
+    if (!toggle) {
+      return;
+    }
+
+    const active = captureModeActive(root);
+    toggle.textContent = active ? 'CAPTURE MODE ACTIVE' : 'PROMOTIONAL CAPTURE';
+    toggle.setAttribute('aria-pressed', active ? 'true' : 'false');
+  }
+
+  function setCaptureMode(root, active, announce) {
+    if (!root) {
+      return;
+    }
+
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    root.oohCaptureMode = Boolean(active);
+    if (root.oohCaptureMode) {
+      root.setAttribute('data-ooh-capture-mode', 'active');
+      if (shell) {
+        shell.setAttribute('data-ooh-capture-mode', 'active');
+      }
+    }
+    else {
+      root.removeAttribute('data-ooh-capture-mode');
+      if (shell) {
+        shell.removeAttribute('data-ooh-capture-mode');
+      }
+    }
+
+    updateCaptureModeToggle(root);
+
+    if (announce && root.classList.contains('is-mission-active')) {
+      showLocalCadenceBeat(
+        root,
+        root.oohCaptureMode ? 'CAPTURE MODE ACTIVE' : 'CAPTURE MODE CLEARED',
+        root.oohCaptureMode ? 'Telemetry pacing stabilized for operational recording.' : 'Runtime pacing restored to operational baseline.',
+        260
+      );
+    }
+  }
+
+  function ensureCaptureModeToggle(root) {
+    if (!root || root.querySelector('[data-ooh-capture-toggle]')) {
+      updateCaptureModeToggle(root);
+      return;
+    }
+
+    const actions = root.querySelector('.ooh-play-scene__actions');
+    if (!actions) {
+      return;
+    }
+
+    const toggle = document.createElement('button');
+    toggle.className = 'ooh-generator__overlay-btn ooh-play-scene__capture-toggle';
+    toggle.type = 'button';
+    toggle.setAttribute('data-ooh-capture-toggle', '');
+    toggle.setAttribute('aria-pressed', 'false');
+    toggle.textContent = 'PROMOTIONAL CAPTURE';
+    toggle.addEventListener('click', function () {
+      setCaptureMode(root, !captureModeActive(root), true);
+    });
+
+    actions.appendChild(toggle);
+    updateCaptureModeToggle(root);
   }
 
   function signalRuntime(root) {
@@ -530,7 +608,14 @@
 
   function extractionSyncRate(root) {
     const runtime = signalRuntime(root);
-    return interferenceBand(runtime ? runtime.interferencePressure : 0) === 'CRITICAL' ?
+    const critical = interferenceBand(runtime ? runtime.interferencePressure : 0) === 'CRITICAL';
+    if (captureModeActive(root)) {
+      return critical ?
+        signalIntegrityRuntime.captureExtractionCriticalRate :
+        signalIntegrityRuntime.captureExtractionRate;
+    }
+
+    return critical ?
       signalIntegrityRuntime.extractionCriticalRate :
       signalIntegrityRuntime.extractionRate;
   }
@@ -872,10 +957,14 @@
       shell.removeAttribute('data-combat-state');
       shell.removeAttribute('data-ooh-operation-condition');
       shell.removeAttribute('data-ooh-condition-intensity');
+      shell.removeAttribute('data-ooh-capture-mode');
     }
     root.removeAttribute('data-ooh-operation-condition');
     root.removeAttribute('data-ooh-condition-intensity');
+    root.removeAttribute('data-ooh-capture-mode');
     root.oohOperationCondition = null;
+    root.oohCaptureMode = false;
+    updateCaptureModeToggle(root);
     if (hud) {
       hud.setAttribute('aria-hidden', 'true');
       hud.querySelectorAll('[data-ooh-action]').forEach(function (button) {
@@ -3381,10 +3470,16 @@ function passiveBehaviorPreviewLabel() {
         root.oohTelemetryPulseIndex += 1;
       }
 
-      root.oohTelemetryPulseTimer = window.setTimeout(tick, mode === 'combat' ? 5200 : 6800);
+      root.oohTelemetryPulseTimer = window.setTimeout(
+        tick,
+        mode === 'combat' ? 5200 : (captureModeActive(root) ? signalIntegrityRuntime.captureTelemetryIntervalMs : 6800)
+      );
     };
 
-    root.oohTelemetryPulseTimer = window.setTimeout(tick, mode === 'combat' ? 1800 : 3200);
+    root.oohTelemetryPulseTimer = window.setTimeout(
+      tick,
+      mode === 'combat' ? 1800 : (captureModeActive(root) ? signalIntegrityRuntime.captureTelemetryInitialMs : 3200)
+    );
   }
 
   function nudgeLocalTelemetryPulse(root, message) {
@@ -3414,10 +3509,13 @@ function passiveBehaviorPreviewLabel() {
 
     clearLocalCadenceBeat(root);
     readout.textContent = message;
+    const cadenceDelay = captureModeActive(root) ?
+      Math.min(Math.round((delay || 180) * signalIntegrityRuntime.captureCadenceDelayMultiplier), signalIntegrityRuntime.captureCadenceMaxDelay) :
+      Math.min(delay || 180, 450);
     root.oohLocalCadenceTimer = window.setTimeout(function () {
       readout.textContent = settleText;
       root.oohLocalCadenceTimer = null;
-    }, Math.min(delay || 180, 450));
+    }, cadenceDelay);
   }
 
   function sessionEvolutionFeedbackText(root, pathKey, routeId) {
@@ -3941,6 +4039,7 @@ function passiveBehaviorPreviewLabel() {
     const evolutionPreview = buildOperatorEvolutionPreview(payload, routeId, pathKey);
     const missionLabel = payloadAudit.missingFields.indexOf('mission') === -1 ? itemLabel(payload.mission, payload.missionType || 'Unconfirmed') : 'MISSION // UNCONFIRMED';
     const combatState = createCombatState();
+    ensureCaptureModeToggle(root);
 
     if (shell) {
       shell.setAttribute('data-route', routeAttribute(routeId));
