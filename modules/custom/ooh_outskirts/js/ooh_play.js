@@ -266,7 +266,10 @@
     interferenceInitial: 0,
     interferenceRate: 1.15,
     interferenceDecayFactor: 0.55,
-    scanAwarenessMs: 3500
+    scanAwarenessMs: 3500,
+    extractionInitial: 0,
+    extractionRate: 7.5,
+    extractionCriticalRate: 4.25
   };
 
   function runtimeStateAttribute(state) {
@@ -295,6 +298,9 @@
         objectiveProgress: signalIntegrityRuntime.objectiveInitial,
         objectiveReady: false,
         objectiveAnnounced: false,
+        extractionProgress: signalIntegrityRuntime.extractionInitial,
+        extractionComplete: false,
+        extractionAnnounced: false,
         interferencePressure: signalIntegrityRuntime.interferenceInitial,
         scanAwarenessUntil: 0,
         cushionUntil: 0,
@@ -328,6 +334,9 @@
     if (!runtime || runtime.lost) {
       return value + '% // CHANNEL NOT READY';
     }
+    if (runtime.extractionComplete) {
+      return 'OPERATION COMPLETE';
+    }
     if (runtime.objectiveReady) {
       return 'OBJECTIVE WINDOW COMPLETE';
     }
@@ -339,7 +348,14 @@
     if (!runtime || runtime.lost) {
       return 'UNAVAILABLE';
     }
-    return runtime.objectiveReady ? 'AVAILABLE' : 'LOCKED';
+    if (runtime.extractionComplete) {
+      return 'SYNCHRONIZED';
+    }
+    if (runtime.objectiveReady) {
+      const progress = Math.max(0, Math.min(100, Math.round(runtime.extractionProgress)));
+      return 'EXFIL SYNCHRONIZING // ' + progress + '%';
+    }
+    return 'LOCKED';
   }
   function interferenceBand(value) {
     const pressure = Math.max(0, Math.min(100, Number(value) || 0));
@@ -422,6 +438,9 @@
     if (!runtime || runtime.lost || stateKey === 'lost') {
       return 'lost';
     }
+    if (runtime.extractionComplete) {
+      return 'complete';
+    }
     if (runtime.objectiveReady) {
       return 'extraction';
     }
@@ -441,9 +460,66 @@
 
     runtime.objectiveReady = true;
     runtime.objectiveProgress = signalIntegrityRuntime.objectiveThreshold;
+    runtime.extractionProgress = signalIntegrityRuntime.extractionInitial;
     if (!runtime.objectiveAnnounced) {
       runtime.objectiveAnnounced = true;
-      showLocalCadenceBeat(root, 'OBJECTIVE WINDOW COMPLETE', 'EXTRACTION WINDOW AVAILABLE. No extraction input is active.', 280);
+      showLocalCadenceBeat(root, 'OBJECTIVE WINDOW COMPLETE', 'EXTRACTION WINDOW AVAILABLE. Exfil synchronization beginning.', 280);
+    }
+  }
+
+  function extractionSyncRate(root) {
+    const runtime = signalRuntime(root);
+    return interferenceBand(runtime ? runtime.interferencePressure : 0) === 'CRITICAL' ?
+      signalIntegrityRuntime.extractionCriticalRate :
+      signalIntegrityRuntime.extractionRate;
+  }
+
+  function completeExtractionSync(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost || runtime.extractionComplete) {
+      return;
+    }
+
+    runtime.extractionProgress = 100;
+    runtime.extractionComplete = true;
+    stopSignalIntegrityLoop(root);
+    stopLocalTelemetryPulse(root);
+    root.classList.remove('is-mission-active');
+
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    if (shell) {
+      shell.classList.remove('is-mission-active');
+      shell.setAttribute('data-mission-state', 'operation-complete');
+    }
+
+    const sceneStatus = root.querySelector('[data-ooh-scene-status]');
+    if (sceneStatus) {
+      sceneStatus.textContent = 'OPERATION COMPLETE // EXTRACTION SYNCHRONIZED // CHANNEL HOLDING';
+    }
+
+    root.querySelectorAll('[data-ooh-action]').forEach(function (button) {
+      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
+    });
+
+    syncSignalIntegrityHud(root, 'complete', 'OPERATION COMPLETE. Extraction synchronized. Runtime loop sealed without persistence.');
+    showLocalCadenceBeat(root, 'EXTRACTION SYNCHRONIZED', 'Operation complete. Runtime loop sealed.', 240);
+  }
+
+  function advanceExtractionSync(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.lost || runtime.extractionComplete || !runtime.objectiveReady) {
+      return;
+    }
+
+    runtime.extractionProgress = Math.min(100, runtime.extractionProgress + extractionSyncRate(root));
+    if (!runtime.extractionAnnounced) {
+      runtime.extractionAnnounced = true;
+      showLocalCadenceBeat(root, 'EXFIL SYNCHRONIZING', 'Hold the channel through the extraction window.', 260);
+    }
+
+    if (runtime.extractionProgress >= 100) {
+      completeExtractionSync(root);
     }
   }
 
@@ -532,6 +608,10 @@
     }
 
     advanceObjectiveProgress(root);
+    advanceExtractionSync(root);
+    if (runtime.extractionComplete) {
+      return;
+    }
 
     if (runtime.integrity < signalIntegrityRuntime.degradedThreshold) {
       if (!runtime.degradedAnnounced) {
@@ -552,6 +632,9 @@
     runtime.objectiveProgress = signalIntegrityRuntime.objectiveInitial;
     runtime.objectiveReady = false;
     runtime.objectiveAnnounced = false;
+    runtime.extractionProgress = signalIntegrityRuntime.extractionInitial;
+    runtime.extractionComplete = false;
+    runtime.extractionAnnounced = false;
     runtime.interferencePressure = signalIntegrityRuntime.interferenceInitial;
     runtime.scanAwarenessUntil = 0;
     runtime.cushionUntil = 0;
