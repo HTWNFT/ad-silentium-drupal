@@ -1582,14 +1582,16 @@
   }
 
   function scrollToMissionBriefing(root) {
-    const target = root.querySelector('[data-ooh-mission-briefing]') ||
+    const activeTarget = root.classList.contains('is-mission-active') && root.querySelector('[data-ooh-active-hud]');
+    const target = activeTarget ||
+      root.querySelector('[data-ooh-mission-briefing]') ||
       root.querySelector('[data-ooh-play-top]') ||
       root;
 
     if (target && typeof target.scrollIntoView === 'function') {
       target.scrollIntoView({
         behavior: 'smooth',
-        block: 'start'
+        block: activeTarget ? 'center' : 'start'
       });
       return;
     }

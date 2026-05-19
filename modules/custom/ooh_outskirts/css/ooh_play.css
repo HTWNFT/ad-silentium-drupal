@@ -5822,3 +5822,60 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-op
     text-align: left;
   }
 }
+
+/* PHASE OA-019 - ACTIVE RUNTIME CAPTURE FRAMING OVERRIDE LOCK */
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud],
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud] {
+  position: relative;
+  z-index: 8;
+  isolation: isolate;
+  scroll-margin-block-start: clamp(0.75rem, 3vh, 1.5rem);
+  border: 1px solid rgba(216, 250, 255, 0.075);
+  border-radius: 8px;
+  padding: clamp(0.72rem, 1.4vw, 1rem);
+  background:
+    linear-gradient(180deg, rgba(2, 9, 13, 0.68), rgba(3, 12, 17, 0.58)),
+    radial-gradient(ellipse at 50% 24%, rgba(128, 244, 255, 0.035), transparent 64%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.012),
+    0 0 28px rgba(84, 225, 255, 0.016);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-generator__header,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-generator__header {
+  opacity: 0.34;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__hud,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__hud {
+  opacity: 0.06;
+  filter: saturate(0.62) contrast(0.86);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__telemetry,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__telemetry {
+  opacity: 0.06;
+  filter: saturate(0.62) contrast(0.86);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__assembly,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__assembly {
+  opacity: 0.06;
+  filter: saturate(0.58) contrast(0.82);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout {
+  background-color: rgba(3, 12, 17, 0.74);
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud],
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud] {
+    scroll-margin-block-start: 0.55rem;
+  }
+}
