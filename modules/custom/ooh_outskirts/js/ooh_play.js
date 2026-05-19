@@ -296,6 +296,128 @@
     return Boolean(root && root.oohCaptureMode);
   }
 
+  const clipChoreographyPresets = [
+    {
+      id: 'none',
+      label: 'PRESET: NONE'
+    },
+    {
+      id: 'signal_collapse',
+      label: 'SIGNAL COLLAPSE',
+      conditionId: 'storm_blackout',
+      signalInitial: 58,
+      interferenceInitial: 48,
+      objectiveInitial: 18,
+      cadenceFlavor: 'Collapse profile staged. Signal margin remains live.'
+    },
+    {
+      id: 'extraction_window',
+      label: 'EXTRACTION WINDOW',
+      conditionId: 'sodium_night',
+      signalInitial: 78,
+      interferenceInitial: 34,
+      objectiveInitial: 54,
+      extractionPacing: 'extended',
+      cadenceFlavor: 'Extraction profile staged. Synchronization window approaching.'
+    },
+    {
+      id: 'pressure_escalation',
+      label: 'PRESSURE ESCALATION',
+      conditionId: 'storm_blackout',
+      signalInitial: 82,
+      interferenceInitial: 42,
+      objectiveInitial: 30,
+      cadenceFlavor: 'Pressure profile staged. Interference line already rising.'
+    },
+    {
+      id: 'low_visibility',
+      label: 'LOW VISIBILITY',
+      conditionId: 'fog_dawn',
+      signalInitial: 95,
+      interferenceInitial: 12,
+      objectiveInitial: 12,
+      cadenceFlavor: 'Low visibility profile staged. Horizon channel softened.'
+    },
+    {
+      id: 'operation_complete',
+      label: 'OPERATION COMPLETE',
+      conditionId: 'fog_dawn',
+      signalInitial: 74,
+      interferenceInitial: 36,
+      objectiveInitial: 60,
+      extractionInitial: 68,
+      extractionPacing: 'extended',
+      cadenceFlavor: 'Completion profile staged. Extraction synchronization remains live.'
+    }
+  ];
+
+  function clipPresetById(id) {
+    return clipChoreographyPresets.filter(function (preset) {
+      return preset.id === id;
+    })[0] || clipChoreographyPresets[0];
+  }
+
+  function activeClipPreset(root) {
+    return root && captureModeActive(root) ? clipPresetById(root.oohClipPresetId || 'none') : clipChoreographyPresets[0];
+  }
+
+  function updateClipPresetToggle(root) {
+    const toggle = root ? root.querySelector('[data-ooh-clip-preset-toggle]') : null;
+    if (!toggle) {
+      return;
+    }
+
+    const preset = clipPresetById(root.oohClipPresetId || 'none');
+    toggle.textContent = preset.label;
+    toggle.setAttribute('data-ooh-clip-preset-active', preset.id);
+  }
+
+  function setClipPreset(root, presetId, announce) {
+    if (!root) {
+      return;
+    }
+
+    const preset = clipPresetById(presetId);
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    root.oohClipPresetId = preset.id;
+    if (preset.id === 'none') {
+      root.removeAttribute('data-ooh-clip-preset');
+      if (shell) {
+        shell.removeAttribute('data-ooh-clip-preset');
+      }
+    }
+    else {
+      root.setAttribute('data-ooh-clip-preset', preset.id);
+      if (shell) {
+        shell.setAttribute('data-ooh-clip-preset', preset.id);
+      }
+    }
+
+    updateClipPresetToggle(root);
+
+    if (announce && root.classList.contains('is-mission-active')) {
+      showLocalCadenceBeat(root, 'PRESET LOCKED', 'Clip presets apply at operation activation only.', 260);
+    }
+  }
+
+  function advanceClipPreset(root) {
+    if (!root) {
+      return;
+    }
+
+    if (root.classList.contains('is-mission-active')) {
+      setClipPreset(root, root.oohClipPresetId || 'none', true);
+      return;
+    }
+
+    const currentId = root.oohClipPresetId || 'none';
+    const currentIndex = clipChoreographyPresets.findIndex(function (preset) {
+      return preset.id === currentId;
+    });
+    const nextPreset = clipChoreographyPresets[(currentIndex + 1) % clipChoreographyPresets.length];
+    setClipPreset(root, nextPreset.id, false);
+  }
+
   function updateCaptureModeToggle(root) {
     const toggle = root ? root.querySelector('[data-ooh-capture-toggle]') : null;
     if (!toggle) {
@@ -328,6 +450,7 @@
     }
 
     updateCaptureModeToggle(root);
+    updateClipPresetToggle(root);
 
     if (announce && root.classList.contains('is-mission-active')) {
       showLocalCadenceBeat(
@@ -342,6 +465,7 @@
   function ensureCaptureModeToggle(root) {
     if (!root || root.querySelector('[data-ooh-capture-toggle]')) {
       updateCaptureModeToggle(root);
+      updateClipPresetToggle(root);
       return;
     }
 
@@ -361,7 +485,19 @@
     });
 
     actions.appendChild(toggle);
+
+    const presetToggle = document.createElement('button');
+    presetToggle.className = 'ooh-generator__overlay-btn ooh-play-scene__clip-preset-toggle';
+    presetToggle.type = 'button';
+    presetToggle.setAttribute('data-ooh-clip-preset-toggle', '');
+    presetToggle.textContent = 'PRESET: NONE';
+    presetToggle.addEventListener('click', function () {
+      advanceClipPreset(root);
+    });
+
+    actions.appendChild(presetToggle);
     updateCaptureModeToggle(root);
+    updateClipPresetToggle(root);
   }
 
   function signalRuntime(root) {
@@ -609,6 +745,11 @@
   function extractionSyncRate(root) {
     const runtime = signalRuntime(root);
     const critical = interferenceBand(runtime ? runtime.interferencePressure : 0) === 'CRITICAL';
+    const preset = activeClipPreset(root);
+    if (preset.extractionPacing === 'extended') {
+      return critical ? 3.25 : 5.5;
+    }
+
     if (captureModeActive(root)) {
       return critical ?
         signalIntegrityRuntime.captureExtractionCriticalRate :
@@ -867,21 +1008,25 @@
   function startSignalIntegrityLoop(root) {
     clearSignalIntegrityRuntime(root);
     const runtime = signalRuntime(root);
-    runtime.integrity = signalIntegrityRuntime.initial;
-    runtime.objectiveProgress = signalIntegrityRuntime.objectiveInitial;
-    runtime.objectiveReady = false;
+    const preset = activeClipPreset(root);
+    const initialObjective = Math.min(signalIntegrityRuntime.objectiveThreshold, Math.max(0, Number(preset.objectiveInitial) || signalIntegrityRuntime.objectiveInitial));
+    runtime.integrity = Math.min(signalIntegrityRuntime.initial, Math.max(signalIntegrityRuntime.degradedThreshold, Number(preset.signalInitial) || signalIntegrityRuntime.initial));
+    runtime.objectiveProgress = initialObjective;
+    runtime.objectiveReady = initialObjective >= signalIntegrityRuntime.objectiveThreshold;
     runtime.objectiveAnnounced = false;
-    runtime.extractionProgress = signalIntegrityRuntime.extractionInitial;
+    runtime.extractionProgress = runtime.objectiveReady ?
+      Math.min(95, Math.max(signalIntegrityRuntime.extractionInitial, Number(preset.extractionInitial) || signalIntegrityRuntime.extractionInitial)) :
+      signalIntegrityRuntime.extractionInitial;
     runtime.extractionComplete = false;
-    runtime.extractionAnnounced = false;
-    runtime.interferencePressure = signalIntegrityRuntime.interferenceInitial;
-    runtime.peakInterferencePressure = signalIntegrityRuntime.interferenceInitial;
+    runtime.extractionAnnounced = runtime.objectiveReady && runtime.extractionProgress > signalIntegrityRuntime.extractionInitial;
+    runtime.interferencePressure = Math.min(100, Math.max(signalIntegrityRuntime.interferenceInitial, Number(preset.interferenceInitial) || signalIntegrityRuntime.interferenceInitial));
+    runtime.peakInterferencePressure = runtime.interferencePressure;
     runtime.startedAt = Date.now();
     runtime.scanAwarenessUntil = 0;
     runtime.cushionUntil = 0;
     runtime.degradedAnnounced = false;
     runtime.lost = false;
-    syncSignalIntegrityHud(root, 'active', cadenceFlavor(root, 'initialization', 'Operation active. Signal integrity at 100%. Relay alignment in progress.'));
+    syncSignalIntegrityHud(root, runtime.objectiveReady ? 'extraction' : 'active', preset.cadenceFlavor || cadenceFlavor(root, 'initialization', 'Operation active. Signal integrity at 100%. Relay alignment in progress.'));
     runtime.timer = window.setInterval(function () {
       tickSignalIntegrity(root);
     }, signalIntegrityRuntime.tickMs);
@@ -958,13 +1103,17 @@
       shell.removeAttribute('data-ooh-operation-condition');
       shell.removeAttribute('data-ooh-condition-intensity');
       shell.removeAttribute('data-ooh-capture-mode');
+      shell.removeAttribute('data-ooh-clip-preset');
     }
     root.removeAttribute('data-ooh-operation-condition');
     root.removeAttribute('data-ooh-condition-intensity');
     root.removeAttribute('data-ooh-capture-mode');
+    root.removeAttribute('data-ooh-clip-preset');
     root.oohOperationCondition = null;
     root.oohCaptureMode = false;
+    root.oohClipPresetId = 'none';
     updateCaptureModeToggle(root);
+    updateClipPresetToggle(root);
     if (hud) {
       hud.setAttribute('aria-hidden', 'true');
       hud.querySelectorAll('[data-ooh-action]').forEach(function (button) {
@@ -1051,7 +1200,20 @@
     return conditions[0];
   }
 
-  function resolveOperationCondition(routeId) {
+  function conditionById(id) {
+    return operationConditions.filter(function (condition) {
+      return condition.id === id;
+    })[0] || null;
+  }
+
+  function resolveOperationCondition(routeId, preset) {
+    if (preset && preset.conditionId) {
+      const presetCondition = conditionById(preset.conditionId);
+      if (presetCondition) {
+        return presetCondition;
+      }
+    }
+
     const routeKey = ['aer', 'mare', 'terra'].indexOf(routeId) !== -1 ? routeId : 'terra';
     const routeConditions = operationConditions.filter(function (condition) {
       return condition.routeAffinity.indexOf(routeKey) !== -1;
@@ -1061,7 +1223,7 @@
   }
 
   function applyOperationCondition(root, shell, routeId) {
-    const condition = resolveOperationCondition(routeId);
+    const condition = resolveOperationCondition(routeId, activeClipPreset(root));
     const targetShell = shell || (root ? root.querySelector('[data-ooh-scene-shell]') : null);
     if (!root || !condition) {
       return null;
