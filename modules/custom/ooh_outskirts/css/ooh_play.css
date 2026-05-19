@@ -5662,3 +5662,55 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-oo
     min-block-size: 2.15rem;
   }
 }
+
+/* PHASE OA-008 - MINIMAL ATMOSPHERIC RUNTIME VARIANTS */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition] .ooh-play-scene__visual::after,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition] .ooh-play-scene__visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="fog_dawn"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="fog_dawn"] .ooh-play-scene__visual {
+  filter: saturate(0.82) contrast(0.92) brightness(1.06);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="fog_dawn"] .ooh-play-scene__visual::after,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="fog_dawn"] .ooh-play-scene__visual::after {
+  background:
+    linear-gradient(180deg, rgba(218, 248, 255, 0.11), rgba(128, 210, 226, 0.035) 48%, rgba(8, 18, 24, 0.1)),
+    radial-gradient(ellipse at 50% 24%, rgba(226, 252, 255, 0.12), transparent 62%);
+  opacity: 0.42;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="sodium_night"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="sodium_night"] .ooh-play-scene__visual {
+  filter: saturate(0.95) contrast(1.08) sepia(0.18) brightness(0.92);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="sodium_night"] .ooh-play-scene__visual::after,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="sodium_night"] .ooh-play-scene__visual::after {
+  background:
+    linear-gradient(180deg, rgba(236, 179, 79, 0.08), rgba(15, 18, 18, 0.18)),
+    radial-gradient(ellipse at 64% 36%, rgba(236, 179, 79, 0.13), transparent 58%);
+  opacity: 0.36;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="storm_blackout"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="storm_blackout"] .ooh-play-scene__visual {
+  filter: saturate(0.72) contrast(1.16) brightness(0.78);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="storm_blackout"] .ooh-play-scene__scanlines,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition="storm_blackout"] .ooh-play-scene__scanlines {
+  opacity: 0.2;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition] [data-ooh-hud-field="telemetryC"],
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell)[data-ooh-operation-condition] [data-ooh-hud-field="telemetryC"] {
+  color: rgba(232, 252, 255, 0.78);
+  text-shadow: 0 0 9px rgba(216, 250, 255, 0.045);
+}

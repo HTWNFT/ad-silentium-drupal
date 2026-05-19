@@ -713,7 +713,12 @@
       shell.classList.remove('is-mission-active', 'is-combat-shell', 'is-combat-armed');
       shell.removeAttribute('data-mission-state');
       shell.removeAttribute('data-combat-state');
+      shell.removeAttribute('data-ooh-operation-condition');
+      shell.removeAttribute('data-ooh-condition-intensity');
     }
+    root.removeAttribute('data-ooh-operation-condition');
+    root.removeAttribute('data-ooh-condition-intensity');
+    root.oohOperationCondition = null;
     if (hud) {
       hud.setAttribute('aria-hidden', 'true');
       hud.querySelectorAll('[data-ooh-action]').forEach(function (button) {
@@ -755,6 +760,88 @@
 
   function missionTypeAttribute(payload) {
     return cleanId(payload.missionType || ((payload.mission || {}).id), 'unconfirmed');
+  }
+
+  const operationConditions = [
+    {
+      id: 'fog_dawn',
+      label: 'LOW VISIBILITY // FOG DAWN',
+      routeAffinity: ['aer', 'mare'],
+      paletteBias: 'pale cyan haze',
+      cadenceFlavor: 'Fog saturation softens the route. Maintain clean telemetry.',
+      launchPriority: 3
+    },
+    {
+      id: 'sodium_night',
+      label: 'SODIUM-VAPOR NIGHT',
+      routeAffinity: ['terra'],
+      paletteBias: 'amber black industrial field',
+      cadenceFlavor: 'Sodium field active. Hard silhouettes on the route.',
+      launchPriority: 3
+    },
+    {
+      id: 'storm_blackout',
+      label: 'STORM DISTORTION',
+      routeAffinity: ['aer', 'terra'],
+      paletteBias: 'cold blackout pressure',
+      cadenceFlavor: 'Storm distortion present. Signal field must remain disciplined.',
+      launchPriority: 2
+    }
+  ];
+
+  function weightedConditionPick(conditions) {
+    const total = conditions.reduce(function (sum, condition) {
+      return sum + Math.max(1, condition.launchPriority || 1);
+    }, 0);
+    let marker = Math.random() * total;
+
+    for (let i = 0; i < conditions.length; i++) {
+      marker -= Math.max(1, conditions[i].launchPriority || 1);
+      if (marker <= 0) {
+        return conditions[i];
+      }
+    }
+
+    return conditions[0];
+  }
+
+  function resolveOperationCondition(routeId) {
+    const routeKey = ['aer', 'mare', 'terra'].indexOf(routeId) !== -1 ? routeId : 'terra';
+    const routeConditions = operationConditions.filter(function (condition) {
+      return condition.routeAffinity.indexOf(routeKey) !== -1;
+    });
+
+    return weightedConditionPick(routeConditions.length ? routeConditions : operationConditions);
+  }
+
+  function applyOperationCondition(root, shell, routeId) {
+    const condition = resolveOperationCondition(routeId);
+    const targetShell = shell || (root ? root.querySelector('[data-ooh-scene-shell]') : null);
+    if (!root || !condition) {
+      return null;
+    }
+
+    root.oohOperationCondition = condition;
+    root.setAttribute('data-ooh-operation-condition', condition.id);
+    root.setAttribute('data-ooh-condition-intensity', 'low');
+    if (targetShell) {
+      targetShell.setAttribute('data-ooh-operation-condition', condition.id);
+      targetShell.setAttribute('data-ooh-condition-intensity', 'low');
+    }
+
+    return condition;
+  }
+
+  function syncOperationConditionHud(root) {
+    const condition = root ? root.oohOperationCondition : null;
+    if (!root || !condition) {
+      return;
+    }
+
+    const telemetry = root.querySelector('[data-ooh-hud-field="telemetryC"]');
+    if (telemetry) {
+      telemetry.textContent = condition.label;
+    }
   }
 
   // Deterministic route asset map. Entries point at local public files and are optional:
@@ -3420,6 +3507,7 @@ function passiveBehaviorPreviewLabel() {
     }
 
     root.classList.add('is-mission-active');
+    const operationCondition = applyOperationCondition(root, shell, routeId);
     startSignalIntegrityLoop(root);
     if (shell) {
       shell.classList.add('is-mission-active');
@@ -3455,6 +3543,10 @@ function passiveBehaviorPreviewLabel() {
       const readout = hud.querySelector('[data-ooh-action-readout]');
       if (readout) {
         showLocalCadenceBeat(root, 'PAYLOAD ECHO STABLE', 'Passive inputs online. Awaiting SCAN, HOLD POSITION, or CHECK SIGNAL.', 220);
+      }
+      syncOperationConditionHud(root);
+      if (operationCondition) {
+        showLocalCadenceBeat(root, operationCondition.label, operationCondition.cadenceFlavor, 320);
       }
       startLocalTelemetryPulse(root, routeId, pathKey, 'mission');
     }
