@@ -620,10 +620,10 @@
     const runtime = signalRuntime(root);
     const band = interferenceBand(runtime ? runtime.interferencePressure : 0);
     const copy = {
-      LOW: 'SCAN RETURNED. Interference low. Signal field stable.',
-      RISING: 'SCAN RETURNED. INTERFERENCE RISING. Channel pressure increasing.',
-      ELEVATED: 'SCAN RETURNED. CHANNEL PRESSURE ELEVATED. Maintain signal hold discipline.',
-      CRITICAL: 'SCAN RETURNED. CRITICAL INTERFERENCE. Signal field unstable.'
+      LOW: 'SCAN RETURNED. Sync improved. Exposure remains low.',
+      RISING: 'SCAN RETURNED. Sync improved. Exposure rising.',
+      ELEVATED: 'SCAN RETURNED. Sync improved. Channel pressure elevated.',
+      CRITICAL: 'SCAN RETURNED. Sync improved. Signal field unstable.'
     };
     return copy[band] || copy.LOW;
   }
@@ -886,7 +886,7 @@
 
     if (readiness < 0.72 && !runtime.extractionUnstableAnnounced) {
       runtime.extractionUnstableAnnounced = true;
-      showLocalCadenceBeat(root, 'EXFIL WINDOW UNSTABLE', cadenceFlavor(root, 'extraction_sync', 'Extraction synchronization slowed. Maintain operational stability.'), 260);
+      showLocalCadenceBeat(root, 'EXFIL WINDOW UNSTABLE', cadenceFlavor(root, 'extraction_sync', 'Synchronization degraded by pressure. Maintain operational stability.'), 260);
     }
     else if (readiness >= 0.82) {
       runtime.extractionUnstableAnnounced = false;
@@ -1204,9 +1204,9 @@
     if (tier !== 'nominal' && runtime.operationalEscalationAnnounced !== tier) {
       runtime.operationalEscalationAnnounced = tier;
       const notices = {
-        elevated: ['PRESSURE RISING', 'Operational pressure rising. Maintain clean synchronization.'],
-        degraded: ['RUNTIME DEGRADED', 'Runtime degradation increasing. Stabilize before extraction narrows.'],
-        unstable: ['RUNTIME UNSTABLE', 'Runtime instability elevated. Hold the channel through extraction.']
+        elevated: ['PRESSURE RISING', 'Exposure rising. Maintain clean synchronization.'],
+        degraded: ['RUNTIME DEGRADED', 'Synchronization thinning. Stabilize before extraction narrows.'],
+        unstable: ['RUNTIME UNSTABLE', 'Pressure disrupting sync. Hold the channel through extraction.']
       };
       const notice = notices[tier];
       showLocalCadenceBeat(root, notice[0], notice[1], 260);
@@ -1268,7 +1268,7 @@
       runtime.operationalRecoveryUntil = Math.max(runtime.operationalRecoveryUntil || 0, now + 3200 + holdBonus);
       if (!recoveryActive && !runtime.operationalRecoveryAnnounced) {
         runtime.operationalRecoveryAnnounced = true;
-        showLocalCadenceBeat(root, 'RUNTIME STABILIZING', 'Temporary recovery window open. Maintain clean cadence.', 240);
+        showLocalCadenceBeat(root, 'RUNTIME STABILIZING', 'Temporary stabilization. Pressure response softened.', 240);
       }
       return;
     }
@@ -1325,7 +1325,7 @@
 
     if (!runtime.operationalDriftAnnounced) {
       runtime.operationalDriftAnnounced = true;
-      showLocalCadenceBeat(root, 'OPERATIONAL DRIFT', 'Runtime conditions shifting. Maintain cadence.', 260);
+      showLocalCadenceBeat(root, 'OPERATIONAL DRIFT', 'Conditions shifted. Recheck sync and pressure.', 260);
     }
     else {
       nudgeLocalTelemetryPulse(root, 'OPERATIONAL DRIFT REGISTERED');
@@ -1408,7 +1408,7 @@
       runtime.degradedAnnounced = false;
     }
     syncSignalIntegrityHud(root, signalIntegrityStateKey(root) === 'degraded' ? 'degraded' : 'pressure', 'SIGNAL HOLD. Channel stabilized. Runtime cohesion cushioned.');
-    showLocalCadenceBeat(root, 'CHANNEL STABILIZED', cadenceFlavor(root, 'stabilization', 'Signal hold active. Decay temporarily cushioned.'), 220);
+    showLocalCadenceBeat(root, 'CHANNEL STABILIZED', cadenceFlavor(root, 'stabilization', 'Signal cushioned. Exposure pressure increasing.'), 220);
   }
 
   function setOperationalRuntimeState(root, stateKey, readoutOverride) {
@@ -1991,7 +1991,12 @@
     }
     applyActionObjectiveProgress(root, runtime, action);
     applyOperationalPressure(root, runtime, action);
-    nudgeLocalTelemetryPulse(root, 'TELEMETRY REFRESH: LOCAL');
+    const actionNudges = {
+      scan: 'SCAN: SYNC IMPROVED // EXPOSURE RISING',
+      hold: 'HOLD: SIGNAL CUSHIONED // PRESSURE RISING',
+      signal: 'SIGNAL CHECK: CHANNEL VERIFIED // PRESSURE LOCAL'
+    };
+    nudgeLocalTelemetryPulse(root, actionNudges[action] || 'ACTION REGISTERED // CHANNEL PRESSURE LOCAL');
 
     if (!shell) {
       return;
@@ -4015,7 +4020,7 @@ function passiveBehaviorPreviewLabel() {
 
   function nudgeLocalTelemetryPulse(root, message) {
     const readout = root ? root.querySelector('[data-ooh-action-readout]') : null;
-    if (!readout || readout.oohEvolutionFeedbackTimer || readout.oohEvolutionContinuityTimer) {
+    if (!readout || root.oohLocalCadenceTimer || readout.oohEvolutionFeedbackTimer || readout.oohEvolutionContinuityTimer) {
       return;
     }
     readout.textContent = message;
