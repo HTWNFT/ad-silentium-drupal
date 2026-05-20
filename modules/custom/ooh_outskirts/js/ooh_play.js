@@ -518,6 +518,7 @@
         extractionProgress: signalIntegrityRuntime.extractionInitial,
         extractionComplete: false,
         extractionAnnounced: false,
+        extractionUnstableAnnounced: false,
         interferencePressure: signalIntegrityRuntime.interferenceInitial,
         peakInterferencePressure: signalIntegrityRuntime.interferenceInitial,
         startedAt: 0,
@@ -849,6 +850,32 @@
       signalIntegrityRuntime.extractionRate;
   }
 
+  function updateExtractionReadiness(root, runtime) {
+    if (!root || !runtime || runtime.lost || runtime.extractionComplete || !runtime.objectiveReady) {
+      return 1;
+    }
+
+    const integrity = Math.max(0, Math.min(signalIntegrityRuntime.initial, runtime.integrity || 0));
+    const pressure = Math.max(0, Math.min(100, runtime.interferencePressure || 0));
+    const scanAssisted = runtime.objectiveScanSyncUntil && Date.now() < runtime.objectiveScanSyncUntil;
+    const degraded = signalIntegrityStateKey(root) === 'degraded';
+    const integrityFactor = degraded ? 0.82 : Math.max(0.76, 0.9 + (integrity / 1000));
+    const pressureDrag = pressure >= 78 ? 0.18 : (pressure >= 52 ? 0.1 : (pressure >= 24 ? 0.04 : 0));
+    const scanBoost = scanAssisted ? 0.07 : 0;
+    const syncSupport = Math.min(0.05, Math.max(0, (runtime.objectiveSyncQuality || 0) * 0.05));
+    const readiness = Math.max(0.62, Math.min(1.08, integrityFactor - pressureDrag + scanBoost + syncSupport));
+
+    if (readiness < 0.72 && !runtime.extractionUnstableAnnounced) {
+      runtime.extractionUnstableAnnounced = true;
+      showLocalCadenceBeat(root, 'EXFIL WINDOW UNSTABLE', cadenceFlavor(root, 'extraction_sync', 'Extraction synchronization slowed. Maintain operational stability.'), 260);
+    }
+    else if (readiness >= 0.82) {
+      runtime.extractionUnstableAnnounced = false;
+    }
+
+    return readiness;
+  }
+
   function completeExtractionSync(root) {
     const runtime = signalRuntime(root);
     if (!runtime || runtime.lost || runtime.extractionComplete) {
@@ -888,7 +915,7 @@
       return;
     }
 
-    runtime.extractionProgress = Math.min(100, runtime.extractionProgress + extractionSyncRate(root));
+    runtime.extractionProgress = Math.min(100, runtime.extractionProgress + (extractionSyncRate(root) * updateExtractionReadiness(root, runtime)));
     if (!runtime.extractionAnnounced) {
       runtime.extractionAnnounced = true;
       showLocalCadenceBeat(root, 'EXFIL SYNCHRONIZING', cadenceFlavor(root, 'extraction_sync', 'Hold the channel through the extraction window.'), 260);
@@ -1109,6 +1136,7 @@
       signalIntegrityRuntime.extractionInitial;
     runtime.extractionComplete = false;
     runtime.extractionAnnounced = runtime.objectiveReady && runtime.extractionProgress > signalIntegrityRuntime.extractionInitial;
+    runtime.extractionUnstableAnnounced = false;
     runtime.interferencePressure = Math.min(100, Math.max(signalIntegrityRuntime.interferenceInitial, Number(preset.interferenceInitial) || signalIntegrityRuntime.interferenceInitial));
     runtime.peakInterferencePressure = runtime.interferencePressure;
     runtime.startedAt = Date.now();
