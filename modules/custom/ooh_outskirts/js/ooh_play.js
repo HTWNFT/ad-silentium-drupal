@@ -876,12 +876,36 @@
     return readiness;
   }
 
+  function determineOperationalOutcome(root, runtime) {
+    if (!root || !runtime) {
+      return 'EXTRACTION COMPLETE';
+    }
+
+    const integrity = Math.max(0, Math.min(signalIntegrityRuntime.initial, runtime.integrity || 0));
+    const pressure = Math.max(0, Math.min(100, runtime.peakInterferencePressure || runtime.interferencePressure || 0));
+    const syncQuality = Math.max(0, Math.min(1, runtime.objectiveSyncQuality || 0));
+    const degraded = runtime.degradedAnnounced || integrity < signalIntegrityRuntime.degradedThreshold;
+    const unstableExtraction = runtime.extractionUnstableAnnounced;
+
+    if (integrity < 25 || pressure >= 78) {
+      return 'SIGNAL-COMPROMISED EXTRACTION';
+    }
+    if (degraded || unstableExtraction || pressure >= 52) {
+      return 'DEGRADED EXTRACTION';
+    }
+    if (syncQuality < 0.45 || pressure >= 35) {
+      return 'PARTIAL SYNCHRONIZATION';
+    }
+    return 'STABLE EXTRACTION';
+  }
+
   function completeExtractionSync(root) {
     const runtime = signalRuntime(root);
     if (!runtime || runtime.lost || runtime.extractionComplete) {
       return;
     }
 
+    const outcome = determineOperationalOutcome(root, runtime);
     runtime.extractionProgress = 100;
     runtime.extractionComplete = true;
     stopSignalIntegrityLoop(root);
@@ -905,8 +929,8 @@
     });
 
     syncSignalIntegrityHud(root, 'complete', cadenceFlavor(root, 'operation_complete', 'OPERATION COMPLETE. Extraction synchronized. Runtime loop sealed without persistence.'));
-    showLocalCadenceBeat(root, 'EXTRACTION SYNCHRONIZED', cadenceFlavor(root, 'operation_complete', 'Operation complete. Runtime loop sealed.'), 240);
-    showOperationSummary(root, 'EXTRACTION COMPLETE');
+    showLocalCadenceBeat(root, outcome, cadenceFlavor(root, 'operation_complete', 'Operation complete. Runtime loop sealed.'), 240);
+    showOperationSummary(root, outcome);
   }
 
   function advanceExtractionSync(root) {
