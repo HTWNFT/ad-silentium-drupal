@@ -1442,7 +1442,7 @@
     });
 
     const readout = root.querySelector('[data-ooh-action-readout]');
-    if (readout) {
+    if (readout && !readoutHoldActive(root, 1)) {
       readout.textContent = readoutOverride || state.readout;
     }
   }
@@ -1457,6 +1457,7 @@
     removeOperationSummary(root);
     stopLocalTelemetryPulse(root);
     clearLocalCadenceBeat(root);
+    clearReadoutHold(root);
     clearSignalIntegrityRuntime(root);
     setOperationalRuntimeState(root, 'standby');
     root.classList.remove('is-mission-active', 'is-combat-shell');
@@ -1996,7 +1997,7 @@
       hold: 'HOLD: SIGNAL CUSHIONED // PRESSURE RISING',
       signal: 'SIGNAL CHECK: CHANNEL VERIFIED // PRESSURE LOCAL'
     };
-    nudgeLocalTelemetryPulse(root, actionNudges[action] || 'ACTION REGISTERED // CHANNEL PRESSURE LOCAL');
+    nudgeLocalTelemetryPulse(root, actionNudges[action] || 'ACTION REGISTERED // CHANNEL PRESSURE LOCAL', 3, 2600);
 
     if (!shell) {
       return;
@@ -3981,6 +3982,29 @@ function passiveBehaviorPreviewLabel() {
     }
   }
 
+  function readoutHoldActive(root, minimumPriority) {
+    if (!root || !root.oohReadoutHoldUntil || Date.now() >= root.oohReadoutHoldUntil) {
+      return false;
+    }
+    return (root.oohReadoutPriority || 0) >= (minimumPriority || 0);
+  }
+
+  function holdReadout(root, priority, holdMs) {
+    if (!root) {
+      return;
+    }
+    root.oohReadoutPriority = priority || 1;
+    root.oohReadoutHoldUntil = Date.now() + (holdMs || 1600);
+  }
+
+  function clearReadoutHold(root) {
+    if (!root) {
+      return;
+    }
+    root.oohReadoutPriority = 0;
+    root.oohReadoutHoldUntil = 0;
+  }
+
   function startLocalTelemetryPulse(root, routeId, pathKey, mode) {
     const readout = root ? root.querySelector('[data-ooh-action-readout]') : null;
     if (!root || !readout) {
@@ -3996,7 +4020,7 @@ function passiveBehaviorPreviewLabel() {
         return;
       }
 
-      if (!readout.oohEvolutionFeedbackTimer && !readout.oohEvolutionContinuityTimer) {
+      if (!readoutHoldActive(root, 1) && !readout.oohEvolutionFeedbackTimer && !readout.oohEvolutionContinuityTimer) {
         const lines = localTelemetryPulseLines(root, routeId, pathKey, mode);
         if (!lines.length) {
           stopLocalTelemetryPulse(root);
@@ -4018,12 +4042,23 @@ function passiveBehaviorPreviewLabel() {
     );
   }
 
-  function nudgeLocalTelemetryPulse(root, message) {
+  function nudgeLocalTelemetryPulse(root, message, priority, holdMs) {
     const readout = root ? root.querySelector('[data-ooh-action-readout]') : null;
-    if (!readout || root.oohLocalCadenceTimer || readout.oohEvolutionFeedbackTimer || readout.oohEvolutionContinuityTimer) {
+    const messagePriority = priority || 1;
+    if (!readout || readout.oohEvolutionFeedbackTimer || readout.oohEvolutionContinuityTimer) {
       return;
     }
+    if (readoutHoldActive(root, messagePriority + 1)) {
+      return;
+    }
+    if (root.oohLocalCadenceTimer && (root.oohReadoutPriority || 0) > messagePriority) {
+      return;
+    }
+    if (root.oohLocalCadenceTimer) {
+      clearLocalCadenceBeat(root);
+    }
     readout.textContent = message;
+    holdReadout(root, messagePriority, holdMs || (messagePriority >= 3 ? 2400 : 1500));
   }
 
   function clearLocalCadenceBeat(root) {
@@ -4037,9 +4072,15 @@ function passiveBehaviorPreviewLabel() {
     }
   }
 
-  function showLocalCadenceBeat(root, message, settleText, delay) {
+  function showLocalCadenceBeat(root, message, settleText, delay, options) {
     const readout = root ? root.querySelector('[data-ooh-action-readout]') : null;
     if (!root || !readout) {
+      return;
+    }
+
+    const cadenceOptions = options || {};
+    const priority = cadenceOptions.priority || 2;
+    if (readoutHoldActive(root, priority + 1)) {
       return;
     }
 
@@ -4048,8 +4089,10 @@ function passiveBehaviorPreviewLabel() {
     const cadenceDelay = captureModeActive(root) ?
       Math.min(Math.round((delay || 180) * signalIntegrityRuntime.captureCadenceDelayMultiplier), signalIntegrityRuntime.captureCadenceMaxDelay) :
       Math.min(delay || 180, 450);
+    holdReadout(root, priority, Math.max(cadenceDelay + 1500, cadenceOptions.holdMs || 1900));
     root.oohLocalCadenceTimer = window.setTimeout(function () {
       readout.textContent = settleText;
+      holdReadout(root, priority, cadenceOptions.settleHoldMs || 1800);
       root.oohLocalCadenceTimer = null;
     }, cadenceDelay);
   }

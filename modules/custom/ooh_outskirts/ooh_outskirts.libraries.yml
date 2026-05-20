@@ -40,7 +40,7 @@ dossier:
     - core/drupalSettings
 
 play:
-  version: 1.0.2
+  version: 1.0.4
   css:
     theme:
       css/ooh_game_generator.css: {}
