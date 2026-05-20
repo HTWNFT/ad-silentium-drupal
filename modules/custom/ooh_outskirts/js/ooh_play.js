@@ -520,6 +520,8 @@
         startedAt: 0,
         scanAwarenessUntil: 0,
         cushionUntil: 0,
+        actionInstabilityUntil: 0,
+        actionInstabilityDecay: 0,
         degradedAnnounced: false,
         lost: false
       };
@@ -686,9 +688,11 @@
     const runtime = signalRuntime(root);
     const pressure = runtime ? Math.max(0, Math.min(100, runtime.interferencePressure)) : 0;
     const scanAware = runtime && runtime.scanAwarenessUntil && Date.now() < runtime.scanAwarenessUntil;
+    const actionInstability = runtime && runtime.actionInstabilityUntil && Date.now() < runtime.actionInstabilityUntil;
     const baseDecay = cushioned ? signalIntegrityRuntime.cushionDecay : signalIntegrityRuntime.baseDecay;
     const pressureFactor = scanAware ? signalIntegrityRuntime.interferenceDecayFactor * 0.55 : signalIntegrityRuntime.interferenceDecayFactor;
-    return baseDecay + ((pressure / 100) * pressureFactor);
+    const instabilityDecay = actionInstability ? Math.max(0, runtime.actionInstabilityDecay || 0) : 0;
+    return baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay;
   }
 
   function applyInterferenceScan(root) {
@@ -740,6 +744,56 @@
       runtime.objectiveAnnounced = true;
       showLocalCadenceBeat(root, 'OBJECTIVE WINDOW COMPLETE', cadenceFlavor(root, 'extraction_available', 'EXTRACTION WINDOW AVAILABLE. Exfil synchronization beginning.'), 280);
     }
+  }
+
+  function applyActionObjectiveProgress(root, runtime, actionKey) {
+    if (!root || !runtime || !root.classList.contains('is-mission-active') || runtime.lost || runtime.integrity <= 0 || runtime.objectiveReady) {
+      return;
+    }
+
+    const actionProgress = {
+      hold: 0.35,
+      scan: 0.75,
+      signal: 0.2
+    };
+    const amount = actionProgress[actionKey] || 0.15;
+    runtime.objectiveProgress = Math.min(signalIntegrityRuntime.objectiveThreshold, runtime.objectiveProgress + amount);
+
+    if (runtime.objectiveProgress >= signalIntegrityRuntime.objectiveThreshold) {
+      runtime.objectiveReady = true;
+      runtime.objectiveProgress = signalIntegrityRuntime.objectiveThreshold;
+      runtime.extractionProgress = signalIntegrityRuntime.extractionInitial;
+      if (!runtime.objectiveAnnounced) {
+        runtime.objectiveAnnounced = true;
+        showLocalCadenceBeat(root, 'OBJECTIVE WINDOW COMPLETE', cadenceFlavor(root, 'extraction_available', 'EXTRACTION WINDOW AVAILABLE. Exfil synchronization beginning.'), 280);
+      }
+    }
+    syncObjectiveProgressHud(root);
+  }
+
+  function applyOperationalPressure(root, runtime, actionKey) {
+    if (!root || !runtime || !root.classList.contains('is-mission-active') || runtime.lost || runtime.integrity <= 0) {
+      return;
+    }
+
+    const pressureAmounts = {
+      hold: 0.25,
+      scan: 0.45,
+      signal: 0.12
+    };
+    const pressureAmount = pressureAmounts[actionKey] || 0.1;
+    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + pressureAmount);
+    runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
+
+    if (actionKey === 'scan') {
+      runtime.actionInstabilityUntil = Date.now() + 1600;
+      runtime.actionInstabilityDecay = 0.18;
+    }
+    else if (!runtime.actionInstabilityUntil || Date.now() >= runtime.actionInstabilityUntil) {
+      runtime.actionInstabilityDecay = 0;
+    }
+
+    syncInterferencePressureHud(root);
   }
 
   function extractionSyncRate(root) {
@@ -1024,6 +1078,8 @@
     runtime.startedAt = Date.now();
     runtime.scanAwarenessUntil = 0;
     runtime.cushionUntil = 0;
+    runtime.actionInstabilityUntil = 0;
+    runtime.actionInstabilityDecay = 0;
     runtime.degradedAnnounced = false;
     runtime.lost = false;
     syncSignalIntegrityHud(root, runtime.objectiveReady ? 'extraction' : 'active', preset.cadenceFlavor || cadenceFlavor(root, 'initialization', 'Operation active. Signal integrity at 100%. Relay alignment in progress.'));
@@ -1624,6 +1680,8 @@
     else {
       syncSignalIntegrityHud(root, runtimeStateKeyFromAction(action), readoutText);
     }
+    applyActionObjectiveProgress(root, signalRuntime(root), action);
+    applyOperationalPressure(root, signalRuntime(root), action);
     nudgeLocalTelemetryPulse(root, 'TELEMETRY REFRESH: LOCAL');
 
     if (!shell) {
