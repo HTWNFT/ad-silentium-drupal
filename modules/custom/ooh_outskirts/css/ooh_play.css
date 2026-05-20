@@ -5850,6 +5850,7 @@ body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__hud {
   opacity: 0.06;
   filter: saturate(0.62) contrast(0.86);
+  pointer-events: none;
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
@@ -5858,12 +5859,42 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__telemetry {
   opacity: 0.06;
   filter: saturate(0.62) contrast(0.86);
+  pointer-events: none;
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__assembly,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__assembly {
   opacity: 0.06;
   filter: saturate(0.58) contrast(0.82);
+  pointer-events: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-assembly__grid,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-assembly__field,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-assembly__grid,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-assembly__field {
+  pointer-events: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud],
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud] {
+  pointer-events: auto;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--actions,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--actions {
+  position: relative;
+  z-index: 9;
+  pointer-events: auto;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-actions,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-action,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-actions,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-action {
+  position: relative;
+  z-index: 9;
+  pointer-events: auto;
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
