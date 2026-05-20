@@ -528,6 +528,8 @@
         actionInstabilityDecay: 0,
         operationalDecayBias: 0,
         extractionReadinessBias: 0,
+        operationalEscalationTier: 'nominal',
+        operationalEscalationAnnounced: '',
         degradedAnnounced: false,
         lost: false
       };
@@ -1120,6 +1122,7 @@
     }
 
     advanceInterferencePressure(root);
+    updateOperationalEscalation(root, runtime);
     const cushioned = runtime.cushionUntil && Date.now() < runtime.cushionUntil;
     runtime.integrity = Math.max(0, runtime.integrity - signalDecayAmount(root, cushioned));
 
@@ -1144,6 +1147,49 @@
     }
 
     syncSignalIntegrityHud(root, cushioned ? 'pressure' : 'active');
+  }
+
+  function updateOperationalEscalation(root, runtime) {
+    if (!root || !runtime || runtime.lost || runtime.extractionComplete) {
+      return;
+    }
+
+    const integrity = Math.max(0, Math.min(100, runtime.integrity || 0));
+    const pressure = Math.max(0, Math.min(100, runtime.interferencePressure || 0));
+    const syncQuality = Math.max(0, Math.min(1, runtime.objectiveSyncQuality || 0));
+    const extractionProgress = runtime.objectiveReady ? Math.max(0, Math.min(100, runtime.extractionProgress || 0)) : 0;
+    let tier = 'nominal';
+
+    if (integrity < 28 || pressure >= 78 || (runtime.objectiveReady && extractionProgress >= 82 && pressure >= 52)) {
+      tier = 'unstable';
+    }
+    else if (integrity < signalIntegrityRuntime.degradedThreshold || pressure >= 52 || syncQuality < 0.24 || (runtime.objectiveReady && extractionProgress >= 68)) {
+      tier = 'degraded';
+    }
+    else if (integrity < 62 || pressure >= 24 || syncQuality < 0.38 || (runtime.objectiveReady && extractionProgress >= 42)) {
+      tier = 'elevated';
+    }
+
+    runtime.operationalEscalationTier = tier;
+    const pressureNudge = {
+      nominal: 0,
+      elevated: 0.03,
+      degraded: 0.07,
+      unstable: 0.12
+    };
+    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + pressureNudge[tier]);
+    runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
+
+    if (tier !== 'nominal' && runtime.operationalEscalationAnnounced !== tier) {
+      runtime.operationalEscalationAnnounced = tier;
+      const notices = {
+        elevated: ['PRESSURE RISING', 'Operational pressure rising. Maintain clean synchronization.'],
+        degraded: ['RUNTIME DEGRADED', 'Runtime degradation increasing. Stabilize before extraction narrows.'],
+        unstable: ['RUNTIME UNSTABLE', 'Runtime instability elevated. Hold the channel through extraction.']
+      };
+      const notice = notices[tier];
+      showLocalCadenceBeat(root, notice[0], notice[1], 260);
+    }
   }
 
   function initializeOperationalVariance(root, runtime) {
@@ -1189,6 +1235,8 @@
     runtime.actionInstabilityDecay = 0;
     runtime.operationalDecayBias = 0;
     runtime.extractionReadinessBias = 0;
+    runtime.operationalEscalationTier = 'nominal';
+    runtime.operationalEscalationAnnounced = '';
     runtime.degradedAnnounced = false;
     runtime.lost = false;
     initializeOperationalVariance(root, runtime);
