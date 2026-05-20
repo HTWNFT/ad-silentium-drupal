@@ -530,6 +530,9 @@
         extractionReadinessBias: 0,
         operationalEscalationTier: 'nominal',
         operationalEscalationAnnounced: '',
+        operationalRecoveryUntil: 0,
+        operationalRecoveryAnnounced: false,
+        operationalRecoveryHoldCount: 0,
         degradedAnnounced: false,
         lost: false
       };
@@ -700,7 +703,8 @@
     const baseDecay = cushioned ? signalIntegrityRuntime.cushionDecay : signalIntegrityRuntime.baseDecay;
     const pressureFactor = scanAware ? signalIntegrityRuntime.interferenceDecayFactor * 0.55 : signalIntegrityRuntime.interferenceDecayFactor;
     const instabilityDecay = actionInstability ? Math.max(0, runtime.actionInstabilityDecay || 0) : 0;
-    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + (runtime.operationalDecayBias || 0));
+    const recoveryCushion = runtime && runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil ? 0.18 : 0;
+    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + (runtime.operationalDecayBias || 0) - recoveryCushion);
   }
 
   function applyInterferenceScan(root) {
@@ -743,9 +747,11 @@
     const lastActionAt = runtime.objectiveSyncLastActionAt || runtime.startedAt || now;
     const idleMs = Math.max(0, now - lastActionAt);
     const scanWindowActive = runtime.objectiveScanSyncUntil && now < runtime.objectiveScanSyncUntil;
+    const recoveryActive = runtime.operationalRecoveryUntil && now < runtime.operationalRecoveryUntil;
     const idleDrag = idleMs > 4500 ? 0.04 : 0.015;
     const scanFloor = scanWindowActive ? 0.72 : 0;
-    const quality = Math.max(scanFloor, (runtime.objectiveSyncQuality || 0.35) - idleDrag);
+    const recoveryLift = recoveryActive ? 0.025 : 0;
+    const quality = Math.max(scanFloor, (runtime.objectiveSyncQuality || 0.35) - idleDrag + recoveryLift);
 
     runtime.objectiveSyncQuality = Math.max(0.12, Math.min(1, quality));
     return 0.25 + (runtime.objectiveSyncQuality * 0.85);
@@ -1122,6 +1128,7 @@
     }
 
     advanceInterferencePressure(root);
+    updateOperationalRecovery(root, runtime);
     updateOperationalEscalation(root, runtime);
     const cushioned = runtime.cushionUntil && Date.now() < runtime.cushionUntil;
     runtime.integrity = Math.max(0, runtime.integrity - signalDecayAmount(root, cushioned));
@@ -1177,7 +1184,9 @@
       degraded: 0.07,
       unstable: 0.12
     };
-    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + pressureNudge[tier]);
+    const recoveryActive = runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil;
+    const recoveryFactor = recoveryActive ? 0.45 : 1;
+    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + (pressureNudge[tier] * recoveryFactor));
     runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
 
     if (tier !== 'nominal' && runtime.operationalEscalationAnnounced !== tier) {
@@ -1189,6 +1198,36 @@
       };
       const notice = notices[tier];
       showLocalCadenceBeat(root, notice[0], notice[1], 260);
+    }
+  }
+
+  function updateOperationalRecovery(root, runtime) {
+    if (!root || !runtime || runtime.lost || runtime.extractionComplete || !root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    const now = Date.now();
+    const pressure = Math.max(0, Math.min(100, runtime.interferencePressure || 0));
+    const integrity = Math.max(0, Math.min(100, runtime.integrity || 0));
+    const syncQuality = Math.max(0, Math.min(1, runtime.objectiveSyncQuality || 0));
+    const recoveryActive = runtime.operationalRecoveryUntil && now < runtime.operationalRecoveryUntil;
+    const holdStabilized = runtime.cushionUntil && now < runtime.cushionUntil && integrity >= signalIntegrityRuntime.degradedThreshold && pressure < 78;
+    const syncStable = syncQuality >= 0.76 && pressure < 52;
+    const extractionStable = runtime.objectiveReady && runtime.extractionProgress >= 25 && integrity >= signalIntegrityRuntime.degradedThreshold && pressure < 52 && !runtime.extractionUnstableAnnounced;
+
+    if (holdStabilized || syncStable || extractionStable) {
+      const holdBonus = Math.min(1200, Math.max(0, runtime.operationalRecoveryHoldCount || 0) * 300);
+      runtime.operationalRecoveryUntil = Math.max(runtime.operationalRecoveryUntil || 0, now + 3200 + holdBonus);
+      if (!recoveryActive && !runtime.operationalRecoveryAnnounced) {
+        runtime.operationalRecoveryAnnounced = true;
+        showLocalCadenceBeat(root, 'RUNTIME STABILIZING', 'Temporary recovery window open. Maintain clean cadence.', 240);
+      }
+      return;
+    }
+
+    if (!recoveryActive) {
+      runtime.operationalRecoveryAnnounced = false;
+      runtime.operationalRecoveryHoldCount = Math.max(0, (runtime.operationalRecoveryHoldCount || 0) - 1);
     }
   }
 
@@ -1237,6 +1276,9 @@
     runtime.extractionReadinessBias = 0;
     runtime.operationalEscalationTier = 'nominal';
     runtime.operationalEscalationAnnounced = '';
+    runtime.operationalRecoveryUntil = 0;
+    runtime.operationalRecoveryAnnounced = false;
+    runtime.operationalRecoveryHoldCount = 0;
     runtime.degradedAnnounced = false;
     runtime.lost = false;
     initializeOperationalVariance(root, runtime);
@@ -1254,6 +1296,8 @@
 
     runtime.integrity = Math.min(signalIntegrityRuntime.initial, runtime.integrity + signalIntegrityRuntime.holdRestore);
     runtime.cushionUntil = Date.now() + signalIntegrityRuntime.holdMs;
+    runtime.operationalRecoveryHoldCount = Math.min(4, (runtime.operationalRecoveryHoldCount || 0) + 1);
+    updateOperationalRecovery(root, runtime);
     if (runtime.integrity >= signalIntegrityRuntime.degradedThreshold) {
       runtime.degradedAnnounced = false;
     }
