@@ -512,6 +512,9 @@
         objectiveProgress: signalIntegrityRuntime.objectiveInitial,
         objectiveReady: false,
         objectiveAnnounced: false,
+        objectiveSyncQuality: 0.35,
+        objectiveSyncLastActionAt: 0,
+        objectiveScanSyncUntil: 0,
         extractionProgress: signalIntegrityRuntime.extractionInitial,
         extractionComplete: false,
         extractionAnnounced: false,
@@ -726,13 +729,31 @@
     return stateKey;
   }
 
+  function updateObjectiveSynchronization(root, runtime) {
+    if (!root || !runtime || runtime.lost || runtime.objectiveReady || !root.classList.contains('is-mission-active')) {
+      return 1;
+    }
+
+    const now = Date.now();
+    const lastActionAt = runtime.objectiveSyncLastActionAt || runtime.startedAt || now;
+    const idleMs = Math.max(0, now - lastActionAt);
+    const scanWindowActive = runtime.objectiveScanSyncUntil && now < runtime.objectiveScanSyncUntil;
+    const idleDrag = idleMs > 4500 ? 0.04 : 0.015;
+    const scanFloor = scanWindowActive ? 0.72 : 0;
+    const quality = Math.max(scanFloor, (runtime.objectiveSyncQuality || 0.35) - idleDrag);
+
+    runtime.objectiveSyncQuality = Math.max(0.12, Math.min(1, quality));
+    return 0.25 + (runtime.objectiveSyncQuality * 0.85);
+  }
+
   function advanceObjectiveProgress(root) {
     const runtime = signalRuntime(root);
     if (!runtime || runtime.lost || runtime.objectiveReady) {
       return;
     }
 
-    runtime.objectiveProgress = Math.min(signalIntegrityRuntime.objectiveThreshold, runtime.objectiveProgress + signalIntegrityRuntime.objectiveRate);
+    const syncMultiplier = updateObjectiveSynchronization(root, runtime);
+    runtime.objectiveProgress = Math.min(signalIntegrityRuntime.objectiveThreshold, runtime.objectiveProgress + (signalIntegrityRuntime.objectiveRate * syncMultiplier));
     if (runtime.objectiveProgress < signalIntegrityRuntime.objectiveThreshold) {
       return;
     }
@@ -751,12 +772,25 @@
       return;
     }
 
+    const now = Date.now();
+    const syncGains = {
+      hold: 0.05,
+      scan: 0.18,
+      signal: 0.08
+    };
     const actionProgress = {
       hold: 0.35,
       scan: 0.75,
       signal: 0.2
     };
-    const amount = actionProgress[actionKey] || 0.15;
+    runtime.objectiveSyncLastActionAt = now;
+    runtime.objectiveSyncQuality = Math.min(1, (runtime.objectiveSyncQuality || 0.35) + (syncGains[actionKey] || 0.06));
+    if (actionKey === 'scan') {
+      runtime.objectiveScanSyncUntil = now + 5500;
+    }
+
+    const syncMultiplier = updateObjectiveSynchronization(root, runtime);
+    const amount = (actionProgress[actionKey] || 0.15) * syncMultiplier;
     runtime.objectiveProgress = Math.min(signalIntegrityRuntime.objectiveThreshold, runtime.objectiveProgress + amount);
 
     if (runtime.objectiveProgress >= signalIntegrityRuntime.objectiveThreshold) {
@@ -1068,6 +1102,8 @@
     runtime.objectiveProgress = initialObjective;
     runtime.objectiveReady = initialObjective >= signalIntegrityRuntime.objectiveThreshold;
     runtime.objectiveAnnounced = false;
+    runtime.objectiveSyncQuality = runtime.objectiveReady ? 1 : 0.35;
+    runtime.objectiveScanSyncUntil = 0;
     runtime.extractionProgress = runtime.objectiveReady ?
       Math.min(95, Math.max(signalIntegrityRuntime.extractionInitial, Number(preset.extractionInitial) || signalIntegrityRuntime.extractionInitial)) :
       signalIntegrityRuntime.extractionInitial;
@@ -1076,6 +1112,7 @@
     runtime.interferencePressure = Math.min(100, Math.max(signalIntegrityRuntime.interferenceInitial, Number(preset.interferenceInitial) || signalIntegrityRuntime.interferenceInitial));
     runtime.peakInterferencePressure = runtime.interferencePressure;
     runtime.startedAt = Date.now();
+    runtime.objectiveSyncLastActionAt = runtime.startedAt;
     runtime.scanAwarenessUntil = 0;
     runtime.cushionUntil = 0;
     runtime.actionInstabilityUntil = 0;
@@ -1670,6 +1707,7 @@
       return;
     }
 
+    const runtime = signalRuntime(root);
     const readoutText = passiveActionText(action, routeId, pathKey);
     if (action === 'hold') {
       applySignalHold(root);
@@ -1680,8 +1718,8 @@
     else {
       syncSignalIntegrityHud(root, runtimeStateKeyFromAction(action), readoutText);
     }
-    applyActionObjectiveProgress(root, signalRuntime(root), action);
-    applyOperationalPressure(root, signalRuntime(root), action);
+    applyActionObjectiveProgress(root, runtime, action);
+    applyOperationalPressure(root, runtime, action);
     nudgeLocalTelemetryPulse(root, 'TELEMETRY REFRESH: LOCAL');
 
     if (!shell) {
