@@ -533,6 +533,9 @@
         operationalRecoveryUntil: 0,
         operationalRecoveryAnnounced: false,
         operationalRecoveryHoldCount: 0,
+        operationalDriftNextAt: 0,
+        operationalDriftUntil: 0,
+        operationalDriftAnnounced: false,
         degradedAnnounced: false,
         lost: false
       };
@@ -700,11 +703,13 @@
     const pressure = runtime ? Math.max(0, Math.min(100, runtime.interferencePressure)) : 0;
     const scanAware = runtime && runtime.scanAwarenessUntil && Date.now() < runtime.scanAwarenessUntil;
     const actionInstability = runtime && runtime.actionInstabilityUntil && Date.now() < runtime.actionInstabilityUntil;
+    const driftActive = runtime && runtime.operationalDriftUntil && Date.now() < runtime.operationalDriftUntil;
     const baseDecay = cushioned ? signalIntegrityRuntime.cushionDecay : signalIntegrityRuntime.baseDecay;
     const pressureFactor = scanAware ? signalIntegrityRuntime.interferenceDecayFactor * 0.55 : signalIntegrityRuntime.interferenceDecayFactor;
     const instabilityDecay = actionInstability ? Math.max(0, runtime.actionInstabilityDecay || 0) : 0;
+    const driftDecay = driftActive ? 0.08 : 0;
     const recoveryCushion = runtime && runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil ? 0.18 : 0;
-    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + (runtime.operationalDecayBias || 0) - recoveryCushion);
+    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + driftDecay + (runtime.operationalDecayBias || 0) - recoveryCushion);
   }
 
   function applyInterferenceScan(root) {
@@ -1129,6 +1134,7 @@
 
     advanceInterferencePressure(root);
     updateOperationalRecovery(root, runtime);
+    updateOperationalDrift(root, runtime);
     updateOperationalEscalation(root, runtime);
     const cushioned = runtime.cushionUntil && Date.now() < runtime.cushionUntil;
     runtime.integrity = Math.max(0, runtime.integrity - signalDecayAmount(root, cushioned));
@@ -1231,6 +1237,59 @@
     }
   }
 
+  function updateOperationalDrift(root, runtime) {
+    if (!root || !runtime || runtime.lost || runtime.extractionComplete || !root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    const now = Date.now();
+    const startedAt = runtime.startedAt || now;
+    if (now - startedAt < 9000 || now < (runtime.operationalDriftNextAt || 0)) {
+      return;
+    }
+
+    const pressure = Math.max(0, Math.min(100, runtime.interferencePressure || 0));
+    const tier = runtime.operationalEscalationTier || 'nominal';
+    const driftChance = tier === 'unstable' ? 0.32 : (tier === 'degraded' ? 0.24 : (tier === 'elevated' ? 0.16 : 0.08));
+    runtime.operationalDriftNextAt = now + 9000 + Math.round(Math.random() * 7000);
+    if (pressure >= 92 || Math.random() > driftChance) {
+      return;
+    }
+
+    const driftType = runtime.objectiveReady ?
+      (Math.random() < 0.5 ? 'extraction' : 'pressure') :
+      (Math.random() < 0.5 ? 'sync' : 'instability');
+
+    if (driftType === 'sync') {
+      runtime.objectiveSyncQuality = Math.max(0.12, (runtime.objectiveSyncQuality || 0.35) - 0.06);
+    }
+    else if (driftType === 'extraction') {
+      runtime.extractionReadinessBias = Math.max(-0.08, (runtime.extractionReadinessBias || 0) - 0.025);
+      runtime.operationalDriftUntil = now + 4200;
+    }
+    else if (driftType === 'instability') {
+      runtime.actionInstabilityUntil = Math.max(runtime.actionInstabilityUntil || 0, now + 1800);
+      runtime.actionInstabilityDecay = Math.max(runtime.actionInstabilityDecay || 0, 0.12);
+      runtime.operationalDriftUntil = now + 2400;
+    }
+    else {
+      runtime.interferencePressure = Math.min(100, runtime.interferencePressure + 1.35);
+      runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
+    }
+
+    if (runtime.operationalRecoveryUntil && now < runtime.operationalRecoveryUntil) {
+      runtime.operationalRecoveryUntil = Math.max(now, runtime.operationalRecoveryUntil - 900);
+    }
+
+    if (!runtime.operationalDriftAnnounced) {
+      runtime.operationalDriftAnnounced = true;
+      showLocalCadenceBeat(root, 'OPERATIONAL DRIFT', 'Runtime conditions shifting. Maintain cadence.', 260);
+    }
+    else {
+      nudgeLocalTelemetryPulse(root, 'OPERATIONAL DRIFT REGISTERED');
+    }
+  }
+
   function initializeOperationalVariance(root, runtime) {
     if (!root || !runtime) {
       return;
@@ -1279,6 +1338,9 @@
     runtime.operationalRecoveryUntil = 0;
     runtime.operationalRecoveryAnnounced = false;
     runtime.operationalRecoveryHoldCount = 0;
+    runtime.operationalDriftNextAt = runtime.startedAt + 12000 + Math.round(Math.random() * 6000);
+    runtime.operationalDriftUntil = 0;
+    runtime.operationalDriftAnnounced = false;
     runtime.degradedAnnounced = false;
     runtime.lost = false;
     initializeOperationalVariance(root, runtime);
