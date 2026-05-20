@@ -526,6 +526,8 @@
         cushionUntil: 0,
         actionInstabilityUntil: 0,
         actionInstabilityDecay: 0,
+        operationalDecayBias: 0,
+        extractionReadinessBias: 0,
         degradedAnnounced: false,
         lost: false
       };
@@ -696,7 +698,7 @@
     const baseDecay = cushioned ? signalIntegrityRuntime.cushionDecay : signalIntegrityRuntime.baseDecay;
     const pressureFactor = scanAware ? signalIntegrityRuntime.interferenceDecayFactor * 0.55 : signalIntegrityRuntime.interferenceDecayFactor;
     const instabilityDecay = actionInstability ? Math.max(0, runtime.actionInstabilityDecay || 0) : 0;
-    return baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay;
+    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + (runtime.operationalDecayBias || 0));
   }
 
   function applyInterferenceScan(root) {
@@ -863,7 +865,7 @@
     const pressureDrag = pressure >= 78 ? 0.18 : (pressure >= 52 ? 0.1 : (pressure >= 24 ? 0.04 : 0));
     const scanBoost = scanAssisted ? 0.07 : 0;
     const syncSupport = Math.min(0.05, Math.max(0, (runtime.objectiveSyncQuality || 0) * 0.05));
-    const readiness = Math.max(0.62, Math.min(1.08, integrityFactor - pressureDrag + scanBoost + syncSupport));
+    const readiness = Math.max(0.62, Math.min(1.08, integrityFactor - pressureDrag + scanBoost + syncSupport + (runtime.extractionReadinessBias || 0)));
 
     if (readiness < 0.72 && !runtime.extractionUnstableAnnounced) {
       runtime.extractionUnstableAnnounced = true;
@@ -1144,6 +1146,22 @@
     syncSignalIntegrityHud(root, cushioned ? 'pressure' : 'active');
   }
 
+  function initializeOperationalVariance(root, runtime) {
+    if (!root || !runtime) {
+      return;
+    }
+
+    const pressureVariance = Math.round(Math.random() * 4);
+    const syncVariance = (Math.random() * 0.08) - 0.03;
+    runtime.operationalDecayBias = (Math.random() * 0.1) - 0.04;
+    runtime.extractionReadinessBias = (Math.random() * 0.08) - 0.04;
+    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + pressureVariance);
+    runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
+    if (!runtime.objectiveReady) {
+      runtime.objectiveSyncQuality = Math.max(0.28, Math.min(0.46, runtime.objectiveSyncQuality + syncVariance));
+    }
+  }
+
   function startSignalIntegrityLoop(root) {
     clearSignalIntegrityRuntime(root);
     const runtime = signalRuntime(root);
@@ -1169,8 +1187,11 @@
     runtime.cushionUntil = 0;
     runtime.actionInstabilityUntil = 0;
     runtime.actionInstabilityDecay = 0;
+    runtime.operationalDecayBias = 0;
+    runtime.extractionReadinessBias = 0;
     runtime.degradedAnnounced = false;
     runtime.lost = false;
+    initializeOperationalVariance(root, runtime);
     syncSignalIntegrityHud(root, runtime.objectiveReady ? 'extraction' : 'active', preset.cadenceFlavor || cadenceFlavor(root, 'initialization', 'Operation active. Signal integrity at 100%. Relay alignment in progress.'));
     runtime.timer = window.setInterval(function () {
       tickSignalIntegrity(root);
