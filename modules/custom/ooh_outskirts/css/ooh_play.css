@@ -6157,3 +6157,89 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
     line-height: 1.42;
   }
 }
+
+/* PHASE OA-036 - PASSIVE RUNTIME OBJECTIVE PRESENCE VISIBILITY */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-presence,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-presence {
+  display: grid;
+  gap: 0.3rem;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  border: 1px solid rgba(255, 240, 196, 0.1);
+  border-radius: 7px;
+  padding: clamp(0.68rem, 1.2vw, 0.84rem);
+  background:
+    linear-gradient(180deg, rgba(17, 15, 8, 0.58), rgba(8, 12, 12, 0.5)),
+    linear-gradient(90deg, rgba(255, 235, 176, 0.026), transparent 46%, rgba(216, 250, 255, 0.016));
+  color: rgba(255, 249, 230, 0.78);
+  pointer-events: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-presence[hidden],
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-presence[hidden] {
+  display: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-kicker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-kicker {
+  color: rgba(255, 240, 196, 0.6);
+  font-size: 0.7rem;
+  font-weight: 680;
+  letter-spacing: 0.08em;
+  line-height: 1.26;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-title,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-state,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-summary,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-title,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-state,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-summary {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+  text-wrap: wrap;
+  white-space: normal;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-title,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-title {
+  color: rgba(255, 253, 242, 0.9);
+  font-size: 0.86rem;
+  font-weight: 670;
+  letter-spacing: 0;
+  line-height: 1.34;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-state,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-state {
+  color: rgba(255, 240, 196, 0.72);
+  font-size: 0.76rem;
+  font-weight: 640;
+  letter-spacing: 0;
+  line-height: 1.32;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-summary,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-summary {
+  color: rgba(255, 240, 196, 0.62);
+  font-size: 0.74rem;
+  font-weight: 540;
+  line-height: 1.44;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-presence,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-presence {
+    gap: 0.34rem;
+    padding-block: 0.76rem 0.8rem;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-title,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__objective-title {
+    line-height: 1.42;
+  }
+}

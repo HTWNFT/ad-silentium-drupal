@@ -2060,6 +2060,124 @@
     }
   }
 
+  function objectivePresenceLabel(value, fallback) {
+    const label = String(value || fallback || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return label || '';
+  }
+
+  function buildObjectivePresenceContext(assembly, missionLabel) {
+    const primaryObjective = objectivePresenceLabel((assembly || {}).primaryObjective, '');
+    const secondaryObjective = objectivePresenceLabel((assembly || {}).secondaryObjective, '');
+    const mission = objectivePresenceLabel(missionLabel, '');
+    if (!primaryObjective && !secondaryObjective && !mission) {
+      return {
+        attached: false,
+        state: 'OBJECTIVE SIGNAL STANDBY',
+        objectiveLabel: '',
+        summary: 'No objective metadata attached.'
+      };
+    }
+
+    const objectiveLabel = primaryObjective || secondaryObjective || mission;
+    const summary = secondaryObjective ?
+      secondaryObjective :
+      (mission ? 'Mission objective linked to ' + mission : 'Primary task linked to active mission shell');
+
+    return {
+      attached: true,
+      state: 'OBJECTIVE PRESENT',
+      objectiveLabel: objectiveLabel,
+      summary: summary,
+      telemetry: [
+        'OBJECTIVE PRESENT // ' + objectiveLabel.toUpperCase(),
+        'STABILIZATION OBJECTIVE LINKED',
+        'FIELD TASK ACTIVE',
+        'OBJECTIVE SIGNAL ONLINE'
+      ]
+    };
+  }
+
+  function ensureObjectivePresenceLayer(hud) {
+    if (!hud) {
+      return null;
+    }
+
+    let layer = hud.querySelector('[data-ooh-objective-presence]');
+    if (layer) {
+      return layer;
+    }
+
+    layer = document.createElement('div');
+    layer.className = 'ooh-play__objective-presence';
+    layer.setAttribute('data-ooh-objective-presence', '');
+    layer.setAttribute('aria-label', 'Passive objective presence status');
+
+    const kicker = document.createElement('span');
+    kicker.className = 'ooh-play__objective-kicker';
+    kicker.textContent = 'STABILIZATION OBJECTIVE';
+
+    const title = document.createElement('span');
+    title.className = 'ooh-play__objective-title';
+    title.setAttribute('data-ooh-objective-field', 'title');
+
+    const state = document.createElement('span');
+    state.className = 'ooh-play__objective-state';
+    state.setAttribute('data-ooh-objective-field', 'state');
+
+    const summary = document.createElement('span');
+    summary.className = 'ooh-play__objective-summary';
+    summary.setAttribute('data-ooh-objective-field', 'summary');
+
+    layer.appendChild(kicker);
+    layer.appendChild(title);
+    layer.appendChild(state);
+    layer.appendChild(summary);
+
+    const band = hud.querySelector('.ooh-play__hud-band');
+    if (band && band.parentNode) {
+      band.parentNode.insertBefore(layer, band);
+      return layer;
+    }
+
+    hud.appendChild(layer);
+    return layer;
+  }
+
+  function renderObjectivePresenceLayer(root, hud, context) {
+    const objectiveContext = context || { attached: false };
+    if (root) {
+      root.oohObjectivePresence = objectiveContext;
+      root.setAttribute('data-ooh-objective-present', objectiveContext.attached ? 'true' : 'false');
+    }
+
+    const layer = ensureObjectivePresenceLayer(hud);
+    if (!layer) {
+      return;
+    }
+
+    layer.hidden = !objectiveContext.attached;
+    layer.setAttribute('aria-hidden', objectiveContext.attached ? 'false' : 'true');
+    if (!objectiveContext.attached) {
+      return;
+    }
+
+    const title = layer.querySelector('[data-ooh-objective-field="title"]');
+    const state = layer.querySelector('[data-ooh-objective-field="state"]');
+    const summary = layer.querySelector('[data-ooh-objective-field="summary"]');
+
+    if (title) {
+      title.textContent = objectiveContext.objectiveLabel;
+    }
+    if (state) {
+      state.textContent = objectiveContext.state + ' // FIELD TASK ACTIVE';
+    }
+    if (summary) {
+      summary.textContent = objectiveContext.summary;
+    }
+  }
+
   function ensureMediaAttachmentLayer(hud) {
     if (!hud) {
       return null;
@@ -4235,6 +4353,7 @@ function passiveBehaviorPreviewLabel() {
       .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW'])
       .concat(conditionLines[conditionId] || conditionLines.neutral)
       .concat(pressureLines[pressure] || pressureLines.LOW)
+      .concat((root && root.oohObjectivePresence && root.oohObjectivePresence.attached) ? root.oohObjectivePresence.telemetry : [])
       .concat((root && root.oohCharacterPresence && root.oohCharacterPresence.attached) ? root.oohCharacterPresence.telemetry : [])
       .concat((root && root.oohMediaAttachment && root.oohMediaAttachment.attached) ? root.oohMediaAttachment.telemetry : [])
       .concat(extractionLines);
@@ -4631,6 +4750,7 @@ function passiveBehaviorPreviewLabel() {
         el.textContent = fields[field];
       }
     });
+    renderObjectivePresenceLayer(root, hud, root.oohObjectivePresence);
     renderCharacterPresenceLayer(root, hud, root.oohCharacterPresence);
     renderMediaAttachmentLayer(root, hud, root.oohMediaAttachment);
   }
@@ -4895,7 +5015,10 @@ function passiveBehaviorPreviewLabel() {
     const pathKey = recruiterPathKey(payload);
     const evolutionPreview = buildOperatorEvolutionPreview(payload, routeId, pathKey);
     const missionLabel = payloadAudit.missingFields.indexOf('mission') === -1 ? itemLabel(payload.mission, payload.missionType || 'Unconfirmed') : 'MISSION // UNCONFIRMED';
+    const objectivePresence = buildObjectivePresenceContext(assembly, missionLabel);
     const combatState = createCombatState();
+    root.oohObjectivePresence = objectivePresence;
+    root.setAttribute('data-ooh-objective-present', objectivePresence.attached ? 'true' : 'false');
     root.oohCharacterPresence = characterPresence;
     root.setAttribute('data-ooh-character-present', characterPresence.attached ? 'true' : 'false');
     root.oohMediaAttachment = mediaAttachment;
