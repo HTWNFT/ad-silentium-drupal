@@ -256,22 +256,22 @@
     initial: 100,
     degradedThreshold: 35,
     tickMs: 1000,
-    baseDecay: 1.4,
-    cushionDecay: 0.35,
-    holdRestore: 8,
-    holdMs: 4500,
+    baseDecay: 0.82,
+    cushionDecay: 0.18,
+    holdRestore: 13,
+    holdMs: 6500,
     objectiveInitial: 0,
     objectiveThreshold: 60,
-    objectiveRate: 0.85,
+    objectiveRate: 1.12,
     interferenceInitial: 0,
-    interferenceRate: 1.15,
-    interferenceDecayFactor: 0.55,
-    scanAwarenessMs: 3500,
+    interferenceRate: 0.9,
+    interferenceDecayFactor: 0.42,
+    scanAwarenessMs: 4200,
     extractionInitial: 0,
-    extractionRate: 7.5,
-    extractionCriticalRate: 4.25,
-    captureExtractionRate: 6.25,
-    captureExtractionCriticalRate: 3.65,
+    extractionRate: 2.75,
+    extractionCriticalRate: 1.75,
+    captureExtractionRate: 2.6,
+    captureExtractionCriticalRate: 1.6,
     captureTelemetryInitialMs: 3800,
     captureTelemetryIntervalMs: 8200,
     captureCadenceDelayMultiplier: 1.35,
@@ -756,9 +756,9 @@
     const idleMs = Math.max(0, now - lastActionAt);
     const scanWindowActive = runtime.objectiveScanSyncUntil && now < runtime.objectiveScanSyncUntil;
     const recoveryActive = runtime.operationalRecoveryUntil && now < runtime.operationalRecoveryUntil;
-    const idleDrag = idleMs > 4500 ? 0.04 : 0.015;
-    const scanFloor = scanWindowActive ? 0.72 : 0;
-    const recoveryLift = recoveryActive ? 0.025 : 0;
+    const idleDrag = idleMs > 5200 ? 0.032 : 0.01;
+    const scanFloor = scanWindowActive ? 0.74 : 0;
+    const recoveryLift = recoveryActive ? 0.035 : 0;
     const quality = Math.max(scanFloor, (runtime.objectiveSyncQuality || 0.35) - idleDrag + recoveryLift);
 
     runtime.objectiveSyncQuality = Math.max(0.12, Math.min(1, quality));
@@ -793,13 +793,13 @@
 
     const now = Date.now();
     const syncGains = {
-      hold: 0.05,
-      scan: 0.18,
+      hold: 0.08,
+      scan: 0.2,
       signal: 0.08
     };
     const actionProgress = {
-      hold: 0.35,
-      scan: 0.75,
+      hold: 0.15,
+      scan: 0.62,
       signal: 0.2
     };
     runtime.objectiveSyncLastActionAt = now;
@@ -831,7 +831,7 @@
 
     const pressureAmounts = {
       hold: 0.25,
-      scan: 0.45,
+      scan: 0.72,
       signal: 0.12
     };
     const pressureAmount = pressureAmounts[actionKey] || 0.1;
@@ -839,8 +839,8 @@
     runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
 
     if (actionKey === 'scan') {
-      runtime.actionInstabilityUntil = Date.now() + 1600;
-      runtime.actionInstabilityDecay = 0.18;
+      runtime.actionInstabilityUntil = Date.now() + 1900;
+      runtime.actionInstabilityDecay = 0.28;
     }
     else if (!runtime.actionInstabilityUntil || Date.now() >= runtime.actionInstabilityUntil) {
       runtime.actionInstabilityDecay = 0;
@@ -1191,9 +1191,9 @@
     runtime.operationalEscalationTier = tier;
     const pressureNudge = {
       nominal: 0,
-      elevated: 0.03,
-      degraded: 0.07,
-      unstable: 0.12
+      elevated: 0.024,
+      degraded: 0.058,
+      unstable: 0.1
     };
     const recoveryActive = runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil;
     const recoveryFactor = recoveryActive ? 0.45 : 1;
@@ -1265,7 +1265,7 @@
 
     if (holdStabilized || syncStable || extractionStable) {
       const holdBonus = Math.min(1200, Math.max(0, runtime.operationalRecoveryHoldCount || 0) * 300);
-      runtime.operationalRecoveryUntil = Math.max(runtime.operationalRecoveryUntil || 0, now + 3200 + holdBonus);
+      runtime.operationalRecoveryUntil = Math.max(runtime.operationalRecoveryUntil || 0, now + 3800 + holdBonus);
       if (!recoveryActive && !runtime.operationalRecoveryAnnounced) {
         runtime.operationalRecoveryAnnounced = true;
         showLocalCadenceBeat(root, 'RUNTIME STABILIZING', 'Temporary stabilization. Pressure response softened.', 240);
@@ -1357,7 +1357,7 @@
     runtime.objectiveProgress = initialObjective;
     runtime.objectiveReady = initialObjective >= signalIntegrityRuntime.objectiveThreshold;
     runtime.objectiveAnnounced = false;
-    runtime.objectiveSyncQuality = runtime.objectiveReady ? 1 : 0.35;
+    runtime.objectiveSyncQuality = runtime.objectiveReady ? 1 : 0.4;
     runtime.objectiveScanSyncUntil = 0;
     runtime.extractionProgress = runtime.objectiveReady ?
       Math.min(95, Math.max(signalIntegrityRuntime.extractionInitial, Number(preset.extractionInitial) || signalIntegrityRuntime.extractionInitial)) :
