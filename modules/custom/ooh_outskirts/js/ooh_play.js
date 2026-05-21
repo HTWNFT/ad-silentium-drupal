@@ -1907,6 +1907,159 @@
     };
   }
 
+  function characterPresenceLabel(value, fallback) {
+    const label = String(value || fallback || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return label || '';
+  }
+
+  function buildCharacterPresenceContext(payload) {
+    const character = (payload || {}).character || null;
+    const path = (payload || {}).path || {};
+    const recruiter = (payload || {}).recruiter || {};
+    const pathLabel = characterPresenceLabel(
+      (character || {}).pathLabel || path.label || path.name || path.id,
+      ''
+    );
+    const identityLabel = characterPresenceLabel(
+      (character || {}).operativeName || (character || {}).name || (character || {}).label || (character || {}).callsign || (character || {}).codename,
+      pathLabel ? pathLabel + ' Operative' : ''
+    );
+    const selectedAttributes = Array.isArray((character || {}).selectedAttributes) ?
+      (character || {}).selectedAttributes :
+      ((Array.isArray((payload || {}).selectedAttributes) ? (payload || {}).selectedAttributes : []));
+    const hasPresenceMetadata = Boolean(
+      pathLabel ||
+      identityLabel ||
+      recruiter.name ||
+      (character || {}).recruiterName ||
+      selectedAttributes.length
+    );
+
+    if (!hasPresenceMetadata) {
+      return {
+        attached: false,
+        state: 'FIELD IDENTITY STANDBY',
+        identityLabel: '',
+        roleLabel: '',
+        summary: 'No operative metadata attached.'
+      };
+    }
+
+    const roleLabel = characterPresenceLabel(
+      (character || {}).role || (character || {}).roleLabel || (character || {}).classLabel || (character || {}).archetype,
+      pathLabel || 'ACTIVE ROLE'
+    );
+    const recruiterLabel = characterPresenceLabel(
+      recruiter.name || (character || {}).recruiterName,
+      ''
+    );
+    const recruiterTitle = characterPresenceLabel(
+      recruiter.title || (character || {}).recruiterTitle,
+      ''
+    );
+    const attributeLabel = selectedAttributes.length ?
+      selectedAttributes.slice(0, 2).map(function (attribute) {
+        return humanizeId(attribute).toUpperCase();
+      }).join(' / ') :
+      '';
+    const summaryParts = [recruiterLabel, recruiterTitle, attributeLabel].filter(Boolean);
+
+    return {
+      attached: true,
+      state: 'OPERATIVE PRESENT',
+      identityLabel: identityLabel || 'FIELD IDENTITY ACTIVE',
+      roleLabel: roleLabel.toUpperCase(),
+      summary: summaryParts.length ? summaryParts.join(' // ') : 'Presence confirmed in active mission shell',
+      telemetry: [
+        'PRESENCE CONFIRMED // ' + (identityLabel || roleLabel || 'OPERATIVE').toUpperCase(),
+        'FIELD IDENTITY ACTIVE',
+        'ACTIVE ROLE // ' + roleLabel.toUpperCase(),
+        'SIGNAL BODY ONLINE'
+      ]
+    };
+  }
+
+  function ensureCharacterPresenceLayer(hud) {
+    if (!hud) {
+      return null;
+    }
+
+    let layer = hud.querySelector('[data-ooh-character-presence]');
+    if (layer) {
+      return layer;
+    }
+
+    layer = document.createElement('div');
+    layer.className = 'ooh-play__character-presence';
+    layer.setAttribute('data-ooh-character-presence', '');
+    layer.setAttribute('aria-label', 'Passive operative presence status');
+
+    const kicker = document.createElement('span');
+    kicker.className = 'ooh-play__character-kicker';
+    kicker.textContent = 'FIELD IDENTITY';
+
+    const title = document.createElement('span');
+    title.className = 'ooh-play__character-title';
+    title.setAttribute('data-ooh-character-field', 'title');
+
+    const role = document.createElement('span');
+    role.className = 'ooh-play__character-role';
+    role.setAttribute('data-ooh-character-field', 'role');
+
+    const summary = document.createElement('span');
+    summary.className = 'ooh-play__character-summary';
+    summary.setAttribute('data-ooh-character-field', 'summary');
+
+    layer.appendChild(kicker);
+    layer.appendChild(title);
+    layer.appendChild(role);
+    layer.appendChild(summary);
+
+    const band = hud.querySelector('.ooh-play__hud-band');
+    if (band && band.parentNode) {
+      band.parentNode.insertBefore(layer, band);
+      return layer;
+    }
+
+    hud.appendChild(layer);
+    return layer;
+  }
+
+  function renderCharacterPresenceLayer(root, hud, context) {
+    const characterContext = context || { attached: false };
+    if (root) {
+      root.oohCharacterPresence = characterContext;
+      root.setAttribute('data-ooh-character-present', characterContext.attached ? 'true' : 'false');
+    }
+
+    const layer = ensureCharacterPresenceLayer(hud);
+    if (!layer) {
+      return;
+    }
+
+    layer.hidden = !characterContext.attached;
+    layer.setAttribute('aria-hidden', characterContext.attached ? 'false' : 'true');
+    if (!characterContext.attached) {
+      return;
+    }
+
+    const title = layer.querySelector('[data-ooh-character-field="title"]');
+    const role = layer.querySelector('[data-ooh-character-field="role"]');
+    const summary = layer.querySelector('[data-ooh-character-field="summary"]');
+
+    if (title) {
+      title.textContent = characterContext.identityLabel;
+    }
+    if (role) {
+      role.textContent = characterContext.state + ' // ' + characterContext.roleLabel;
+    }
+    if (summary) {
+      summary.textContent = characterContext.summary;
+    }
+  }
+
   function ensureMediaAttachmentLayer(hud) {
     if (!hud) {
       return null;
@@ -4082,6 +4235,7 @@ function passiveBehaviorPreviewLabel() {
       .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW'])
       .concat(conditionLines[conditionId] || conditionLines.neutral)
       .concat(pressureLines[pressure] || pressureLines.LOW)
+      .concat((root && root.oohCharacterPresence && root.oohCharacterPresence.attached) ? root.oohCharacterPresence.telemetry : [])
       .concat((root && root.oohMediaAttachment && root.oohMediaAttachment.attached) ? root.oohMediaAttachment.telemetry : [])
       .concat(extractionLines);
 
@@ -4477,6 +4631,7 @@ function passiveBehaviorPreviewLabel() {
         el.textContent = fields[field];
       }
     });
+    renderCharacterPresenceLayer(root, hud, root.oohCharacterPresence);
     renderMediaAttachmentLayer(root, hud, root.oohMediaAttachment);
   }
 
@@ -4736,10 +4891,13 @@ function passiveBehaviorPreviewLabel() {
     const scene = sceneCopy(routeId, payload, selectedPrompt);
     const assembly = buildMissionAssembly(payload);
     const mediaAttachment = buildMediaAttachmentContext(payload, assembly);
+    const characterPresence = buildCharacterPresenceContext(payload);
     const pathKey = recruiterPathKey(payload);
     const evolutionPreview = buildOperatorEvolutionPreview(payload, routeId, pathKey);
     const missionLabel = payloadAudit.missingFields.indexOf('mission') === -1 ? itemLabel(payload.mission, payload.missionType || 'Unconfirmed') : 'MISSION // UNCONFIRMED';
     const combatState = createCombatState();
+    root.oohCharacterPresence = characterPresence;
+    root.setAttribute('data-ooh-character-present', characterPresence.attached ? 'true' : 'false');
     root.oohMediaAttachment = mediaAttachment;
     root.setAttribute('data-ooh-media-attached', mediaAttachment.attached ? 'true' : 'false');
     ensureCaptureModeToggle(root);
