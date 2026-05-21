@@ -299,7 +299,7 @@
   const clipChoreographyPresets = [
     {
       id: 'none',
-      label: 'PRESET: NONE'
+      label: 'CAPTURE PRESET: NONE'
     },
     {
       id: 'signal_collapse',
@@ -490,7 +490,7 @@
     presetToggle.className = 'ooh-generator__overlay-btn ooh-play-scene__clip-preset-toggle';
     presetToggle.type = 'button';
     presetToggle.setAttribute('data-ooh-clip-preset-toggle', '');
-    presetToggle.textContent = 'PRESET: NONE';
+    presetToggle.textContent = 'CAPTURE PRESET: NONE';
     presetToggle.addEventListener('click', function () {
       advanceClipPreset(root);
     });
