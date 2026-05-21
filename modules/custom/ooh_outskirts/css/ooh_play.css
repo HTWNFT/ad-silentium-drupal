@@ -6399,6 +6399,41 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
 }
 
 /* PHASE OA-041 - MOBILE CAPTURE CONTAINMENT */
+@media (min-width: 721px) and (max-height: 920px) {
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud],
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud] {
+    padding: 0.64rem;
+    scroll-margin-block-start: 0.45rem;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud {
+    gap: 0.64rem;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-grid,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-grid {
+    gap: 0.58rem;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout {
+    padding-block: 0.6rem 0.66rem;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--actions,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--actions {
+    position: fixed;
+    inset-block-end: 6rem;
+    inset-inline-start: 50%;
+    inline-size: min(28rem, calc(100vw - 2rem));
+    transform: translateX(-50%);
+    z-index: 14;
+  }
+}
+
 @media (max-width: 720px) and (max-height: 820px) {
   body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud],
   body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud] {

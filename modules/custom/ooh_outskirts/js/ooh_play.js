@@ -2456,8 +2456,8 @@
 
     if (target && typeof target.scrollIntoView === 'function') {
       target.scrollIntoView({
-        behavior: 'smooth',
-        block: activeTarget ? 'center' : 'start'
+        behavior: activeTarget ? 'auto' : 'smooth',
+        block: 'start'
       });
       return;
     }
