@@ -407,14 +407,6 @@ final class OohPlayBlock extends BlockBase {
         </div>
       </section>
 
-      <section class="ooh-generator__panel ooh-play-scene__debug" aria-label="Payload snapshot">
-        <div class="ooh-generator__panel-head">
-          <div class="ooh-generator__panel-kicker">PAY</div>
-          <h3 class="ooh-generator__panel-title">Payload Snapshot</h3>
-        </div>
-        <pre class="ooh-play-mission__debug" data-ooh-briefing-debug>Awaiting payload.</pre>
-      </section>
-
       <div class="ooh-play-scene__actions">
         <button class="ooh-generator__overlay-btn ooh-play-scene__activate" type="button" data-ooh-activate-mission>ACTIVATE MISSION</button>
         <a class="ooh-generator__overlay-btn" href="{$dossier_target_escaped}">Return to Dossier</a>
