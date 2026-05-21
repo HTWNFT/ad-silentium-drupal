@@ -2178,6 +2178,117 @@
     }
   }
 
+  function extractionPresenceLabel(value, fallback) {
+    const label = String(value || fallback || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return label || '';
+  }
+
+  function buildExtractionPresenceContext(assembly) {
+    const extractionCondition = extractionPresenceLabel((assembly || {}).extractionCondition, '');
+    if (!extractionCondition) {
+      return {
+        attached: false,
+        state: 'EXTRACTION LINK STANDBY',
+        extractionLabel: '',
+        summary: 'No extraction context attached.'
+      };
+    }
+
+    return {
+      attached: true,
+      state: 'EXTRACTION WINDOW',
+      extractionLabel: 'SIGNAL EXTRACTION AVAILABLE',
+      summary: extractionCondition,
+      telemetry: [
+        'EXTRACTION LINK PRESENT',
+        'EXTRACTION WINDOW MONITORED',
+        'SYNCHRONIZATION ACTIVE',
+        'SIGNAL EXTRACTION AVAILABLE'
+      ]
+    };
+  }
+
+  function ensureExtractionPresenceLayer(hud) {
+    if (!hud) {
+      return null;
+    }
+
+    let layer = hud.querySelector('[data-ooh-extraction-presence]');
+    if (layer) {
+      return layer;
+    }
+
+    layer = document.createElement('div');
+    layer.className = 'ooh-play__extraction-presence';
+    layer.setAttribute('data-ooh-extraction-presence', '');
+    layer.setAttribute('aria-label', 'Passive extraction state status');
+
+    const kicker = document.createElement('span');
+    kicker.className = 'ooh-play__extraction-kicker';
+    kicker.textContent = 'EXTRACTION WINDOW';
+
+    const title = document.createElement('span');
+    title.className = 'ooh-play__extraction-title';
+    title.setAttribute('data-ooh-extraction-field', 'title');
+
+    const state = document.createElement('span');
+    state.className = 'ooh-play__extraction-state';
+    state.setAttribute('data-ooh-extraction-field', 'state');
+
+    const summary = document.createElement('span');
+    summary.className = 'ooh-play__extraction-summary';
+    summary.setAttribute('data-ooh-extraction-field', 'summary');
+
+    layer.appendChild(kicker);
+    layer.appendChild(title);
+    layer.appendChild(state);
+    layer.appendChild(summary);
+
+    const band = hud.querySelector('.ooh-play__hud-band');
+    if (band && band.parentNode) {
+      band.parentNode.insertBefore(layer, band);
+      return layer;
+    }
+
+    hud.appendChild(layer);
+    return layer;
+  }
+
+  function renderExtractionPresenceLayer(root, hud, context) {
+    const extractionContext = context || { attached: false };
+    if (root) {
+      root.oohExtractionPresence = extractionContext;
+      root.setAttribute('data-ooh-extraction-present', extractionContext.attached ? 'true' : 'false');
+    }
+
+    const layer = ensureExtractionPresenceLayer(hud);
+    if (!layer) {
+      return;
+    }
+
+    layer.hidden = !extractionContext.attached;
+    layer.setAttribute('aria-hidden', extractionContext.attached ? 'false' : 'true');
+    if (!extractionContext.attached) {
+      return;
+    }
+
+    const title = layer.querySelector('[data-ooh-extraction-field="title"]');
+    const state = layer.querySelector('[data-ooh-extraction-field="state"]');
+    const summary = layer.querySelector('[data-ooh-extraction-field="summary"]');
+
+    if (title) {
+      title.textContent = extractionContext.extractionLabel;
+    }
+    if (state) {
+      state.textContent = extractionContext.state + ' // SYNCHRONIZATION ACTIVE';
+    }
+    if (summary) {
+      summary.textContent = extractionContext.summary;
+    }
+  }
+
   function ensureMediaAttachmentLayer(hud) {
     if (!hud) {
       return null;
@@ -4354,6 +4465,7 @@ function passiveBehaviorPreviewLabel() {
       .concat(conditionLines[conditionId] || conditionLines.neutral)
       .concat(pressureLines[pressure] || pressureLines.LOW)
       .concat((root && root.oohObjectivePresence && root.oohObjectivePresence.attached) ? root.oohObjectivePresence.telemetry : [])
+      .concat((root && root.oohExtractionPresence && root.oohExtractionPresence.attached) ? root.oohExtractionPresence.telemetry : [])
       .concat((root && root.oohCharacterPresence && root.oohCharacterPresence.attached) ? root.oohCharacterPresence.telemetry : [])
       .concat((root && root.oohMediaAttachment && root.oohMediaAttachment.attached) ? root.oohMediaAttachment.telemetry : [])
       .concat(extractionLines);
@@ -4751,6 +4863,7 @@ function passiveBehaviorPreviewLabel() {
       }
     });
     renderObjectivePresenceLayer(root, hud, root.oohObjectivePresence);
+    renderExtractionPresenceLayer(root, hud, root.oohExtractionPresence);
     renderCharacterPresenceLayer(root, hud, root.oohCharacterPresence);
     renderMediaAttachmentLayer(root, hud, root.oohMediaAttachment);
   }
@@ -5016,9 +5129,12 @@ function passiveBehaviorPreviewLabel() {
     const evolutionPreview = buildOperatorEvolutionPreview(payload, routeId, pathKey);
     const missionLabel = payloadAudit.missingFields.indexOf('mission') === -1 ? itemLabel(payload.mission, payload.missionType || 'Unconfirmed') : 'MISSION // UNCONFIRMED';
     const objectivePresence = buildObjectivePresenceContext(assembly, missionLabel);
+    const extractionPresence = buildExtractionPresenceContext(assembly);
     const combatState = createCombatState();
     root.oohObjectivePresence = objectivePresence;
     root.setAttribute('data-ooh-objective-present', objectivePresence.attached ? 'true' : 'false');
+    root.oohExtractionPresence = extractionPresence;
+    root.setAttribute('data-ooh-extraction-present', extractionPresence.attached ? 'true' : 'false');
     root.oohCharacterPresence = characterPresence;
     root.setAttribute('data-ooh-character-present', characterPresence.attached ? 'true' : 'false');
     root.oohMediaAttachment = mediaAttachment;
