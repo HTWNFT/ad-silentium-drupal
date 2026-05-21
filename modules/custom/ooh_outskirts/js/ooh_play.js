@@ -1997,7 +1997,7 @@
       hold: 'HOLD: SIGNAL CUSHIONED // PRESSURE RISING',
       signal: 'SIGNAL CHECK: CHANNEL VERIFIED // PRESSURE LOCAL'
     };
-    nudgeLocalTelemetryPulse(root, actionNudges[action] || 'ACTION REGISTERED // CHANNEL PRESSURE LOCAL', 3, 2600);
+    nudgeLocalTelemetryPulse(root, actionNudges[action] || 'ACTION REGISTERED // CHANNEL PRESSURE LOCAL', 3, 3600);
 
     if (!shell) {
       return;
@@ -4032,13 +4032,13 @@ function passiveBehaviorPreviewLabel() {
 
       root.oohTelemetryPulseTimer = window.setTimeout(
         tick,
-        mode === 'combat' ? 5200 : (captureModeActive(root) ? signalIntegrityRuntime.captureTelemetryIntervalMs : 6800)
+        mode === 'combat' ? 5200 : (captureModeActive(root) ? signalIntegrityRuntime.captureTelemetryIntervalMs : 8200)
       );
     };
 
     root.oohTelemetryPulseTimer = window.setTimeout(
       tick,
-      mode === 'combat' ? 1800 : (captureModeActive(root) ? signalIntegrityRuntime.captureTelemetryInitialMs : 3200)
+      mode === 'combat' ? 1800 : (captureModeActive(root) ? signalIntegrityRuntime.captureTelemetryInitialMs : 4200)
     );
   }
 
@@ -4058,7 +4058,7 @@ function passiveBehaviorPreviewLabel() {
       clearLocalCadenceBeat(root);
     }
     readout.textContent = message;
-    holdReadout(root, messagePriority, holdMs || (messagePriority >= 3 ? 2400 : 1500));
+    holdReadout(root, messagePriority, holdMs || (messagePriority >= 3 ? 3200 : 2100));
   }
 
   function clearLocalCadenceBeat(root) {
@@ -4089,10 +4089,10 @@ function passiveBehaviorPreviewLabel() {
     const cadenceDelay = captureModeActive(root) ?
       Math.min(Math.round((delay || 180) * signalIntegrityRuntime.captureCadenceDelayMultiplier), signalIntegrityRuntime.captureCadenceMaxDelay) :
       Math.min(delay || 180, 450);
-    holdReadout(root, priority, Math.max(cadenceDelay + 1500, cadenceOptions.holdMs || 1900));
+    holdReadout(root, priority, Math.max(cadenceDelay + 1900, cadenceOptions.holdMs || 2400));
     root.oohLocalCadenceTimer = window.setTimeout(function () {
       readout.textContent = settleText;
-      holdReadout(root, priority, cadenceOptions.settleHoldMs || 1800);
+      holdReadout(root, priority, cadenceOptions.settleHoldMs || 2400);
       root.oohLocalCadenceTimer = null;
     }, cadenceDelay);
   }
