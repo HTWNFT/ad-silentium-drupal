@@ -5985,3 +5985,89 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) [data-o
     gap: 0.78rem;
   }
 }
+
+/* PHASE OA-033 - PASSIVE PLAYLIST MEDIA ATTACHMENT VISIBILITY */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-attachment,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-attachment {
+  display: grid;
+  gap: 0.32rem;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  border: 1px solid rgba(216, 250, 255, 0.09);
+  border-radius: 7px;
+  padding: clamp(0.7rem, 1.3vw, 0.86rem);
+  background:
+    linear-gradient(180deg, rgba(4, 14, 18, 0.62), rgba(4, 10, 15, 0.54)),
+    linear-gradient(90deg, rgba(128, 244, 255, 0.025), transparent 42%, rgba(219, 229, 222, 0.018));
+  color: rgba(232, 252, 255, 0.78);
+  pointer-events: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-attachment[hidden],
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-attachment[hidden] {
+  display: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-kicker,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-kicker {
+  color: rgba(216, 250, 255, 0.58);
+  font-size: 0.7rem;
+  font-weight: 680;
+  letter-spacing: 0.08em;
+  line-height: 1.26;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-title,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-state,
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-summary,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-title,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-state,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-summary {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+  text-wrap: wrap;
+  white-space: normal;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-title,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-title {
+  color: rgba(244, 255, 255, 0.9);
+  font-size: 0.86rem;
+  font-weight: 670;
+  letter-spacing: 0;
+  line-height: 1.34;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-state,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-state {
+  color: rgba(216, 250, 255, 0.72);
+  font-size: 0.76rem;
+  font-weight: 640;
+  letter-spacing: 0;
+  line-height: 1.32;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-summary,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-summary {
+  color: rgba(216, 250, 255, 0.62);
+  font-size: 0.74rem;
+  font-weight: 540;
+  line-height: 1.44;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-attachment,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-attachment {
+    gap: 0.36rem;
+    padding-block: 0.78rem 0.82rem;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-title,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-title {
+    line-height: 1.42;
+  }
+}

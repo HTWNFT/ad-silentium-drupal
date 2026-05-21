@@ -1867,6 +1867,125 @@
     return 'neutral';
   }
 
+  function mediaAttachmentLabel(value, fallback) {
+    const label = String(value || fallback || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return label || '';
+  }
+
+  function buildMediaAttachmentContext(payload, assembly) {
+    const playlist = (payload || {}).playlist || {};
+    const playlistLabel = mediaAttachmentLabel(playlist.label || playlist.name || playlist.id, '');
+    if (!playlistLabel || playlistLabel.toLowerCase() === 'no playlist selected') {
+      return {
+        attached: false,
+        state: 'MEDIA CONTEXT STANDBY',
+        playlistLabel: '',
+        summary: 'No playlist metadata attached.'
+      };
+    }
+
+    const mood = playlistMoodAttribute(payload || {}).toUpperCase();
+    const description = mediaAttachmentLabel(playlist.description, (assembly || {}).playlistMoodEffect);
+    const summary = description ?
+      description.replace(/\.$/, '') :
+      'Passive mission soundtrack metadata attached';
+
+    return {
+      attached: true,
+      state: 'OPERATIONAL AUDIO AVAILABLE',
+      playlistLabel: playlistLabel,
+      summary: summary,
+      mood: mood,
+      telemetry: [
+        'SIGNAL ATTACHED // ' + playlistLabel.toUpperCase(),
+        'CHANNEL LINKED // ' + mood + ' AUDIO CONTEXT',
+        'MEDIA CONTEXT ACTIVE',
+        'OPERATIONAL AUDIO AVAILABLE'
+      ]
+    };
+  }
+
+  function ensureMediaAttachmentLayer(hud) {
+    if (!hud) {
+      return null;
+    }
+
+    let layer = hud.querySelector('[data-ooh-media-attachment]');
+    if (layer) {
+      return layer;
+    }
+
+    layer = document.createElement('div');
+    layer.className = 'ooh-play__media-attachment';
+    layer.setAttribute('data-ooh-media-attachment', '');
+    layer.setAttribute('aria-label', 'Passive media attachment status');
+
+    const kicker = document.createElement('span');
+    kicker.className = 'ooh-play__media-kicker';
+    kicker.textContent = 'MEDIA ATTACHMENT';
+
+    const title = document.createElement('span');
+    title.className = 'ooh-play__media-title';
+    title.setAttribute('data-ooh-media-field', 'title');
+
+    const state = document.createElement('span');
+    state.className = 'ooh-play__media-state';
+    state.setAttribute('data-ooh-media-field', 'state');
+
+    const summary = document.createElement('span');
+    summary.className = 'ooh-play__media-summary';
+    summary.setAttribute('data-ooh-media-field', 'summary');
+
+    layer.appendChild(kicker);
+    layer.appendChild(title);
+    layer.appendChild(state);
+    layer.appendChild(summary);
+
+    const band = hud.querySelector('.ooh-play__hud-band');
+    if (band && band.parentNode) {
+      band.parentNode.insertBefore(layer, band);
+      return layer;
+    }
+
+    hud.appendChild(layer);
+    return layer;
+  }
+
+  function renderMediaAttachmentLayer(root, hud, context) {
+    const mediaContext = context || { attached: false };
+    if (root) {
+      root.oohMediaAttachment = mediaContext;
+      root.setAttribute('data-ooh-media-attached', mediaContext.attached ? 'true' : 'false');
+    }
+
+    const layer = ensureMediaAttachmentLayer(hud);
+    if (!layer) {
+      return;
+    }
+
+    layer.hidden = !mediaContext.attached;
+    layer.setAttribute('aria-hidden', mediaContext.attached ? 'false' : 'true');
+    if (!mediaContext.attached) {
+      return;
+    }
+
+    const title = layer.querySelector('[data-ooh-media-field="title"]');
+    const state = layer.querySelector('[data-ooh-media-field="state"]');
+    const summary = layer.querySelector('[data-ooh-media-field="summary"]');
+
+    if (title) {
+      title.textContent = mediaContext.playlistLabel;
+    }
+    if (state) {
+      state.textContent = mediaContext.state;
+    }
+    if (summary) {
+      summary.textContent = mediaContext.summary;
+    }
+  }
+
   function buildSceneStatus(routeId, pathKey, missionLabel) {
     const routeStates = {
       aer: 'Sky corridor staged. Wind shear simulated. No flight order issued.',
@@ -3963,6 +4082,7 @@ function passiveBehaviorPreviewLabel() {
       .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW'])
       .concat(conditionLines[conditionId] || conditionLines.neutral)
       .concat(pressureLines[pressure] || pressureLines.LOW)
+      .concat((root && root.oohMediaAttachment && root.oohMediaAttachment.attached) ? root.oohMediaAttachment.telemetry : [])
       .concat(extractionLines);
 
     if (mode === 'combat') {
@@ -4357,6 +4477,7 @@ function passiveBehaviorPreviewLabel() {
         el.textContent = fields[field];
       }
     });
+    renderMediaAttachmentLayer(root, hud, root.oohMediaAttachment);
   }
 
   function activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel, assembly) {
@@ -4614,10 +4735,13 @@ function passiveBehaviorPreviewLabel() {
     const activateButton = root.querySelector('[data-ooh-activate-mission]');
     const scene = sceneCopy(routeId, payload, selectedPrompt);
     const assembly = buildMissionAssembly(payload);
+    const mediaAttachment = buildMediaAttachmentContext(payload, assembly);
     const pathKey = recruiterPathKey(payload);
     const evolutionPreview = buildOperatorEvolutionPreview(payload, routeId, pathKey);
     const missionLabel = payloadAudit.missingFields.indexOf('mission') === -1 ? itemLabel(payload.mission, payload.missionType || 'Unconfirmed') : 'MISSION // UNCONFIRMED';
     const combatState = createCombatState();
+    root.oohMediaAttachment = mediaAttachment;
+    root.setAttribute('data-ooh-media-attached', mediaAttachment.attached ? 'true' : 'false');
     ensureCaptureModeToggle(root);
 
     if (shell) {
