@@ -96,7 +96,23 @@
     return ['aer', 'mare', 'terra'].indexOf(routeId) !== -1 ? routeId : '';
   }
 
+  function normalizePayloadSnapshot(payload) {
+    if (!payload || typeof payload !== 'object') {
+      return {};
+    }
+
+    const snapshot = payload.snapshot && typeof payload.snapshot === 'object' ? payload.snapshot : {};
+    ['playlist', 'path', 'recruiter', 'character', 'campaignRoute', 'route', 'mission'].forEach(function (field) {
+      if (!payload[field] && snapshot[field]) {
+        payload[field] = snapshot[field];
+      }
+    });
+
+    return payload;
+  }
+
   function auditPayload(payload) {
+    payload = normalizePayloadSnapshot(payload);
     const missingFields = [];
 
     if (!payload.playlist || !payload.playlist.id || !payload.playlist.label) {
@@ -570,7 +586,7 @@
 
     if (active) {
       syncSignalIntegrityHud(root, signalIntegrityStateKey(root), 'FIELD INSTABILITY CONTACT. Signal interference detected.');
-      showLocalCadenceBeat(root, 'SIGNAL INTERFERENCE DETECTED', 'POSITION COMPROMISED. Clear the instability band.', 180);
+      showLocalCadenceBeat(root, 'SIGNAL INTERFERENCE DETECTED', 'POSITION COMPROMISED. Clear the instability band. ' + playlistCadenceText(root), 180);
     }
     else {
       syncSignalIntegrityHud(root, signalIntegrityStateKey(root), 'FIELD POSITION STABILIZED. Interference cleared.');
@@ -620,7 +636,7 @@
     });
 
     syncSignalIntegrityHud(root, 'complete', 'EXTRACTION LINK CONFIRMED. Signal route stabilized.');
-    showLocalCadenceBeat(root, 'EXTRACTION WINDOW AVAILABLE', 'SIGNAL ROUTE STABILIZED. Operation success state active.', 180, { priority: 3 });
+    showLocalCadenceBeat(root, 'EXTRACTION WINDOW AVAILABLE', 'SIGNAL ROUTE STABILIZED. Operation success state active. AUDIO IDENTITY LOCKED.', 180, { priority: 3 });
   }
 
   function updateExtractionObjectiveContact(root) {
@@ -666,7 +682,7 @@
 
     if (!state.moved) {
       state.moved = true;
-      showLocalCadenceBeat(root, 'OPERATOR PRESENCE CONFIRMED', 'FIELD POSITION ACTIVE. Movement bounded to the active field.', 220);
+      showLocalCadenceBeat(root, 'OPERATOR PRESENCE CONFIRMED', 'FIELD POSITION ACTIVE. ' + (activeMediaState(root.oohMediaAttachment) || 'Movement bounded to the active field.'), 220);
     }
 
     return true;
@@ -2207,54 +2223,61 @@
     return recruiterName + ': proceed under ' + pathKey + ' protocol. Carry ' + attributes + '.';
   }
 
-  function getPlaylistMoodEffect(payload) {
-    const playlistLabel = itemLabel(payload.playlist, 'No playlist selected');
-    const playlistKey = cleanId((payload.playlist || {}).id || playlistLabel, 'playlist');
+  function playlistMoodProfile(payload) {
+    const playlistLabel = itemLabel((payload || {}).playlist, 'No playlist selected');
+    const playlistKey = cleanId(((payload || {}).playlist || {}).id || playlistLabel, 'playlist');
+    const haystack = playlistKey + ' ' + playlistLabel.toLowerCase();
     const moodMap = [
       {
-        match: ['black', 'banner', 'orchestra', 'war', 'bangaz'],
-        text: 'reinforces command-scale tension and operational dread'
+        id: 'impact',
+        match: ['rock', 'riot', 'metal', 'wreckoning', 'steel'],
+        text: 'pushes impact, grit, and forward pressure',
+        cadence: 'IMPACT CADENCE AVAILABLE'
       },
       {
-        match: ['rock', 'riot', 'metal'],
-        text: 'pushes impact, grit, and forward pressure'
+        id: 'pulse',
+        match: ['rap', 'drill', 'trap', 'bangaz'],
+        text: 'adds pulse, aggression, and close-range focus',
+        cadence: 'PULSE CADENCE AVAILABLE'
       },
       {
-        match: ['rap', 'drill', 'trap'],
-        text: 'adds pulse, aggression, and close-range focus'
+        id: 'void',
+        match: ['ambient', 'drone', 'void', 'signal_blitz', 'blitz'],
+        text: 'lowers the room into static, distance, and threat awareness',
+        cadence: 'VOID CADENCE AVAILABLE'
       },
       {
-        match: ['ambient', 'drone', 'void'],
-        text: 'lowers the room into static, distance, and threat awareness'
+        id: 'dread',
+        match: ['black', 'banner', 'orchestra', 'classical', 'war'],
+        text: 'reinforces command-scale tension and operational dread',
+        cadence: 'DREAD CADENCE AVAILABLE'
       }
     ];
     const matched = moodMap.find(function (entry) {
       return entry.match.some(function (keyword) {
-        return playlistKey.indexOf(keyword) !== -1 || playlistLabel.toLowerCase().indexOf(keyword) !== -1;
+        return haystack.indexOf(keyword) !== -1;
       });
-    });
-    const mood = matched ? matched.text : 'sets tension, tempo, and operational focus';
+    }) || {
+      id: 'neutral',
+      text: 'sets tension, tempo, and operational focus',
+      cadence: 'AUDIO CADENCE AVAILABLE'
+    };
 
-    return playlistLabel.toUpperCase() + ' ' + mood + '.';
+    return {
+      id: matched.id,
+      label: playlistLabel,
+      text: matched.text,
+      cadence: matched.cadence
+    };
+  }
+
+  function getPlaylistMoodEffect(payload) {
+    const profile = playlistMoodProfile(payload);
+    return profile.label.toUpperCase() + ' ' + profile.text + '.';
   }
 
   function playlistMoodAttribute(payload) {
-    const playlistLabel = itemLabel(payload.playlist, '');
-    const playlistKey = cleanId((payload.playlist || {}).id || playlistLabel, 'neutral');
-
-    if (/(black|banner|orchestra|war)/.test(playlistKey)) {
-      return 'dread';
-    }
-    if (/(rock|riot|metal)/.test(playlistKey)) {
-      return 'impact';
-    }
-    if (/(rap|drill|trap)/.test(playlistKey)) {
-      return 'pulse';
-    }
-    if (/(ambient|drone|void)/.test(playlistKey)) {
-      return 'void';
-    }
-    return 'neutral';
+    return playlistMoodProfile(payload).id;
   }
 
   function mediaAttachmentLabel(value, fallback) {
@@ -2285,12 +2308,16 @@
     return {
       attached: true,
       state: 'OPERATIONAL AUDIO AVAILABLE',
+      activeState: 'PLAYLIST SIGNAL: ' + playlistLabel.toUpperCase(),
+      playlistId: cleanId(playlist.id || playlistLabel, 'playlist'),
       playlistLabel: playlistLabel,
       summary: summary,
       mood: mood,
+      cadence: playlistMoodProfile(payload || {}).cadence,
       telemetry: [
         'SIGNAL ATTACHED // ' + playlistLabel.toUpperCase(),
         'CHANNEL LINKED // ' + mood + ' AUDIO CONTEXT',
+        playlistMoodProfile(payload || {}).cadence,
         'MEDIA CONTEXT ACTIVE',
         'OPERATIONAL AUDIO AVAILABLE'
       ]
@@ -2725,6 +2752,23 @@
     return layer;
   }
 
+  function activeMediaState(mediaContext) {
+    if (!mediaContext || !mediaContext.attached) {
+      return '';
+    }
+
+    return mediaContext.activeState || ('PLAYLIST SIGNAL: ' + String(mediaContext.playlistLabel || 'AUDIO').toUpperCase());
+  }
+
+  function playlistCadenceText(root) {
+    const mediaContext = root ? root.oohMediaAttachment : null;
+    if (!mediaContext || !mediaContext.attached) {
+      return '';
+    }
+
+    return mediaContext.cadence || 'AUDIO IDENTITY LOCKED';
+  }
+
   function renderMediaAttachmentLayer(root, hud, context) {
     const mediaContext = context || { attached: false };
     if (root) {
@@ -2751,10 +2795,10 @@
       title.textContent = mediaContext.playlistLabel;
     }
     if (state) {
-      state.textContent = mediaContext.state;
+      state.textContent = root && root.classList.contains('is-mission-active') ? activeMediaState(mediaContext) : mediaContext.state;
     }
     if (summary) {
-      summary.textContent = mediaContext.summary;
+      summary.textContent = root && root.classList.contains('is-mission-active') ? (mediaContext.cadence || mediaContext.summary) : mediaContext.summary;
     }
   }
 
@@ -5304,6 +5348,10 @@ function passiveBehaviorPreviewLabel() {
       if (readout) {
         showLocalCadenceBeat(root, 'PAYLOAD ECHO STABLE', 'Passive inputs online. Awaiting SCAN, HOLD POSITION, or CHECK SIGNAL.', 220);
       }
+      renderMediaAttachmentLayer(root, hud, root.oohMediaAttachment);
+      if (root.oohMediaAttachment && root.oohMediaAttachment.attached) {
+        showLocalCadenceBeat(root, 'AUDIO IDENTITY LOCKED', activeMediaState(root.oohMediaAttachment) + ' // ' + (root.oohMediaAttachment.cadence || 'AUDIO CADENCE AVAILABLE'), 260);
+      }
       syncOperationConditionHud(root);
       if (operationCondition) {
         showLocalCadenceBeat(root, operationCondition.label, operationCondition.cadenceFlavor, 320);
@@ -5539,6 +5587,10 @@ function passiveBehaviorPreviewLabel() {
       shell.setAttribute('data-path', pathKey);
       shell.setAttribute('data-mission-type', missionTypeAttribute(payload));
       shell.setAttribute('data-playlist-mood', playlistMoodAttribute(payload));
+      if (payload.playlist) {
+        shell.setAttribute('data-playlist-id', cleanId(payload.playlist.id || payload.playlist.label, 'playlist'));
+        shell.setAttribute('data-playlist-label', itemLabel(payload.playlist, 'Unselected'));
+      }
       shell.setAttribute('data-prompt-block', selectedPrompt ? (selectedPrompt.id || 'prompt_block') : 'unavailable');
       if (missionUuid) {
         shell.setAttribute('data-ooh-mission-uuid', missionUuid);
@@ -5680,7 +5732,7 @@ function passiveBehaviorPreviewLabel() {
 
         // Hydrate the /play scene from the Dossier payload stored before routing.
         const storedState = readStoredState();
-        const payload = storedState.payload || {};
+        const payload = normalizePayloadSnapshot(storedState.payload || {});
         const missionUuid = typeof storedState.serverMissionUuid === 'string' ? storedState.serverMissionUuid : '';
         const payloadAudit = auditPayload(payload);
         const playSettings = (((drupalSettings || {}).ooh_outskirts || {}).play) || {};
@@ -5692,7 +5744,7 @@ function passiveBehaviorPreviewLabel() {
           }
 
           lookupMissionPayload(missionUuid).then(function (missionData) {
-            const hydratedPayload = missionData.payload || {};
+            const hydratedPayload = normalizePayloadSnapshot(missionData.payload || {});
             const hydratedAudit = auditPayload(hydratedPayload);
             if (hydratedAudit.payloadStatus !== 'VALID') {
               recoverIncompletePayload(root, hydratedAudit, dossierTarget);
