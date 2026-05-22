@@ -201,6 +201,58 @@
   function missionEntryReady(root) {
     return Boolean(root && root.getAttribute('data-ooh-payload-status') === 'valid');
   }
+
+  function setActivationReadyState(root, shell, activateButton) {
+    if (!missionEntryReady(root) || root.classList.contains('is-mission-active')) {
+      return;
+    }
+    root.setAttribute('data-ooh-activation-ready', 'true');
+    if (shell) {
+      shell.setAttribute('data-ooh-activation-ready', 'true');
+    }
+    if (activateButton && !activateButton.disabled) {
+      activateButton.setAttribute('title', 'Activate mission and enter the field');
+    }
+  }
+
+  function clearActivationReadyState(root, shell) {
+    if (root) {
+      root.removeAttribute('data-ooh-activation-ready');
+    }
+    if (shell) {
+      shell.removeAttribute('data-ooh-activation-ready');
+    }
+  }
+
+  function focusActivationEntry(root) {
+    if (!missionEntryReady(root) || root.classList.contains('is-mission-active')) {
+      return;
+    }
+    const actions = root.querySelector('.ooh-play-scene__actions');
+    const activateButton = root.querySelector('[data-ooh-activate-mission]');
+    if (!actions || !activateButton || activateButton.disabled) {
+      return;
+    }
+    const rect = actions.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+    if (!viewportHeight || (rect.top >= viewportHeight * 0.18 && rect.bottom <= viewportHeight * 0.86)) {
+      return;
+    }
+    const scrollTop = window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop ||
+      0;
+    const maxScroll = Math.max(
+      0,
+      (document.documentElement.scrollHeight || document.body.scrollHeight || 0) - viewportHeight
+    );
+    const targetTop = Math.max(0, Math.min(maxScroll, scrollTop + rect.top - (viewportHeight * 0.44)));
+    window.scrollTo({
+      behavior: 'smooth',
+      top: targetTop
+    });
+  }
+
   const runtimeStateLabels = {
     standby: {
       state: 'STANDBY',
@@ -2142,6 +2194,10 @@
           activateButton.textContent = 'ACTIVATE MISSION';
           activateButton.disabled = false;
           activateButton.setAttribute('aria-disabled', 'false');
+          setActivationReadyState(root, root.querySelector('[data-ooh-scene-shell]'), activateButton);
+          window.setTimeout(function () {
+            focusActivationEntry(root);
+          }, 80);
         }
       });
     }
@@ -2699,6 +2755,7 @@
       root.oohRuntimeCadenceNudgeTimer = null;
     }
     root.classList.remove('is-mission-active', 'is-combat-shell', 'is-field-extraction-complete');
+    clearActivationReadyState(root, shell);
     if (shell) {
       shell.classList.remove('is-mission-active', 'is-combat-shell', 'is-combat-armed');
       shell.removeAttribute('data-mission-state');
@@ -6446,6 +6503,7 @@ function passiveBehaviorPreviewLabel() {
     }
 
     root.classList.add('is-mission-active');
+    clearActivationReadyState(root, shell);
     setRuntimeAliveState(root, 'active');
     const operationCondition = applyOperationCondition(root, shell, routeId);
     startSignalIntegrityLoop(root);
@@ -6749,10 +6807,14 @@ function passiveBehaviorPreviewLabel() {
     }
 
     if (sceneStatus) {
-      sceneStatus.textContent = 'MISSION STAGED // PAYLOAD STAGED // AWAITING ACTIVATION' + (payloadAudit.routeFallbackUsed ? ' // ROUTE FALLBACK: TERRA' : '');
+      sceneStatus.textContent = 'MISSION STAGED // ACTIVATE MISSION TO ENTER FIELD' + (payloadAudit.routeFallbackUsed ? ' // ROUTE FALLBACK: TERRA' : '');
     }
 
     if (activateButton) {
+      setActivationReadyState(root, shell, activateButton);
+      window.setTimeout(function () {
+        focusActivationEntry(root);
+      }, 160);
       activateButton.addEventListener('click', function () {
         if (activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel, assembly)) {
           window.setTimeout(function () {
