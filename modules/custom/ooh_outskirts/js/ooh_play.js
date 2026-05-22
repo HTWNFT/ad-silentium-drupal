@@ -1118,6 +1118,7 @@
 
     syncSignalIntegrityHud(root, 'complete', 'EXTRACTION LINK CONFIRMED. Signal route stabilized.');
     showLocalCadenceBeat(root, 'EXTRACTION WINDOW AVAILABLE', 'SIGNAL ROUTE STABILIZED. Operation success state active. AUDIO IDENTITY LOCKED.', 180, { priority: 3 });
+    showOperationSummary(root, determineOperationalOutcome(root, runtime));
   }
 
   function updateExtractionObjectiveContact(root) {
@@ -2004,6 +2005,70 @@
     return condition ? condition.label : 'CONDITION UNASSIGNED';
   }
 
+  function playlistSummaryLabel(root) {
+    const media = root ? root.oohMediaAttachment : null;
+    const shell = root ? root.querySelector('[data-ooh-scene-shell]') : null;
+    return (media && media.label) ||
+      (shell && shell.getAttribute('data-playlist-label')) ||
+      'PLAYLIST UNASSIGNED';
+  }
+
+  function pressurePhaseSummaryLabel(runtime) {
+    const stage = runtime ? (runtime.pressureCurveStage || 'early') : 'early';
+    const labels = {
+      early: 'CONTROLLED',
+      mid: 'RISING',
+      late: 'LATE PRESSURE',
+      extraction: 'EXTRACTION URGENCY',
+      complete: 'SEALED'
+    };
+    return labels[stage] || 'CONTROLLED';
+  }
+
+  function contactSeveritySummaryLabel(root, runtime) {
+    if (!root || !root.oohContactPresence || !root.oohContactPresence.active) {
+      return 'TRACE LOW';
+    }
+    if (root.getAttribute('data-ooh-contact-presence') === 'near' || (runtime && runtime.contactPresenceNear)) {
+      return 'CONTACT NEAR';
+    }
+    return 'TRACE OBSERVED';
+  }
+
+  function extractionStatusSummaryLabel(root, runtime, outcome) {
+    if (runtime && runtime.lost) {
+      return 'SIGNAL LOST';
+    }
+    if (root && root.getAttribute('data-ooh-extraction-uncertainty') === 'resolved') {
+      return 'EXTRACTED // STABILIZED';
+    }
+    if (runtime && runtime.extractionComplete) {
+      return 'EXTRACTED';
+    }
+    return outcome || 'UNRESOLVED';
+  }
+
+  function routeStabilitySummaryLabel(runtime) {
+    if (!runtime) {
+      return 'UNKNOWN';
+    }
+    const pressure = Math.max(0, Math.min(100, runtime.peakInterferencePressure || runtime.interferencePressure || 0));
+    const integrity = Math.max(0, Math.min(100, runtime.integrity || 0));
+    if (runtime.lost || integrity <= 0) {
+      return 'COLLAPSED';
+    }
+    if (pressure >= 78 || integrity < 28) {
+      return 'UNSTABLE';
+    }
+    if (pressure >= 52 || integrity < signalIntegrityRuntime.degradedThreshold) {
+      return 'DEGRADED';
+    }
+    if (pressure >= 24 || integrity < 62) {
+      return 'CONTESTED';
+    }
+    return 'STABLE';
+  }
+
   function objectiveCompletionPercent(runtime) {
     if (!runtime) {
       return 0;
@@ -2035,9 +2100,14 @@
     summary.setAttribute('aria-label', 'Operation summary');
 
     const fields = [
-      ['EXTRACTION STATUS', outcome],
+      ['OUTCOME', runtime.lost ? 'SIGNAL LOST' : 'EXTRACTED'],
+      ['EXTRACTION STATUS', extractionStatusSummaryLabel(root, runtime, outcome)],
       ['ROUTE', routeSummaryLabel(root)],
-      ['ROUTE CONDITION', conditionSummaryLabel(root)],
+      ['FIELD CONDITION', conditionSummaryLabel(root)],
+      ['PLAYLIST SIGNAL', playlistSummaryLabel(root)],
+      ['PRESSURE PHASE', pressurePhaseSummaryLabel(runtime)],
+      ['CONTACT SEVERITY', contactSeveritySummaryLabel(root, runtime)],
+      ['ROUTE STABILITY', routeStabilitySummaryLabel(runtime)],
       ['SIGNAL CONDITION', Math.max(0, Math.round(runtime.integrity)) + '%'],
       ['INTERFERENCE PEAK', Math.max(0, Math.round(runtime.peakInterferencePressure || runtime.interferencePressure || 0)) + '% // ' + interferenceBand(runtime.peakInterferencePressure || runtime.interferencePressure || 0)],
       ['OBJECTIVE COMPLETION', objectiveCompletionPercent(runtime) + '%'],
@@ -2055,6 +2125,7 @@
       '<div class="ooh-operation-summary__shell">' +
         '<div class="ooh-operation-summary__kicker">OPERATION SUMMARY</div>' +
         '<h3 class="ooh-operation-summary__title">Runtime Debrief</h3>' +
+        '<p class="ooh-operation-summary__note">Local debrief only. No progress saved.</p>' +
         '<div class="ooh-operation-summary__grid">' + rows + '</div>' +
         '<div class="ooh-operation-summary__actions">' +
           '<button class="ooh-operation-summary__button" type="button" data-ooh-summary-reset>RESET</button>' +
