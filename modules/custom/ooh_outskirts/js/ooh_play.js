@@ -332,6 +332,17 @@
     height: 0.12
   };
 
+  const contactPresenceConfig = {
+    size: 24,
+    initialX: 0.18,
+    initialY: 0.44,
+    driftStep: 16,
+    interval: 2600,
+    proximity: 168,
+    decay: 0.16,
+    pressurePulse: 0.42
+  };
+
   const playerMovementKeys = {
     arrowup: [0, -1],
     w: [0, -1],
@@ -342,6 +353,21 @@
     arrowright: [1, 0],
     d: [1, 0]
   };
+
+  function contactPresenceState(root) {
+    if (!root.oohContactPresence) {
+      root.oohContactPresence = {
+        x: 0,
+        y: 0,
+        driftIndex: 0,
+        near: false,
+        active: false,
+        pressurePulseAt: 0
+      };
+    }
+
+    return root.oohContactPresence;
+  }
 
   function playerPresenceState(root) {
     if (!root.oohPlayerPresence) {
@@ -399,6 +425,41 @@
     zone.style.width = (traversalPressureConfig.width * 100) + '%';
     zone.style.height = (traversalPressureConfig.height * 100) + '%';
     return zone;
+  }
+
+  function ensureContactPresence(root) {
+    const field = playerPresenceField(root);
+    if (!field) {
+      return null;
+    }
+
+    let marker = field.querySelector('[data-ooh-contact-presence]');
+    if (!marker) {
+      marker = document.createElement('div');
+      marker.className = 'ooh-play-contact-presence';
+      marker.setAttribute('data-ooh-contact-presence', 'observed');
+      marker.setAttribute('aria-hidden', 'true');
+      marker.hidden = true;
+      field.appendChild(marker);
+    }
+
+    return marker;
+  }
+
+  function applyContactPresencePosition(root) {
+    const marker = ensureContactPresence(root);
+    const field = playerPresenceField(root);
+    if (!marker || !field) {
+      return;
+    }
+
+    const state = contactPresenceState(root);
+    const fieldRect = field.getBoundingClientRect();
+    const maxX = Math.max(0, fieldRect.width - contactPresenceConfig.size);
+    const maxY = Math.max(0, fieldRect.height - contactPresenceConfig.size);
+    state.x = Math.max(0, Math.min(maxX, state.x));
+    state.y = Math.max(0, Math.min(maxY, state.y));
+    marker.style.transform = 'translate3d(' + state.x + 'px, ' + state.y + 'px, 0)';
   }
 
   function ensureExtractionObjectiveZone(root) {
@@ -475,6 +536,144 @@
     }
     marker.hidden = false;
     clampPlayerPresence(root);
+  }
+
+  function contactPresenceDistance(root) {
+    const player = ensurePlayerPresence(root);
+    const contact = ensureContactPresence(root);
+    if (!player || !contact || player.hidden || contact.hidden) {
+      return Infinity;
+    }
+
+    const playerRect = player.getBoundingClientRect();
+    const contactRect = contact.getBoundingClientRect();
+    const playerX = playerRect.left + (playerRect.width / 2);
+    const playerY = playerRect.top + (playerRect.height / 2);
+    const contactX = contactRect.left + (contactRect.width / 2);
+    const contactY = contactRect.top + (contactRect.height / 2);
+    return Math.hypot(playerX - contactX, playerY - contactY);
+  }
+
+  function updateContactPresenceProximity(root, announce) {
+    if (!root || !root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    const marker = ensureContactPresence(root);
+    const runtime = signalRuntime(root);
+    if (!marker || marker.hidden || !runtime || runtime.lost || runtime.extractionComplete) {
+      return;
+    }
+
+    const state = contactPresenceState(root);
+    const near = contactPresenceDistance(root) <= contactPresenceConfig.proximity;
+    const changed = near !== Boolean(state.near);
+    state.near = near;
+    runtime.contactPresenceActive = true;
+    runtime.contactPresenceNear = near;
+    runtime.contactPresenceDecay = near ? contactPresenceConfig.decay : 0;
+    marker.classList.toggle('is-contact-near', near);
+    marker.setAttribute('data-ooh-contact-presence', near ? 'near' : 'observed');
+    root.setAttribute('data-ooh-contact-presence', near ? 'near' : 'observed');
+
+    if (near && Date.now() - (runtime.contactPresencePressureAt || 0) > 2200) {
+      runtime.interferencePressure = Math.min(100, runtime.interferencePressure + contactPresenceConfig.pressurePulse);
+      runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
+      runtime.contactPresencePressureAt = Date.now();
+    }
+
+    if (!changed || announce === false) {
+      return;
+    }
+
+    if (near) {
+      pulseRuntimeCadence(root, 'pressure', 1500);
+      syncSignalIntegrityHud(root, signalIntegrityStateKey(root), 'CONTACT TRACE DETECTED. Signal shadow observed.');
+      showLocalCadenceBeat(root, 'SIGNAL SHADOW OBSERVED', 'FIELD PRESENCE ESCALATING. Maintain route discipline.', 220, { priority: 3, holdMs: 2800, settleHoldMs: 2200 });
+      nudgeLocalTelemetryPulse(root, 'CONTACT TRACE DETECTED', 3, 2600);
+    }
+    else {
+      nudgeLocalTelemetryPulse(root, 'CONTACT TRACE DISTANT', 1, 1800);
+    }
+  }
+
+  function driftContactPresence(root) {
+    if (!root || !root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    const state = contactPresenceState(root);
+    const player = playerPresenceState(root);
+    const patterns = [
+      [1, -0.35],
+      [0.45, 0.8],
+      [-0.55, 0.35],
+      [0.25, -0.65]
+    ];
+    const vector = patterns[state.driftIndex % patterns.length];
+    const pursuitX = player.x > state.x ? 0.25 : -0.25;
+    const pursuitY = player.y > state.y ? 0.16 : -0.16;
+    state.x += (vector[0] + pursuitX) * contactPresenceConfig.driftStep;
+    state.y += (vector[1] + pursuitY) * contactPresenceConfig.driftStep;
+    state.driftIndex += 1;
+    applyContactPresencePosition(root);
+    updateContactPresenceProximity(root, true);
+  }
+
+  function stopContactPresenceDrift(root) {
+    if (root && root.oohContactPresenceTimer) {
+      window.clearInterval(root.oohContactPresenceTimer);
+      root.oohContactPresenceTimer = null;
+    }
+  }
+
+  function resetContactPresence(root) {
+    if (!root) {
+      return;
+    }
+
+    stopContactPresenceDrift(root);
+    const marker = ensureContactPresence(root);
+    if (marker) {
+      marker.hidden = true;
+      marker.classList.remove('is-contact-near');
+      marker.setAttribute('data-ooh-contact-presence', 'observed');
+    }
+    root.removeAttribute('data-ooh-contact-presence');
+    root.oohContactPresence = null;
+
+    const runtime = root.oohSignalRuntime;
+    if (runtime) {
+      runtime.contactPresenceActive = false;
+      runtime.contactPresenceNear = false;
+      runtime.contactPresenceDecay = 0;
+    }
+  }
+
+  function activateContactPresence(root) {
+    const marker = ensureContactPresence(root);
+    const field = playerPresenceField(root);
+    if (!marker || !field) {
+      return;
+    }
+
+    const state = contactPresenceState(root);
+    const fieldRect = field.getBoundingClientRect();
+    state.x = Math.max(0, (fieldRect.width - contactPresenceConfig.size) * contactPresenceConfig.initialX);
+    state.y = Math.max(0, (fieldRect.height - contactPresenceConfig.size) * contactPresenceConfig.initialY);
+    state.driftIndex = 0;
+    state.near = false;
+    state.active = true;
+    marker.hidden = false;
+    marker.classList.remove('is-contact-near');
+    marker.setAttribute('data-ooh-contact-presence', 'observed');
+    root.setAttribute('data-ooh-contact-presence', 'observed');
+    applyContactPresencePosition(root);
+    updateContactPresenceProximity(root, false);
+    stopContactPresenceDrift(root);
+    root.oohContactPresenceTimer = window.setInterval(function () {
+      driftContactPresence(root);
+    }, contactPresenceConfig.interval);
   }
 
   function setRuntimeAliveState(root, state) {
@@ -611,6 +810,7 @@
     clampPlayerPresence(root);
     updateTraversalPressureContact(root);
     updateExtractionObjectiveContact(root);
+    updateContactPresenceProximity(root, false);
   }
 
   function rectsOverlap(a, b) {
@@ -662,6 +862,11 @@
     runtime.extractionComplete = true;
     runtime.traversalPressureActive = false;
     runtime.traversalPressureDecay = 0;
+    runtime.contactPresenceActive = false;
+    runtime.contactPresenceNear = false;
+    runtime.contactPresenceDecay = 0;
+    runtime.contactPresencePressureAt = 0;
+    stopContactPresenceDrift(root);
     stopSignalIntegrityLoop(root);
     stopLocalTelemetryPulse(root);
     clearLocalCadenceBeat(root);
@@ -678,11 +883,18 @@
     setRuntimeAliveState(root, 'extraction');
     root.setAttribute('data-ooh-field-extraction', 'complete');
     root.setAttribute('data-ooh-traversal-pressure', 'clear');
+    root.setAttribute('data-ooh-contact-presence', 'clear');
 
     zone.classList.add('is-contact-active', 'is-complete');
     const pressureZone = root.querySelector('[data-ooh-traversal-pressure-zone]');
     if (pressureZone) {
       pressureZone.classList.remove('is-contact-active');
+    }
+    const contactMarker = root.querySelector('[data-ooh-contact-presence]');
+    if (contactMarker) {
+      contactMarker.hidden = true;
+      contactMarker.classList.remove('is-contact-near');
+      contactMarker.setAttribute('data-ooh-contact-presence', 'observed');
     }
 
     const shell = root.querySelector('[data-ooh-scene-shell]');
@@ -740,11 +952,15 @@
     clampPlayerPresence(root);
     updateTraversalPressureContact(root);
     updateExtractionObjectiveContact(root);
+    updateContactPresenceProximity(root, true);
     if (root.getAttribute('data-ooh-field-extraction') === 'complete') {
       setRuntimeAliveState(root, 'extraction');
     }
     else if (root.getAttribute('data-ooh-traversal-pressure') === 'contact') {
       pulseRuntimeCadence(root, 'pressure', 1800);
+    }
+    else if (root.getAttribute('data-ooh-contact-presence') === 'near') {
+      pulseRuntimeCadence(root, 'pressure', 1500);
     }
     else {
       pulseRuntimeCadence(root, 'moving', 900);
@@ -999,6 +1215,10 @@
         actionInstabilityDecay: 0,
         traversalPressureActive: false,
         traversalPressureDecay: 0,
+        contactPresenceActive: false,
+        contactPresenceNear: false,
+        contactPresenceDecay: 0,
+        contactPresencePressureAt: 0,
         fieldExtractionComplete: false,
         operationalDecayBias: 0,
         extractionReadinessBias: 0,
@@ -1185,9 +1405,10 @@
     const instabilityDecay = actionInstability ? Math.max(0, runtime.actionInstabilityDecay || 0) : 0;
     const driftDecay = driftActive ? 0.08 : 0;
     const traversalDecay = runtime && runtime.traversalPressureActive ? Math.max(0, runtime.traversalPressureDecay || 0) : 0;
+    const contactDecay = runtime && runtime.contactPresenceNear ? Math.max(0, runtime.contactPresenceDecay || 0) : 0;
     const recoveryCushion = runtime && runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil ? 0.18 : 0;
     const adaptiveDecay = runtime ? Math.max(-0.12, Math.min(0.12, -(runtime.adaptiveStability || 0) * 0.12)) : 0;
-    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + driftDecay + traversalDecay + (runtime.operationalDecayBias || 0) + adaptiveDecay - recoveryCushion);
+    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + driftDecay + traversalDecay + contactDecay + (runtime.operationalDecayBias || 0) + adaptiveDecay - recoveryCushion);
   }
 
   function applyInterferenceScan(root) {
@@ -1858,6 +2079,10 @@
     runtime.actionInstabilityDecay = 0;
     runtime.traversalPressureActive = false;
     runtime.traversalPressureDecay = 0;
+    runtime.contactPresenceActive = false;
+    runtime.contactPresenceNear = false;
+    runtime.contactPresenceDecay = 0;
+    runtime.contactPresencePressureAt = 0;
     runtime.fieldExtractionComplete = false;
     runtime.operationalDecayBias = 0;
     runtime.extractionReadinessBias = 0;
@@ -1949,6 +2174,7 @@
     resetPlayerPresence(root);
     resetTraversalPressure(root);
     resetExtractionObjective(root);
+    resetContactPresence(root);
     if (root.oohRuntimeCadenceTimer) {
       window.clearTimeout(root.oohRuntimeCadenceTimer);
       root.oohRuntimeCadenceTimer = null;
@@ -4970,6 +5196,17 @@ function passiveBehaviorPreviewLabel() {
     return baseLines.concat(moodLines[mood] || moodLines.neutral);
   }
 
+  function contactPresenceTelemetryLines(root) {
+    const state = root ? root.oohContactPresence : null;
+    if (!state || !state.active) {
+      return [];
+    }
+
+    return state.near ?
+      ['CONTACT TRACE DETECTED', 'SIGNAL SHADOW OBSERVED', 'FIELD PRESENCE ESCALATING'] :
+      ['DISTANT CONTACT TRACE', 'SIGNAL SHADOW LOW'];
+  }
+
   function localTelemetryPulseLines(root, routeId, pathKey, mode) {
     const runtime = signalRuntime(root);
     const condition = root ? root.oohOperationCondition : null;
@@ -5003,6 +5240,7 @@ function passiveBehaviorPreviewLabel() {
     const pressure = interferenceBand(runtime ? runtime.interferencePressure : 0);
     const lines = ['PAYLOAD ECHO STABLE', 'LOCAL CHANNEL NORMAL', 'PASSIVE SCAN CYCLING', 'DISPLAY CHANNEL HOLDING']
       .concat(runtimeCadenceLines(root))
+      .concat(contactPresenceTelemetryLines(root))
       .concat(routeLines[routeId] || routeLines.terra)
       .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW'])
       .concat(conditionLines[conditionId] || conditionLines.neutral)
@@ -5433,6 +5671,7 @@ function passiveBehaviorPreviewLabel() {
     activatePlayerPresence(root);
     activateTraversalPressureZone(root);
     activateExtractionObjectiveZone(root);
+    activateContactPresence(root);
 
     const debugPanel = root.querySelector('[data-ooh-briefing-debug]');
     if (debugPanel) {
