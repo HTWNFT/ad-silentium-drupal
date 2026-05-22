@@ -5762,15 +5762,19 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-op
   z-index: 40;
   display: grid;
   place-items: center;
+  overflow-y: auto;
   padding: clamp(1rem, 4vw, 2.5rem);
   background:
     linear-gradient(180deg, rgba(4, 9, 13, 0.76), rgba(4, 9, 13, 0.88)),
     radial-gradient(ellipse at 50% 42%, rgba(128, 244, 255, 0.08), transparent 62%);
+  -webkit-overflow-scrolling: touch;
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-operation-summary__shell,
 body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-operation-summary__shell {
   inline-size: min(42rem, 100%);
+  max-block-size: calc(100dvh - clamp(2rem, 8vw, 5rem));
+  overflow-y: auto;
   border: 1px solid rgba(216, 250, 255, 0.16);
   border-radius: 8px;
   padding: clamp(1rem, 3vw, 1.45rem);
@@ -5849,6 +5853,11 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-op
 }
 
 @media (max-width: 620px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-operation-summary,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-operation-summary {
+    place-items: start center;
+  }
+
   body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-operation-summary__row,
   body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-operation-summary__row {
     display: grid;
