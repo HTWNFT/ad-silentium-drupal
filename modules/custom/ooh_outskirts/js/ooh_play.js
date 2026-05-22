@@ -954,6 +954,16 @@
       button.setAttribute('aria-disabled', 'true');
     });
 
+    const combatGate = root.querySelector('[data-ooh-combat-gate]');
+    if (combatGate) {
+      combatGate.hidden = true;
+    }
+    const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
+    if (combatGateButton) {
+      combatGateButton.disabled = true;
+      combatGateButton.setAttribute('aria-disabled', 'true');
+    }
+
     syncSignalIntegrityHud(root, 'complete', 'EXTRACTION LINK CONFIRMED. Signal route stabilized.');
     showLocalCadenceBeat(root, 'EXTRACTION WINDOW AVAILABLE', 'SIGNAL ROUTE STABILIZED. Operation success state active. AUDIO IDENTITY LOCKED.', 180, { priority: 3 });
   }
@@ -5945,15 +5955,15 @@ function passiveBehaviorPreviewLabel() {
 
     const combatGate = root.querySelector('[data-ooh-combat-gate]');
     if (combatGate) {
-      combatGate.hidden = false;
+      combatGate.hidden = true;
     }
 
     const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
     if (combatGateButton) {
-      combatGateButton.disabled = false;
-      combatGateButton.setAttribute('aria-disabled', 'false');
+      combatGateButton.disabled = true;
+      combatGateButton.setAttribute('aria-disabled', 'true');
       if (combatGateButton.nextElementSibling) {
-        combatGateButton.nextElementSibling.textContent = 'Combat systems standing by.';
+        combatGateButton.nextElementSibling.textContent = 'Combat systems standing by outside proof capture.';
       }
     }
 
