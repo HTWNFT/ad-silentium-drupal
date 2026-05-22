@@ -2125,10 +2125,10 @@
       '<div class="ooh-operation-summary__shell">' +
         '<div class="ooh-operation-summary__kicker">OPERATION SUMMARY</div>' +
         '<h3 class="ooh-operation-summary__title">Runtime Debrief</h3>' +
-        '<p class="ooh-operation-summary__note">Local debrief only. No progress saved.</p>' +
+        '<p class="ooh-operation-summary__note">Operation closed. Local debrief only. No progress saved. Run again to initiate a new operation.</p>' +
         '<div class="ooh-operation-summary__grid">' + rows + '</div>' +
         '<div class="ooh-operation-summary__actions">' +
-          '<button class="ooh-operation-summary__button" type="button" data-ooh-summary-reset>RESET</button>' +
+          '<button class="ooh-operation-summary__button" type="button" data-ooh-summary-reset>RUN AGAIN</button>' +
           '<a class="ooh-operation-summary__button" href="' + returnHref + '">RETURN</a>' +
         '</div>' +
       '</div>';
