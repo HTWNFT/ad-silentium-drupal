@@ -6018,6 +6018,78 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
   text-transform: uppercase;
 }
 
+/* PHASE OA-040 - EMBODIED RUNTIME PRESENCE BASELINE */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-player-presence,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-player-presence {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 10;
+  inline-size: 18px;
+  block-size: 18px;
+  box-sizing: border-box;
+  pointer-events: none;
+  border: 1px solid rgba(232, 252, 255, 0.72);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(232, 252, 255, 0.86) 0 2px, transparent 3px),
+    radial-gradient(circle at 50% 50%, rgba(128, 244, 255, 0.16), rgba(8, 18, 24, 0.1) 64%, transparent 66%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 0 12px rgba(128, 244, 255, 0.12);
+  opacity: 0;
+  transition:
+    transform 90ms linear,
+    opacity 160ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-player-presence[hidden],
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-player-presence[hidden] {
+  display: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence {
+  opacity: 0.84;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence::before,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence::before,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence::after,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgba(216, 250, 255, 0.16);
+  border-radius: 50%;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence::after,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence::after {
+  inset: 7px -7px;
+  border-inline-color: rgba(216, 250, 255, 0.22);
+  border-block-color: transparent;
+  border-radius: 0;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence.is-moving,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-player-presence.is-moving {
+  border-color: rgba(244, 255, 255, 0.9);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 0 16px rgba(128, 244, 255, 0.16);
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-player-presence,
+  body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-player-presence {
+    inline-size: 16px;
+    block-size: 16px;
+  }
+}
+
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-title,
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-state,
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play__media-summary,

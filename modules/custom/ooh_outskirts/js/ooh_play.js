@@ -292,6 +292,161 @@
     });
   }
 
+  const playerPresenceConfig = {
+    size: 18,
+    step: 18,
+    initialX: 0.5,
+    initialY: 0.5,
+    viewportX: 0.5,
+    viewportY: 0.72
+  };
+
+  const playerMovementKeys = {
+    arrowup: [0, -1],
+    w: [0, -1],
+    arrowleft: [-1, 0],
+    a: [-1, 0],
+    arrowdown: [0, 1],
+    s: [0, 1],
+    arrowright: [1, 0],
+    d: [1, 0]
+  };
+
+  function playerPresenceState(root) {
+    if (!root.oohPlayerPresence) {
+      root.oohPlayerPresence = {
+        x: 0,
+        y: 0,
+        moved: false
+      };
+    }
+
+    return root.oohPlayerPresence;
+  }
+
+  function playerPresenceField(root) {
+    return root ? root.querySelector('.ooh-play-scene__visual') : null;
+  }
+
+  function ensurePlayerPresence(root) {
+    const field = playerPresenceField(root);
+    if (!field) {
+      return null;
+    }
+
+    let marker = field.querySelector('[data-ooh-player-presence]');
+    if (!marker) {
+      marker = document.createElement('div');
+      marker.className = 'ooh-play-player-presence';
+      marker.setAttribute('data-ooh-player-presence', '');
+      marker.setAttribute('aria-hidden', 'true');
+      marker.hidden = true;
+      field.appendChild(marker);
+    }
+
+    return marker;
+  }
+
+  function clampPlayerPresence(root) {
+    const marker = ensurePlayerPresence(root);
+    const field = playerPresenceField(root);
+    if (!marker || !field) {
+      return;
+    }
+
+    const state = playerPresenceState(root);
+    const fieldRect = field.getBoundingClientRect();
+    const markerRect = marker.getBoundingClientRect();
+    const markerSize = Math.max(markerRect.width, markerRect.height, playerPresenceConfig.size);
+    const maxX = Math.max(0, fieldRect.width - markerSize);
+    const maxY = Math.max(0, fieldRect.height - markerSize);
+
+    state.x = Math.min(Math.max(state.x, 0), maxX);
+    state.y = Math.min(Math.max(state.y, 0), maxY);
+    marker.style.transform = 'translate3d(' + state.x + 'px, ' + state.y + 'px, 0)';
+  }
+
+  function resetPlayerPresence(root) {
+    if (!root) {
+      return;
+    }
+
+    const marker = ensurePlayerPresence(root);
+    const field = playerPresenceField(root);
+    if (!marker || !field) {
+      return;
+    }
+
+    const state = playerPresenceState(root);
+    const fieldRect = field.getBoundingClientRect();
+    state.x = Math.max(0, (fieldRect.width - playerPresenceConfig.size) * playerPresenceConfig.initialX);
+    state.y = Math.max(0, (fieldRect.height - playerPresenceConfig.size) * playerPresenceConfig.initialY);
+    state.moved = false;
+    marker.hidden = true;
+    marker.classList.remove('is-moving');
+    clampPlayerPresence(root);
+  }
+
+  function activatePlayerPresence(root) {
+    const marker = ensurePlayerPresence(root);
+    if (!marker) {
+      return;
+    }
+
+    if (!root.oohPlayerPresence) {
+      resetPlayerPresence(root);
+    }
+    marker.hidden = false;
+    clampPlayerPresence(root);
+  }
+
+  function alignPlayerPresenceToViewport(root) {
+    const marker = ensurePlayerPresence(root);
+    const field = playerPresenceField(root);
+    if (!marker || !field || marker.hidden) {
+      return;
+    }
+
+    const state = playerPresenceState(root);
+    const fieldRect = field.getBoundingClientRect();
+    const markerRect = marker.getBoundingClientRect();
+    const markerSize = Math.max(markerRect.width, markerRect.height, playerPresenceConfig.size);
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || fieldRect.width;
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || fieldRect.height;
+
+    state.x = (viewportWidth * playerPresenceConfig.viewportX) - fieldRect.left - (markerSize / 2);
+    state.y = (viewportHeight * playerPresenceConfig.viewportY) - fieldRect.top - (markerSize / 2);
+    clampPlayerPresence(root);
+  }
+
+  function movePlayerPresence(root, vector) {
+    if (!root || !vector || !root.classList.contains('is-mission-active')) {
+      return false;
+    }
+
+    const marker = ensurePlayerPresence(root);
+    if (!marker || marker.hidden) {
+      return false;
+    }
+
+    const state = playerPresenceState(root);
+    state.x += vector[0] * playerPresenceConfig.step;
+    state.y += vector[1] * playerPresenceConfig.step;
+    clampPlayerPresence(root);
+    marker.classList.add('is-moving');
+    window.clearTimeout(root.oohPlayerPresenceMoveTimer);
+    root.oohPlayerPresenceMoveTimer = window.setTimeout(function () {
+      marker.classList.remove('is-moving');
+    }, 140);
+
+    if (!state.moved) {
+      state.moved = true;
+      showLocalCadenceBeat(root, 'OPERATOR PRESENCE CONFIRMED', 'FIELD POSITION ACTIVE. Movement bounded to the active field.', 220);
+    }
+
+    return true;
+  }
+
   function captureModeActive(root) {
     return Boolean(root && root.oohCaptureMode);
   }
@@ -1460,6 +1615,7 @@
     clearReadoutHold(root);
     clearSignalIntegrityRuntime(root);
     setOperationalRuntimeState(root, 'standby');
+    resetPlayerPresence(root);
     root.classList.remove('is-mission-active', 'is-combat-shell');
     if (shell) {
       shell.classList.remove('is-mission-active', 'is-combat-shell', 'is-combat-armed');
@@ -4883,6 +5039,7 @@ function passiveBehaviorPreviewLabel() {
     if (sceneStatus) {
       sceneStatus.textContent = buildActiveSceneStatus(routeId, pathKey, missionLabel);
     }
+    activatePlayerPresence(root);
 
     const debugPanel = root.querySelector('[data-ooh-briefing-debug]');
     if (debugPanel) {
@@ -5170,6 +5327,9 @@ function passiveBehaviorPreviewLabel() {
         if (activateMission(root, shell, sceneStatus, routeId, pathKey, missionLabel, assembly)) {
           window.setTimeout(function () {
             scrollToMissionBriefing(root);
+            window.setTimeout(function () {
+              alignPlayerPresenceToViewport(root);
+            }, 80);
           }, 60);
         }
       });
@@ -5201,7 +5361,13 @@ function passiveBehaviorPreviewLabel() {
       }
 
       const key = String(event.key || '').toLowerCase();
-      const action = key === 's' ? 'scan' : (key === 'h' ? 'hold' : (key === 'c' ? 'signal' : ''));
+      const movement = playerMovementKeys[key];
+      if (movement && movePlayerPresence(root, movement)) {
+        event.preventDefault();
+        return;
+      }
+
+      const action = key === 'h' ? 'hold' : (key === 'c' ? 'signal' : '');
       if (action) {
         triggerPassiveAction(root, shell, action, routeId, pathKey);
       }
@@ -5271,6 +5437,11 @@ function passiveBehaviorPreviewLabel() {
   Drupal.behaviors.oohPlayBriefing = {
     attach: function (context) {
       once('ooh-play-briefing', '[data-ooh-play]', context).forEach(function (root) {
+        resetPlayerPresence(root);
+        window.addEventListener('resize', function () {
+          clampPlayerPresence(root);
+        });
+
         // Hydrate the /play scene from the Dossier payload stored before routing.
         const storedState = readStoredState();
         const payload = storedState.payload || {};
