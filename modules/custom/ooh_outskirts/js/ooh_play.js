@@ -343,6 +343,44 @@
     pressurePulse: 0.42
   };
 
+  function activeRuntimeCondition(root) {
+    return root && root.oohOperationCondition ? root.oohOperationCondition : null;
+  }
+
+  function runtimeConditionModifier(root, key, fallback) {
+    const condition = activeRuntimeCondition(root);
+    const modifiers = condition && condition.modifiers ? condition.modifiers : {};
+    return typeof modifiers[key] === 'number' ? modifiers[key] : fallback;
+  }
+
+  function traversalPressureRuntimeLayout(root) {
+    const condition = activeRuntimeCondition(root);
+    const layout = Object.assign({}, traversalPressureConfig);
+    const offset = condition && condition.pressureOffset ? condition.pressureOffset : null;
+    if (offset) {
+      layout.x = Math.max(0.08, Math.min(0.72, layout.x + (offset.x || 0)));
+      layout.y = Math.max(0.14, Math.min(0.72, layout.y + (offset.y || 0)));
+      layout.width = Math.max(0.16, Math.min(0.34, layout.width + (offset.width || 0)));
+      layout.height = Math.max(0.08, Math.min(0.18, layout.height + (offset.height || 0)));
+    }
+    return layout;
+  }
+
+  function contactPresenceRuntimeConfig(root) {
+    const proximity = runtimeConditionModifier(root, 'contactProximity', contactPresenceConfig.proximity);
+    const driftStep = runtimeConditionModifier(root, 'contactDriftStep', contactPresenceConfig.driftStep);
+    const interval = runtimeConditionModifier(root, 'contactInterval', contactPresenceConfig.interval);
+    const decay = runtimeConditionModifier(root, 'contactDecay', contactPresenceConfig.decay);
+    const pressurePulse = runtimeConditionModifier(root, 'contactPressurePulse', contactPresenceConfig.pressurePulse);
+    return {
+      proximity: proximity,
+      driftStep: driftStep,
+      interval: interval,
+      decay: decay,
+      pressurePulse: pressurePulse
+    };
+  }
+
   const playerMovementKeys = {
     arrowup: [0, -1],
     w: [0, -1],
@@ -420,10 +458,11 @@
       field.appendChild(zone);
     }
 
-    zone.style.left = (traversalPressureConfig.x * 100) + '%';
-    zone.style.top = (traversalPressureConfig.y * 100) + '%';
-    zone.style.width = (traversalPressureConfig.width * 100) + '%';
-    zone.style.height = (traversalPressureConfig.height * 100) + '%';
+    const layout = traversalPressureRuntimeLayout(root);
+    zone.style.left = (layout.x * 100) + '%';
+    zone.style.top = (layout.y * 100) + '%';
+    zone.style.width = (layout.width * 100) + '%';
+    zone.style.height = (layout.height * 100) + '%';
     return zone;
   }
 
@@ -566,18 +605,19 @@
     }
 
     const state = contactPresenceState(root);
-    const near = contactPresenceDistance(root) <= contactPresenceConfig.proximity;
+    const contactConfig = contactPresenceRuntimeConfig(root);
+    const near = contactPresenceDistance(root) <= contactConfig.proximity;
     const changed = near !== Boolean(state.near);
     state.near = near;
     runtime.contactPresenceActive = true;
     runtime.contactPresenceNear = near;
-    runtime.contactPresenceDecay = near ? contactPresenceConfig.decay : 0;
+    runtime.contactPresenceDecay = near ? contactConfig.decay : 0;
     marker.classList.toggle('is-contact-near', near);
     marker.setAttribute('data-ooh-contact-presence', near ? 'near' : 'observed');
     root.setAttribute('data-ooh-contact-presence', near ? 'near' : 'observed');
 
     if (near && Date.now() - (runtime.contactPresencePressureAt || 0) > 2200) {
-      runtime.interferencePressure = Math.min(100, runtime.interferencePressure + contactPresenceConfig.pressurePulse);
+      runtime.interferencePressure = Math.min(100, runtime.interferencePressure + contactConfig.pressurePulse);
       runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
       runtime.contactPresencePressureAt = Date.now();
     }
@@ -613,8 +653,9 @@
     const vector = patterns[state.driftIndex % patterns.length];
     const pursuitX = player.x > state.x ? 0.25 : -0.25;
     const pursuitY = player.y > state.y ? 0.16 : -0.16;
-    state.x += (vector[0] + pursuitX) * contactPresenceConfig.driftStep;
-    state.y += (vector[1] + pursuitY) * contactPresenceConfig.driftStep;
+    const contactConfig = contactPresenceRuntimeConfig(root);
+    state.x += (vector[0] + pursuitX) * contactConfig.driftStep;
+    state.y += (vector[1] + pursuitY) * contactConfig.driftStep;
     state.driftIndex += 1;
     applyContactPresencePosition(root);
     updateContactPresenceProximity(root, true);
@@ -673,7 +714,7 @@
     stopContactPresenceDrift(root);
     root.oohContactPresenceTimer = window.setInterval(function () {
       driftContactPresence(root);
-    }, contactPresenceConfig.interval);
+    }, contactPresenceRuntimeConfig(root).interval);
   }
 
   function setRuntimeAliveState(root, state) {
@@ -1361,6 +1402,39 @@
         signal_lost: 'SIGNAL LOST. Storm channel collapsed.',
         operation_complete: 'OPERATION COMPLETE. Storm channel sealed.'
       },
+      signal_echo: {
+        initialization: 'SIGNAL ECHO ACTIVE. Telemetry repeat contained.',
+        stabilization: 'Echo cadence holding. Signal duplication low.',
+        signal_degradation: 'SIGNAL ECHO RISING. Telemetry edges repeating.',
+        elevated_pressure: 'ECHO PRESSURE LOCAL. Channel response delayed.',
+        extraction_available: 'Extraction window available through signal echo.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Echo cadence contained.',
+        critical_instability: 'CRITICAL ECHO PRESSURE. Signal field repeating.',
+        signal_lost: 'SIGNAL LOST. Echo channel collapsed.',
+        operation_complete: 'OPERATION COMPLETE. Echo channel sealed.'
+      },
+      unstable_cadence: {
+        initialization: 'UNSTABLE CADENCE. Movement discipline required.',
+        stabilization: 'Cadence variance contained. Runtime tempo holding.',
+        signal_degradation: 'CADENCE INSTABILITY RISING. Signal tempo thinning.',
+        elevated_pressure: 'CADENCE SHIFT DETECTED. Pressure line moving.',
+        extraction_available: 'Extraction window available under unstable cadence.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Hold through cadence shift.',
+        critical_instability: 'CRITICAL CADENCE VARIANCE. Runtime tempo unstable.',
+        signal_lost: 'SIGNAL LOST. Cadence channel collapsed.',
+        operation_complete: 'OPERATION COMPLETE. Cadence channel sealed.'
+      },
+      impact_pressure: {
+        initialization: 'IMPACT PRESSURE ACTIVE. Forward cadence under load.',
+        stabilization: 'Impact pressure contained. Route discipline holding.',
+        signal_degradation: 'IMPACT PRESSURE RISING. Signal field tightening.',
+        elevated_pressure: 'IMPACT PRESSURE LOCAL. Clear the pressure line.',
+        extraction_available: 'Extraction window available under impact pressure.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Maintain impact cadence.',
+        critical_instability: 'CRITICAL IMPACT PRESSURE. Route cohesion thin.',
+        signal_lost: 'SIGNAL LOST. Impact channel collapsed.',
+        operation_complete: 'OPERATION COMPLETE. Impact pressure sealed.'
+      },
       neutral: {}
     };
     const pressureLines = {
@@ -2041,12 +2115,15 @@
       return;
     }
 
+    const condition = activeRuntimeCondition(root);
+    const modifiers = condition && condition.modifiers ? condition.modifiers : {};
     const pressureVariance = Math.round(Math.random() * 4);
     const syncVariance = (Math.random() * 0.08) - 0.03;
-    runtime.operationalDecayBias = (Math.random() * 0.1) - 0.04;
-    runtime.extractionReadinessBias = (Math.random() * 0.08) - 0.04;
-    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + pressureVariance);
+    runtime.operationalDecayBias = ((Math.random() * 0.1) - 0.04) + (modifiers.decayBias || 0);
+    runtime.extractionReadinessBias = ((Math.random() * 0.08) - 0.04) + (modifiers.extractionBias || 0);
+    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + pressureVariance + (modifiers.pressureInitial || 0));
     runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
+    runtime.operationalDriftNextAt = Math.max(runtime.startedAt + 5500, (runtime.operationalDriftNextAt || runtime.startedAt + 12000) + (modifiers.driftDelay || 0));
     if (!runtime.objectiveReady) {
       runtime.objectiveSyncQuality = Math.max(0.28, Math.min(0.46, runtime.objectiveSyncQuality + syncVariance));
     }
@@ -2251,26 +2328,154 @@
     {
       id: 'fog_dawn',
       label: 'LOW VISIBILITY // FOG DAWN',
+      fieldLabel: 'FIELD CONDITION: LOW VISIBILITY',
       routeAffinity: ['aer', 'mare'],
+      moodAffinity: ['void', 'dread', 'neutral'],
       paletteBias: 'pale cyan haze',
       cadenceFlavor: 'Fog saturation softens the route. Maintain clean telemetry.',
+      telemetry: ['FIELD CONDITION: LOW VISIBILITY', 'VISIBILITY CHANNEL SOFT', 'HORIZON CONTRAST LOW'],
+      modifiers: {
+        decayBias: 0.01,
+        extractionBias: -0.015,
+        pressureInitial: 1,
+        driftDelay: 1800,
+        contactProximity: 152,
+        contactDriftStep: 14,
+        contactInterval: 2800
+      },
+      pressureOffset: {
+        x: -0.03,
+        y: 0.02,
+        width: 0.01
+      },
       launchPriority: 3
     },
     {
       id: 'sodium_night',
       label: 'SODIUM-VAPOR NIGHT',
+      fieldLabel: 'FIELD CONDITION: SODIUM NIGHT',
       routeAffinity: ['terra'],
+      moodAffinity: ['pulse', 'dread', 'neutral'],
       paletteBias: 'amber black industrial field',
       cadenceFlavor: 'Sodium field active. Hard silhouettes on the route.',
+      telemetry: ['FIELD CONDITION: SODIUM NIGHT', 'VISUAL CHANNEL STABLE', 'SURFACE EXPOSURE ELEVATED'],
+      modifiers: {
+        decayBias: 0,
+        extractionBias: 0.005,
+        pressureInitial: 2,
+        driftDelay: 600,
+        contactProximity: 164,
+        contactDriftStep: 16,
+        contactInterval: 2600
+      },
+      pressureOffset: {
+        x: 0.02,
+        y: -0.01
+      },
       launchPriority: 3
     },
     {
       id: 'storm_blackout',
       label: 'STORM DISTORTION',
+      fieldLabel: 'FIELD CONDITION: STORM DISTORTION',
       routeAffinity: ['aer', 'terra'],
+      moodAffinity: ['dread', 'impact', 'neutral'],
       paletteBias: 'cold blackout pressure',
       cadenceFlavor: 'Storm distortion present. Signal field must remain disciplined.',
+      telemetry: ['FIELD CONDITION: STORM DISTORTION', 'CHANNEL INSTABILITY RISING', 'BLACKOUT PRESSURE LOCAL'],
+      modifiers: {
+        decayBias: 0.025,
+        extractionBias: -0.02,
+        pressureInitial: 4,
+        driftDelay: -1200,
+        contactProximity: 178,
+        contactDriftStep: 18,
+        contactDecay: 0.18,
+        contactPressurePulse: 0.5,
+        contactInterval: 2300
+      },
+      pressureOffset: {
+        x: 0.04,
+        y: 0.01,
+        height: 0.01
+      },
       launchPriority: 2
+    },
+    {
+      id: 'signal_echo',
+      label: 'SIGNAL ECHO ACTIVE',
+      fieldLabel: 'FIELD CONDITION: SIGNAL ECHO ACTIVE',
+      routeAffinity: ['aer', 'mare', 'terra'],
+      moodAffinity: ['pulse', 'void', 'neutral'],
+      paletteBias: 'echoing cyan field',
+      cadenceFlavor: 'Signal echo activity present. Telemetry repeats on a controlled delay.',
+      telemetry: ['FIELD CONDITION: SIGNAL ECHO ACTIVE', 'SIGNAL ECHO DETECTED', 'ECHO CADENCE LOCAL'],
+      modifiers: {
+        decayBias: 0.008,
+        extractionBias: 0,
+        pressureInitial: 1,
+        driftDelay: 900,
+        contactProximity: 160,
+        contactDriftStep: 15,
+        contactInterval: 2500
+      },
+      pressureOffset: {
+        x: -0.015,
+        width: 0.02
+      },
+      launchPriority: 2
+    },
+    {
+      id: 'unstable_cadence',
+      label: 'UNSTABLE CADENCE',
+      fieldLabel: 'FIELD CONDITION: UNSTABLE CADENCE',
+      routeAffinity: ['aer', 'mare', 'terra'],
+      moodAffinity: ['pulse', 'impact', 'dread'],
+      paletteBias: 'thin cadence variance',
+      cadenceFlavor: 'Cadence unstable. Keep movement deliberate through pressure shifts.',
+      telemetry: ['FIELD CONDITION: UNSTABLE CADENCE', 'CADENCE VARIANCE LOCAL', 'RUNTIME TEMPO SHIFT'],
+      modifiers: {
+        decayBias: 0.018,
+        extractionBias: -0.01,
+        pressureInitial: 3,
+        driftDelay: -900,
+        contactProximity: 170,
+        contactDriftStep: 17,
+        contactDecay: 0.17,
+        contactInterval: 2200
+      },
+      pressureOffset: {
+        x: 0.015,
+        y: -0.025,
+        height: 0.015
+      },
+      launchPriority: 2
+    },
+    {
+      id: 'impact_pressure',
+      label: 'IMPACT PRESSURE',
+      fieldLabel: 'FIELD CONDITION: IMPACT PRESSURE',
+      routeAffinity: ['aer', 'terra'],
+      moodAffinity: ['impact'],
+      paletteBias: 'restrained impact pressure',
+      cadenceFlavor: 'Impact pressure active. Forward cadence remains available under load.',
+      telemetry: ['FIELD CONDITION: IMPACT PRESSURE', 'IMPACT PRESSURE LOCAL', 'FORWARD CADENCE UNDER LOAD'],
+      modifiers: {
+        decayBias: 0.02,
+        extractionBias: -0.015,
+        pressureInitial: 4,
+        driftDelay: -1500,
+        contactProximity: 184,
+        contactDriftStep: 19,
+        contactDecay: 0.18,
+        contactPressurePulse: 0.54,
+        contactInterval: 2100
+      },
+      pressureOffset: {
+        x: 0.05,
+        width: 0.02
+      },
+      launchPriority: 3
     }
   ];
 
@@ -2296,7 +2501,7 @@
     })[0] || null;
   }
 
-  function resolveOperationCondition(routeId, preset) {
+  function resolveOperationCondition(routeId, preset, root) {
     if (preset && preset.conditionId) {
       const presetCondition = conditionById(preset.conditionId);
       if (presetCondition) {
@@ -2309,11 +2514,21 @@
       return condition.routeAffinity.indexOf(routeKey) !== -1;
     });
 
-    return weightedConditionPick(routeConditions.length ? routeConditions : operationConditions);
+    const candidates = routeConditions.length ? routeConditions : operationConditions;
+    const mood = root && root.oohMediaAttachment && root.oohMediaAttachment.mood ? String(root.oohMediaAttachment.mood).toLowerCase() : 'neutral';
+    const moodWeighted = candidates.map(function (condition) {
+      const copy = Object.assign({}, condition);
+      if (condition.moodAffinity && condition.moodAffinity.indexOf(mood) !== -1) {
+        copy.launchPriority = Math.max(1, condition.launchPriority || 1) + 2;
+      }
+      return copy;
+    });
+
+    return conditionById(weightedConditionPick(moodWeighted).id);
   }
 
   function applyOperationCondition(root, shell, routeId) {
-    const condition = resolveOperationCondition(routeId, activeClipPreset(root));
+    const condition = resolveOperationCondition(routeId, activeClipPreset(root), root);
     const targetShell = shell || (root ? root.querySelector('[data-ooh-scene-shell]') : null);
     if (!root || !condition) {
       return null;
@@ -2338,7 +2553,7 @@
 
     const telemetry = root.querySelector('[data-ooh-hud-field="telemetryC"]');
     if (telemetry) {
-      telemetry.textContent = condition.label;
+      telemetry.textContent = condition.fieldLabel || ('FIELD CONDITION: ' + condition.label);
     }
   }
 
@@ -5184,6 +5399,8 @@ function passiveBehaviorPreviewLabel() {
   function runtimeCadenceLines(root) {
     const mediaContext = root ? root.oohMediaAttachment : null;
     const mood = mediaContext && mediaContext.mood ? String(mediaContext.mood).toLowerCase() : 'neutral';
+    const condition = activeRuntimeCondition(root);
+    const conditionId = condition ? condition.id : 'neutral';
     const baseLines = ['SIGNAL ECHO DETECTED', 'CADENCE STABLE', 'FIELD DISTORTION MINOR'];
     const moodLines = {
       impact: ['IMPACT RHYTHM MAINTAINED', 'FORWARD CADENCE STABLE'],
@@ -5192,8 +5409,17 @@ function passiveBehaviorPreviewLabel() {
       dread: ['DREAD CADENCE LOW', 'COMMAND TEMPO HOLDING'],
       neutral: ['AUDIO CADENCE HOLDING']
     };
+    const conditionLines = {
+      fog_dawn: ['LOW VISIBILITY CADENCE', 'HORIZON SIGNAL SOFT'],
+      sodium_night: ['SODIUM FIELD HOLDING', 'HARD SILHOUETTE STABLE'],
+      storm_blackout: ['BLACKOUT CADENCE ACTIVE', 'STORM PRESSURE LOCAL'],
+      signal_echo: ['ECHO CADENCE ACTIVE', 'SIGNAL REPEAT CONTROLLED'],
+      unstable_cadence: ['CADENCE VARIANCE LOCAL', 'TEMPO SHIFT CONTAINED'],
+      impact_pressure: ['IMPACT PRESSURE ACTIVE', 'FORWARD CADENCE UNDER LOAD'],
+      neutral: []
+    };
 
-    return baseLines.concat(moodLines[mood] || moodLines.neutral);
+    return baseLines.concat(moodLines[mood] || moodLines.neutral).concat(conditionLines[conditionId] || conditionLines.neutral);
   }
 
   function contactPresenceTelemetryLines(root) {
@@ -5224,6 +5450,9 @@ function passiveBehaviorPreviewLabel() {
       fog_dawn: ['LOW VISIBILITY', 'HORIZON LOSS DETECTED', 'SIGNAL SATURATION RISING'],
       sodium_night: ['INDUSTRIAL FIELD ACTIVE', 'ROUTE EXPOSURE ELEVATED', 'VISUAL CHANNEL STABLE'],
       storm_blackout: ['STORM DISTORTION ACTIVE', 'CHANNEL INSTABILITY RISING', 'EXTRACTION WINDOW NARROWING'],
+      signal_echo: ['SIGNAL ECHO ACTIVE', 'ECHO CADENCE LOCAL', 'TELEMETRY REPEAT CONTROLLED'],
+      unstable_cadence: ['UNSTABLE CADENCE', 'CADENCE VARIANCE LOCAL', 'RUNTIME TEMPO SHIFT'],
+      impact_pressure: ['IMPACT PRESSURE', 'FORWARD CADENCE UNDER LOAD', 'PRESSURE LINE ACTIVE'],
       neutral: []
     };
     const pressureLines = {
@@ -5241,6 +5470,7 @@ function passiveBehaviorPreviewLabel() {
     const lines = ['PAYLOAD ECHO STABLE', 'LOCAL CHANNEL NORMAL', 'PASSIVE SCAN CYCLING', 'DISPLAY CHANNEL HOLDING']
       .concat(runtimeCadenceLines(root))
       .concat(contactPresenceTelemetryLines(root))
+      .concat((condition && condition.telemetry) ? condition.telemetry : [])
       .concat(routeLines[routeId] || routeLines.terra)
       .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW'])
       .concat(conditionLines[conditionId] || conditionLines.neutral)
@@ -5706,7 +5936,7 @@ function passiveBehaviorPreviewLabel() {
       }
       syncOperationConditionHud(root);
       if (operationCondition) {
-        showLocalCadenceBeat(root, operationCondition.label, operationCondition.cadenceFlavor, 320);
+        showLocalCadenceBeat(root, operationCondition.fieldLabel || operationCondition.label, operationCondition.cadenceFlavor, 320);
       }
       showLocalCadenceBeat(root, 'CADENCE STABLE', (runtimeCadenceLines(root)[3] || 'FIELD DISTORTION MINOR'), 340, { holdMs: 1900, settleHoldMs: 1900 });
       startLocalTelemetryPulse(root, routeId, pathKey, 'mission');
