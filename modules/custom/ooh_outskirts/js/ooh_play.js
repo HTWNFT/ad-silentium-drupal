@@ -332,6 +332,50 @@
     height: 0.12
   };
 
+  const extractionUncertaintyConfig = {
+    chance: 0.52,
+    conditionChance: 0.62,
+    holdMs: 1400
+  };
+
+  const extractionComplications = [
+    {
+      id: 'signal_delay',
+      label: 'EXTRACTION SIGNAL DELAY',
+      title: 'EXTRACTION SIGNAL DELAY',
+      message: 'Extraction signal delayed. Hold position for route confirmation.',
+      recovery: 'EXTRACTION SIGNAL RECOVERED. Route confirmation clean.'
+    },
+    {
+      id: 'route_recalibration',
+      label: 'ROUTE RECALIBRATION',
+      title: 'ROUTE RECALIBRATION',
+      message: 'Route recalibration active. Maintain the extraction channel.',
+      recovery: 'ROUTE RECALIBRATED. Extraction channel restored.'
+    },
+    {
+      id: 'unstable_corridor',
+      label: 'UNSTABLE EXTRACTION CORRIDOR',
+      title: 'EXTRACTION CORRIDOR UNSTABLE',
+      message: 'Extraction corridor unstable. Hold until the signal route settles.',
+      recovery: 'CORRIDOR STABILIZED. Extraction route confirmed.'
+    },
+    {
+      id: 'stabilization_hold',
+      label: 'STABILIZATION HOLD',
+      title: 'STABILIZATION HOLD REQUIRED',
+      message: 'Short stabilization hold required. Keep position inside extraction.',
+      recovery: 'STABILIZATION HOLD COMPLETE. Extraction link confirmed.'
+    },
+    {
+      id: 'temporary_interference',
+      label: 'TEMPORARY EXTRACTION INTERFERENCE',
+      title: 'TEMPORARY EXTRACTION INTERFERENCE',
+      message: 'Temporary extraction interference. Hold the window open.',
+      recovery: 'INTERFERENCE CLEARED. Extraction window stable.'
+    }
+  ];
+
   const contactPresenceConfig = {
     size: 24,
     initialX: 0.18,
@@ -829,6 +873,7 @@
     const runtime = root.oohSignalRuntime;
     if (runtime) {
       runtime.fieldExtractionComplete = false;
+      resetExtractionUncertainty(root, runtime);
     }
   }
 
@@ -892,11 +937,103 @@
     }
   }
 
+  function clearExtractionComplicationTimer(root) {
+    if (root && root.oohExtractionComplicationTimer) {
+      window.clearTimeout(root.oohExtractionComplicationTimer);
+      root.oohExtractionComplicationTimer = null;
+    }
+  }
+
+  function resetExtractionUncertainty(root, runtime) {
+    clearExtractionComplicationTimer(root);
+    if (runtime) {
+      runtime.extractionComplicationChecked = false;
+      runtime.extractionComplication = null;
+      runtime.extractionComplicationActive = false;
+      runtime.extractionComplicationResolveAt = 0;
+      runtime.extractionComplicationAnnounced = false;
+    }
+    if (root) {
+      root.removeAttribute('data-ooh-extraction-uncertainty');
+    }
+  }
+
+  function extractionComplicationChance(root) {
+    const condition = activeRuntimeCondition(root);
+    const conditionIds = ['signal_interference', 'unstable_weather', 'storm_blackout', 'unstable_cadence', 'high_contact_risk'];
+    return condition && conditionIds.indexOf(condition.id) !== -1 ?
+      extractionUncertaintyConfig.conditionChance :
+      extractionUncertaintyConfig.chance;
+  }
+
+  function selectExtractionComplication(root, runtime) {
+    if (!runtime || runtime.extractionComplicationChecked) {
+      return runtime ? runtime.extractionComplication : null;
+    }
+
+    runtime.extractionComplicationChecked = true;
+    if (Math.random() > extractionComplicationChance(root)) {
+      runtime.extractionComplication = null;
+      return null;
+    }
+
+    runtime.extractionComplication = extractionComplications[Math.floor(Math.random() * extractionComplications.length)] || extractionComplications[0];
+    return runtime.extractionComplication;
+  }
+
+  function extractionContactActive(root, marker, zone) {
+    return Boolean(root && root.classList.contains('is-mission-active') && marker && zone && !marker.hidden && !zone.hidden && rectsOverlap(marker.getBoundingClientRect(), zone.getBoundingClientRect()));
+  }
+
+  function resolveExtractionComplication(root, zone, runtime, marker) {
+    if (!root || !zone || !runtime || runtime.lost || runtime.extractionComplete || !runtime.extractionComplicationActive) {
+      return;
+    }
+
+    if (!extractionContactActive(root, marker || ensurePlayerPresence(root), zone)) {
+      runtime.extractionComplicationActive = false;
+      runtime.extractionComplicationResolveAt = 0;
+      root.setAttribute('data-ooh-extraction-uncertainty', 'pending');
+      syncSignalIntegrityHud(root, signalIntegrityStateKey(root), 'EXTRACTION HOLD BROKEN. Re-enter the extraction window.');
+      showLocalCadenceBeat(root, 'EXTRACTION HOLD BROKEN', 'Re-enter extraction and stabilize the route.', 220);
+      return;
+    }
+
+    if (Date.now() < runtime.extractionComplicationResolveAt) {
+      return;
+    }
+
+    const complication = runtime.extractionComplication || extractionComplications[0];
+    runtime.extractionComplicationActive = false;
+    runtime.extractionComplicationResolveAt = 0;
+    root.setAttribute('data-ooh-extraction-uncertainty', 'resolved');
+    syncSignalIntegrityHud(root, signalIntegrityStateKey(root), complication.recovery);
+    showLocalCadenceBeat(root, 'EXTRACTION STABILIZED', complication.recovery, 180);
+    completeFieldExtraction(root, zone, runtime);
+  }
+
+  function beginExtractionComplication(root, zone, runtime, marker, complication) {
+    if (!root || !zone || !runtime || !complication) {
+      return;
+    }
+
+    clearExtractionComplicationTimer(root);
+    runtime.extractionComplicationActive = true;
+    runtime.extractionComplicationResolveAt = Date.now() + Math.max(900, complication.holdMs || extractionUncertaintyConfig.holdMs);
+    root.setAttribute('data-ooh-extraction-uncertainty', complication.id);
+    syncSignalIntegrityHud(root, signalIntegrityStateKey(root), complication.message);
+    showLocalCadenceBeat(root, complication.title, complication.message, 180, { priority: 2 });
+    root.oohExtractionComplicationTimer = window.setTimeout(function () {
+      resolveExtractionComplication(root, zone, runtime, marker);
+    }, Math.max(900, complication.holdMs || extractionUncertaintyConfig.holdMs) + 80);
+  }
+
   function completeFieldExtraction(root, zone, runtime) {
     if (!root || !zone || !runtime || runtime.fieldExtractionComplete || runtime.extractionComplete) {
       return;
     }
 
+    clearExtractionComplicationTimer(root);
     runtime.fieldExtractionComplete = true;
     runtime.objectiveReady = true;
     runtime.extractionProgress = 100;
@@ -923,6 +1060,7 @@
     root.classList.add('is-field-extraction-complete');
     setRuntimeAliveState(root, 'extraction');
     root.setAttribute('data-ooh-field-extraction', 'complete');
+    root.setAttribute('data-ooh-extraction-uncertainty', runtime.extractionComplication ? 'resolved' : 'clear');
     root.setAttribute('data-ooh-traversal-pressure', 'clear');
     root.setAttribute('data-ooh-contact-presence', 'clear');
 
@@ -983,7 +1121,19 @@
     const active = rectsOverlap(marker.getBoundingClientRect(), zone.getBoundingClientRect());
     zone.classList.toggle('is-contact-active', active);
     if (active) {
+      if (runtime.extractionComplicationActive) {
+        resolveExtractionComplication(root, zone, runtime, marker);
+        return;
+      }
+      const complication = selectExtractionComplication(root, runtime);
+      if (complication) {
+        beginExtractionComplication(root, zone, runtime, marker, complication);
+        return;
+      }
       completeFieldExtraction(root, zone, runtime);
+    }
+    else if (runtime.extractionComplicationActive) {
+      resolveExtractionComplication(root, zone, runtime, marker);
     }
   }
 
@@ -1257,6 +1407,10 @@
         extractionComplete: false,
         extractionAnnounced: false,
         extractionUnstableAnnounced: false,
+        extractionComplicationChecked: false,
+        extractionComplication: null,
+        extractionComplicationActive: false,
+        extractionComplicationResolveAt: 0,
         interferencePressure: signalIntegrityRuntime.interferenceInitial,
         peakInterferencePressure: signalIntegrityRuntime.interferenceInitial,
         startedAt: 0,
@@ -1808,9 +1962,11 @@
     if (runtime && runtime.timer) {
       window.clearInterval(runtime.timer);
     }
+    clearExtractionComplicationTimer(root);
 
     if (root) {
       root.oohSignalRuntime = null;
+      root.removeAttribute('data-ooh-extraction-uncertainty');
     }
   }
 
