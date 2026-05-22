@@ -1423,6 +1423,50 @@
         signal_lost: 'SIGNAL LOST. Echo channel collapsed.',
         operation_complete: 'OPERATION COMPLETE. Echo channel sealed.'
       },
+      signal_interference: {
+        initialization: 'SIGNAL INTERFERENCE. Channel noise contained.',
+        stabilization: 'Interference channel softening. Signal margin holding.',
+        signal_degradation: 'SIGNAL INTERFERENCE RISING. Runtime clarity thinning.',
+        elevated_pressure: 'INTERFERENCE CHANNEL ACTIVE. Keep movement deliberate.',
+        extraction_available: 'Extraction window available through interference.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Hold through signal interference.',
+        critical_instability: 'CRITICAL INTERFERENCE. Signal discipline required.',
+        signal_lost: 'SIGNAL LOST. Interference channel closed.',
+        operation_complete: 'OPERATION COMPLETE. Interference channel sealed.'
+      },
+      unstable_weather: {
+        initialization: 'UNSTABLE WEATHER. Drift window active.',
+        stabilization: 'Weather channel uneven. Route remains readable.',
+        signal_degradation: 'WEATHER DISTORTION RISING. Signal margin narrowing.',
+        elevated_pressure: 'UNSTABLE WEATHER LOCAL. Field drift increasing.',
+        extraction_available: 'Extraction window available under unstable weather.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Hold through weather drift.',
+        critical_instability: 'CRITICAL WEATHER DISTORTION. Route cohesion thin.',
+        signal_lost: 'SIGNAL LOST. Weather channel collapsed.',
+        operation_complete: 'OPERATION COMPLETE. Weather channel sealed.'
+      },
+      cold_start: {
+        initialization: 'COLD START. Systems warming under low pressure.',
+        stabilization: 'Cold channel warming. Signal response deliberate.',
+        signal_degradation: 'COLD START DRAG. Extraction sync responding slowly.',
+        elevated_pressure: 'COLD CHANNEL UNDER LOAD. Preserve signal margin.',
+        extraction_available: 'Extraction window available after cold start delay.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Cold channel coming online.',
+        critical_instability: 'CRITICAL COLD START DRAG. Channel response thin.',
+        signal_lost: 'SIGNAL LOST. Cold channel failed to stabilize.',
+        operation_complete: 'OPERATION COMPLETE. Cold start channel sealed.'
+      },
+      high_contact_risk: {
+        initialization: 'HIGH CONTACT RISK. Field presence likely.',
+        stabilization: 'Contact risk contained. Keep distance disciplined.',
+        signal_degradation: 'CONTACT RISK RISING. Signal shadow nearby.',
+        elevated_pressure: 'FIELD PRESENCE WATCH. Contact pressure local.',
+        extraction_available: 'Extraction window available under contact risk.',
+        extraction_sync: 'EXFIL SYNCHRONIZING. Contact shadow contained.',
+        critical_instability: 'CRITICAL CONTACT PRESSURE. Signal field exposed.',
+        signal_lost: 'SIGNAL LOST. Contact pressure overwhelmed the channel.',
+        operation_complete: 'OPERATION COMPLETE. Contact risk sealed.'
+      },
       unstable_cadence: {
         initialization: 'UNSTABLE CADENCE. Movement discipline required.',
         stabilization: 'Cadence variance contained. Runtime tempo holding.',
@@ -2432,6 +2476,106 @@
       pressureOffset: {
         x: -0.015,
         width: 0.02
+      },
+      launchPriority: 2
+    },
+    {
+      id: 'signal_interference',
+      label: 'SIGNAL INTERFERENCE',
+      fieldLabel: 'FIELD CONDITION: SIGNAL INTERFERENCE',
+      routeAffinity: ['aer', 'mare', 'terra'],
+      moodAffinity: ['void', 'dread', 'pulse', 'neutral'],
+      paletteBias: 'restrained signal interference',
+      cadenceFlavor: 'Signal interference present. Channel noise remains contained.',
+      telemetry: ['FIELD CONDITION: SIGNAL INTERFERENCE', 'INTERFERENCE CHANNEL ACTIVE', 'SIGNAL DECAY SLIGHT'],
+      modifiers: {
+        decayBias: 0.022,
+        extractionBias: -0.012,
+        pressureInitial: 3,
+        driftDelay: -500,
+        contactProximity: 166,
+        contactDriftStep: 16,
+        contactDecay: 0.17,
+        contactInterval: 2400
+      },
+      pressureOffset: {
+        x: -0.02,
+        height: 0.01
+      },
+      launchPriority: 2
+    },
+    {
+      id: 'unstable_weather',
+      label: 'UNSTABLE WEATHER',
+      fieldLabel: 'FIELD CONDITION: UNSTABLE WEATHER',
+      routeAffinity: ['aer', 'mare'],
+      moodAffinity: ['dread', 'impact', 'neutral'],
+      paletteBias: 'thin weather drift',
+      cadenceFlavor: 'Unstable weather active. Drift cadence remains readable.',
+      telemetry: ['FIELD CONDITION: UNSTABLE WEATHER', 'WEATHER CHANNEL UNSTEADY', 'DRIFT WINDOW ACTIVE'],
+      modifiers: {
+        decayBias: 0.016,
+        extractionBias: -0.018,
+        pressureInitial: 2,
+        driftDelay: -1400,
+        contactProximity: 172,
+        contactDriftStep: 18,
+        contactPressurePulse: 0.46,
+        contactInterval: 2300
+      },
+      pressureOffset: {
+        y: 0.025,
+        width: 0.01
+      },
+      launchPriority: 2
+    },
+    {
+      id: 'cold_start',
+      label: 'COLD START',
+      fieldLabel: 'FIELD CONDITION: COLD START',
+      routeAffinity: ['aer', 'mare', 'terra'],
+      moodAffinity: ['void', 'neutral'],
+      paletteBias: 'quiet cold startup',
+      cadenceFlavor: 'Cold start active. Extraction sync responds on a delay.',
+      telemetry: ['FIELD CONDITION: COLD START', 'SYSTEM WARMUP LOCAL', 'EXTRACTION SYNC DELAYED'],
+      modifiers: {
+        decayBias: -0.005,
+        extractionBias: -0.025,
+        pressureInitial: 0,
+        driftDelay: 2200,
+        contactProximity: 148,
+        contactDriftStep: 13,
+        contactInterval: 3000
+      },
+      pressureOffset: {
+        x: -0.01,
+        y: -0.01
+      },
+      launchPriority: 2
+    },
+    {
+      id: 'high_contact_risk',
+      label: 'HIGH CONTACT RISK',
+      fieldLabel: 'FIELD CONDITION: HIGH CONTACT RISK',
+      routeAffinity: ['aer', 'mare', 'terra'],
+      moodAffinity: ['impact', 'dread'],
+      paletteBias: 'restrained contact watch',
+      cadenceFlavor: 'High contact risk present. Field presence likely.',
+      telemetry: ['FIELD CONDITION: HIGH CONTACT RISK', 'CONTACT SHADOW LIKELY', 'FIELD PRESENCE WATCH'],
+      modifiers: {
+        decayBias: 0.018,
+        extractionBias: -0.01,
+        pressureInitial: 2,
+        driftDelay: -900,
+        contactProximity: 190,
+        contactDriftStep: 20,
+        contactDecay: 0.18,
+        contactPressurePulse: 0.58,
+        contactInterval: 2000
+      },
+      pressureOffset: {
+        x: 0.025,
+        height: 0.01
       },
       launchPriority: 2
     },
@@ -5424,6 +5568,10 @@ function passiveBehaviorPreviewLabel() {
       sodium_night: ['SODIUM FIELD HOLDING', 'HARD SILHOUETTE STABLE'],
       storm_blackout: ['BLACKOUT CADENCE ACTIVE', 'STORM PRESSURE LOCAL'],
       signal_echo: ['ECHO CADENCE ACTIVE', 'SIGNAL REPEAT CONTROLLED'],
+      signal_interference: ['SIGNAL INTERFERENCE ACTIVE', 'CHANNEL NOISE CONTAINED'],
+      unstable_weather: ['UNSTABLE WEATHER ACTIVE', 'DRIFT WINDOW READABLE'],
+      cold_start: ['COLD START ACTIVE', 'SYSTEM WARMUP LOCAL'],
+      high_contact_risk: ['CONTACT RISK ACTIVE', 'FIELD PRESENCE WATCH'],
       unstable_cadence: ['CADENCE VARIANCE LOCAL', 'TEMPO SHIFT CONTAINED'],
       impact_pressure: ['IMPACT PRESSURE ACTIVE', 'FORWARD CADENCE UNDER LOAD'],
       neutral: []
@@ -5461,6 +5609,10 @@ function passiveBehaviorPreviewLabel() {
       sodium_night: ['INDUSTRIAL FIELD ACTIVE', 'ROUTE EXPOSURE ELEVATED', 'VISUAL CHANNEL STABLE'],
       storm_blackout: ['STORM DISTORTION ACTIVE', 'CHANNEL INSTABILITY RISING', 'EXTRACTION WINDOW NARROWING'],
       signal_echo: ['SIGNAL ECHO ACTIVE', 'ECHO CADENCE LOCAL', 'TELEMETRY REPEAT CONTROLLED'],
+      signal_interference: ['SIGNAL INTERFERENCE', 'INTERFERENCE CHANNEL ACTIVE', 'SIGNAL DECAY SLIGHT'],
+      unstable_weather: ['UNSTABLE WEATHER', 'WEATHER CHANNEL UNSTEADY', 'DRIFT WINDOW ACTIVE'],
+      cold_start: ['COLD START', 'SYSTEM WARMUP LOCAL', 'EXTRACTION SYNC DELAYED'],
+      high_contact_risk: ['HIGH CONTACT RISK', 'CONTACT SHADOW LIKELY', 'FIELD PRESENCE WATCH'],
       unstable_cadence: ['UNSTABLE CADENCE', 'CADENCE VARIANCE LOCAL', 'RUNTIME TEMPO SHIFT'],
       impact_pressure: ['IMPACT PRESSURE', 'FORWARD CADENCE UNDER LOAD', 'PRESSURE LINE ACTIVE'],
       neutral: []
