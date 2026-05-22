@@ -294,6 +294,20 @@
     captureCadenceMaxDelay: 650
   };
 
+  const pressureCurveConfig = {
+    earlyMs: 24000,
+    midMs: 52000,
+    lateMs: 82000,
+    earlyRate: 0.72,
+    midRate: 1,
+    lateRate: 1.18,
+    extractionRate: 1.32,
+    earlyDecay: -0.05,
+    midDecay: 0,
+    lateDecay: 0.045,
+    extractionDecay: 0.075
+  };
+
   function runtimeStateAttribute(state) {
     return String(state || '').toLowerCase().replace(/\s+/g, '-');
   }
@@ -1429,6 +1443,8 @@
         extractionReadinessBias: 0,
         operationalEscalationTier: 'nominal',
         operationalEscalationAnnounced: '',
+        pressureCurveStage: 'early',
+        pressureCurveAnnounced: '',
         operationalRecoveryUntil: 0,
         operationalRecoveryAnnounced: false,
         operationalRecoveryHoldCount: 0,
@@ -1672,7 +1688,7 @@
       return;
     }
 
-    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + signalIntegrityRuntime.interferenceRate);
+    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + (signalIntegrityRuntime.interferenceRate * pressureCurveRate(root, runtime)));
     runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
   }
 
@@ -1690,7 +1706,8 @@
     const contactDecay = runtime && runtime.contactPresenceNear ? Math.max(0, runtime.contactPresenceDecay || 0) : 0;
     const recoveryCushion = runtime && runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil ? 0.18 : 0;
     const adaptiveDecay = runtime ? Math.max(-0.12, Math.min(0.12, -(runtime.adaptiveStability || 0) * 0.12)) : 0;
-    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + driftDecay + traversalDecay + contactDecay + (runtime.operationalDecayBias || 0) + adaptiveDecay - recoveryCushion);
+    const curveDecay = pressureCurveDecay(root, runtime);
+    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + driftDecay + traversalDecay + contactDecay + (runtime.operationalDecayBias || 0) + adaptiveDecay + curveDecay - recoveryCushion);
   }
 
   function applyInterferenceScan(root) {
@@ -2124,6 +2141,7 @@
       return;
     }
 
+    updatePressureCurveStage(root, runtime);
     advanceInterferencePressure(root);
     updateAdaptiveStability(root, runtime);
     updateOperationalRecovery(root, runtime);
@@ -2155,6 +2173,131 @@
     syncSignalIntegrityHud(root, cushioned ? 'pressure' : 'active');
   }
 
+  function pressureCurveConditionBias(root) {
+    const condition = activeRuntimeCondition(root);
+    if (!condition) {
+      return 0;
+    }
+
+    const bias = {
+      cold_start: -0.05,
+      fog_dawn: -0.02,
+      sodium_night: 0,
+      signal_echo: 0.015,
+      signal_interference: 0.035,
+      unstable_weather: 0.04,
+      unstable_cadence: 0.045,
+      storm_blackout: 0.055,
+      high_contact_risk: 0.06,
+      impact_pressure: 0.065
+    };
+    return Math.max(-0.06, Math.min(0.07, bias[condition.id] || 0));
+  }
+
+  function pressureCurveStage(root, runtime) {
+    if (!runtime || runtime.extractionComplete) {
+      return 'complete';
+    }
+
+    const elapsed = Math.max(0, Date.now() - (runtime.startedAt || Date.now()));
+    const objective = Math.max(0, Math.min(100, runtime.objectiveProgress || 0));
+    const extraction = runtime.objectiveReady ? Math.max(0, Math.min(100, runtime.extractionProgress || 0)) : 0;
+    const pressure = Math.max(0, Math.min(100, runtime.interferencePressure || 0));
+
+    if (runtime.objectiveReady && (extraction >= 52 || pressure >= 58 || elapsed >= pressureCurveConfig.lateMs)) {
+      return 'extraction';
+    }
+    if (runtime.objectiveReady || objective >= 42 || pressure >= 36 || elapsed >= pressureCurveConfig.midMs) {
+      return 'late';
+    }
+    if (objective >= 18 || pressure >= 16 || elapsed >= pressureCurveConfig.earlyMs) {
+      return 'mid';
+    }
+    return 'early';
+  }
+
+  function pressureCurveRate(root, runtime) {
+    const stage = runtime ? (runtime.pressureCurveStage || pressureCurveStage(root, runtime)) : 'early';
+    const rates = {
+      early: pressureCurveConfig.earlyRate,
+      mid: pressureCurveConfig.midRate,
+      late: pressureCurveConfig.lateRate,
+      extraction: pressureCurveConfig.extractionRate,
+      complete: 0
+    };
+    const recoveryActive = runtime && runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil;
+    const recoveryFactor = recoveryActive ? 0.82 : 1;
+    return Math.max(0.66, Math.min(1.36, (rates[stage] || 1) + pressureCurveConditionBias(root)) * recoveryFactor);
+  }
+
+  function pressureCurveDecay(root, runtime) {
+    const stage = runtime ? (runtime.pressureCurveStage || pressureCurveStage(root, runtime)) : 'early';
+    const decay = {
+      early: pressureCurveConfig.earlyDecay,
+      mid: pressureCurveConfig.midDecay,
+      late: pressureCurveConfig.lateDecay,
+      extraction: pressureCurveConfig.extractionDecay,
+      complete: 0
+    };
+    const recoveryActive = runtime && runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil;
+    const recoveryFactor = recoveryActive ? 0.55 : 1;
+    return Math.max(-0.06, Math.min(0.12, ((decay[stage] || 0) + (pressureCurveConditionBias(root) * 0.35)) * recoveryFactor));
+  }
+
+  function pressureCurveTelemetry(stage) {
+    const copy = {
+      early: ['FIELD PRESSURE CONTROLLED', 'EARLY RUN STABLE'],
+      mid: ['FIELD PRESSURE RISING', 'MID RUN INSTABILITY LOCAL'],
+      late: ['LATE RUN PRESSURE BUILDING', 'ROUTE CONDITIONS WORSENING'],
+      extraction: ['EXTRACTION URGENCY RISING', 'EXFIL PRESSURE INCREASING'],
+      complete: ['PRESSURE CURVE SEALED']
+    };
+    return copy[stage] || copy.early;
+  }
+
+  function pressureCurveReadout(root, stateKey, fallback) {
+    const runtime = root ? root.oohSignalRuntime : null;
+    if (!runtime || runtime.lost || runtime.extractionComplete || stateKey === 'standby' || stateKey === 'complete') {
+      return fallback;
+    }
+
+    const stage = runtime.pressureCurveStage || pressureCurveStage(root, runtime);
+    const copy = {
+      early: fallback,
+      mid: 'FIELD PRESSURE RISING. Runtime remains readable; stabilization remains effective.',
+      late: 'ROUTE CONDITIONS WORSENING. Pressure is building toward extraction.',
+      extraction: 'EXTRACTION URGENCY RISING. Hold stabilization through the window.'
+    };
+    return copy[stage] || fallback;
+  }
+
+  function updatePressureCurveStage(root, runtime) {
+    if (!root || !runtime || runtime.lost || runtime.extractionComplete || !root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    const stage = pressureCurveStage(root, runtime);
+    runtime.pressureCurveStage = stage;
+    root.setAttribute('data-ooh-pressure-curve', stage);
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    if (shell) {
+      shell.setAttribute('data-ooh-pressure-curve', stage);
+    }
+
+    if (stage !== 'early' && runtime.pressureCurveAnnounced !== stage) {
+      runtime.pressureCurveAnnounced = stage;
+      const notices = {
+        mid: ['FIELD PRESSURE RISING', 'Mid-run instability increasing. Stabilization remains effective.'],
+        late: ['ROUTE CONDITIONS WORSENING', 'Late-run pressure building. Keep the channel clean.'],
+        extraction: ['EXTRACTION URGENCY RISING', 'Exfil pressure increasing. Hold stabilization through the window.']
+      };
+      const notice = notices[stage];
+      if (notice) {
+        showLocalCadenceBeat(root, notice[0], notice[1], 260);
+      }
+    }
+  }
+
   function updateOperationalEscalation(root, runtime) {
     if (!root || !runtime || runtime.lost || runtime.extractionComplete) {
       return;
@@ -2179,14 +2322,21 @@
     runtime.operationalEscalationTier = tier;
     const pressureNudge = {
       nominal: 0,
-      elevated: 0.024,
-      degraded: 0.058,
-      unstable: 0.1
+      elevated: 0.02,
+      degraded: 0.048,
+      unstable: 0.084
+    };
+    const curveNudge = {
+      early: -0.006,
+      mid: 0,
+      late: 0.012,
+      extraction: 0.022,
+      complete: 0
     };
     const recoveryActive = runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil;
     const recoveryFactor = recoveryActive ? 0.45 : 1;
     const adaptiveFactor = Math.max(0.75, Math.min(1.25, 1 - ((runtime.adaptiveStability || 0) * 0.18)));
-    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + (pressureNudge[tier] * recoveryFactor * adaptiveFactor));
+    runtime.interferencePressure = Math.min(100, runtime.interferencePressure + ((pressureNudge[tier] + (curveNudge[runtime.pressureCurveStage || 'early'] || 0)) * recoveryFactor * adaptiveFactor));
     runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
 
     if (tier !== 'nominal' && runtime.operationalEscalationAnnounced !== tier) {
@@ -2375,6 +2525,8 @@
     runtime.extractionReadinessBias = 0;
     runtime.operationalEscalationTier = 'nominal';
     runtime.operationalEscalationAnnounced = '';
+    runtime.pressureCurveStage = 'early';
+    runtime.pressureCurveAnnounced = '';
     runtime.operationalRecoveryUntil = 0;
     runtime.operationalRecoveryAnnounced = false;
     runtime.operationalRecoveryHoldCount = 0;
@@ -2385,6 +2537,11 @@
     runtime.adaptiveStabilityAnnounced = '';
     runtime.degradedAnnounced = false;
     runtime.lost = false;
+    root.setAttribute('data-ooh-pressure-curve', 'early');
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    if (shell) {
+      shell.setAttribute('data-ooh-pressure-curve', 'early');
+    }
     initializeOperationalVariance(root, runtime);
     syncSignalIntegrityHud(root, runtime.objectiveReady ? 'extraction' : 'active', preset.cadenceFlavor || cadenceFlavor(root, 'initialization', 'Operation active. Signal integrity at 100%. Relay alignment in progress.'));
     runtime.timer = window.setInterval(function () {
@@ -2441,7 +2598,7 @@
 
     const readout = root.querySelector('[data-ooh-action-readout]');
     if (readout && !readoutHoldActive(root, 1)) {
-      readout.textContent = readoutOverride || state.readout;
+      readout.textContent = readoutOverride || pressureCurveReadout(root, stateKey, state.readout);
     }
   }
 
@@ -2477,12 +2634,14 @@
       shell.removeAttribute('data-combat-state');
       shell.removeAttribute('data-ooh-operation-condition');
       shell.removeAttribute('data-ooh-condition-intensity');
+      shell.removeAttribute('data-ooh-pressure-curve');
       shell.removeAttribute('data-ooh-capture-mode');
       shell.removeAttribute('data-ooh-clip-preset');
       shell.removeAttribute('data-ooh-runtime-alive');
     }
     root.removeAttribute('data-ooh-operation-condition');
     root.removeAttribute('data-ooh-condition-intensity');
+    root.removeAttribute('data-ooh-pressure-curve');
     root.removeAttribute('data-ooh-capture-mode');
     root.removeAttribute('data-ooh-clip-preset');
     root.removeAttribute('data-ooh-runtime-alive');
@@ -5747,6 +5906,15 @@ function passiveBehaviorPreviewLabel() {
       ['DISTANT CONTACT TRACE', 'SIGNAL SHADOW LOW'];
   }
 
+  function pressureCurveTelemetryLines(root) {
+    const runtime = signalRuntime(root);
+    if (!runtime || runtime.extractionComplete || runtime.lost) {
+      return [];
+    }
+
+    return pressureCurveTelemetry(runtime.pressureCurveStage || pressureCurveStage(root, runtime));
+  }
+
   function localTelemetryPulseLines(root, routeId, pathKey, mode) {
     const runtime = signalRuntime(root);
     const condition = root ? root.oohOperationCondition : null;
@@ -5788,6 +5956,7 @@ function passiveBehaviorPreviewLabel() {
     const lines = ['PAYLOAD ECHO STABLE', 'LOCAL CHANNEL NORMAL', 'PASSIVE SCAN CYCLING', 'DISPLAY CHANNEL HOLDING']
       .concat(runtimeCadenceLines(root))
       .concat(contactPresenceTelemetryLines(root))
+      .concat(pressureCurveTelemetryLines(root))
       .concat((condition && condition.telemetry) ? condition.telemetry : [])
       .concat(routeLines[routeId] || routeLines.terra)
       .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW'])
