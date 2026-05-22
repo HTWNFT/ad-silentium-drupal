@@ -301,6 +301,14 @@
     viewportY: 0.72
   };
 
+  const traversalPressureConfig = {
+    x: 0.28,
+    y: 0.32,
+    width: 0.28,
+    height: 0.12,
+    decay: 0.28
+  };
+
   const playerMovementKeys = {
     arrowup: [0, -1],
     w: [0, -1],
@@ -345,6 +353,29 @@
     }
 
     return marker;
+  }
+
+  function ensureTraversalPressureZone(root) {
+    const field = playerPresenceField(root);
+    if (!field) {
+      return null;
+    }
+
+    let zone = field.querySelector('[data-ooh-traversal-pressure-zone]');
+    if (!zone) {
+      zone = document.createElement('div');
+      zone.className = 'ooh-play-traversal-pressure';
+      zone.setAttribute('data-ooh-traversal-pressure-zone', '');
+      zone.setAttribute('aria-hidden', 'true');
+      zone.hidden = true;
+      field.appendChild(zone);
+    }
+
+    zone.style.left = (traversalPressureConfig.x * 100) + '%';
+    zone.style.top = (traversalPressureConfig.y * 100) + '%';
+    zone.style.width = (traversalPressureConfig.width * 100) + '%';
+    zone.style.height = (traversalPressureConfig.height * 100) + '%';
+    return zone;
   }
 
   function clampPlayerPresence(root) {
@@ -400,6 +431,36 @@
     clampPlayerPresence(root);
   }
 
+  function activateTraversalPressureZone(root) {
+    const zone = ensureTraversalPressureZone(root);
+    if (!zone) {
+      return;
+    }
+
+    zone.hidden = false;
+    root.setAttribute('data-ooh-traversal-pressure', 'clear');
+    updateTraversalPressureContact(root);
+  }
+
+  function resetTraversalPressure(root) {
+    if (!root) {
+      return;
+    }
+
+    const zone = ensureTraversalPressureZone(root);
+    if (zone) {
+      zone.hidden = true;
+      zone.classList.remove('is-contact-active');
+    }
+    root.removeAttribute('data-ooh-traversal-pressure');
+
+    const runtime = root.oohSignalRuntime;
+    if (runtime) {
+      runtime.traversalPressureActive = false;
+      runtime.traversalPressureDecay = 0;
+    }
+  }
+
   function alignPlayerPresenceToViewport(root) {
     const marker = ensurePlayerPresence(root);
     const field = playerPresenceField(root);
@@ -417,6 +478,43 @@
     state.x = (viewportWidth * playerPresenceConfig.viewportX) - fieldRect.left - (markerSize / 2);
     state.y = (viewportHeight * playerPresenceConfig.viewportY) - fieldRect.top - (markerSize / 2);
     clampPlayerPresence(root);
+    updateTraversalPressureContact(root);
+  }
+
+  function rectsOverlap(a, b) {
+    return Boolean(a && b && a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top);
+  }
+
+  function updateTraversalPressureContact(root) {
+    if (!root || !root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    const marker = ensurePlayerPresence(root);
+    const zone = ensureTraversalPressureZone(root);
+    const runtime = signalRuntime(root);
+    if (!marker || !zone || marker.hidden || zone.hidden || !runtime || runtime.lost) {
+      return;
+    }
+
+    const active = rectsOverlap(marker.getBoundingClientRect(), zone.getBoundingClientRect());
+    if (active === Boolean(runtime.traversalPressureActive)) {
+      return;
+    }
+
+    runtime.traversalPressureActive = active;
+    runtime.traversalPressureDecay = active ? traversalPressureConfig.decay : 0;
+    zone.classList.toggle('is-contact-active', active);
+    root.setAttribute('data-ooh-traversal-pressure', active ? 'contact' : 'clear');
+
+    if (active) {
+      syncSignalIntegrityHud(root, signalIntegrityStateKey(root), 'FIELD INSTABILITY CONTACT. Signal interference detected.');
+      showLocalCadenceBeat(root, 'SIGNAL INTERFERENCE DETECTED', 'POSITION COMPROMISED. Clear the instability band.', 180);
+    }
+    else {
+      syncSignalIntegrityHud(root, signalIntegrityStateKey(root), 'FIELD POSITION STABILIZED. Interference cleared.');
+      showLocalCadenceBeat(root, 'INTERFERENCE CLEARED', 'FIELD POSITION STABILIZED. Normal signal behavior restored.', 180);
+    }
   }
 
   function movePlayerPresence(root, vector) {
@@ -433,6 +531,7 @@
     state.x += vector[0] * playerPresenceConfig.step;
     state.y += vector[1] * playerPresenceConfig.step;
     clampPlayerPresence(root);
+    updateTraversalPressureContact(root);
     marker.classList.add('is-moving');
     window.clearTimeout(root.oohPlayerPresenceMoveTimer);
     root.oohPlayerPresenceMoveTimer = window.setTimeout(function () {
@@ -681,6 +780,8 @@
         cushionUntil: 0,
         actionInstabilityUntil: 0,
         actionInstabilityDecay: 0,
+        traversalPressureActive: false,
+        traversalPressureDecay: 0,
         operationalDecayBias: 0,
         extractionReadinessBias: 0,
         operationalEscalationTier: 'nominal',
@@ -865,9 +966,10 @@
     const pressureFactor = scanAware ? signalIntegrityRuntime.interferenceDecayFactor * 0.55 : signalIntegrityRuntime.interferenceDecayFactor;
     const instabilityDecay = actionInstability ? Math.max(0, runtime.actionInstabilityDecay || 0) : 0;
     const driftDecay = driftActive ? 0.08 : 0;
+    const traversalDecay = runtime && runtime.traversalPressureActive ? Math.max(0, runtime.traversalPressureDecay || 0) : 0;
     const recoveryCushion = runtime && runtime.operationalRecoveryUntil && Date.now() < runtime.operationalRecoveryUntil ? 0.18 : 0;
     const adaptiveDecay = runtime ? Math.max(-0.12, Math.min(0.12, -(runtime.adaptiveStability || 0) * 0.12)) : 0;
-    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + driftDecay + (runtime.operationalDecayBias || 0) + adaptiveDecay - recoveryCushion);
+    return Math.max(0.1, baseDecay + ((pressure / 100) * pressureFactor) + instabilityDecay + driftDecay + traversalDecay + (runtime.operationalDecayBias || 0) + adaptiveDecay - recoveryCushion);
   }
 
   function applyInterferenceScan(root) {
@@ -1528,6 +1630,8 @@
     runtime.cushionUntil = 0;
     runtime.actionInstabilityUntil = 0;
     runtime.actionInstabilityDecay = 0;
+    runtime.traversalPressureActive = false;
+    runtime.traversalPressureDecay = 0;
     runtime.operationalDecayBias = 0;
     runtime.extractionReadinessBias = 0;
     runtime.operationalEscalationTier = 'nominal';
@@ -1616,6 +1720,7 @@
     clearSignalIntegrityRuntime(root);
     setOperationalRuntimeState(root, 'standby');
     resetPlayerPresence(root);
+    resetTraversalPressure(root);
     root.classList.remove('is-mission-active', 'is-combat-shell');
     if (shell) {
       shell.classList.remove('is-mission-active', 'is-combat-shell', 'is-combat-armed');
@@ -5040,6 +5145,7 @@ function passiveBehaviorPreviewLabel() {
       sceneStatus.textContent = buildActiveSceneStatus(routeId, pathKey, missionLabel);
     }
     activatePlayerPresence(root);
+    activateTraversalPressureZone(root);
 
     const debugPanel = root.querySelector('[data-ooh-briefing-debug]');
     if (debugPanel) {
