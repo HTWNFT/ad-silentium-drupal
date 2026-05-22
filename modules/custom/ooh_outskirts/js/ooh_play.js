@@ -309,6 +309,13 @@
     decay: 0.28
   };
 
+  const extractionObjectiveConfig = {
+    x: 0.72,
+    y: 0.32,
+    width: 0.12,
+    height: 0.12
+  };
+
   const playerMovementKeys = {
     arrowup: [0, -1],
     w: [0, -1],
@@ -375,6 +382,29 @@
     zone.style.top = (traversalPressureConfig.y * 100) + '%';
     zone.style.width = (traversalPressureConfig.width * 100) + '%';
     zone.style.height = (traversalPressureConfig.height * 100) + '%';
+    return zone;
+  }
+
+  function ensureExtractionObjectiveZone(root) {
+    const field = playerPresenceField(root);
+    if (!field) {
+      return null;
+    }
+
+    let zone = field.querySelector('[data-ooh-extraction-objective]');
+    if (!zone) {
+      zone = document.createElement('div');
+      zone.className = 'ooh-play-extraction-objective';
+      zone.setAttribute('data-ooh-extraction-objective', '');
+      zone.setAttribute('aria-hidden', 'true');
+      zone.hidden = true;
+      field.appendChild(zone);
+    }
+
+    zone.style.left = (extractionObjectiveConfig.x * 100) + '%';
+    zone.style.top = (extractionObjectiveConfig.y * 100) + '%';
+    zone.style.width = (extractionObjectiveConfig.width * 100) + '%';
+    zone.style.height = (extractionObjectiveConfig.height * 100) + '%';
     return zone;
   }
 
@@ -461,6 +491,36 @@
     }
   }
 
+  function activateExtractionObjectiveZone(root) {
+    const zone = ensureExtractionObjectiveZone(root);
+    if (!zone) {
+      return;
+    }
+
+    zone.hidden = false;
+    zone.classList.remove('is-contact-active', 'is-complete');
+    root.setAttribute('data-ooh-field-extraction', 'available');
+    updateExtractionObjectiveContact(root);
+  }
+
+  function resetExtractionObjective(root) {
+    if (!root) {
+      return;
+    }
+
+    const zone = ensureExtractionObjectiveZone(root);
+    if (zone) {
+      zone.hidden = true;
+      zone.classList.remove('is-contact-active', 'is-complete');
+    }
+    root.removeAttribute('data-ooh-field-extraction');
+
+    const runtime = root.oohSignalRuntime;
+    if (runtime) {
+      runtime.fieldExtractionComplete = false;
+    }
+  }
+
   function alignPlayerPresenceToViewport(root) {
     const marker = ensurePlayerPresence(root);
     const field = playerPresenceField(root);
@@ -479,6 +539,7 @@
     state.y = (viewportHeight * playerPresenceConfig.viewportY) - fieldRect.top - (markerSize / 2);
     clampPlayerPresence(root);
     updateTraversalPressureContact(root);
+    updateExtractionObjectiveContact(root);
   }
 
   function rectsOverlap(a, b) {
@@ -517,6 +578,70 @@
     }
   }
 
+  function completeFieldExtraction(root, zone, runtime) {
+    if (!root || !zone || !runtime || runtime.fieldExtractionComplete || runtime.extractionComplete) {
+      return;
+    }
+
+    runtime.fieldExtractionComplete = true;
+    runtime.objectiveReady = true;
+    runtime.extractionProgress = 100;
+    runtime.extractionComplete = true;
+    runtime.traversalPressureActive = false;
+    runtime.traversalPressureDecay = 0;
+    stopSignalIntegrityLoop(root);
+    stopLocalTelemetryPulse(root);
+    clearLocalCadenceBeat(root);
+    root.classList.remove('is-mission-active');
+    root.classList.add('is-field-extraction-complete');
+    root.setAttribute('data-ooh-field-extraction', 'complete');
+    root.setAttribute('data-ooh-traversal-pressure', 'clear');
+
+    zone.classList.add('is-contact-active', 'is-complete');
+    const pressureZone = root.querySelector('[data-ooh-traversal-pressure-zone]');
+    if (pressureZone) {
+      pressureZone.classList.remove('is-contact-active');
+    }
+
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    if (shell) {
+      shell.classList.remove('is-mission-active');
+      shell.setAttribute('data-mission-state', 'operation-complete');
+    }
+
+    const sceneStatus = root.querySelector('[data-ooh-scene-status]');
+    if (sceneStatus) {
+      sceneStatus.textContent = 'OPERATION COMPLETE // EXTRACTION LINK CONFIRMED // SIGNAL ROUTE STABILIZED';
+    }
+
+    root.querySelectorAll('[data-ooh-action]').forEach(function (button) {
+      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
+    });
+
+    syncSignalIntegrityHud(root, 'complete', 'EXTRACTION LINK CONFIRMED. Signal route stabilized.');
+    showLocalCadenceBeat(root, 'EXTRACTION WINDOW AVAILABLE', 'SIGNAL ROUTE STABILIZED. Operation success state active.', 180, { priority: 3 });
+  }
+
+  function updateExtractionObjectiveContact(root) {
+    if (!root || !root.classList.contains('is-mission-active')) {
+      return;
+    }
+
+    const marker = ensurePlayerPresence(root);
+    const zone = ensureExtractionObjectiveZone(root);
+    const runtime = signalRuntime(root);
+    if (!marker || !zone || marker.hidden || zone.hidden || !runtime || runtime.lost || runtime.extractionComplete) {
+      return;
+    }
+
+    const active = rectsOverlap(marker.getBoundingClientRect(), zone.getBoundingClientRect());
+    zone.classList.toggle('is-contact-active', active);
+    if (active) {
+      completeFieldExtraction(root, zone, runtime);
+    }
+  }
+
   function movePlayerPresence(root, vector) {
     if (!root || !vector || !root.classList.contains('is-mission-active')) {
       return false;
@@ -532,6 +657,7 @@
     state.y += vector[1] * playerPresenceConfig.step;
     clampPlayerPresence(root);
     updateTraversalPressureContact(root);
+    updateExtractionObjectiveContact(root);
     marker.classList.add('is-moving');
     window.clearTimeout(root.oohPlayerPresenceMoveTimer);
     root.oohPlayerPresenceMoveTimer = window.setTimeout(function () {
@@ -782,6 +908,7 @@
         actionInstabilityDecay: 0,
         traversalPressureActive: false,
         traversalPressureDecay: 0,
+        fieldExtractionComplete: false,
         operationalDecayBias: 0,
         extractionReadinessBias: 0,
         operationalEscalationTier: 'nominal',
@@ -1632,6 +1759,7 @@
     runtime.actionInstabilityDecay = 0;
     runtime.traversalPressureActive = false;
     runtime.traversalPressureDecay = 0;
+    runtime.fieldExtractionComplete = false;
     runtime.operationalDecayBias = 0;
     runtime.extractionReadinessBias = 0;
     runtime.operationalEscalationTier = 'nominal';
@@ -1721,7 +1849,8 @@
     setOperationalRuntimeState(root, 'standby');
     resetPlayerPresence(root);
     resetTraversalPressure(root);
-    root.classList.remove('is-mission-active', 'is-combat-shell');
+    resetExtractionObjective(root);
+    root.classList.remove('is-mission-active', 'is-combat-shell', 'is-field-extraction-complete');
     if (shell) {
       shell.classList.remove('is-mission-active', 'is-combat-shell', 'is-combat-armed');
       shell.removeAttribute('data-mission-state');
@@ -5146,6 +5275,7 @@ function passiveBehaviorPreviewLabel() {
     }
     activatePlayerPresence(root);
     activateTraversalPressureZone(root);
+    activateExtractionObjectiveZone(root);
 
     const debugPanel = root.querySelector('[data-ooh-briefing-debug]');
     if (debugPanel) {
