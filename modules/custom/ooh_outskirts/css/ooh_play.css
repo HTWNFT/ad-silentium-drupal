@@ -6694,3 +6694,90 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-pl
     padding-inline: 0.48rem;
   }
 }
+
+/* PHASE OA-046 - RUNTIME CADENCE AND ENVIRONMENTAL DRIFT BASELINE */
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__visual {
+  --ooh-runtime-drift-x: 0.6px;
+  --ooh-runtime-drift-y: 0.4px;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__sky,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__horizon,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__terrain,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__sky,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__horizon,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__terrain {
+  animation: ooh-runtime-field-drift 18s ease-in-out infinite alternate;
+  transform: translate3d(var(--ooh-runtime-drift-x), var(--ooh-runtime-drift-y), 0);
+  will-change: transform, opacity;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="moving"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="moving"] .ooh-play-scene__visual {
+  --ooh-runtime-drift-x: 1px;
+  --ooh-runtime-drift-y: -1px;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="cadence"] .ooh-play__media-attachment,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="cadence"] .ooh-play__media-attachment {
+  border-color: rgba(216, 250, 255, 0.16);
+  box-shadow: inset 0 0 18px rgba(128, 244, 255, 0.03), 0 0 18px rgba(128, 244, 255, 0.025);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="pressure"] .ooh-play-scene__visual::after,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="pressure"] .ooh-play-scene__visual::after {
+  opacity: 0.52;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="pressure"] .ooh-play-traversal-pressure,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="pressure"] .ooh-play-traversal-pressure {
+  animation: ooh-runtime-pressure-breathe 2.8s ease-in-out infinite;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="stabilized"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="stabilized"] .ooh-play-scene__visual,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell)[data-ooh-runtime-alive="extraction"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell)[data-ooh-runtime-alive="extraction"] .ooh-play-scene__visual {
+  filter: saturate(0.92) contrast(1.02) brightness(1.02);
+}
+
+@keyframes ooh-runtime-field-drift {
+  0% {
+    opacity: 0.94;
+    transform: translate3d(calc(var(--ooh-runtime-drift-x) * -1), 0, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate3d(var(--ooh-runtime-drift-x), var(--ooh-runtime-drift-y), 0);
+  }
+  100% {
+    opacity: 0.96;
+    transform: translate3d(0, calc(var(--ooh-runtime-drift-y) * -1), 0);
+  }
+}
+
+@keyframes ooh-runtime-pressure-breathe {
+  0%, 100% {
+    opacity: 0.66;
+    box-shadow: inset 0 0 18px rgba(84, 225, 255, 0.035), 0 0 18px rgba(84, 225, 255, 0.024);
+  }
+  50% {
+    opacity: 0.78;
+    box-shadow: inset 0 0 24px rgba(84, 225, 255, 0.055), 0 0 24px rgba(84, 225, 255, 0.038);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__sky,
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__horizon,
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__terrain,
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="pressure"] .ooh-play-traversal-pressure,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__sky,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__horizon,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__terrain,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive="pressure"] .ooh-play-traversal-pressure {
+    animation: none;
+    transform: none;
+  }
+}

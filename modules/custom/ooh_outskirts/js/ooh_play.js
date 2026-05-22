@@ -477,6 +477,61 @@
     clampPlayerPresence(root);
   }
 
+  function setRuntimeAliveState(root, state) {
+    if (!root) {
+      return;
+    }
+
+    const nextState = state || 'standby';
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    root.setAttribute('data-ooh-runtime-alive', nextState);
+    if (shell) {
+      shell.setAttribute('data-ooh-runtime-alive', nextState);
+    }
+  }
+
+  function scheduleRuntimeCadenceNudge(root) {
+    if (!root) {
+      return;
+    }
+
+    if (root.oohRuntimeCadenceNudgeTimer) {
+      window.clearTimeout(root.oohRuntimeCadenceNudgeTimer);
+    }
+    root.oohRuntimeCadenceNudgeTimer = window.setTimeout(function () {
+      if (!root.classList.contains('is-mission-active')) {
+        return;
+      }
+      const cadenceLines = runtimeCadenceLines(root);
+      pulseRuntimeCadence(root, 'cadence', 1100);
+      nudgeLocalTelemetryPulse(root, cadenceLines[1] || 'CADENCE STABLE', 1, 1900);
+      root.oohRuntimeCadenceNudgeTimer = null;
+    }, 5600);
+  }
+
+  function pulseRuntimeCadence(root, state, holdMs) {
+    if (!root) {
+      return;
+    }
+
+    setRuntimeAliveState(root, state);
+    if (root.oohRuntimeCadenceTimer) {
+      window.clearTimeout(root.oohRuntimeCadenceTimer);
+      root.oohRuntimeCadenceTimer = null;
+    }
+    if (root.oohRuntimeCadenceNudgeTimer) {
+      window.clearTimeout(root.oohRuntimeCadenceNudgeTimer);
+      root.oohRuntimeCadenceNudgeTimer = null;
+    }
+    if (!root.classList.contains('is-mission-active')) {
+      return;
+    }
+    root.oohRuntimeCadenceTimer = window.setTimeout(function () {
+      setRuntimeAliveState(root, 'active');
+      root.oohRuntimeCadenceTimer = null;
+    }, holdMs || 1200);
+  }
+
   function activateTraversalPressureZone(root) {
     const zone = ensureTraversalPressureZone(root);
     if (!zone) {
@@ -585,10 +640,12 @@
     root.setAttribute('data-ooh-traversal-pressure', active ? 'contact' : 'clear');
 
     if (active) {
+      pulseRuntimeCadence(root, 'pressure', 1800);
       syncSignalIntegrityHud(root, signalIntegrityStateKey(root), 'FIELD INSTABILITY CONTACT. Signal interference detected.');
       showLocalCadenceBeat(root, 'SIGNAL INTERFERENCE DETECTED', 'POSITION COMPROMISED. Clear the instability band. ' + playlistCadenceText(root), 180);
     }
     else {
+      pulseRuntimeCadence(root, 'stabilized', 1400);
       syncSignalIntegrityHud(root, signalIntegrityStateKey(root), 'FIELD POSITION STABILIZED. Interference cleared.');
       showLocalCadenceBeat(root, 'INTERFERENCE CLEARED', 'FIELD POSITION STABILIZED. Normal signal behavior restored.', 180);
     }
@@ -608,8 +665,17 @@
     stopSignalIntegrityLoop(root);
     stopLocalTelemetryPulse(root);
     clearLocalCadenceBeat(root);
+    if (root.oohRuntimeCadenceTimer) {
+      window.clearTimeout(root.oohRuntimeCadenceTimer);
+      root.oohRuntimeCadenceTimer = null;
+    }
+    if (root.oohRuntimeCadenceNudgeTimer) {
+      window.clearTimeout(root.oohRuntimeCadenceNudgeTimer);
+      root.oohRuntimeCadenceNudgeTimer = null;
+    }
     root.classList.remove('is-mission-active');
     root.classList.add('is-field-extraction-complete');
+    setRuntimeAliveState(root, 'extraction');
     root.setAttribute('data-ooh-field-extraction', 'complete');
     root.setAttribute('data-ooh-traversal-pressure', 'clear');
 
@@ -674,6 +740,15 @@
     clampPlayerPresence(root);
     updateTraversalPressureContact(root);
     updateExtractionObjectiveContact(root);
+    if (root.getAttribute('data-ooh-field-extraction') === 'complete') {
+      setRuntimeAliveState(root, 'extraction');
+    }
+    else if (root.getAttribute('data-ooh-traversal-pressure') === 'contact') {
+      pulseRuntimeCadence(root, 'pressure', 1800);
+    }
+    else {
+      pulseRuntimeCadence(root, 'moving', 900);
+    }
     marker.classList.add('is-moving');
     window.clearTimeout(root.oohPlayerPresenceMoveTimer);
     root.oohPlayerPresenceMoveTimer = window.setTimeout(function () {
@@ -1507,6 +1582,14 @@
     stopSignalIntegrityLoop(root);
     stopLocalTelemetryPulse(root);
     clearLocalCadenceBeat(root);
+    if (root.oohRuntimeCadenceTimer) {
+      window.clearTimeout(root.oohRuntimeCadenceTimer);
+      root.oohRuntimeCadenceTimer = null;
+    }
+    if (root.oohRuntimeCadenceNudgeTimer) {
+      window.clearTimeout(root.oohRuntimeCadenceNudgeTimer);
+      root.oohRuntimeCadenceNudgeTimer = null;
+    }
     root.classList.remove('is-mission-active');
 
     const shell = root.querySelector('[data-ooh-scene-shell]');
@@ -1866,6 +1949,14 @@
     resetPlayerPresence(root);
     resetTraversalPressure(root);
     resetExtractionObjective(root);
+    if (root.oohRuntimeCadenceTimer) {
+      window.clearTimeout(root.oohRuntimeCadenceTimer);
+      root.oohRuntimeCadenceTimer = null;
+    }
+    if (root.oohRuntimeCadenceNudgeTimer) {
+      window.clearTimeout(root.oohRuntimeCadenceNudgeTimer);
+      root.oohRuntimeCadenceNudgeTimer = null;
+    }
     root.classList.remove('is-mission-active', 'is-combat-shell', 'is-field-extraction-complete');
     if (shell) {
       shell.classList.remove('is-mission-active', 'is-combat-shell', 'is-combat-armed');
@@ -1875,11 +1966,13 @@
       shell.removeAttribute('data-ooh-condition-intensity');
       shell.removeAttribute('data-ooh-capture-mode');
       shell.removeAttribute('data-ooh-clip-preset');
+      shell.removeAttribute('data-ooh-runtime-alive');
     }
     root.removeAttribute('data-ooh-operation-condition');
     root.removeAttribute('data-ooh-condition-intensity');
     root.removeAttribute('data-ooh-capture-mode');
     root.removeAttribute('data-ooh-clip-preset');
+    root.removeAttribute('data-ooh-runtime-alive');
     root.oohOperationCondition = null;
     root.oohCaptureMode = false;
     root.oohClipPresetId = 'none';
@@ -4862,6 +4955,21 @@ function passiveBehaviorPreviewLabel() {
     }, 1400);
   }
 
+  function runtimeCadenceLines(root) {
+    const mediaContext = root ? root.oohMediaAttachment : null;
+    const mood = mediaContext && mediaContext.mood ? String(mediaContext.mood).toLowerCase() : 'neutral';
+    const baseLines = ['SIGNAL ECHO DETECTED', 'CADENCE STABLE', 'FIELD DISTORTION MINOR'];
+    const moodLines = {
+      impact: ['IMPACT RHYTHM MAINTAINED', 'FORWARD CADENCE STABLE'],
+      pulse: ['PULSE CADENCE MAINTAINED', 'LOW RHYTHM HOLDING'],
+      void: ['VOID CHANNEL QUIET', 'DISTANT SIGNAL DRIFT'],
+      dread: ['DREAD CADENCE LOW', 'COMMAND TEMPO HOLDING'],
+      neutral: ['AUDIO CADENCE HOLDING']
+    };
+
+    return baseLines.concat(moodLines[mood] || moodLines.neutral);
+  }
+
   function localTelemetryPulseLines(root, routeId, pathKey, mode) {
     const runtime = signalRuntime(root);
     const condition = root ? root.oohOperationCondition : null;
@@ -4894,6 +5002,7 @@ function passiveBehaviorPreviewLabel() {
         ['RELAY ALIGNMENT IN PROGRESS', 'CHANNEL NOT READY']);
     const pressure = interferenceBand(runtime ? runtime.interferencePressure : 0);
     const lines = ['PAYLOAD ECHO STABLE', 'LOCAL CHANNEL NORMAL', 'PASSIVE SCAN CYCLING', 'DISPLAY CHANNEL HOLDING']
+      .concat(runtimeCadenceLines(root))
       .concat(routeLines[routeId] || routeLines.terra)
       .concat(pathLines[pathKey] || ['SIGNAL VARIANCE: LOW'])
       .concat(conditionLines[conditionId] || conditionLines.neutral)
@@ -4966,6 +5075,9 @@ function passiveBehaviorPreviewLabel() {
           return;
         }
         readout.textContent = lines[root.oohTelemetryPulseIndex % lines.length];
+        if (root.oohTelemetryPulseIndex % 3 === 0) {
+          pulseRuntimeCadence(root, 'cadence', 1100);
+        }
         root.oohTelemetryPulseIndex += 1;
       }
 
@@ -5308,6 +5420,7 @@ function passiveBehaviorPreviewLabel() {
     }
 
     root.classList.add('is-mission-active');
+    setRuntimeAliveState(root, 'active');
     const operationCondition = applyOperationCondition(root, shell, routeId);
     startSignalIntegrityLoop(root);
     if (shell) {
@@ -5356,7 +5469,9 @@ function passiveBehaviorPreviewLabel() {
       if (operationCondition) {
         showLocalCadenceBeat(root, operationCondition.label, operationCondition.cadenceFlavor, 320);
       }
+      showLocalCadenceBeat(root, 'CADENCE STABLE', (runtimeCadenceLines(root)[3] || 'FIELD DISTORTION MINOR'), 340, { holdMs: 1900, settleHoldMs: 1900 });
       startLocalTelemetryPulse(root, routeId, pathKey, 'mission');
+      scheduleRuntimeCadenceNudge(root);
     }
 
     const combatGate = root.querySelector('[data-ooh-combat-gate]');
