@@ -2789,6 +2789,7 @@
     const combatGate = root.querySelector('[data-ooh-combat-gate]');
     const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
     const encounter = root.querySelector('[data-ooh-combat-encounter]');
+    const sceneStatus = root.querySelector('[data-ooh-scene-status]');
 
     removeOperationSummary(root);
     stopLocalTelemetryPulse(root);
@@ -2857,6 +2858,9 @@
       encounter.hidden = true;
       encounter.classList.remove('is-encounter-visible');
       encounter.removeAttribute('data-encounter-state');
+    }
+    if (sceneStatus && missionEntryReady(root)) {
+      sceneStatus.textContent = 'MISSION STAGED // ACTIVATE MISSION TO ENTER FIELD';
     }
   }
 
