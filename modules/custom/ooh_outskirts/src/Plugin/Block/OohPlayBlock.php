@@ -59,7 +59,7 @@ final class OohPlayBlock extends BlockBase {
   public function defaultConfiguration(): array {
     return [
       'title' => 'Mission Briefing',
-      'subtitle' => 'Dossier accepted. Mission staging renderer online.',
+      'subtitle' => 'Dossier accepted. Operation staged for field entry.',
       'require_login' => FALSE,
       'playlist_options' => "rap|War Bangaz\nrock|War Rock",
       'recruiter_options' => "merged|Merged\ndoomed|Doomed",
@@ -203,7 +203,7 @@ final class OohPlayBlock extends BlockBase {
         <div class="ooh-play-scene__mission-label" data-ooh-scene-mission-label>MISSION TYPE // PENDING</div>
         <div class="ooh-play-scene__staging-card">
           <span class="ooh-play-scene__staging-kicker">MISSION STATUS</span>
-          <span class="ooh-play-scene__staging-copy" data-ooh-scene-status>MISSION STAGED // PAYLOAD STAGED // AWAITING ACTIVATION</span>
+          <span class="ooh-play-scene__staging-copy" data-ooh-scene-status>MISSION STAGED // ACTIVATE MISSION TO ENTER FIELD</span>
         </div>
         <aside class="ooh-play__hud" data-ooh-active-hud aria-label="Active mission HUD" aria-hidden="true">
           <div class="ooh-play__hud-panel ooh-play__hud-panel--command">

@@ -332,7 +332,7 @@ class OohGameGeneratorBlock extends BlockBase {
         'lockedBody' => 'Clearance preview is available for this staged package.',
         'enterIncomplete' => 'ASSEMBLY INCOMPLETE // COMPLETE PRIOR DOSSIER STEPS',
         'enterLocked' => 'Clearance preview available for selected package.',
-        'enterReady' => 'PAYLOAD STAGED // LOCAL DISPLAY READY',
+        'enterReady' => 'OPERATION STAGED // FIELD ENTRY READY',
       ],
       'storage' => [
         'stateKey' => 'ooh_game_generator_state_v1',
@@ -358,7 +358,7 @@ class OohGameGeneratorBlock extends BlockBase {
       <p class="ooh-generator__eyebrow">SELECTED OPERATIONS // DOSSIER ASSEMBLY</p>
       <h2 class="ooh-generator__title">DOSSIER</h2>
       <p class="ooh-generator__intro">
-        Recruiters are standing by. Select soundtrack, path, and mission profile, then stage the payload for local display.
+        Recruiters are standing by. Select soundtrack, path, and mission profile, then stage the operation for field entry.
       </p>
     </div>
 
