@@ -1032,7 +1032,11 @@
     if (active) {
       pulseRuntimeCadence(root, 'pressure', 1800);
       syncSignalIntegrityHud(root, signalIntegrityStateKey(root), 'FIELD INSTABILITY CONTACT. Signal interference detected.');
-      showLocalCadenceBeat(root, 'SIGNAL INTERFERENCE DETECTED', 'POSITION COMPROMISED. Clear the instability band. ' + playlistCadenceText(root), 180);
+      showLocalCadenceBeat(root, 'SIGNAL INTERFERENCE DETECTED', 'POSITION COMPROMISED. Clear the instability band. ' + playlistCadenceText(root), 180, {
+        priority: 3,
+        holdMs: 3200,
+        settleHoldMs: 2800
+      });
     }
     else {
       pulseRuntimeCadence(root, 'stabilized', 1400);
@@ -2460,7 +2464,12 @@
       };
       const notice = notices[stage];
       if (notice) {
-        showLocalCadenceBeat(root, notice[0], notice[1], 260);
+        const holdOptions = {
+          mid: { priority: 2, holdMs: 3100, settleHoldMs: 2700 },
+          late: { priority: 3, holdMs: 3800, settleHoldMs: 3200 },
+          extraction: { priority: 3, holdMs: 4000, settleHoldMs: 3300 }
+        };
+        showLocalCadenceBeat(root, notice[0], notice[1], 260, holdOptions[stage]);
       }
     }
   }
@@ -2514,7 +2523,12 @@
         unstable: ['RUNTIME UNSTABLE', 'Pressure disrupting sync. Hold the channel through extraction.']
       };
       const notice = notices[tier];
-      showLocalCadenceBeat(root, notice[0], notice[1], 260);
+      const holdOptions = {
+        elevated: { priority: 2, holdMs: 3000, settleHoldMs: 2500 },
+        degraded: { priority: 3, holdMs: 3600, settleHoldMs: 3000 },
+        unstable: { priority: 3, holdMs: 3900, settleHoldMs: 3200 }
+      };
+      showLocalCadenceBeat(root, notice[0], notice[1], 260, holdOptions[tier]);
     }
   }
 
