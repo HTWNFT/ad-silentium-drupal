@@ -330,7 +330,7 @@
       objectiveStatus: 'ROUTE SHIFT READY',
       interferencePressure: 'CRESTING',
       extractionReadiness: 'AVAILABLE',
-      readout: 'Extraction readiness visible. No extraction order has been issued.'
+      readout: 'Extraction readiness visible. Awaiting route confirmation.'
     },
     lost: {
       state: 'SIGNAL LOST',
@@ -338,7 +338,7 @@
       objectiveStatus: 'INTERRUPTED',
       interferencePressure: 'MAXIMUM',
       extractionReadiness: 'UNAVAILABLE',
-      readout: 'Signal lost. Runtime shell holds presentation state only.'
+      readout: 'Signal lost. Runtime shell holding local state.'
     },
     complete: {
       state: 'OPERATION COMPLETE',
@@ -346,7 +346,7 @@
       objectiveStatus: 'COMPLETE',
       interferencePressure: 'CLEARED',
       extractionReadiness: 'CLOSED',
-      readout: 'Operation complete. Result authority remains offline.'
+      readout: 'Operation complete. Local debrief only.'
     }
   };
 
@@ -1211,7 +1211,7 @@
     }
 
     syncSignalIntegrityHud(root, 'complete', 'EXTRACTION LINK CONFIRMED. Signal route stabilized.');
-    showLocalCadenceBeat(root, 'EXTRACTION WINDOW AVAILABLE', 'SIGNAL ROUTE STABILIZED. Operation success state active. AUDIO IDENTITY LOCKED.', 180, { priority: 3 });
+    showLocalCadenceBeat(root, 'EXTRACTION WINDOW AVAILABLE', 'SIGNAL ROUTE STABILIZED. Operation closed. AUDIO IDENTITY LOCKED.', 180, { priority: 3 });
     showOperationSummary(root, determineOperationalOutcome(root, runtime));
   }
 
@@ -2435,7 +2435,7 @@
     const stage = runtime.pressureCurveStage || pressureCurveStage(root, runtime);
     const copy = {
       early: fallback,
-      mid: 'FIELD PRESSURE RISING. Runtime remains readable; stabilization remains effective.',
+      mid: 'FIELD PRESSURE RISING. Telemetry remains readable; stabilization remains effective.',
       late: 'ROUTE CONDITIONS WORSENING. Pressure is building toward extraction.',
       extraction: 'EXTRACTION URGENCY RISING. Hold stabilization through the window.'
     };
