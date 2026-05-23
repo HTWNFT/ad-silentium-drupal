@@ -253,6 +253,44 @@
     });
   }
 
+  function clearMovementHint(root) {
+    if (root && root.oohMovementHintTimer) {
+      window.clearTimeout(root.oohMovementHintTimer);
+      root.oohMovementHintTimer = null;
+    }
+  }
+
+  function scheduleMovementHint(root) {
+    if (!root || root.oohMovementHintShown) {
+      return;
+    }
+    clearMovementHint(root);
+    root.oohMovementHintTimer = window.setTimeout(function () {
+      const state = playerPresenceState(root);
+      root.oohMovementHintTimer = null;
+      if (!missionEntryReady(root) || !root.classList.contains('is-mission-active') || root.oohMovementHintShown || state.moved) {
+        return;
+      }
+      root.oohMovementHintShown = true;
+      const sceneStatus = root.querySelector('[data-ooh-scene-status]');
+      const previousStatus = sceneStatus ? sceneStatus.textContent : '';
+      const hintText = 'TRAVERSAL ACTIVE // WASD OR ARROW KEYS';
+      if (sceneStatus) {
+        sceneStatus.textContent = hintText;
+        window.setTimeout(function () {
+          if (sceneStatus.textContent === hintText && root.classList.contains('is-mission-active')) {
+            sceneStatus.textContent = previousStatus;
+          }
+        }, 2600);
+      }
+      showLocalCadenceBeat(root, hintText, 'Movement bounded to the active field. Maintain route discipline.', 180, {
+        priority: 2,
+        holdMs: 2300,
+        settleHoldMs: 1900
+      });
+    }, 1200);
+  }
+
   const runtimeStateLabels = {
     standby: {
       state: 'STANDBY',
@@ -1241,6 +1279,8 @@
 
     if (!state.moved) {
       state.moved = true;
+      root.oohMovementHintShown = true;
+      clearMovementHint(root);
       showLocalCadenceBeat(root, 'OPERATOR PRESENCE CONFIRMED', 'FIELD POSITION ACTIVE. ' + (activeMediaState(root.oohMediaAttachment) || 'Movement bounded to the active field.'), 220);
     }
 
@@ -2739,6 +2779,7 @@
     removeOperationSummary(root);
     stopLocalTelemetryPulse(root);
     clearLocalCadenceBeat(root);
+    clearMovementHint(root);
     clearReadoutHold(root);
     clearSignalIntegrityRuntime(root);
     setOperationalRuntimeState(root, 'standby');
@@ -2774,6 +2815,7 @@
     root.removeAttribute('data-ooh-clip-preset');
     root.removeAttribute('data-ooh-runtime-alive');
     root.oohOperationCondition = null;
+    root.oohMovementHintShown = false;
     root.oohCaptureMode = false;
     root.oohClipPresetId = 'none';
     updateCaptureModeToggle(root);
@@ -6555,6 +6597,7 @@ function passiveBehaviorPreviewLabel() {
         showLocalCadenceBeat(root, operationCondition.fieldLabel || operationCondition.label, operationCondition.cadenceFlavor, 320);
       }
       showLocalCadenceBeat(root, 'CADENCE STABLE', (runtimeCadenceLines(root)[3] || 'FIELD DISTORTION MINOR'), 340, { holdMs: 1900, settleHoldMs: 1900 });
+      scheduleMovementHint(root);
       startLocalTelemetryPulse(root, routeId, pathKey, 'mission');
       scheduleRuntimeCadenceNudge(root);
     }
