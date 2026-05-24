@@ -4399,16 +4399,37 @@ body.path-user-login .messages {
 }
 
 /*
- * Phase 52 runtime-authority note:
- * Dossier layout uses separate desktop, tablet, and mobile containment layers.
- * Desktop layout behavior, tablet collapse behavior, and mobile collapse behavior
- * are not interchangeable even when the visible section sequence validates.
- * The @media (max-width: 1320px) containment rule is not redundant.
- * Functional sequence validation alone is insufficient proof of layout equivalence.
- * Future dossier layout changes must validate 1920, 1440, 1280, 1024, 768,
- * and 390 widths before being treated as launch-safe.
- * Keep Git authority, XAMPP runtime, and production Hostinger trees synchronized
- * intentionally; do not infer one tree's runtime state from another.
+ * OA-082 — Dossier Deployment Integrity Lock
+ *
+ * Protected containment region:
+ * The @media (max-width: 1320px) rule immediately below is the dossier's
+ * breakpoint containment guard. It protects the tablet/narrow desktop collapse
+ * without flattening the desktop grid globally.
+ *
+ * Protected section ordering region:
+ * The explicit flex order rules below preserve this rendered dossier sequence:
+ * playlist → recruiter → campaignRoute → mission → ENTER.
+ *
+ * Protected ENTER positioning region:
+ * ENTER must remain after mission in the ordered dossier flow. Do not change
+ * ENTER positioning, visibility, readiness, or premium-ready behavior here.
+ *
+ * Deployment authority tree:
+ * Git authority: C:\Users\natha\OneDrive\Documents\GitHub\ad-silentium-drupal
+ * XAMPP runtime: C:\XAMPP11032025\htdocs\STIKWALLET11202025
+ * Hostinger production: public_html / deployed Hostinger file tree
+ *
+ * Validation doctrine:
+ * Localhost validation alone is NOT production validation. LiteSpeed/browser
+ * cache can create false-negative recovery states where a stale or cached asset
+ * appears fixed while production still serves drifted CSS. Functional sequence
+ * validation does NOT prove layout equivalence across Git, XAMPP, and Hostinger.
+ *
+ * DO NOT:
+ * - remove @media (max-width: 1320px)
+ * - flatten dossier grid globally
+ * - reorder mission/campaignRoute accidentally
+ * - assume Hostinger file matches Git authority automatically
  */
 /* Phase 52 — Dossier Flow Readability */
 
