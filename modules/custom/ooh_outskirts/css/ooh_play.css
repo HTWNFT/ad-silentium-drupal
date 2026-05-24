@@ -7021,6 +7021,24 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:
   overflow: hidden;
 }
 
+/* PHASE OA-091 - RUNTIME PRESENTATION CONTAINMENT */
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-play-top],
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) [data-ooh-play-top],
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-play-top],
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) [data-ooh-play-top],
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__mission-label,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__mission-label,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__mission-label,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__mission-label,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__staging-card {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
 /* PHASE OA-046 - RUNTIME CADENCE AND ENVIRONMENTAL DRIFT BASELINE */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__visual,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__visual {
