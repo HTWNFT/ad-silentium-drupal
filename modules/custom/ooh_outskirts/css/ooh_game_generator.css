@@ -4402,9 +4402,15 @@ body.path-user-login .messages {
 
 body.path-dossier .ooh-generator__grid,
 body.page-dossier .ooh-generator__grid {
-  align-items: start;
-  gap: 26px;
-  grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 26px;
+}
+
+@media (max-width: 1320px) {
+    body.path-dossier .ooh-generator__grid,
+    body.page-dossier .ooh-generator__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 body.path-dossier .ooh-generator__panel[data-ooh-section="playlist"],
