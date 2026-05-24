@@ -3357,18 +3357,18 @@
   // the CSS route gradients remain the fallback whenever an image or passive loop is missing.
   const sceneAssetMap = {
     aer: {
-      image: '/STIKWALLET11202025/sites/default/files/outskirts/backgrounds/bg_underboard_alley_signal_drift.webp',
-      video: '/STIKWALLET11202025/sites/default/files/outskirts/loops/video_loops_underboard_alley_signal_drift.mp4',
+      image: drupalPath('sites/default/files/outskirts/backgrounds/bg_underboard_alley_signal_drift.webp'),
+      video: drupalPath('sites/default/files/outskirts/loops/video_loops_underboard_alley_signal_drift.mp4'),
       label: 'AER route asset: upper corridor signal drift'
     },
     mare: {
-      image: '/STIKWALLET11202025/sites/default/files/outskirts/backgrounds/bg_neon_bog_core.webp',
-      video: '/STIKWALLET11202025/sites/default/files/outskirts/loops/video_loops_neon_fog_marsh_core.mp4',
+      image: drupalPath('sites/default/files/outskirts/backgrounds/bg_neon_bog_core.webp'),
+      video: drupalPath('sites/default/files/outskirts/loops/video_loops_neon_fog_marsh_core.mp4'),
       label: 'MARE route asset: submerged pressure fog'
     },
     terra: {
-      image: '/STIKWALLET11202025/sites/default/files/outskirts/backgrounds/bg_wasteland_ridge_aftermath_quiet.webp',
-      video: '/STIKWALLET11202025/sites/default/files/outskirts/loops/video_loops_wasteland_ridge_core.mp4',
+      image: drupalPath('sites/default/files/outskirts/backgrounds/bg_wasteland_ridge_aftermath_quiet.webp'),
+      video: drupalPath('sites/default/files/outskirts/loops/video_loops_wasteland_ridge_core.mp4'),
       label: 'TERRA route asset: wasteland ridge'
     }
   };

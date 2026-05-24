@@ -44,7 +44,7 @@ class OohGameGeneratorBlock extends BlockBase {
    */
   public function build() {
     $file_url_generator = \Drupal::service('file_url_generator');
-    $recruiter_asset_base = 'public://adsilentium/portraits/Recruiters/';
+    $recruiter_asset_base = 'public://outskirts/portraits/Recruiters/';
     $sigil_asset_base = 'public://adsilentium/Sigils/';
 
     $playlists = [
