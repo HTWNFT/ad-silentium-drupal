@@ -4433,6 +4433,47 @@ body.path-user-login .messages {
  */
 /* Phase 52 — Dossier Flow Readability */
 
+/*
+ * OA-083 — Dossier Runtime Equivalence Audit
+ *
+ * FUNCTIONAL VALIDATION:
+ * - sequence continuity
+ * - interaction continuity
+ * - ENTER continuity
+ *
+ * ARCHITECTURAL VALIDATION:
+ * - breakpoint containment
+ * - panel ordering
+ * - viewport collapse integrity
+ * - overflow integrity
+ * - desktop equivalence
+ * - mobile equivalence
+ * - deployment equivalence
+ *
+ * A successful sequence, 01 → 02 → 03 → 04 → ENTER, does NOT alone prove
+ * layout equivalence. Runtime interaction can pass while breakpoint containment,
+ * panel ordering, viewport collapse, overflow, or deployed asset parity drift.
+ *
+ * Protected verification checklist:
+ * - 1920
+ * - 1440
+ * - 1280
+ * - 1024
+ * - 768
+ * - 390
+ *
+ * Preserve the dossier ordering exactly:
+ * playlist → recruiter → campaignRoute → mission → ENTER.
+ *
+ * Preserve @media (max-width: 1320px) containment exactly as-is.
+ *
+ * Deployment reminder:
+ * Git authority
+ * → XAMPP runtime
+ * → Hostinger production
+ * must all be validated independently.
+ */
+
 body.path-dossier .ooh-generator__grid,
 body.page-dossier .ooh-generator__grid {
     align-items: start;
