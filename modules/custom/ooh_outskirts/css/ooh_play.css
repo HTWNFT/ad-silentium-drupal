@@ -99,6 +99,19 @@ body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-mission__debug {
 
 /* Phase 98: operator focus confirmation. */
 
+/* PHASE OA-088 - PLAY PAYLOAD EXPOSURE RECOVERY */
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__debug,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-play-mission__debug,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-scene__debug,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-play-mission__debug {
+  display: none !important;
+  max-block-size: 0 !important;
+  opacity: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
 /* Hover/focus confirmation stays shared across non-combat states. */
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions .ooh-generator__overlay-btn:not(:disabled):hover,
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-play-scene__actions .ooh-generator__overlay-btn:not(:disabled):focus-visible,
@@ -5770,6 +5783,14 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-op
   -webkit-overflow-scrolling: touch;
 }
 
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-operation-summary,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-operation-summary {
+  z-index: 80;
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-operation-summary__shell,
 body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-operation-summary__shell {
   inline-size: min(42rem, 100%);
@@ -5784,6 +5805,12 @@ body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-op
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.018),
     0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-operation-summary__shell,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-operation-summary__shell {
+  opacity: 1;
+  visibility: visible;
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) .ooh-operation-summary__kicker,

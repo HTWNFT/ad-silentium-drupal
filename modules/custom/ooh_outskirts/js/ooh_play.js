@@ -190,11 +190,9 @@
       link.setAttribute('aria-label', 'Return to Dossier to complete mission setup');
     });
     if (debugEl) {
-      debugEl.textContent = JSON.stringify({
-        payloadStatus: payloadAudit.payloadStatus,
-        missingFields: payloadAudit.missingFields,
-        recoveryTarget: resolvedDossierTarget || '/dossier'
-      }, null, 2);
+      debugEl.textContent = '';
+      debugEl.hidden = true;
+      debugEl.setAttribute('aria-hidden', 'true');
     }
   }
 
@@ -2186,6 +2184,23 @@
     }
   }
 
+  function suppressVisibleDebugOutput(root) {
+    if (!root) {
+      return;
+    }
+
+    root.querySelectorAll('[data-ooh-briefing-debug], .ooh-play-mission__debug').forEach(function (debugEl) {
+      debugEl.textContent = '';
+      debugEl.hidden = true;
+      debugEl.setAttribute('aria-hidden', 'true');
+      const panel = debugEl.closest('.ooh-play-scene__debug');
+      if (panel) {
+        panel.hidden = true;
+        panel.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
   function showOperationSummary(root, outcome) {
     const runtime = signalRuntime(root);
     if (!root || !runtime) {
@@ -2913,6 +2928,7 @@
     const encounter = root.querySelector('[data-ooh-combat-encounter]');
     const sceneStatus = root.querySelector('[data-ooh-scene-status]');
 
+    suppressVisibleDebugOutput(root);
     removeOperationSummary(root);
     stopLocalTelemetryPulse(root);
     clearLocalCadenceBeat(root);
@@ -6891,14 +6907,6 @@ function passiveBehaviorPreviewLabel() {
     };
   }
 
-  function promptExcerpt(rawText) {
-    const text = String(rawText || '').replace(/\s+/g, ' ').trim();
-    if (!text) {
-      return 'No prompt text is available for this campaign route yet. The dossier is still valid; the briefing channel is awaiting prompt source text.';
-    }
-    return text.length > 620 ? text.slice(0, 620).trim() + '...' : text;
-  }
-
   function selectPromptBlock(payload, promptLibrary) {
     const routeId = routeIdFromPayload(payload);
     const routeBlocks = Array.isArray(promptLibrary[routeId]) ? promptLibrary[routeId] : [];
@@ -6919,20 +6927,20 @@ function passiveBehaviorPreviewLabel() {
     const recruiter = payload.recruiter || {};
     const recruiterName = recruiter.name || ((payload.character || {}).recruiterName) || 'Unassigned recruiter';
     const playlistLabel = itemLabel(payload.playlist, 'No playlist selected');
-    const promptText = selectedPrompt ? promptExcerpt(selectedPrompt.rawText) : promptExcerpt('');
+    const promptLabel = selectedPrompt ? (selectedPrompt.title || selectedPrompt.id || 'Sealed source') : 'Sealed source';
 
     return [
       'Route ' + routeLabel(routeId) + ' accepts the dossier.',
       missionLabel + ' is assigned under ' + pathLabel + ' supervision.',
       recruiterName + ' confirms the selected evolution path and locks the mission channel.',
       'Playlist theme: ' + playlistLabel + '.',
-      '',
-      promptText
+      'Mission source: ' + promptLabel + '. Runtime prompt text is sealed from field display.'
     ].join('\n');
   }
 
   function renderMissionPayload(root, payload, missionUuid, payloadAudit, hydrationMeta) {
     root.setAttribute('data-ooh-payload-status', 'valid');
+    suppressVisibleDebugOutput(root);
     if (missionUuid) {
       root.setAttribute('data-ooh-mission-uuid', missionUuid);
     }
@@ -7061,7 +7069,7 @@ function passiveBehaviorPreviewLabel() {
       observedSignals: evolutionPreview.observedSignals,
       recruiter: [recruiter.name || ((payload.character || {}).recruiterName), recruiter.title || ((payload.character || {}).recruiterTitle)].filter(Boolean).join(' / ') || 'Unassigned',
       playlist: payloadAudit.missingFields.indexOf('playlist') === -1 ? itemLabel(payload.playlist, 'Unselected') : 'PLAYLIST // UNCONFIRMED',
-      prompt: selectedPrompt ? (selectedPrompt.title || selectedPrompt.id || 'Prompt Block') : 'Unavailable'
+      prompt: selectedPrompt ? 'Sealed mission source' : 'Sealed'
     };
 
     Object.keys(fields).forEach(function (field) {
@@ -7090,25 +7098,9 @@ function passiveBehaviorPreviewLabel() {
 
     const debugEl = root.querySelector('[data-ooh-briefing-debug]');
     if (debugEl) {
-      const debugPayload = {
-        payloadStatus: payloadAudit.payloadStatus,
-        missingFields: payloadAudit.missingFields,
-        routeFallbackUsed: payloadAudit.routeFallbackUsed,
-        missionUuid: missionUuid,
-        payload: payload,
-        selectedPrompt: selectedPrompt,
-        missionAssembly: assembly
-      };
-      if (hydrationMeta && hydrationMeta.payloadUuid) {
-        debugPayload.payloadUuid = hydrationMeta.payloadUuid;
-      }
-      if (hydrationMeta && hydrationMeta.lifecycleState) {
-        debugPayload.lifecycleState = hydrationMeta.lifecycleState;
-      }
-      if (hydrationMeta && hydrationMeta.hydrationSource) {
-        debugPayload.hydrationSource = hydrationMeta.hydrationSource;
-      }
-      debugEl.textContent = JSON.stringify(debugPayload, null, 2);
+      debugEl.textContent = '';
+      debugEl.hidden = true;
+      debugEl.setAttribute('aria-hidden', 'true');
     }
   }
 
