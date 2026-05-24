@@ -4398,6 +4398,18 @@ body.path-user-login .messages {
   background: rgba(0,0,0,0.35);
 }
 
+/*
+ * Phase 52 runtime-authority note:
+ * Dossier layout uses separate desktop, tablet, and mobile containment layers.
+ * Desktop layout behavior, tablet collapse behavior, and mobile collapse behavior
+ * are not interchangeable even when the visible section sequence validates.
+ * The @media (max-width: 1320px) containment rule is not redundant.
+ * Functional sequence validation alone is insufficient proof of layout equivalence.
+ * Future dossier layout changes must validate 1920, 1440, 1280, 1024, 768,
+ * and 390 widths before being treated as launch-safe.
+ * Keep Git authority, XAMPP runtime, and production Hostinger trees synchronized
+ * intentionally; do not infer one tree's runtime state from another.
+ */
 /* Phase 52 — Dossier Flow Readability */
 
 body.path-dossier .ooh-generator__grid,
