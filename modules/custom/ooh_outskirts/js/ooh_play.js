@@ -520,12 +520,16 @@
     const interval = runtimeConditionModifier(root, 'contactInterval', contactPresenceConfig.interval);
     const decay = runtimeConditionModifier(root, 'contactDecay', contactPresenceConfig.decay);
     const pressurePulse = runtimeConditionModifier(root, 'contactPressurePulse', contactPresenceConfig.pressurePulse);
+    const synthesis = root && root.oohActivationSynthesisBias ? root.oohActivationSynthesisBias : {};
+    const contactPressureMultiplier = typeof synthesis.contactPressureMultiplier === 'number' ?
+      synthesis.contactPressureMultiplier :
+      1;
     return {
       proximity: proximity,
       driftStep: driftStep,
       interval: interval,
       decay: decay,
-      pressurePulse: pressurePulse
+      pressurePulse: Math.max(0.32, Math.min(0.74, pressurePulse * contactPressureMultiplier))
     };
   }
 
@@ -2670,6 +2674,123 @@
     }
   }
 
+  function numericActivationModifier(modifiers, key, fallback) {
+    if (!modifiers || typeof modifiers !== 'object') {
+      return fallback;
+    }
+
+    return typeof modifiers[key] === 'number' ? modifiers[key] : fallback;
+  }
+
+  function addActivationBias(target, source) {
+    Object.keys(source || {}).forEach(function (key) {
+      target[key] = (target[key] || 0) + source[key];
+    });
+  }
+
+  function buildActivateMissionSynthesisBias(root, routeId, pathKey, operationCondition) {
+    const payload = root && root.oohRuntimeSynthesisPayload ? root.oohRuntimeSynthesisPayload : {};
+    const character = payload.character || {};
+    const recruiter = payload.recruiter || {};
+    const attributeModifiers = Object.assign(
+      {},
+      recruiter.attributeModifiers || {},
+      character.attributeModifiers || {}
+    );
+    const missionKey = cleanId(payload.missionType || ((payload.mission || {}).id), 'mission');
+    const playlistMood = playlistMoodAttribute(payload);
+    const routeKey = ['aer', 'mare', 'terra'].indexOf(routeId) !== -1 ? routeId : 'terra';
+    const path = String(pathKey || recruiterPathKey(payload) || '').toUpperCase();
+    const conditionModifiers = operationCondition && operationCondition.modifiers ? operationCondition.modifiers : {};
+    const bias = {
+      signalOffset: 0,
+      pressureOffset: 0,
+      extractionBias: 0,
+      objectiveSyncOffset: 0,
+      decayBias: 0,
+      contactPressureMultiplier: 0
+    };
+
+    const routeBiases = {
+      aer: { signalOffset: 1, pressureOffset: 0.8, objectiveSyncOffset: 0.008 },
+      mare: { signalOffset: -1, pressureOffset: 1.4, extractionBias: -0.006, contactPressureMultiplier: 0.03 },
+      terra: { pressureOffset: 0.4, extractionBias: 0.004 }
+    };
+    const moodBiases = {
+      impact: { signalOffset: -1, pressureOffset: 1.4, objectiveSyncOffset: 0.006, contactPressureMultiplier: 0.04 },
+      pulse: { pressureOffset: 0.9, objectiveSyncOffset: 0.014, contactPressureMultiplier: 0.02 },
+      void: { signalOffset: 1, pressureOffset: -0.4, extractionBias: -0.004 },
+      dread: { pressureOffset: 1.1, extractionBias: -0.004, decayBias: 0.004 },
+      neutral: { objectiveSyncOffset: 0.004 }
+    };
+    const missionBiases = {
+      recon: { signalOffset: 1, pressureOffset: -0.5, objectiveSyncOffset: 0.018 },
+      survival: { signalOffset: -1, pressureOffset: 1.7, extractionBias: -0.008, contactPressureMultiplier: 0.04 },
+      purge: { signalOffset: -1, pressureOffset: 1.5, contactPressureMultiplier: 0.025 },
+      extraction: { pressureOffset: 0.5, extractionBias: 0.012, objectiveSyncOffset: 0.016 },
+      sabotage: { signalOffset: -1, pressureOffset: 1.2, objectiveSyncOffset: 0.01, contactPressureMultiplier: 0.02 },
+      artifact_recovery: { signalOffset: 0.5, pressureOffset: 0.6, extractionBias: -0.004, objectiveSyncOffset: 0.012 }
+    };
+
+    addActivationBias(bias, routeBiases[routeKey]);
+    addActivationBias(bias, moodBiases[playlistMood]);
+    addActivationBias(bias, missionBiases[missionKey]);
+
+    if (path === 'DOOMED') {
+      addActivationBias(bias, { signalOffset: -1.5, pressureOffset: 1.5, objectiveSyncOffset: 0.006, contactPressureMultiplier: 0.04 });
+    }
+    else if (path === 'MERGED') {
+      addActivationBias(bias, { signalOffset: 1, pressureOffset: -0.4, extractionBias: 0.005, objectiveSyncOffset: 0.014 });
+    }
+
+    addActivationBias(bias, {
+      pressureOffset: (conditionModifiers.pressureInitial || 0) * 0.18,
+      extractionBias: (conditionModifiers.extractionBias || 0) * 0.35,
+      decayBias: (conditionModifiers.decayBias || 0) * 0.3,
+      contactPressureMultiplier: (conditionModifiers.contactPressurePulse || 0) * 0.08
+    });
+
+    addActivationBias(bias, {
+      signalOffset: numericActivationModifier(attributeModifiers, 'signalOffset', 0),
+      pressureOffset: numericActivationModifier(attributeModifiers, 'pressureOffset', numericActivationModifier(attributeModifiers, 'pressureInitial', 0)),
+      extractionBias: numericActivationModifier(attributeModifiers, 'extractionBias', 0),
+      objectiveSyncOffset: numericActivationModifier(attributeModifiers, 'objectiveSyncOffset', 0),
+      decayBias: numericActivationModifier(attributeModifiers, 'decayBias', 0),
+      contactPressureMultiplier: numericActivationModifier(attributeModifiers, 'contactPressureWeight', 0)
+    });
+
+    return {
+      route: routeKey,
+      playlistMood: playlistMood,
+      missionType: missionKey,
+      path: path || 'UNASSIGNED',
+      condition: operationCondition ? operationCondition.id : '',
+      signalOffset: Math.max(-4, Math.min(4, bias.signalOffset)),
+      pressureOffset: Math.max(-2, Math.min(5, bias.pressureOffset)),
+      extractionBias: Math.max(-0.035, Math.min(0.035, bias.extractionBias)),
+      objectiveSyncOffset: Math.max(-0.025, Math.min(0.045, bias.objectiveSyncOffset)),
+      decayBias: Math.max(-0.025, Math.min(0.035, bias.decayBias)),
+      contactPressureMultiplier: Math.max(0.86, Math.min(1.18, 1 + bias.contactPressureMultiplier))
+    };
+  }
+
+  function applyActivateMissionSynthesisBias(root, runtime) {
+    if (!root || !runtime || !root.oohActivationSynthesisBias) {
+      return;
+    }
+
+    const bias = root.oohActivationSynthesisBias;
+    runtime.integrity = Math.min(signalIntegrityRuntime.initial, Math.max(signalIntegrityRuntime.degradedThreshold, runtime.integrity + bias.signalOffset));
+    runtime.interferencePressure = Math.max(0, Math.min(100, runtime.interferencePressure + bias.pressureOffset));
+    runtime.peakInterferencePressure = Math.max(runtime.peakInterferencePressure || 0, runtime.interferencePressure);
+    runtime.extractionReadinessBias = Math.max(-0.12, Math.min(0.12, (runtime.extractionReadinessBias || 0) + bias.extractionBias));
+    runtime.operationalDecayBias = Math.max(-0.12, Math.min(0.16, (runtime.operationalDecayBias || 0) + bias.decayBias));
+    if (!runtime.objectiveReady) {
+      runtime.objectiveSyncQuality = Math.max(0.28, Math.min(0.52, (runtime.objectiveSyncQuality || 0.35) + bias.objectiveSyncOffset));
+    }
+    runtime.activationSynthesisBias = bias;
+  }
+
   function startSignalIntegrityLoop(root) {
     clearSignalIntegrityRuntime(root);
     const runtime = signalRuntime(root);
@@ -2724,6 +2845,7 @@
       shell.setAttribute('data-ooh-pressure-curve', 'early');
     }
     initializeOperationalVariance(root, runtime);
+    applyActivateMissionSynthesisBias(root, runtime);
     syncSignalIntegrityHud(root, runtime.objectiveReady ? 'extraction' : 'active', preset.cadenceFlavor || cadenceFlavor(root, 'initialization', 'Operation active. Signal integrity at 100%. Relay alignment in progress.'));
     runtime.timer = window.setInterval(function () {
       tickSignalIntegrity(root);
@@ -2802,6 +2924,7 @@
     resetTraversalPressure(root);
     resetExtractionObjective(root);
     resetContactPresence(root);
+    root.oohActivationSynthesisBias = null;
     if (root.oohRuntimeCadenceTimer) {
       window.clearTimeout(root.oohRuntimeCadenceTimer);
       root.oohRuntimeCadenceTimer = null;
@@ -6566,6 +6689,7 @@ function passiveBehaviorPreviewLabel() {
     clearActivationReadyState(root, shell);
     setRuntimeAliveState(root, 'active');
     const operationCondition = applyOperationCondition(root, shell, routeId);
+    root.oohActivationSynthesisBias = buildActivateMissionSynthesisBias(root, routeId, pathKey, operationCondition);
     startSignalIntegrityLoop(root);
     if (shell) {
       shell.classList.add('is-mission-active');
@@ -6833,6 +6957,7 @@ function passiveBehaviorPreviewLabel() {
     const objectivePresence = buildObjectivePresenceContext(assembly, missionLabel);
     const extractionPresence = buildExtractionPresenceContext(assembly);
     const combatState = createCombatState();
+    root.oohRuntimeSynthesisPayload = payload;
     root.oohObjectivePresence = objectivePresence;
     root.setAttribute('data-ooh-objective-present', objectivePresence.attached ? 'true' : 'false');
     root.oohExtractionPresence = extractionPresence;
