@@ -6898,6 +6898,102 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:
   margin-block-start: 0.72rem;
 }
 
+/* PHASE OA-085 - PLAY HUD STACKING CONTAINMENT */
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud],
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) [data-ooh-active-hud],
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-active-hud],
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) [data-ooh-active-hud] {
+  box-sizing: border-box;
+  max-inline-size: 100%;
+  overflow: visible;
+  isolation: isolate;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud {
+  max-inline-size: 100%;
+  min-block-size: 0;
+  align-content: start;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-grid,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-grid,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-grid,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-grid {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-band,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-readout,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-band,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-band,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-readout,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-band {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout--runtime,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-readout--runtime,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-readout--runtime,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-readout--runtime {
+  max-block-size: clamp(9rem, 34vh, 18rem);
+  overflow: auto;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--actions,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-panel--actions,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-panel--actions,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-panel--actions {
+  overflow: visible;
+  isolation: isolate;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-actions,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-actions,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-actions,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-actions {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-action,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-action,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play__hud-action,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play__hud-action {
+  position: relative;
+  z-index: 15;
+  min-inline-size: 0;
+  pointer-events: auto;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__telemetry,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__assembly,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__telemetry,
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__assembly,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__telemetry,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__assembly,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__briefing-panel,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__telemetry,
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__assembly {
+  z-index: 0;
+  max-inline-size: 100%;
+  overflow: hidden;
+}
+
 /* PHASE OA-046 - RUNTIME CADENCE AND ENVIRONMENTAL DRIFT BASELINE */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__visual,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__visual {
