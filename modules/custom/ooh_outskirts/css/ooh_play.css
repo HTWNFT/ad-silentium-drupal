@@ -7082,6 +7082,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:
 }
 
 /* PHASE OA-100A - PLAY ACTIVE MONITOR STATE SEPARATION */
+/* PHASE OA-106 - ACTIVE MONITOR VERTICAL ALIGNMENT */
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-play-top],
+body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) [data-ooh-play-top],
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-play-top],
+body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) [data-ooh-play-top] {
+  display: none !important;
+}
+
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__hud,
 body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) .ooh-play-scene__hud,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__hud,
