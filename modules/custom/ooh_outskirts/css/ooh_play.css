@@ -7082,6 +7082,14 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:
 }
 
 /* PHASE OA-100A - PLAY ACTIVE MONITOR STATE SEPARATION */
+/* PHASE OA-107 - RUNTIME SHELL CONTROL CLARIFICATION */
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-field-extraction-complete):not(.is-combat-shell) .ooh-play-scene__staging-card,
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-mission-active):not(.is-field-extraction-complete):not(.is-combat-shell) .ooh-play-scene__staging-card {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
 /* PHASE OA-106 - ACTIVE MONITOR VERTICAL ALIGNMENT */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) [data-ooh-play-top],
 body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell) [data-ooh-play-top],
