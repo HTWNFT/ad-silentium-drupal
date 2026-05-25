@@ -105,11 +105,11 @@ class OohGameGeneratorBlock extends BlockBase {
           'Survival Instinct',
         ],
         'recruiter' => [
-          'id' => 'genescribe',
-          'name' => 'Gene Scribe',
+          'id' => 'scrapbroker',
+          'name' => 'Scrapbroker',
           'title' => 'Organic Path Recruiter',
-          'portraitUrl' => $file_url_generator->generateString($recruiter_asset_base . 'Asset__Portraits__Recruiters__genescribe.webp'),
-          'sigilUrl' => $file_url_generator->generateString($sigil_asset_base . 'genescribe.webp'),
+          'portraitUrl' => $file_url_generator->generateString($recruiter_asset_base . 'Asset__Portraits__Recruiters__scrapbroker.webp'),
+          'sigilUrl' => $file_url_generator->generateString($sigil_asset_base . 'scrapbroker.webp'),
           'script' => [
             'You are not upgraded. You are broken open.',
             'The body becomes weapon, weather, pressure, memory.',
