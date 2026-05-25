@@ -7216,3 +7216,135 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:
     transform: none;
   }
 }
+
+/* OA-109: isolated first-person runtime presentation layer. */
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.78rem;
+  border: 1px solid rgba(216, 250, 255, 0.105);
+  background:
+    linear-gradient(180deg, rgba(7, 16, 18, 0.78), rgba(4, 8, 10, 0.66)),
+    linear-gradient(90deg, rgba(84, 225, 255, 0.035), transparent 46%, rgba(255, 223, 146, 0.025));
+  box-shadow: inset 0 0 18px rgba(84, 225, 255, 0.026);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__head,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__label,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid span,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__label,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid span {
+  color: rgba(216, 250, 255, 0.62);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__stage,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid strong,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__stage,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid strong {
+  color: rgba(244, 255, 255, 0.92);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid div,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid div {
+  display: grid;
+  gap: 0.18rem;
+  min-inline-size: 0;
+  padding: 0.55rem;
+  border: 1px solid rgba(216, 250, 255, 0.07);
+  background: rgba(216, 250, 255, 0.025);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__feed,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__feed {
+  min-block-size: 2.35rem;
+  margin: 0;
+  color: rgba(244, 255, 255, 0.86);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 30% 32%, rgba(255, 223, 146, 0.08), transparent 22%),
+    radial-gradient(circle at 70% 58%, rgba(84, 225, 255, 0.065), transparent 28%),
+    linear-gradient(120deg, transparent, rgba(244, 255, 255, 0.04), transparent);
+  mix-blend-mode: screen;
+  transition: opacity 320ms ease, filter 320ms ease;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience="active"] .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience="active"] .ooh-runtime-experience-overlay {
+  opacity: 0.22;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pressure="rising"] .ooh-runtime-experience-overlay,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pressure="unstable"] .ooh-runtime-experience-overlay,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pressure="contested"] .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pressure="rising"] .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pressure="unstable"] .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pressure="contested"] .ooh-runtime-experience-overlay {
+  opacity: 0.36;
+  filter: saturate(1.18) contrast(1.08);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pulse] .ooh-runtime-experience-panel,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pulse] .ooh-runtime-experience-panel {
+  border-color: rgba(255, 223, 146, 0.22);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pulse] .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pulse] .ooh-runtime-experience-overlay {
+  opacity: 0.48;
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel {
+    padding: 0.68rem;
+  }
+
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__head,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.28rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay {
+    transition: none;
+  }
+}

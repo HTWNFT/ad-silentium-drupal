@@ -47,6 +47,7 @@ play:
       css/ooh_play.css: {}
   js:
     js/ooh_play.js: {}
+    js/ooh_play_runtime_experience.js: {}
   dependencies:
     - ooh_outskirts/base
     - ooh_outskirts/player_pages
