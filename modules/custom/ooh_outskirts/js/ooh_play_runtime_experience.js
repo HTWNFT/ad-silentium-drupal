@@ -86,6 +86,38 @@
     complete: 'CLEARED'
   };
 
+  const previewLoopDirectory = 'sites/default/files/adsilentium/play_loops/';
+  const previewLoops = {
+    insertion: 'oa_play_terra_video_loops_wasteland_ridge_core_insertion_drift_1440.mp4',
+    contact: 'oa_play_terra_video_loops_wasteland_ridge_core_contact_interference_1440.mp4',
+    instability: 'oa_play_terra_video_loops_wasteland_ridge_core_instability_signal_drift_1440.mp4',
+    'collapse-risk': 'oa_play_terra_video_loops_wasteland_ridge_core_collapse_flicker_1440.mp4',
+    'extraction-window': 'oa_play_terra_video_loops_wasteland_ridge_core_extraction_corridor_1440.mp4'
+  };
+
+  const manifestationEvents = {
+    insertion: [
+      { id: 'corridor', label: 'ROUTE NARROWS', feed: 'ROUTE GEOMETRY CLOSING AHEAD' },
+      { id: 'signal', label: 'SIGNAL ECHO', feed: 'TRANSMISSION BURST ACROSS THE FIELD' }
+    ],
+    contact: [
+      { id: 'silhouette', label: 'DISTANT CONTACT', feed: 'TRANSIENT SILHOUETTE BEYOND VISIBILITY' },
+      { id: 'movement', label: 'PERIMETER MOTION', feed: 'MOVEMENT REGISTERED PAST THE CORRIDOR EDGE' }
+    ],
+    instability: [
+      { id: 'contamination', label: 'ROUTE CONTAMINATION', feed: 'ROUTE CONTAMINATION ALERT' },
+      { id: 'pressure', label: 'FIELD PRESSURE', feed: 'ENVIRONMENTAL PRESSURE SURGE' }
+    ],
+    'collapse-risk': [
+      { id: 'manifestation', label: 'MANIFESTATION TRACE', feed: 'HOSTILE MANIFESTATION TRACE CLOSE TO FIELD LINE' },
+      { id: 'rupture', label: 'SECTOR RUPTURE', feed: 'CORRIDOR INSTABILITY EVENT' }
+    ],
+    'extraction-window': [
+      { id: 'extraction', label: 'EXTRACTION STATIC', feed: 'EXTRACTION CORRIDOR FLASHING THROUGH SIGNAL NOISE' },
+      { id: 'contact', label: 'CONTACT BEHIND', feed: 'UNSEEN CONTACT PRESSING FROM BEHIND THE FIELD' }
+    ]
+  };
+
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   }
@@ -143,6 +175,8 @@
       '<div class="ooh-runtime-experience-panel__grid">',
       '<div><span>PRESSURE</span><strong data-ooh-runtime-experience-pressure>QUIET</strong></div>',
       '<div><span>DISTINCTION</span><strong data-ooh-runtime-experience-distinction>0</strong></div>',
+      '<div><span>CONTACT</span><strong data-ooh-runtime-experience-contact>NONE</strong></div>',
+      '<div><span>SOUNDTRACK</span><strong data-ooh-runtime-experience-playlist>LINKED</strong></div>',
       '</div>',
       '<p class="ooh-runtime-experience-panel__feed" data-ooh-runtime-experience-feed>Awaiting mission activation.</p>'
     ].join('');
@@ -156,11 +190,39 @@
     overlay.setAttribute('data-ooh-runtime-experience-overlay', '');
     overlay.setAttribute('aria-hidden', 'true');
     overlay.innerHTML = [
+      '<span class="ooh-runtime-experience-overlay__vignette"></span>',
+      '<span class="ooh-runtime-experience-overlay__corridor"></span>',
+      '<span class="ooh-runtime-experience-overlay__silhouette"></span>',
+      '<span class="ooh-runtime-experience-overlay__burst"></span>',
       '<span class="ooh-runtime-experience-overlay__scanline"></span>',
       '<span class="ooh-runtime-experience-overlay__sweep"></span>',
       '<span class="ooh-runtime-experience-overlay__interference"></span>'
     ].join('');
     return overlay;
+  }
+
+  function createLoopPreview() {
+    const wrap = document.createElement('div');
+    const video = document.createElement('video');
+
+    wrap.className = 'ooh-runtime-experience-loop-preview';
+    wrap.setAttribute('data-ooh-runtime-experience-loop-preview', '');
+    wrap.setAttribute('aria-hidden', 'true');
+
+    video.className = 'ooh-runtime-experience-loop-preview__video';
+    video.setAttribute('data-ooh-runtime-experience-loop-video', '');
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('preload', 'metadata');
+    video.setAttribute('aria-hidden', 'true');
+
+    wrap.appendChild(video);
+    return wrap;
   }
 
   function ensureExperience(root) {
@@ -176,6 +238,12 @@
       hud.appendChild(panel);
     }
 
+    let loopPreview = visual.querySelector('[data-ooh-runtime-experience-loop-preview]');
+    if (!loopPreview) {
+      loopPreview = createLoopPreview();
+      visual.insertBefore(loopPreview, visual.firstChild);
+    }
+
     let overlay = visual.querySelector('[data-ooh-runtime-experience-overlay]');
     if (!overlay) {
       overlay = createOverlay();
@@ -188,8 +256,104 @@
       stage: panel.querySelector('[data-ooh-runtime-experience-stage]'),
       pressure: panel.querySelector('[data-ooh-runtime-experience-pressure]'),
       distinction: panel.querySelector('[data-ooh-runtime-experience-distinction]'),
+      contact: panel.querySelector('[data-ooh-runtime-experience-contact]'),
+      playlist: panel.querySelector('[data-ooh-runtime-experience-playlist]'),
+      loopPreview: loopPreview,
+      loopVideo: loopPreview.querySelector('[data-ooh-runtime-experience-loop-video]'),
       feed: panel.querySelector('[data-ooh-runtime-experience-feed]')
     };
+  }
+
+  function playlistLabel(root) {
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    const label = shell ? shell.getAttribute('data-playlist-label') : '';
+    return label || (root.getAttribute('data-ooh-media-attached') === 'true' ? 'ACTIVE' : 'LINKED');
+  }
+
+  function contactLabel(state) {
+    if (!state.lastManifestation) {
+      return state.stageIndex > 0 ? 'DISTANT' : 'NONE';
+    }
+    return state.lastManifestation.label;
+  }
+
+  function loopPathForStage(stageId) {
+    const filename = previewLoops[stageId] || '';
+    const path = filename ? previewLoopDirectory + filename : '';
+    if (!path) {
+      return '';
+    }
+    if (Drupal && typeof Drupal.url === 'function') {
+      return Drupal.url(path);
+    }
+    return '/' + path;
+  }
+
+  function syncLoopPreview(experience, active, stageId) {
+    const video = experience.loopVideo;
+    const loopPreview = experience.loopPreview;
+    if (!video || !loopPreview) {
+      return;
+    }
+
+    const nextSrc = active ? loopPathForStage(stageId) : '';
+    loopPreview.setAttribute('data-ooh-runtime-experience-loop-stage', active ? stageId : 'standby');
+    loopPreview.classList.toggle('is-active', Boolean(nextSrc));
+
+    if (!nextSrc) {
+      video.removeAttribute('src');
+      video.load();
+      return;
+    }
+
+    if (video.getAttribute('src') !== nextSrc) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.setAttribute('muted', '');
+      video.setAttribute('src', nextSrc);
+      video.load();
+    }
+
+    if (video.paused) {
+      const playAttempt = video.play();
+      if (playAttempt && typeof playAttempt.catch === 'function') {
+        playAttempt.catch(function () {});
+      }
+    }
+  }
+
+  function eventForStage(stageId, state) {
+    const events = manifestationEvents[stageId] || manifestationEvents.insertion;
+    return events[state.eventIndex % events.length];
+  }
+
+  function clearManifestation(root) {
+    root.removeAttribute('data-ooh-runtime-experience-contact');
+    window.clearTimeout(root.oohRuntimeManifestationTimer);
+  }
+
+  function triggerManifestation(root, state, stage, immediate) {
+    if (!root.classList.contains('is-mission-active')) {
+      return '';
+    }
+
+    const now = Date.now();
+    if (!immediate && now < state.nextManifestationAt) {
+      return '';
+    }
+
+    const event = eventForStage(stage.id, state);
+    state.eventIndex += 1;
+    state.lastManifestation = event;
+    state.nextManifestationAt = now + clamp(8800 - (state.stageIndex * 900), 5200, 8800);
+
+    root.setAttribute('data-ooh-runtime-experience-contact', event.id);
+    window.clearTimeout(root.oohRuntimeManifestationTimer);
+    root.oohRuntimeManifestationTimer = window.setTimeout(function () {
+      clearManifestation(root);
+    }, immediate ? 1250 : 1680);
+
+    return event.feed;
   }
 
   function readPressure(root, state, stage) {
@@ -230,11 +394,19 @@
     root.setAttribute('data-ooh-runtime-experience-pressure', pressure.toLowerCase());
     root.setAttribute('data-ooh-runtime-experience-intensity', String(state.stageIndex));
 
+    syncLoopPreview(experience, active, stage.id);
+
     experience.overlay.setAttribute('data-ooh-runtime-experience-stage', active ? stage.id : 'standby');
     experience.overlay.setAttribute('data-ooh-runtime-experience-pressure', pressure.toLowerCase());
     experience.stage.textContent = active ? stage.label : 'STANDBY';
     experience.pressure.textContent = pressure;
     experience.distinction.textContent = String(state.distinction);
+    if (experience.contact) {
+      experience.contact.textContent = active ? contactLabel(state) : 'NONE';
+    }
+    if (experience.playlist) {
+      experience.playlist.textContent = playlistLabel(root);
+    }
     experience.feed.textContent = message || (active ? nextFrom(stage.feed, state.feedIndex) : 'Awaiting mission activation.');
   }
 
@@ -251,6 +423,7 @@
     state.startedAt = Date.now();
     state.feedIndex = 0;
     state.stageIndex = 0;
+    state.nextManifestationAt = Date.now() + 5200;
     render(root, state, 'YOU ARE INSIDE THE FIELD');
     pulse(root, 'activate');
   }
@@ -269,7 +442,9 @@
     state.feedIndex += 1;
     state.lastAction = action;
 
-    const message = nextFrom(responses, state.actionCount - 1);
+    const stage = escalationStages[effectiveStageIndex(root, state)];
+    const eventMessage = (action === 'scan' || state.actionCount % 4 === 0) ? triggerManifestation(root, state, stage, true) : '';
+    const message = eventMessage || nextFrom(responses, state.actionCount - 1);
     render(root, state, message);
     pulse(root, action);
 
@@ -318,7 +493,8 @@
         state.startedAt = Date.now();
       }
       state.feedIndex += 1;
-      render(root, state);
+      const stage = escalationStages[effectiveStageIndex(root, state)];
+      render(root, state, triggerManifestation(root, state, stage, false));
     }, 5200);
   }
 
@@ -329,8 +505,11 @@
           activated: root.classList.contains('is-mission-active'),
           actionCount: 0,
           distinction: 0,
+          eventIndex: 0,
           feedIndex: 0,
+          lastManifestation: null,
           lastAction: '',
+          nextManifestationAt: 0,
           stageIndex: 0,
           startedAt: root.classList.contains('is-mission-active') ? Date.now() : 0
         };

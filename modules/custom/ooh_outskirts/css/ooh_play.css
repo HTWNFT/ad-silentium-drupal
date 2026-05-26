@@ -7267,6 +7267,11 @@ body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel
   gap: 0.55rem;
 }
 
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__wide,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__wide {
+  grid-column: 1 / -1;
+}
+
 body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid div,
 body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__grid div {
   display: grid;
@@ -7286,6 +7291,57 @@ body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel
   font-weight: 700;
   line-height: 1.45;
   text-transform: uppercase;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  overflow: hidden;
+  background: rgba(2, 7, 10, 0.28);
+  transition: opacity 520ms ease, filter 520ms ease;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview.is-active,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview.is-active {
+  opacity: 0.54;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview__video,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview__video {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  opacity: 0.88;
+  filter: saturate(1.04) contrast(1.04);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview[data-ooh-runtime-experience-loop-stage="contact"],
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview[data-ooh-runtime-experience-loop-stage="contact"] {
+  opacity: 0.58;
+  filter: saturate(1.08) contrast(1.05);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview[data-ooh-runtime-experience-loop-stage="instability"],
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview[data-ooh-runtime-experience-loop-stage="instability"] {
+  opacity: 0.62;
+  filter: saturate(1.12) contrast(1.08);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview[data-ooh-runtime-experience-loop-stage="collapse-risk"],
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview[data-ooh-runtime-experience-loop-stage="collapse-risk"] {
+  opacity: 0.66;
+  filter: saturate(1.16) contrast(1.1) hue-rotate(-4deg);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview[data-ooh-runtime-experience-loop-stage="extraction-window"],
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-loop-preview[data-ooh-runtime-experience-loop-stage="extraction-window"] {
+  opacity: 0.6;
+  filter: saturate(1.08) contrast(1.04) hue-rotate(5deg);
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay,
@@ -7312,12 +7368,58 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience="
 body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__scanline,
 body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__sweep,
 body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__interference,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__vignette,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__corridor,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__silhouette,
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__burst,
 body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__scanline,
 body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__sweep,
-body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__interference {
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__interference,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__vignette,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__corridor,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__silhouette,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__burst {
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__vignette,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__vignette {
+  opacity: 0.64;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.48), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.48)),
+    radial-gradient(circle at 50% 54%, transparent 38%, rgba(0, 0, 0, 0.32) 76%);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__corridor,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__corridor {
+  opacity: 0.18;
+  clip-path: polygon(18% 0, 82% 0, 62% 100%, 38% 100%);
+  background: linear-gradient(180deg, rgba(216, 250, 255, 0.08), transparent 58%, rgba(255, 223, 146, 0.045));
+  animation: ooh-runtime-experience-corridor 8s ease-in-out infinite;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__silhouette,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__silhouette {
+  inset: auto 14% 23% auto;
+  inline-size: clamp(30px, 8vw, 84px);
+  block-size: clamp(72px, 18vw, 168px);
+  border-radius: 52% 48% 44% 46%;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 50% 14%, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.34) 38%, transparent 42%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.08));
+  filter: blur(2px);
+  transform: translate3d(0, 8%, 0) scaleX(0.7);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__burst,
+body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__burst {
+  opacity: 0;
+  background:
+    radial-gradient(circle at 46% 48%, rgba(244, 255, 255, 0.16), transparent 15%),
+    linear-gradient(90deg, transparent, rgba(84, 225, 255, 0.09), rgba(255, 76, 76, 0.08), transparent);
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__scanline,
@@ -7434,6 +7536,36 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-p
   opacity: 0.34;
 }
 
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="corridor"] .ooh-runtime-experience-overlay__corridor,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="rupture"] .ooh-runtime-experience-overlay__corridor,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="corridor"] .ooh-runtime-experience-overlay__corridor,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="rupture"] .ooh-runtime-experience-overlay__corridor {
+  opacity: 0.42;
+  animation-duration: 3.4s;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="silhouette"] .ooh-runtime-experience-overlay__silhouette,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="manifestation"] .ooh-runtime-experience-overlay__silhouette,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="contact"] .ooh-runtime-experience-overlay__silhouette,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="silhouette"] .ooh-runtime-experience-overlay__silhouette,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="manifestation"] .ooh-runtime-experience-overlay__silhouette,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="contact"] .ooh-runtime-experience-overlay__silhouette {
+  animation: ooh-runtime-experience-silhouette 1.2s ease-out both;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="signal"] .ooh-runtime-experience-overlay__burst,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="contamination"] .ooh-runtime-experience-overlay__burst,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="pressure"] .ooh-runtime-experience-overlay__burst,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="extraction"] .ooh-runtime-experience-overlay__burst,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="movement"] .ooh-runtime-experience-overlay__burst,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="signal"] .ooh-runtime-experience-overlay__burst,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="contamination"] .ooh-runtime-experience-overlay__burst,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="pressure"] .ooh-runtime-experience-overlay__burst,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="extraction"] .ooh-runtime-experience-overlay__burst,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="movement"] .ooh-runtime-experience-overlay__burst {
+  animation: ooh-runtime-experience-burst 1.05s ease-out both;
+}
+
 @keyframes ooh-runtime-experience-scanline {
   0% {
     transform: translate3d(0, -10%, 0);
@@ -7467,6 +7599,43 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-p
   }
 }
 
+@keyframes ooh-runtime-experience-corridor {
+  0%, 100% {
+    transform: translate3d(0, -1.4%, 0) scaleX(1);
+  }
+  50% {
+    transform: translate3d(0, 1.2%, 0) scaleX(0.86);
+  }
+}
+
+@keyframes ooh-runtime-experience-silhouette {
+  0% {
+    opacity: 0;
+    transform: translate3d(18%, 8%, 0) scaleX(0.55);
+  }
+  18%, 42% {
+    opacity: 0.34;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-12%, 2%, 0) scaleX(0.78);
+  }
+}
+
+@keyframes ooh-runtime-experience-burst {
+  0% {
+    opacity: 0;
+    transform: translate3d(-8%, 0, 0);
+  }
+  18%, 46% {
+    opacity: 0.38;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(8%, 0, 0);
+  }
+}
+
 @media (max-width: 720px) {
   body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel,
   body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel {
@@ -7486,10 +7655,16 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-p
   body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__scanline,
   body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__sweep,
   body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__interference,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__corridor,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__silhouette,
+  body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__burst,
   body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay,
   body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__scanline,
   body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__sweep,
-  body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__interference {
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__interference,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__corridor,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__silhouette,
+  body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-overlay__burst {
     animation: none;
     transition: none;
   }
