@@ -151,6 +151,24 @@
     'SOMETHING IS NEARBY'
   ];
 
+  const contactTensionLines = {
+    warning: [
+      'MANIFESTATION PRESSURE NEAR THE ROUTE EDGE',
+      'CONTACT ZONE FORMING OUTSIDE VISIBILITY',
+      'FIELD HESITATION DETECTED AHEAD'
+    ],
+    suppressed: [
+      'CONTACT PRESSURE SUPPRESSED BY OPERATOR ANCHOR',
+      'CORRIDOR QUIET FORCED THROUGH THE FIELD',
+      'MANIFESTATION TRACE HELD OUTSIDE THE LINE'
+    ],
+    signal: [
+      'CONTACT RHYTHM EXPOSED THROUGH THE CHANNEL',
+      'FIELD INSTABILITY ANSWERING THE SIGNAL CHECK',
+      'MANIFESTATION RESISTANCE READ IN THE NOISE'
+    ]
+  };
+
   const cadenceSamples = {
     scan: [
       'SCAN RETURNS EMPTY CORRIDOR',
@@ -502,10 +520,20 @@
   }
 
   function contactLabel(state) {
-    if (!state.lastManifestation) {
-      return state.stageIndex > 0 ? 'DISTANT' : 'NONE';
+    const now = Date.now();
+    if (state.lastManifestation && now - state.lastManifestationAt < 3200) {
+      return state.lastManifestation.label;
     }
-    return state.lastManifestation.label;
+    if (state.contactSuppressedUntil > now) {
+      return 'SUPPRESSED';
+    }
+    if (state.cadencePhase === 'warning') {
+      return 'PROXIMITY';
+    }
+    if (state.stageIndex > 0 || state.lastManifestation) {
+      return 'DISTANT';
+    }
+    return 'NONE';
   }
 
   function cadenceProfile(stageId) {
@@ -662,6 +690,34 @@
     return environmentFeed(environment, line);
   }
 
+  function contactTensionState(state, active) {
+    const now = Date.now();
+    if (!active) {
+      return 'standby';
+    }
+    if (state.contactSuppressedUntil > now) {
+      return 'suppressed';
+    }
+    if (state.lastManifestation && now - state.lastManifestationAt < 3200) {
+      return 'contact';
+    }
+    if (state.cadencePhase === 'warning') {
+      return 'near';
+    }
+    if (state.stageIndex > 0 || state.lastManifestation) {
+      return 'distant';
+    }
+    return 'quiet';
+  }
+
+  function contactTensionFeed(environment, state, type) {
+    const list = contactTensionLines[type] || [];
+    if (!list.length) {
+      return '';
+    }
+    return environmentFeed(environment, nextFrom(list, state.cadenceIndex + state.actionCount + state.stageIndex));
+  }
+
   function presenceLabel(state, active) {
     if (!active) {
       return 'DORMANT';
@@ -784,6 +840,7 @@
     state.eventIndex += 1;
     state.lastManifestation = event;
     state.lastManifestationAt = now;
+    state.contactSuppressedUntil = 0;
     setCadence(root, state, 'interruption');
     scheduleNextCadence(state, stage, now, cadenceProfile(stage.id).recoveryMs);
 
@@ -814,7 +871,7 @@
       const environment = environmentForStage(stage);
       state.warningIssued = true;
       setCadence(root, state, 'warning');
-      return environmentFeed(environment, environmentPhrase(environment, 'warnings', nextFrom(cadenceWarnings, state.cadenceIndex + state.stageIndex), state.cadenceIndex));
+      return contactTensionFeed(environment, state, 'warning') || environmentFeed(environment, environmentPhrase(environment, 'warnings', nextFrom(cadenceWarnings, state.cadenceIndex + state.stageIndex), state.cadenceIndex));
     }
 
     if (state.cadencePhase !== 'stabilized') {
@@ -836,18 +893,20 @@
     if (action === 'hold') {
       state.nextManifestationAt = Math.max(state.nextManifestationAt || now, now + 4200);
       state.warningIssued = false;
+      state.contactSuppressedUntil = now + 3600;
       setCadence(root, state, 'stabilized');
     }
 
     if (action === 'signal' && nearEvent) {
       setCadence(root, state, 'warning');
+      return contactTensionFeed(environment, state, 'signal');
     }
 
     if (action === 'scan') {
       return environmentFeed(environment, environmentPhrase(environment, 'contact', nextFrom(cadenceSamples.scan, state.actionCount + state.stageIndex), state.actionCount));
     }
     if (action === 'hold') {
-      return environmentFeed(environment, environmentPhrase(environment, 'routePressure', nextFrom(cadenceSamples.hold, state.actionCount + state.stageIndex), state.actionCount));
+      return contactTensionFeed(environment, state, 'suppressed') || environmentFeed(environment, environmentPhrase(environment, 'routePressure', nextFrom(cadenceSamples.hold, state.actionCount + state.stageIndex), state.actionCount));
     }
     return environmentFeed(environment, nextFrom(cadenceSamples[action] || cadenceSamples.scan, state.actionCount + state.stageIndex));
   }
@@ -895,6 +954,7 @@
     root.setAttribute('data-ooh-runtime-environment', active ? environment.id : 'standby');
     root.setAttribute('data-ooh-runtime-route-depth', active ? routeDepthLabel(state, active).toLowerCase().replace(/\s+/g, '-') : 'standby');
     root.setAttribute('data-ooh-runtime-force-presence', presenceLabel(state, active).toLowerCase());
+    root.setAttribute('data-ooh-runtime-contact-tension', contactTensionState(state, active));
 
     syncLoopPreview(experience, active, stage.id);
 
@@ -957,6 +1017,7 @@
     state.forcePulseUntil = 0;
     state.lastForceAction = '';
     state.operatorPresence = 1;
+    state.contactSuppressedUntil = 0;
     window.clearTimeout(state.forcePresenceTimer);
     state.nextManifestationAt = Date.now() + 7200;
     state.warningIssued = false;
@@ -1055,6 +1116,7 @@
           cadencePhase: 'standby',
           eventIndex: 0,
           feedIndex: 0,
+          contactSuppressedUntil: 0,
           lastManifestation: null,
           lastManifestationAt: 0,
           lastAction: '',
