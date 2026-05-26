@@ -169,6 +169,29 @@
     ]
   };
 
+  const pressureExchangeLines = {
+    scan: [
+      'FIELD RESPONSE INTENSIFYING ALONG THE ROUTE',
+      'OPERATOR PROBE LEAVES PRESSURE RESIDUE',
+      'MANIFESTATION SIGNATURE WITHDRAWING FROM THE SCAN'
+    ],
+    hold: [
+      'SUPPRESSION HOLDING FOR THE MOMENT',
+      'PRESSURE RESIDUE REMAINS ACTIVE',
+      'FIELD PUSHBACK SLOWED BY OPERATOR ANCHOR'
+    ],
+    signal: [
+      'THE CHANNEL RESISTS FURTHER READING',
+      'INSTABILITY MOVING UNDER THE SIGNAL CHECK',
+      'FIELD RESISTANCE ANSWERING THROUGH THE NOISE'
+    ],
+    cadence: [
+      'SECTOR REMEMBERS THE DISTURBANCE',
+      'PRESSURE SATURATION RISING UNDER THE ROUTE',
+      'FIELD RESPONSE REMAINS ACTIVE'
+    ]
+  };
+
   const cadenceSamples = {
     scan: [
       'SCAN RETURNS EMPTY CORRIDOR',
@@ -421,6 +444,7 @@
       '<div><span>ROUTE</span><strong data-ooh-runtime-experience-route-depth>UNTRACED</strong></div>',
       '<div><span>RESIDUE</span><strong data-ooh-runtime-experience-residue>CLEAR</strong></div>',
       '<div><span>PRESENCE</span><strong data-ooh-runtime-experience-presence>DORMANT</strong></div>',
+      '<div><span>EXCHANGE</span><strong data-ooh-runtime-experience-exchange>QUIET</strong></div>',
       '</div>',
       '<p class="ooh-runtime-experience-panel__feed" data-ooh-runtime-experience-feed>Awaiting mission activation.</p>'
     ].join('');
@@ -507,6 +531,7 @@
       routeDepth: panel.querySelector('[data-ooh-runtime-experience-route-depth]'),
       residue: panel.querySelector('[data-ooh-runtime-experience-residue]'),
       presence: panel.querySelector('[data-ooh-runtime-experience-presence]'),
+      exchange: panel.querySelector('[data-ooh-runtime-experience-exchange]'),
       loopPreview: loopPreview,
       loopVideo: loopPreview.querySelector('[data-ooh-runtime-experience-loop-video]'),
       feed: panel.querySelector('[data-ooh-runtime-experience-feed]')
@@ -718,6 +743,52 @@
     return environmentFeed(environment, nextFrom(list, state.cadenceIndex + state.actionCount + state.stageIndex));
   }
 
+  function pressureExchangeLabel(state, active) {
+    const now = Date.now();
+    if (!active) {
+      return 'QUIET';
+    }
+    if (state.exchangeUntil > now) {
+      if (state.exchangeState === 'scan') {
+        return 'DISTURBED';
+      }
+      if (state.exchangeState === 'hold') {
+        return 'SUPPRESSED';
+      }
+      if (state.exchangeState === 'signal') {
+        return 'RESISTING';
+      }
+      return 'ACTIVE';
+    }
+    if (state.exchangeSaturation >= 5) {
+      return 'SATURATED';
+    }
+    if (state.exchangeSaturation >= 2) {
+      return 'RESIDUAL';
+    }
+    return 'QUIET';
+  }
+
+  function pressureExchangeFeed(environment, state, type) {
+    const list = pressureExchangeLines[type] || [];
+    if (!list.length) {
+      return '';
+    }
+    return environmentFeed(environment, nextFrom(list, state.actionCount + state.exchangeSaturation + state.stageIndex));
+  }
+
+  function markPressureExchange(root, state, action) {
+    const now = Date.now();
+    state.exchangeState = action;
+    state.exchangeUntil = now + (action === 'hold' ? 3200 : 2600);
+    state.exchangeSaturation = clamp(state.exchangeSaturation + (action === 'hold' ? 1 : 2), 0, 7);
+    window.clearTimeout(state.exchangeTimer);
+    state.exchangeTimer = window.setTimeout(function () {
+      state.exchangeUntil = 0;
+      render(root, state);
+    }, action === 'hold' ? 3300 : 2700);
+  }
+
   function presenceLabel(state, active) {
     if (!active) {
       return 'DORMANT';
@@ -841,6 +912,7 @@
     state.lastManifestation = event;
     state.lastManifestationAt = now;
     state.contactSuppressedUntil = 0;
+    state.exchangeSaturation = clamp(state.exchangeSaturation + 1, 0, 7);
     setCadence(root, state, 'interruption');
     scheduleNextCadence(state, stage, now, cadenceProfile(stage.id).recoveryMs);
 
@@ -871,6 +943,9 @@
       const environment = environmentForStage(stage);
       state.warningIssued = true;
       setCadence(root, state, 'warning');
+      if (state.exchangeSaturation > 0 && state.cadenceIndex % 2 === 0) {
+        return pressureExchangeFeed(environment, state, 'cadence');
+      }
       return contactTensionFeed(environment, state, 'warning') || environmentFeed(environment, environmentPhrase(environment, 'warnings', nextFrom(cadenceWarnings, state.cadenceIndex + state.stageIndex), state.cadenceIndex));
     }
 
@@ -955,6 +1030,7 @@
     root.setAttribute('data-ooh-runtime-route-depth', active ? routeDepthLabel(state, active).toLowerCase().replace(/\s+/g, '-') : 'standby');
     root.setAttribute('data-ooh-runtime-force-presence', presenceLabel(state, active).toLowerCase());
     root.setAttribute('data-ooh-runtime-contact-tension', contactTensionState(state, active));
+    root.setAttribute('data-ooh-runtime-pressure-exchange', pressureExchangeLabel(state, active).toLowerCase());
 
     syncLoopPreview(experience, active, stage.id);
 
@@ -983,6 +1059,9 @@
     }
     if (experience.presence) {
       experience.presence.textContent = presenceLabel(state, active);
+    }
+    if (experience.exchange) {
+      experience.exchange.textContent = pressureExchangeLabel(state, active);
     }
     if (state.pendingSectorTransitionMessage && state.sectorTransitionUntil <= Date.now()) {
       state.pendingSectorTransitionMessage = '';
@@ -1018,7 +1097,11 @@
     state.lastForceAction = '';
     state.operatorPresence = 1;
     state.contactSuppressedUntil = 0;
+    state.exchangeState = '';
+    state.exchangeUntil = 0;
+    state.exchangeSaturation = 0;
     window.clearTimeout(state.forcePresenceTimer);
+    window.clearTimeout(state.exchangeTimer);
     state.nextManifestationAt = Date.now() + 7200;
     state.warningIssued = false;
     setCadence(root, state, 'silence');
@@ -1042,6 +1125,7 @@
     state.lastForceAction = action;
     state.forcePulseUntil = Date.now() + 1800;
     state.operatorPresence = clamp(state.operatorPresence + (action === 'hold' ? 1 : 2), 0, 6);
+    markPressureExchange(root, state, action);
     window.clearTimeout(state.forcePresenceTimer);
     state.forcePresenceTimer = window.setTimeout(function () {
       state.forcePulseUntil = 0;
@@ -1051,7 +1135,8 @@
     const stage = escalationStages[effectiveStageIndex(root, state)];
     const eventMessage = sampleCadence(root, state, stage, action);
     const environment = environmentForStage(stage);
-    const message = forceResponse(state, environment, action) || eventMessage || nextFrom(responses, state.actionCount - 1);
+    const exchangeMessage = state.actionCount % 2 === 0 ? pressureExchangeFeed(environment, state, action) : '';
+    const message = forceResponse(state, environment, action) || exchangeMessage || eventMessage || nextFrom(responses, state.actionCount - 1);
     render(root, state, message);
     pulse(root, action);
 
@@ -1117,6 +1202,10 @@
           eventIndex: 0,
           feedIndex: 0,
           contactSuppressedUntil: 0,
+          exchangeSaturation: 0,
+          exchangeState: '',
+          exchangeTimer: null,
+          exchangeUntil: 0,
           lastManifestation: null,
           lastManifestationAt: 0,
           lastAction: '',
