@@ -7282,6 +7282,14 @@ body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel
   background: rgba(216, 250, 255, 0.025);
 }
 
+body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-route-depth],
+body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-residue],
+body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-route-depth],
+body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-residue] {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 body.path-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__feed,
 body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel__feed {
   min-block-size: 2.35rem;
@@ -7604,6 +7612,19 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-trans
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] .ooh-runtime-experience-overlay__vignette,
 body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] .ooh-runtime-experience-overlay__vignette {
   opacity: 0.72;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-route-depth="crossing"] [data-ooh-runtime-experience-route-depth],
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] [data-ooh-runtime-experience-residue],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-route-depth="crossing"] [data-ooh-runtime-experience-route-depth],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] [data-ooh-runtime-experience-residue] {
+  color: rgba(244, 255, 255, 0.96);
+  text-shadow: 0 0 12px rgba(84, 225, 255, 0.2);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-route-depth="deep-field"] .ooh-runtime-experience-overlay__corridor,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-route-depth="deep-field"] .ooh-runtime-experience-overlay__corridor {
+  opacity: 0.28;
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-residue="dead-riverbed"] .ooh-runtime-experience-overlay__interference,

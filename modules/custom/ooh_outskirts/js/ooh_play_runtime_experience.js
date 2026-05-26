@@ -313,6 +313,14 @@
     ]
   };
 
+  const continuityFeedLines = [
+    'FIELD MEMORY DETECTED ALONG THE ROUTE',
+    'PRIOR SECTOR TRACE REMAINS IN THE SIGNAL BED',
+    'PRESSURE FOLLOWING THROUGH THE CORRIDOR',
+    'ROUTE CONTINUITY UNSTABLE BUT HOLDING',
+    'RESIDUE CARRYING FORWARD THROUGH THE FIELD'
+  ];
+
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   }
@@ -374,6 +382,8 @@
       '<div><span>CADENCE</span><strong data-ooh-runtime-experience-cadence>QUIET</strong></div>',
       '<div><span>ENVIRONMENT</span><strong data-ooh-runtime-experience-environment>UNMAPPED</strong></div>',
       '<div><span>SOUNDTRACK</span><strong data-ooh-runtime-experience-playlist>LINKED</strong></div>',
+      '<div><span>ROUTE</span><strong data-ooh-runtime-experience-route-depth>UNTRACED</strong></div>',
+      '<div><span>RESIDUE</span><strong data-ooh-runtime-experience-residue>CLEAR</strong></div>',
       '</div>',
       '<p class="ooh-runtime-experience-panel__feed" data-ooh-runtime-experience-feed>Awaiting mission activation.</p>'
     ].join('');
@@ -457,6 +467,8 @@
       cadence: panel.querySelector('[data-ooh-runtime-experience-cadence]'),
       environment: panel.querySelector('[data-ooh-runtime-experience-environment]'),
       playlist: panel.querySelector('[data-ooh-runtime-experience-playlist]'),
+      routeDepth: panel.querySelector('[data-ooh-runtime-experience-route-depth]'),
+      residue: panel.querySelector('[data-ooh-runtime-experience-residue]'),
       loopPreview: loopPreview,
       loopVideo: loopPreview.querySelector('[data-ooh-runtime-experience-loop-video]'),
       feed: panel.querySelector('[data-ooh-runtime-experience-feed]')
@@ -586,6 +598,48 @@
       return environment.label + ' / ' + previous.residue;
     }
     return environment.label;
+  }
+
+  function sectorResidueLabel(state) {
+    const previous = environmentById(state.previousEnvironmentId);
+    if (state.sectorTransitionUntil > Date.now() && previous) {
+      return previous.residue;
+    }
+    if (state.transitionIndex > 0) {
+      return 'TRACE HELD';
+    }
+    return 'CLEAR';
+  }
+
+  function routeDepthLabel(state, active) {
+    if (!active) {
+      return 'UNTRACED';
+    }
+    if (state.sectorTransitionUntil > Date.now() && state.previousEnvironmentId) {
+      return 'CROSSING';
+    }
+    if (state.stageIndex >= 4) {
+      return 'EXTRACTION';
+    }
+    if (state.stageIndex >= 2) {
+      return 'DEEP FIELD';
+    }
+    if (state.stageIndex >= 1) {
+      return 'INWARD';
+    }
+    return 'ENTRY ROUTE';
+  }
+
+  function continuityFeed(state, environment) {
+    if (state.transitionIndex <= 0 || state.feedIndex % 3 !== 1) {
+      return '';
+    }
+    const previous = environmentById(state.previousEnvironmentId);
+    const line = nextFrom(continuityFeedLines, state.feedIndex + state.transitionIndex);
+    if (previous && state.sectorTransitionUntil > Date.now()) {
+      return environmentFeed(environment, previous.residue + ' STILL CARRYING FORWARD');
+    }
+    return environmentFeed(environment, line);
   }
 
   function loopPathForStage(stageId) {
@@ -786,6 +840,7 @@
     root.setAttribute('data-ooh-runtime-experience-intensity', String(state.stageIndex));
     root.setAttribute('data-ooh-runtime-experience-cadence-state', active ? state.cadencePhase : 'standby');
     root.setAttribute('data-ooh-runtime-environment', active ? environment.id : 'standby');
+    root.setAttribute('data-ooh-runtime-route-depth', active ? routeDepthLabel(state, active).toLowerCase().replace(/\s+/g, '-') : 'standby');
 
     syncLoopPreview(experience, active, stage.id);
 
@@ -806,6 +861,12 @@
     if (experience.playlist) {
       experience.playlist.textContent = playlistLabel(root);
     }
+    if (experience.routeDepth) {
+      experience.routeDepth.textContent = routeDepthLabel(state, active);
+    }
+    if (experience.residue) {
+      experience.residue.textContent = active ? sectorResidueLabel(state) : 'CLEAR';
+    }
     if (state.pendingSectorTransitionMessage && state.sectorTransitionUntil <= Date.now()) {
       state.pendingSectorTransitionMessage = '';
     }
@@ -813,7 +874,8 @@
     if (transitionMessage) {
       state.pendingSectorTransitionMessage = '';
     }
-    experience.feed.textContent = message || transitionMessage || (active ? environmentFeed(environment, nextFrom(stage.feed, state.feedIndex)) : 'Awaiting mission activation.');
+    const memoryMessage = active && !message && !transitionMessage ? continuityFeed(state, environment) : '';
+    experience.feed.textContent = message || transitionMessage || memoryMessage || (active ? environmentFeed(environment, nextFrom(stage.feed, state.feedIndex)) : 'Awaiting mission activation.');
   }
 
   function pulse(root, action) {
