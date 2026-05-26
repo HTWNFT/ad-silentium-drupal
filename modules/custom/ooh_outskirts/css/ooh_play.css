@@ -7286,10 +7286,12 @@ body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-
 body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-residue],
 body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-presence],
 body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-exchange],
+body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-manifestation],
 body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-route-depth],
 body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-residue],
 body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-presence],
-body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-exchange] {
+body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-exchange],
+body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-manifestation] {
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -7680,6 +7682,43 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-pressure-exc
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-pressure-exchange="saturated"] .ooh-runtime-experience-overlay,
 body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-pressure-exchange="saturated"] .ooh-runtime-experience-overlay {
   opacity: 0.5;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="fleeting"] [data-ooh-runtime-experience-manifestation],
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="nearby"] [data-ooh-runtime-experience-manifestation],
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="occupied"] [data-ooh-runtime-experience-manifestation],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="fleeting"] [data-ooh-runtime-experience-manifestation],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="nearby"] [data-ooh-runtime-experience-manifestation],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="occupied"] [data-ooh-runtime-experience-manifestation] {
+  color: rgba(244, 255, 255, 0.96);
+  text-shadow: 0 0 14px rgba(255, 70, 180, 0.16);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="suppressed"] [data-ooh-runtime-experience-manifestation],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="suppressed"] [data-ooh-runtime-experience-manifestation] {
+  color: rgba(216, 250, 255, 0.9);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="fleeting"] .ooh-runtime-experience-overlay__silhouette,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="fleeting"] .ooh-runtime-experience-overlay__silhouette {
+  opacity: 0.2;
+  transform: translate3d(12%, 6%, 0) scaleX(0.58);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="nearby"] .ooh-runtime-experience-overlay__corridor,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="nearby"] .ooh-runtime-experience-overlay__corridor {
+  opacity: 0.4;
+  animation-duration: 3.8s;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="occupied"] .ooh-runtime-experience-overlay__silhouette,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="occupied"] .ooh-runtime-experience-overlay__silhouette {
+  animation: ooh-runtime-experience-silhouette 1.55s ease-out both;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="suppressed"] .ooh-runtime-experience-overlay__silhouette,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-manifestation-presence="suppressed"] .ooh-runtime-experience-overlay__silhouette {
+  opacity: 0.08;
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="dead-riverbed"] .ooh-runtime-experience-panel,

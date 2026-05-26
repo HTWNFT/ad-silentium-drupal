@@ -192,6 +192,29 @@
     ]
   };
 
+  const manifestationPresenceLines = {
+    scan: [
+      'MOVEMENT REGISTERED ALONG THE OUTER ROUTE',
+      'THE CORRIDOR IS NO LONGER EMPTY',
+      'UNSTABLE TRACE BRIEFLY ENTERS THE FIELD'
+    ],
+    hold: [
+      'FIELD OCCUPATION SUPPRESSED FOR THE MOMENT',
+      'ROUTE TRACE HELD OUTSIDE VISIBILITY',
+      'CORRIDOR PRESENCE FORCED BACK INTO STATIC'
+    ],
+    signal: [
+      'THE ROUTE REFUSES A CLEAR READING',
+      'PRESSURE SHIFTS NEAR THE SIGNAL BED',
+      'FIELD OCCUPATION DETECTED UNDER THE CHANNEL'
+    ],
+    contact: [
+      'FIELD OCCUPATION DETECTED',
+      'PRESENCE SHARING THE ROUTE EDGE',
+      'TRACE MOVING THROUGH THE OUTER CORRIDOR'
+    ]
+  };
+
   const cadenceSamples = {
     scan: [
       'SCAN RETURNS EMPTY CORRIDOR',
@@ -445,6 +468,7 @@
       '<div><span>RESIDUE</span><strong data-ooh-runtime-experience-residue>CLEAR</strong></div>',
       '<div><span>PRESENCE</span><strong data-ooh-runtime-experience-presence>DORMANT</strong></div>',
       '<div><span>EXCHANGE</span><strong data-ooh-runtime-experience-exchange>QUIET</strong></div>',
+      '<div><span>TRACE</span><strong data-ooh-runtime-experience-manifestation>EMPTY</strong></div>',
       '</div>',
       '<p class="ooh-runtime-experience-panel__feed" data-ooh-runtime-experience-feed>Awaiting mission activation.</p>'
     ].join('');
@@ -532,6 +556,7 @@
       residue: panel.querySelector('[data-ooh-runtime-experience-residue]'),
       presence: panel.querySelector('[data-ooh-runtime-experience-presence]'),
       exchange: panel.querySelector('[data-ooh-runtime-experience-exchange]'),
+      manifestation: panel.querySelector('[data-ooh-runtime-experience-manifestation]'),
       loopPreview: loopPreview,
       loopVideo: loopPreview.querySelector('[data-ooh-runtime-experience-loop-video]'),
       feed: panel.querySelector('[data-ooh-runtime-experience-feed]')
@@ -789,6 +814,50 @@
     }, action === 'hold' ? 3300 : 2700);
   }
 
+  function manifestationPresenceLabel(state, active) {
+    const now = Date.now();
+    if (!active) {
+      return 'EMPTY';
+    }
+    if (state.manifestationPresenceUntil > now) {
+      if (state.manifestationPresenceState === 'suppressed') {
+        return 'SUPPRESSED';
+      }
+      if (state.manifestationPresenceState === 'occupied') {
+        return 'OCCUPIED';
+      }
+      if (state.manifestationPresenceState === 'nearby') {
+        return 'NEARBY';
+      }
+      return 'FLEETING';
+    }
+    if (state.lastManifestation && now - state.lastManifestationAt < 6200) {
+      return 'NEARBY';
+    }
+    if (state.stageIndex > 1 || state.exchangeSaturation >= 5) {
+      return 'TRACE';
+    }
+    return 'EMPTY';
+  }
+
+  function manifestationPresenceFeed(environment, state, type) {
+    const list = manifestationPresenceLines[type] || [];
+    if (!list.length) {
+      return '';
+    }
+    return environmentFeed(environment, nextFrom(list, state.actionCount + state.eventIndex + state.stageIndex));
+  }
+
+  function markManifestationPresence(root, state, type, duration) {
+    state.manifestationPresenceState = type;
+    state.manifestationPresenceUntil = Date.now() + duration;
+    window.clearTimeout(state.manifestationPresenceTimer);
+    state.manifestationPresenceTimer = window.setTimeout(function () {
+      state.manifestationPresenceUntil = 0;
+      render(root, state);
+    }, duration + 100);
+  }
+
   function presenceLabel(state, active) {
     if (!active) {
       return 'DORMANT';
@@ -913,6 +982,7 @@
     state.lastManifestationAt = now;
     state.contactSuppressedUntil = 0;
     state.exchangeSaturation = clamp(state.exchangeSaturation + 1, 0, 7);
+    markManifestationPresence(root, state, 'occupied', immediate ? 2300 : 3100);
     setCadence(root, state, 'interruption');
     scheduleNextCadence(state, stage, now, cadenceProfile(stage.id).recoveryMs);
 
@@ -942,6 +1012,7 @@
     if (!state.warningIssued && state.nextManifestationAt - now <= profile.warningMs) {
       const environment = environmentForStage(stage);
       state.warningIssued = true;
+      markManifestationPresence(root, state, 'nearby', 3400);
       setCadence(root, state, 'warning');
       if (state.exchangeSaturation > 0 && state.cadenceIndex % 2 === 0) {
         return pressureExchangeFeed(environment, state, 'cadence');
@@ -969,15 +1040,18 @@
       state.nextManifestationAt = Math.max(state.nextManifestationAt || now, now + 4200);
       state.warningIssued = false;
       state.contactSuppressedUntil = now + 3600;
+      markManifestationPresence(root, state, 'suppressed', 3600);
       setCadence(root, state, 'stabilized');
     }
 
     if (action === 'signal' && nearEvent) {
+      markManifestationPresence(root, state, 'occupied', 2600);
       setCadence(root, state, 'warning');
       return contactTensionFeed(environment, state, 'signal');
     }
 
     if (action === 'scan') {
+      markManifestationPresence(root, state, 'fleeting', 2100);
       return environmentFeed(environment, environmentPhrase(environment, 'contact', nextFrom(cadenceSamples.scan, state.actionCount + state.stageIndex), state.actionCount));
     }
     if (action === 'hold') {
@@ -1031,6 +1105,7 @@
     root.setAttribute('data-ooh-runtime-force-presence', presenceLabel(state, active).toLowerCase());
     root.setAttribute('data-ooh-runtime-contact-tension', contactTensionState(state, active));
     root.setAttribute('data-ooh-runtime-pressure-exchange', pressureExchangeLabel(state, active).toLowerCase());
+    root.setAttribute('data-ooh-runtime-manifestation-presence', manifestationPresenceLabel(state, active).toLowerCase());
 
     syncLoopPreview(experience, active, stage.id);
 
@@ -1062,6 +1137,9 @@
     }
     if (experience.exchange) {
       experience.exchange.textContent = pressureExchangeLabel(state, active);
+    }
+    if (experience.manifestation) {
+      experience.manifestation.textContent = manifestationPresenceLabel(state, active);
     }
     if (state.pendingSectorTransitionMessage && state.sectorTransitionUntil <= Date.now()) {
       state.pendingSectorTransitionMessage = '';
@@ -1100,8 +1178,11 @@
     state.exchangeState = '';
     state.exchangeUntil = 0;
     state.exchangeSaturation = 0;
+    state.manifestationPresenceState = '';
+    state.manifestationPresenceUntil = 0;
     window.clearTimeout(state.forcePresenceTimer);
     window.clearTimeout(state.exchangeTimer);
+    window.clearTimeout(state.manifestationPresenceTimer);
     state.nextManifestationAt = Date.now() + 7200;
     state.warningIssued = false;
     setCadence(root, state, 'silence');
@@ -1136,7 +1217,8 @@
     const eventMessage = sampleCadence(root, state, stage, action);
     const environment = environmentForStage(stage);
     const exchangeMessage = state.actionCount % 2 === 0 ? pressureExchangeFeed(environment, state, action) : '';
-    const message = forceResponse(state, environment, action) || exchangeMessage || eventMessage || nextFrom(responses, state.actionCount - 1);
+    const presenceMessage = state.actionCount % 3 === 0 ? manifestationPresenceFeed(environment, state, action) : '';
+    const message = presenceMessage || forceResponse(state, environment, action) || exchangeMessage || eventMessage || nextFrom(responses, state.actionCount - 1);
     render(root, state, message);
     pulse(root, action);
 
@@ -1206,6 +1288,9 @@
           exchangeState: '',
           exchangeTimer: null,
           exchangeUntil: 0,
+          manifestationPresenceState: '',
+          manifestationPresenceTimer: null,
+          manifestationPresenceUntil: 0,
           lastManifestation: null,
           lastManifestationAt: 0,
           lastAction: '',
