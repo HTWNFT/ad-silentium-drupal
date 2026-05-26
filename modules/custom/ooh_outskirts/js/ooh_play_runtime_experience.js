@@ -122,6 +122,29 @@
     'extraction-window': 'RESOLUTION WINDOW'
   };
 
+  const resolutionFeedLines = {
+    extraction: [
+      'EXTRACTION CORRIDOR OPEN // SURVIVAL NOT YET CLEAN',
+      'ROUTE CLEARING UNDER PRESSURE // HOLD UNTIL SIGNAL RELEASE',
+      'FIELD LETS GO IN PIECES // DO NOT BREAK FORMATION'
+    ],
+    complete: [
+      'SURVIVAL CONFIRMED // FIELD RESIDUE STILL ATTACHED',
+      'EXTRACTION COMPLETE // OPERATOR RETURNS WITH TRACE CONTAMINATION',
+      'DEBRIEF CHANNEL OPEN // VICTORY REMAINS PARTIAL'
+    ],
+    collapse: [
+      'FIELD COLLAPSE RECORDED // ROUTE MEMORY FAILED',
+      'SIGNAL LOSS CONFIRMED // OPERATOR TRACE UNSTABLE',
+      'AFTERMATH CHANNEL OPEN // CONSEQUENCE CANNOT BE CLEARED'
+    ],
+    critical: [
+      'COLLAPSE PRESSURE BECOMING SELF-SUSTAINING',
+      'FIELD BREAKPOINT APPROACHING // ACTIONS NOW CARRY FORWARD',
+      'ROUTE STABILITY FAILING // EXTRACTION WINDOW MAY CLOSE'
+    ]
+  };
+
   const actionEffects = {
     scan: {
       label: 'EXPOSURE RISK',
@@ -713,9 +736,39 @@
     return pressureReadability[pressure] || pressure;
   }
 
-  function operationalEffectLabel(state, active) {
+  function runtimeResolutionState(root, state) {
+    const runtimeState = root.getAttribute('data-ooh-runtime-alive') || '';
+    if (runtimeState === 'complete' || root.classList.contains('is-field-extraction-complete')) {
+      return 'complete';
+    }
+    if (runtimeState === 'lost') {
+      return 'collapse';
+    }
+    if (runtimeState === 'extraction' || state.stageIndex >= 4) {
+      return 'extraction';
+    }
+    if (state.stageIndex >= 3 && state.exchangeSaturation >= 5) {
+      return 'critical';
+    }
+    return '';
+  }
+
+  function operationalEffectLabel(root, state, active) {
+    const resolutionState = active ? runtimeResolutionState(root, state) : '';
     if (!active) {
       return 'STANDBY';
+    }
+    if (resolutionState === 'complete') {
+      return 'PARTIAL RELIEF';
+    }
+    if (resolutionState === 'collapse') {
+      return 'AFTERMATH';
+    }
+    if (resolutionState === 'extraction') {
+      return 'SURVIVE WINDOW';
+    }
+    if (resolutionState === 'critical') {
+      return 'COLLAPSE NEAR';
     }
     if (state.operationalEffectUntil > Date.now()) {
       return state.operationalEffect || 'ACTIVE';
@@ -853,9 +906,19 @@
     return 'CLEAR';
   }
 
-  function routeDepthLabel(state, active) {
+  function routeDepthLabel(root, state, active) {
     if (!active) {
       return 'UNTRACED';
+    }
+    const resolutionState = runtimeResolutionState(root, state);
+    if (resolutionState === 'complete') {
+      return 'DEBRIEF';
+    }
+    if (resolutionState === 'collapse') {
+      return 'COLLAPSE';
+    }
+    if (resolutionState === 'critical') {
+      return 'BREAKPOINT';
     }
     if (state.sectorTransitionUntil > Date.now() && state.previousEnvironmentId) {
       return 'CROSSING';
@@ -870,6 +933,15 @@
       return 'INWARD';
     }
     return 'ENTRY ROUTE';
+  }
+
+  function resolutionFeed(root, state, environment) {
+    const resolutionState = runtimeResolutionState(root, state);
+    const list = resolutionFeedLines[resolutionState] || [];
+    if (!list.length) {
+      return '';
+    }
+    return environmentFeed(environment, nextFrom(list, state.feedIndex + state.actionCount + state.stageIndex));
   }
 
   function continuityFeed(state, environment) {
@@ -936,6 +1008,26 @@
       return 'RESIDUAL';
     }
     return 'QUIET';
+  }
+
+  function resolutionPresenceLabel(root, state, active) {
+    if (!active) {
+      return '';
+    }
+    const resolutionState = runtimeResolutionState(root, state);
+    if (resolutionState === 'complete') {
+      return 'WITHDRAWING';
+    }
+    if (resolutionState === 'collapse') {
+      return 'AFTERMATH';
+    }
+    if (resolutionState === 'extraction') {
+      return 'BEHIND';
+    }
+    if (resolutionState === 'critical') {
+      return 'CLOSING';
+    }
+    return '';
   }
 
   function pressureExchangeFeed(environment, state, type) {
@@ -1254,7 +1346,7 @@
     root.setAttribute('data-ooh-runtime-environment', active ? environment.id : 'standby');
     root.setAttribute('data-ooh-runtime-sector-light', active ? (registrySectorLightIdentity(environment) || {}).id || 'unmapped' : 'standby');
     root.setAttribute('data-ooh-runtime-soundtrack-identity', active ? (registrySoundtrackIdentity(root, environment) || {}).id || 'unmapped' : 'standby');
-    root.setAttribute('data-ooh-runtime-route-depth', active ? routeDepthLabel(state, active).toLowerCase().replace(/\s+/g, '-') : 'standby');
+    root.setAttribute('data-ooh-runtime-route-depth', active ? routeDepthLabel(root, state, active).toLowerCase().replace(/\s+/g, '-') : 'standby');
     root.setAttribute('data-ooh-runtime-force-presence', presenceLabel(state, active).toLowerCase());
     root.setAttribute('data-ooh-runtime-contact-tension', contactTensionState(state, active));
     root.setAttribute('data-ooh-runtime-pressure-exchange', pressureExchangeLabel(state, active).toLowerCase());
@@ -1267,7 +1359,7 @@
     experience.stage.textContent = active ? stage.label : 'STANDBY';
     experience.pressure.textContent = pressureDisplayLabel(pressure);
     if (experience.effect) {
-      experience.effect.textContent = operationalEffectLabel(state, active);
+      experience.effect.textContent = operationalEffectLabel(root, state, active);
     }
     experience.distinction.textContent = String(state.distinction);
     if (experience.contact) {
@@ -1286,7 +1378,7 @@
       experience.playlist.textContent = playlistLabel(root, environment);
     }
     if (experience.routeDepth) {
-      experience.routeDepth.textContent = routeDepthLabel(state, active);
+      experience.routeDepth.textContent = routeDepthLabel(root, state, active);
     }
     if (experience.residue) {
       experience.residue.textContent = active ? sectorResidueLabel(state) : 'CLEAR';
@@ -1298,7 +1390,7 @@
       experience.exchange.textContent = pressureExchangeLabel(state, active);
     }
     if (experience.manifestation) {
-      experience.manifestation.textContent = manifestationPresenceLabel(state, active);
+      experience.manifestation.textContent = resolutionPresenceLabel(root, state, active) || manifestationPresenceLabel(state, active);
     }
     if (state.pendingSectorTransitionMessage && state.sectorTransitionUntil <= Date.now()) {
       state.pendingSectorTransitionMessage = '';
@@ -1308,7 +1400,8 @@
       state.pendingSectorTransitionMessage = '';
     }
     const memoryMessage = active && !message && !transitionMessage ? continuityFeed(state, environment) : '';
-    experience.feed.textContent = message || transitionMessage || memoryMessage || (active ? environmentFeed(environment, nextFrom(stage.feed, state.feedIndex)) : 'Awaiting mission activation.');
+    const closureMessage = active && !message && !transitionMessage && !memoryMessage ? resolutionFeed(root, state, environment) : '';
+    experience.feed.textContent = message || transitionMessage || memoryMessage || closureMessage || (active ? environmentFeed(environment, nextFrom(stage.feed, state.feedIndex)) : 'Awaiting mission activation.');
   }
 
   function pulse(root, action) {
