@@ -114,6 +114,14 @@
     CLEARED: 'CLEARED'
   };
 
+  const escalationSequenceLabels = {
+    insertion: 'LOW PRESSURE',
+    contact: 'RISING CONTACT',
+    instability: 'UNSTABLE FIELD',
+    'collapse-risk': 'COLLAPSE RISK',
+    'extraction-window': 'RESOLUTION WINDOW'
+  };
+
   const actionEffects = {
     scan: {
       label: 'EXPOSURE RISK',
@@ -508,18 +516,30 @@
     return index;
   }
 
+  function actionEscalationDelta(action) {
+    if (action === 'scan') {
+      return 2;
+    }
+    if (action === 'hold') {
+      return -2;
+    }
+    return 0;
+  }
+
   function effectiveStageIndex(root, state) {
     if (!root.classList.contains('is-mission-active')) {
       return 0;
     }
 
-    const actionPressure = Math.floor(state.actionCount / 3);
+    const actionPressure = Math.floor(state.actionCount / 4);
+    const saturationPressure = Math.floor(state.exchangeSaturation / 3);
+    const momentumPressure = Math.floor(Math.max(0, state.escalationMomentum || 0) / 4);
     const timedPressure = timedStageIndex(state);
     const runtimeState = root.getAttribute('data-ooh-runtime-alive') || '';
     const extractionPressure = runtimeState === 'extraction' || root.classList.contains('is-field-extraction-complete') ? 4 : 0;
     const degradedPressure = runtimeState === 'degraded' || runtimeState === 'lost' ? 3 : 0;
 
-    return clamp(Math.max(actionPressure, timedPressure, extractionPressure, degradedPressure), 0, escalationStages.length - 1);
+    return clamp(Math.max(actionPressure, saturationPressure, momentumPressure, timedPressure, extractionPressure, degradedPressure), 0, escalationStages.length - 1);
   }
 
   function createPanel() {
@@ -709,7 +729,7 @@
     if (state.cadencePhase === 'stabilized') {
       return 'CONTROL HELD';
     }
-    return 'MONITORING';
+    return escalationSequenceLabels[(escalationStages[state.stageIndex] || {}).id] || 'MONITORING';
   }
 
   function actionEffectFeed(action, state, environment) {
@@ -930,7 +950,7 @@
     const now = Date.now();
     state.exchangeState = action;
     state.exchangeUntil = now + (action === 'hold' ? 3200 : 2600);
-    state.exchangeSaturation = clamp(state.exchangeSaturation + (action === 'hold' ? 1 : 2), 0, 7);
+    state.exchangeSaturation = clamp(state.exchangeSaturation + (action === 'scan' ? 2 : (action === 'signal' ? 1 : 0)), 0, 7);
     window.clearTimeout(state.exchangeTimer);
     state.exchangeTimer = window.setTimeout(function () {
       state.exchangeUntil = 0;
@@ -1073,7 +1093,7 @@
   function cadenceInterval(state, stage) {
     const profile = cadenceProfile(stage.id);
     const pressureTrim = state.stageIndex * 620;
-    const actionTrim = Math.min(1500, state.actionCount * 120);
+    const actionTrim = Math.min(1700, Math.max(0, state.escalationMomentum || 0) * 140);
     const breath = (state.cadenceIndex % 3) * 900;
     return clamp(profile.intervalMs - pressureTrim - actionTrim + breath, 5600, 12800);
   }
@@ -1164,7 +1184,7 @@
       state.nextManifestationAt = Math.max(state.nextManifestationAt || now, now + 5600);
       state.warningIssued = false;
       state.contactSuppressedUntil = now + 3600;
-      state.exchangeSaturation = clamp(state.exchangeSaturation - 1, 0, 7);
+      state.exchangeSaturation = clamp(state.exchangeSaturation - 2, 0, 7);
       markManifestationPresence(root, state, 'suppressed', 3600);
       setCadence(root, state, 'stabilized');
     }
@@ -1317,6 +1337,7 @@
     state.exchangeState = '';
     state.exchangeUntil = 0;
     state.exchangeSaturation = 0;
+    state.escalationMomentum = 0;
     state.manifestationPresenceState = '';
     state.manifestationPresenceUntil = 0;
     state.operationalEffect = '';
@@ -1348,6 +1369,7 @@
     state.forcePulseUntil = Date.now() + 1800;
     state.operationalEffect = (actionEffects[action] || {}).label || 'ACTIVE';
     state.operationalEffectUntil = Date.now() + 3200;
+    state.escalationMomentum = clamp((state.escalationMomentum || 0) + actionEscalationDelta(action), 0, 12);
     state.operatorPresence = clamp(state.operatorPresence + (action === 'hold' ? 1 : 2), 0, 6);
     markPressureExchange(root, state, action);
     window.clearTimeout(state.forcePresenceTimer);
@@ -1429,6 +1451,7 @@
           feedIndex: 0,
           contactSuppressedUntil: 0,
           exchangeSaturation: 0,
+          escalationMomentum: 0,
           exchangeState: '',
           exchangeTimer: null,
           exchangeUntil: 0,
