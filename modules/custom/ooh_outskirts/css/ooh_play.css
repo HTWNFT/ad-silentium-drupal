@@ -7285,6 +7285,100 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
   color: rgba(232, 252, 255, 0.76);
 }
 
+/* PHASE OA-127 - OPERATIONAL FOCUS AND TRAVERSAL IMMERSION */
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__visual {
+  outline: 1px solid rgba(216, 250, 255, 0.1);
+  outline-offset: -1px;
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 250, 255, 0.08),
+    inset 0 0 74px rgba(0, 0, 0, 0.44),
+    0 0 42px rgba(84, 225, 255, 0.032);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__visual::before,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__visual::before {
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(255, 255, 255, 0.02), transparent 42%),
+    radial-gradient(ellipse at 50% 52%, transparent 48%, rgba(0, 0, 0, 0.3) 88%),
+    linear-gradient(180deg, rgba(84, 225, 255, 0.025), rgba(0, 0, 0, 0.18));
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-runtime-experience-overlay__vignette,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-runtime-experience-overlay__vignette {
+  opacity: 0.62;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-runtime-experience-overlay__corridor,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-runtime-experience-overlay__corridor {
+  opacity: 0.18;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-experience-pulse] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-experience-pulse] .ooh-play-scene__visual {
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 250, 255, 0.12),
+    inset 0 0 88px rgba(0, 0, 0, 0.48),
+    0 0 48px rgba(84, 225, 255, 0.044);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-experience-pulse] .ooh-play__hud-panel--actions,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-experience-pulse] .ooh-play__hud-panel--actions {
+  border-color: rgba(216, 250, 255, 0.18);
+  box-shadow:
+    inset 0 0 20px rgba(84, 225, 255, 0.038),
+    0 0 18px rgba(84, 225, 255, 0.022);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="near"] .ooh-play-scene__visual,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="contact"] .ooh-play-scene__visual,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="nearby"] .ooh-play-scene__visual,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="occupied"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="near"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="contact"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="nearby"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="occupied"] .ooh-play-scene__visual {
+  outline-color: rgba(255, 223, 146, 0.14);
+  filter: saturate(1.12) contrast(1.11) brightness(0.94);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 223, 146, 0.12),
+    inset 0 0 96px rgba(0, 0, 0, 0.5),
+    0 0 50px rgba(255, 76, 76, 0.028),
+    0 0 44px rgba(84, 225, 255, 0.038);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="near"] .ooh-runtime-experience-overlay__vignette,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="contact"] .ooh-runtime-experience-overlay__vignette,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="nearby"] .ooh-runtime-experience-overlay__vignette,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="occupied"] .ooh-runtime-experience-overlay__vignette,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="near"] .ooh-runtime-experience-overlay__vignette,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="contact"] .ooh-runtime-experience-overlay__vignette,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="nearby"] .ooh-runtime-experience-overlay__vignette,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="occupied"] .ooh-runtime-experience-overlay__vignette {
+  opacity: 0.76;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-pressure-exchange="resisting"] .ooh-play-traversal-pressure,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-pressure-exchange="saturated"] .ooh-play-traversal-pressure,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-pressure-exchange="resisting"] .ooh-play-traversal-pressure,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-pressure-exchange="saturated"] .ooh-play-traversal-pressure {
+  opacity: 0.78;
+  border-block-color: rgba(255, 223, 146, 0.2);
+  box-shadow:
+    inset 0 0 24px rgba(255, 223, 146, 0.035),
+    0 0 28px rgba(84, 225, 255, 0.03);
+}
+
+@media (max-width: 720px) {
+  body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__visual,
+  body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__visual {
+    box-shadow:
+      inset 0 0 0 1px rgba(216, 250, 255, 0.075),
+      inset 0 0 54px rgba(0, 0, 0, 0.42),
+      0 0 30px rgba(84, 225, 255, 0.028);
+  }
+}
+
 /* PHASE OA-046 - RUNTIME CADENCE AND ENVIRONMENTAL DRIFT BASELINE */
 body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__visual,
 body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-alive] .ooh-play-scene__visual {
@@ -7330,6 +7424,34 @@ body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-com
 body.path-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell)[data-ooh-runtime-alive="extraction"] .ooh-play-scene__visual,
 body.page-play .ooh-play-session.ooh-play-briefing.is-field-extraction-complete:not(.is-combat-shell)[data-ooh-runtime-alive="extraction"] .ooh-play-scene__visual {
   filter: saturate(0.92) contrast(1.02) brightness(1.02);
+}
+
+/* OA-127 cascade reinforcement after runtime-alive visual states. */
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell) .ooh-play-scene__visual {
+  outline: 1px solid rgba(216, 250, 255, 0.1);
+  outline-offset: -1px;
+  box-shadow:
+    inset 0 0 0 1px rgba(216, 250, 255, 0.08),
+    inset 0 0 74px rgba(0, 0, 0, 0.44),
+    0 0 42px rgba(84, 225, 255, 0.032);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="near"] .ooh-play-scene__visual,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="contact"] .ooh-play-scene__visual,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="nearby"] .ooh-play-scene__visual,
+body.path-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="occupied"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="near"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-contact-tension="contact"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="nearby"] .ooh-play-scene__visual,
+body.page-play .ooh-play-session.ooh-play-briefing.is-mission-active:not(.is-combat-shell)[data-ooh-runtime-manifestation-presence="occupied"] .ooh-play-scene__visual {
+  outline-color: rgba(255, 223, 146, 0.14);
+  filter: saturate(1.12) contrast(1.11) brightness(0.94);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 223, 146, 0.12),
+    inset 0 0 96px rgba(0, 0, 0, 0.5),
+    0 0 50px rgba(255, 76, 76, 0.028),
+    0 0 44px rgba(84, 225, 255, 0.038);
 }
 
 @keyframes ooh-runtime-field-drift {
