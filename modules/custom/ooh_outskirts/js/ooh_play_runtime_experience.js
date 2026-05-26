@@ -104,6 +104,43 @@
     complete: 'CLEARED'
   };
 
+  const pressureReadability = {
+    QUIET: 'QUIET',
+    ACTIVE: 'ACTIVE FIELD',
+    RISING: 'RISING CONTACT',
+    UNSTABLE: 'UNSTABLE SIGNAL',
+    CRITICAL: 'CRITICAL FIELD',
+    EXTRACTION: 'EXTRACTION WINDOW',
+    CLEARED: 'CLEARED'
+  };
+
+  const actionEffects = {
+    scan: {
+      label: 'EXPOSURE RISK',
+      feed: [
+        'SCAN WIDENS THE SIGNAL BUT EXPOSES THE OPERATOR LINE',
+        'SCAN REVEALS PRESSURE AND LEAVES A BRIGHTER TRACE',
+        'SCAN FINDS MOVEMENT; CONTACT MAY ANSWER'
+      ]
+    },
+    hold: {
+      label: 'STABILIZING',
+      feed: [
+        'HOLD POSITION STABILIZES THE FIELD LINE',
+        'ANCHOR SET; PRESSURE ADVANCE SLOWS',
+        'OPERATOR CONTROL FORCES THE ROUTE TO SETTLE'
+      ]
+    },
+    signal: {
+      label: 'READINESS CHECK',
+      feed: [
+        'CHECK SIGNAL MEASURES THE NEXT INTERRUPTION',
+        'SIGNAL CHECK CLARIFIES READINESS WITHOUT ADVANCING',
+        'CHANNEL ASSESSMENT RETURNS PRESSURE TIMING'
+      ]
+    }
+  };
+
   const previewLoopDirectory = 'sites/default/files/adsilentium/play_loops/';
   const previewLoops = {
     insertion: 'oa_play_terra_video_loops_wasteland_ridge_core_insertion_drift_1440.mp4',
@@ -498,6 +535,7 @@
       '</div>',
       '<div class="ooh-runtime-experience-panel__grid">',
       '<div><span>PRESSURE</span><strong data-ooh-runtime-experience-pressure>QUIET</strong></div>',
+      '<div><span>EFFECT</span><strong data-ooh-runtime-experience-effect>STANDBY</strong></div>',
       '<div><span>DISTINCTION</span><strong data-ooh-runtime-experience-distinction>0</strong></div>',
       '<div><span>CONTACT</span><strong data-ooh-runtime-experience-contact>NONE</strong></div>',
       '<div><span>CADENCE</span><strong data-ooh-runtime-experience-cadence>QUIET</strong></div>',
@@ -587,6 +625,7 @@
       overlay: overlay,
       stage: panel.querySelector('[data-ooh-runtime-experience-stage]'),
       pressure: panel.querySelector('[data-ooh-runtime-experience-pressure]'),
+      effect: panel.querySelector('[data-ooh-runtime-experience-effect]'),
       distinction: panel.querySelector('[data-ooh-runtime-experience-distinction]'),
       contact: panel.querySelector('[data-ooh-runtime-experience-contact]'),
       cadence: panel.querySelector('[data-ooh-runtime-experience-cadence]'),
@@ -648,6 +687,37 @@
       return 'HELD';
     }
     return cadenceProfile(stage.id).label;
+  }
+
+  function pressureDisplayLabel(pressure) {
+    return pressureReadability[pressure] || pressure;
+  }
+
+  function operationalEffectLabel(state, active) {
+    if (!active) {
+      return 'STANDBY';
+    }
+    if (state.operationalEffectUntil > Date.now()) {
+      return state.operationalEffect || 'ACTIVE';
+    }
+    if (state.cadencePhase === 'warning') {
+      return 'CONTACT NEAR';
+    }
+    if (state.cadencePhase === 'interruption') {
+      return 'INTERRUPTION';
+    }
+    if (state.cadencePhase === 'stabilized') {
+      return 'CONTROL HELD';
+    }
+    return 'MONITORING';
+  }
+
+  function actionEffectFeed(action, state, environment) {
+    const effect = actionEffects[action];
+    if (!effect) {
+      return '';
+    }
+    return environmentFeed(environment, nextFrom(effect.feed, state.actionCount + state.stageIndex));
   }
 
   function environmentForStage(stage) {
@@ -1091,9 +1161,10 @@
     }
 
     if (action === 'hold') {
-      state.nextManifestationAt = Math.max(state.nextManifestationAt || now, now + 4200);
+      state.nextManifestationAt = Math.max(state.nextManifestationAt || now, now + 5600);
       state.warningIssued = false;
       state.contactSuppressedUntil = now + 3600;
+      state.exchangeSaturation = clamp(state.exchangeSaturation - 1, 0, 7);
       markManifestationPresence(root, state, 'suppressed', 3600);
       setCadence(root, state, 'stabilized');
     }
@@ -1105,8 +1176,14 @@
     }
 
     if (action === 'scan') {
+      state.nextManifestationAt = Math.min(state.nextManifestationAt || now + 6200, now + 5200);
+      state.warningIssued = false;
+      state.exchangeSaturation = clamp(state.exchangeSaturation + 1, 0, 7);
       markManifestationPresence(root, state, 'fleeting', 2100);
       return environmentFeed(environment, environmentPhrase(environment, 'contact', nextFrom(cadenceSamples.scan, state.actionCount + state.stageIndex), state.actionCount));
+    }
+    if (action === 'signal') {
+      state.nextManifestationAt = Math.max(state.nextManifestationAt || now, now + 3400);
     }
     if (action === 'hold') {
       return contactTensionFeed(environment, state, 'suppressed') || environmentFeed(environment, environmentPhrase(environment, 'routePressure', nextFrom(cadenceSamples.hold, state.actionCount + state.stageIndex), state.actionCount));
@@ -1168,7 +1245,10 @@
     experience.overlay.setAttribute('data-ooh-runtime-experience-stage', active ? stage.id : 'standby');
     experience.overlay.setAttribute('data-ooh-runtime-experience-pressure', pressure.toLowerCase());
     experience.stage.textContent = active ? stage.label : 'STANDBY';
-    experience.pressure.textContent = pressure;
+    experience.pressure.textContent = pressureDisplayLabel(pressure);
+    if (experience.effect) {
+      experience.effect.textContent = operationalEffectLabel(state, active);
+    }
     experience.distinction.textContent = String(state.distinction);
     if (experience.contact) {
       experience.contact.textContent = active ? contactLabel(state) : 'NONE';
@@ -1239,6 +1319,8 @@
     state.exchangeSaturation = 0;
     state.manifestationPresenceState = '';
     state.manifestationPresenceUntil = 0;
+    state.operationalEffect = '';
+    state.operationalEffectUntil = 0;
     window.clearTimeout(state.forcePresenceTimer);
     window.clearTimeout(state.exchangeTimer);
     window.clearTimeout(state.manifestationPresenceTimer);
@@ -1264,6 +1346,8 @@
     state.lastAction = action;
     state.lastForceAction = action;
     state.forcePulseUntil = Date.now() + 1800;
+    state.operationalEffect = (actionEffects[action] || {}).label || 'ACTIVE';
+    state.operationalEffectUntil = Date.now() + 3200;
     state.operatorPresence = clamp(state.operatorPresence + (action === 'hold' ? 1 : 2), 0, 6);
     markPressureExchange(root, state, action);
     window.clearTimeout(state.forcePresenceTimer);
@@ -1277,7 +1361,8 @@
     const environment = environmentForStage(stage);
     const exchangeMessage = state.actionCount % 2 === 0 ? pressureExchangeFeed(environment, state, action) : '';
     const presenceMessage = state.actionCount % 3 === 0 ? manifestationPresenceFeed(environment, state, action) : '';
-    const message = presenceMessage || forceResponse(state, environment, action) || exchangeMessage || eventMessage || nextFrom(responses, state.actionCount - 1);
+    const effectMessage = actionEffectFeed(action, state, environment);
+    const message = presenceMessage || forceResponse(state, environment, action) || exchangeMessage || eventMessage || effectMessage || nextFrom(responses, state.actionCount - 1);
     render(root, state, message);
     pulse(root, action);
 
@@ -1350,6 +1435,8 @@
           manifestationPresenceState: '',
           manifestationPresenceTimer: null,
           manifestationPresenceUntil: 0,
+          operationalEffect: '',
+          operationalEffectUntil: 0,
           lastManifestation: null,
           lastManifestationAt: 0,
           lastAction: '',
