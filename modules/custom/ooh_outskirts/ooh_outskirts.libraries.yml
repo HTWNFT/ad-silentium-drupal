@@ -46,6 +46,7 @@ play:
       css/ooh_game_generator.css: {}
       css/ooh_play.css: {}
   js:
+    js/ooh_identity_registries.js: {}
     js/ooh_play.js: {}
     js/ooh_play_runtime_experience.js: {}
   dependencies:
