@@ -151,6 +151,143 @@
     ]
   };
 
+  const environmentRegistry = {
+    deadRiverbed: {
+      id: 'dead-riverbed',
+      label: 'DEAD RIVERBED',
+      mood: 'ASH HAZE',
+      accent: 'magenta',
+      visualAnchors: ['collapsed ridges', 'skeletal pylons', 'ash channel'],
+      stageSuitability: ['insertion', 'contact'],
+      cadenceSuitability: ['silence', 'warning'],
+      warnings: [
+        'ASH HAZE SWALLOWING THE ROUTE',
+        'PYLON LINE VANISHING AHEAD'
+      ],
+      routePressure: [
+        'DEAD RIVERBED FUNNELS THE FIELD',
+        'ASH CHANNEL CLOSING AROUND THE OPERATOR'
+      ],
+      contact: [
+        'MOVEMENT REGISTERED BEYOND THE PYLONS',
+        'DISTANT SHAPE LOST IN ASH HAZE'
+      ]
+    },
+    utilityCorridor: {
+      id: 'utility-corridor',
+      label: 'UTILITY CORRIDOR',
+      mood: 'WET CONCRETE',
+      accent: 'green',
+      visualAnchors: ['chain fence', 'service cables', 'flooded concrete'],
+      stageSuitability: ['contact', 'instability'],
+      cadenceSuitability: ['warning', 'interruption'],
+      warnings: [
+        'FENCE LINE PICKS UP STATIC',
+        'UTILITY PASSAGE FALLS QUIET'
+      ],
+      routePressure: [
+        'FLOODED CONCRETE CARRIES THE SIGNAL BACK',
+        'SERVICE CABLES PULL THE ROUTE INWARD'
+      ],
+      contact: [
+        'CONTACT TRACE MOVING BEHIND THE FENCE',
+        'LOW MOTION ALONG THE SERVICE LINE'
+      ]
+    },
+    industrialMarsh: {
+      id: 'industrial-marsh',
+      label: 'INDUSTRIAL MARSH',
+      mood: 'BLUE FOG',
+      accent: 'cyan',
+      visualAnchors: ['standing water', 'antenna ruin', 'submerged cables'],
+      stageSuitability: ['instability', 'collapse-risk'],
+      cadenceSuitability: ['warning', 'interruption'],
+      warnings: [
+        'MARSH WATER CARRYING SIGNAL NOISE',
+        'ANTENNA RUIN ANSWERING THE FIELD'
+      ],
+      routePressure: [
+        'WATERLINE REFLECTIONS BREAK CADENCE',
+        'SUBMERGED CABLES HUM UNDER THE ROUTE'
+      ],
+      contact: [
+        'RIPPLE PATTERN MOVING AGAINST THE WIND',
+        'DISTANT CONTACT BEYOND THE ANTENNA RUIN'
+      ]
+    },
+    signalGrove: {
+      id: 'signal-grove',
+      label: 'SIGNAL GROVE',
+      mood: 'ROOT STATIC',
+      accent: 'cyan',
+      visualAnchors: ['root-wrapped trees', 'shallow water', 'cyan runes'],
+      stageSuitability: ['instability', 'collapse-risk'],
+      cadenceSuitability: ['silence', 'warning'],
+      warnings: [
+        'ROOT STATIC RISING THROUGH THE GROVE',
+        'GROVE BEACONS BEGIN ANSWERING EACH OTHER'
+      ],
+      routePressure: [
+        'ROOTS BEND THE FIELD INTO A NARROW PASSAGE',
+        'SHALLOW WATER HOLDS THE LAST SIGNAL ECHO'
+      ],
+      contact: [
+        'SILHOUETTE BREAKS BETWEEN ROOTS',
+        'CONTACT TRACE SPLITS ACROSS THE WATER'
+      ]
+    },
+    aerialTrenchGate: {
+      id: 'aerial-trench-gate',
+      label: 'TRENCH GATE',
+      mood: 'STORMFRONT',
+      accent: 'blue',
+      visualAnchors: ['cathedral gate', 'ruined trench', 'storm corridor'],
+      stageSuitability: ['collapse-risk', 'extraction-window'],
+      cadenceSuitability: ['interruption', 'stabilized'],
+      warnings: [
+        'STORMFRONT COMPRESSING THE GATE',
+        'TRENCH GATE LOSING DEPTH'
+      ],
+      routePressure: [
+        'GATE ARCH HOLDS THE ROUTE OPEN',
+        'STORM CORRIDOR PULLS AGAINST EXTRACTION'
+      ],
+      contact: [
+        'CONTACT PRESSURE BEHIND THE GATE',
+        'SILENT MOVEMENT ALONG THE TRENCH WALL'
+      ]
+    },
+    bunkerApproach: {
+      id: 'bunker-approach',
+      label: 'BUNKER APPROACH',
+      mood: 'BURIED SIGNAL',
+      accent: 'cyan',
+      visualAnchors: ['buried door', 'wet cables', 'cyan beacon'],
+      stageSuitability: ['extraction-window'],
+      cadenceSuitability: ['stabilized', 'interruption'],
+      warnings: [
+        'BURIED SIGNAL PULSE RETURNING',
+        'BUNKER DOOR REFLECTING FIELD PRESSURE'
+      ],
+      routePressure: [
+        'CABLE RUNS LEAD THE OPERATOR FORWARD',
+        'BURIED APPROACH HOLDS A THIN SIGNAL PATH'
+      ],
+      contact: [
+        'CONTACT TRACE FALLS BACK INTO THE BUNKER LINE',
+        'PRESSURE MOVES UNDER THE WATER'
+      ]
+    }
+  };
+
+  const stageEnvironmentMap = {
+    insertion: 'deadRiverbed',
+    contact: 'utilityCorridor',
+    instability: 'industrialMarsh',
+    'collapse-risk': 'signalGrove',
+    'extraction-window': 'bunkerApproach'
+  };
+
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   }
@@ -210,6 +347,7 @@
       '<div><span>DISTINCTION</span><strong data-ooh-runtime-experience-distinction>0</strong></div>',
       '<div><span>CONTACT</span><strong data-ooh-runtime-experience-contact>NONE</strong></div>',
       '<div><span>CADENCE</span><strong data-ooh-runtime-experience-cadence>QUIET</strong></div>',
+      '<div><span>ENVIRONMENT</span><strong data-ooh-runtime-experience-environment>UNMAPPED</strong></div>',
       '<div><span>SOUNDTRACK</span><strong data-ooh-runtime-experience-playlist>LINKED</strong></div>',
       '</div>',
       '<p class="ooh-runtime-experience-panel__feed" data-ooh-runtime-experience-feed>Awaiting mission activation.</p>'
@@ -292,6 +430,7 @@
       distinction: panel.querySelector('[data-ooh-runtime-experience-distinction]'),
       contact: panel.querySelector('[data-ooh-runtime-experience-contact]'),
       cadence: panel.querySelector('[data-ooh-runtime-experience-cadence]'),
+      environment: panel.querySelector('[data-ooh-runtime-experience-environment]'),
       playlist: panel.querySelector('[data-ooh-runtime-experience-playlist]'),
       loopPreview: loopPreview,
       loopVideo: loopPreview.querySelector('[data-ooh-runtime-experience-loop-video]'),
@@ -327,6 +466,25 @@
       return 'HELD';
     }
     return cadenceProfile(stage.id).label;
+  }
+
+  function environmentForStage(stage) {
+    return environmentRegistry[stageEnvironmentMap[stage.id]] || environmentRegistry.deadRiverbed;
+  }
+
+  function environmentPhrase(environment, field, fallback, index) {
+    const list = environment[field] || [];
+    if (!list.length) {
+      return fallback;
+    }
+    return nextFrom(list, index || 0);
+  }
+
+  function environmentFeed(environment, message) {
+    if (!message) {
+      return '';
+    }
+    return environment.label + ' // ' + message;
   }
 
   function loopPathForStage(stageId) {
@@ -414,6 +572,7 @@
     }
 
     const event = eventForStage(stage.id, state);
+    const environment = environmentForStage(stage);
     state.eventIndex += 1;
     state.lastManifestation = event;
     state.lastManifestationAt = now;
@@ -426,7 +585,7 @@
       clearManifestation(root);
     }, immediate ? 1250 : 1680);
 
-    return event.feed;
+    return environmentFeed(environment, environmentPhrase(environment, 'contact', event.feed, state.eventIndex));
   }
 
   function cadenceTick(root, state, stage) {
@@ -444,9 +603,10 @@
     }
 
     if (!state.warningIssued && state.nextManifestationAt - now <= profile.warningMs) {
+      const environment = environmentForStage(stage);
       state.warningIssued = true;
       setCadence(root, state, 'warning');
-      return nextFrom(cadenceWarnings, state.cadenceIndex + state.stageIndex);
+      return environmentFeed(environment, environmentPhrase(environment, 'warnings', nextFrom(cadenceWarnings, state.cadenceIndex + state.stageIndex), state.cadenceIndex));
     }
 
     if (state.cadencePhase !== 'stabilized') {
@@ -457,6 +617,7 @@
 
   function sampleCadence(root, state, stage, action) {
     const now = Date.now();
+    const environment = environmentForStage(stage);
     const timeSinceEvent = now - (state.lastManifestationAt || 0);
     const nearEvent = state.nextManifestationAt && state.nextManifestationAt - now <= cadenceProfile(stage.id).warningMs;
 
@@ -474,7 +635,13 @@
       setCadence(root, state, 'warning');
     }
 
-    return nextFrom(cadenceSamples[action] || cadenceSamples.scan, state.actionCount + state.stageIndex);
+    if (action === 'scan') {
+      return environmentFeed(environment, environmentPhrase(environment, 'contact', nextFrom(cadenceSamples.scan, state.actionCount + state.stageIndex), state.actionCount));
+    }
+    if (action === 'hold') {
+      return environmentFeed(environment, environmentPhrase(environment, 'routePressure', nextFrom(cadenceSamples.hold, state.actionCount + state.stageIndex), state.actionCount));
+    }
+    return environmentFeed(environment, nextFrom(cadenceSamples[action] || cadenceSamples.scan, state.actionCount + state.stageIndex));
   }
 
   function readPressure(root, state, stage) {
@@ -507,6 +674,7 @@
     const active = root.classList.contains('is-mission-active');
     state.stageIndex = active ? effectiveStageIndex(root, state) : 0;
     const stage = active ? escalationStages[state.stageIndex] : stageById('insertion');
+    const environment = environmentForStage(stage);
     const pressure = readPressure(root, state, stage);
     updateDistinction(state);
 
@@ -515,6 +683,7 @@
     root.setAttribute('data-ooh-runtime-experience-pressure', pressure.toLowerCase());
     root.setAttribute('data-ooh-runtime-experience-intensity', String(state.stageIndex));
     root.setAttribute('data-ooh-runtime-experience-cadence-state', active ? state.cadencePhase : 'standby');
+    root.setAttribute('data-ooh-runtime-environment', active ? environment.id : 'standby');
 
     syncLoopPreview(experience, active, stage.id);
 
@@ -529,10 +698,13 @@
     if (experience.cadence) {
       experience.cadence.textContent = active ? cadenceLabel(state, stage) : 'QUIET';
     }
+    if (experience.environment) {
+      experience.environment.textContent = active ? environment.label : 'UNMAPPED';
+    }
     if (experience.playlist) {
       experience.playlist.textContent = playlistLabel(root);
     }
-    experience.feed.textContent = message || (active ? nextFrom(stage.feed, state.feedIndex) : 'Awaiting mission activation.');
+    experience.feed.textContent = message || (active ? environmentFeed(environment, nextFrom(stage.feed, state.feedIndex)) : 'Awaiting mission activation.');
   }
 
   function pulse(root, action) {

@@ -7563,6 +7563,30 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-c
   box-shadow: inset 0 0 20px rgba(84, 225, 255, 0.042);
 }
 
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="dead-riverbed"] .ooh-runtime-experience-panel,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="dead-riverbed"] .ooh-runtime-experience-panel {
+  border-color: rgba(255, 70, 180, 0.16);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="utility-corridor"] .ooh-runtime-experience-panel,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="utility-corridor"] .ooh-runtime-experience-panel {
+  border-color: rgba(136, 255, 86, 0.14);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="industrial-marsh"] .ooh-runtime-experience-overlay,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="signal-grove"] .ooh-runtime-experience-overlay,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="bunker-approach"] .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="industrial-marsh"] .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="signal-grove"] .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="bunker-approach"] .ooh-runtime-experience-overlay {
+  filter: saturate(1.08) contrast(1.06) hue-rotate(3deg);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="aerial-trench-gate"] .ooh-runtime-experience-overlay,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment="aerial-trench-gate"] .ooh-runtime-experience-overlay {
+  filter: saturate(0.96) contrast(1.1) brightness(0.96);
+}
+
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="corridor"] .ooh-runtime-experience-overlay__corridor,
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="rupture"] .ooh-runtime-experience-overlay__corridor,
 body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="corridor"] .ooh-runtime-experience-overlay__corridor,
