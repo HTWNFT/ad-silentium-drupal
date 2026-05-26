@@ -7284,8 +7284,10 @@ body.page-play .ooh-play-session.ooh-play-briefing .ooh-runtime-experience-panel
 
 body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-route-depth],
 body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-residue],
+body.path-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-presence],
 body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-route-depth],
-body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-residue] {
+body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-residue],
+body.page-play .ooh-play-session.ooh-play-briefing [data-ooh-runtime-experience-presence] {
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -7542,6 +7544,37 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-p
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pulse="signal"] .ooh-runtime-experience-overlay__interference,
 body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-pulse="signal"] .ooh-runtime-experience-overlay__interference {
   opacity: 0.34;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="probing"] [data-ooh-runtime-experience-presence],
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="anchored"] [data-ooh-runtime-experience-presence],
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="reading"] [data-ooh-runtime-experience-presence],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="probing"] [data-ooh-runtime-experience-presence],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="anchored"] [data-ooh-runtime-experience-presence],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="reading"] [data-ooh-runtime-experience-presence] {
+  color: rgba(255, 223, 146, 0.95);
+  text-shadow: 0 0 14px rgba(255, 223, 146, 0.18);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="felt"] [data-ooh-runtime-experience-presence],
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="felt"] [data-ooh-runtime-experience-presence] {
+  color: rgba(244, 255, 255, 0.94);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="probing"] .ooh-runtime-experience-overlay__sweep,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="probing"] .ooh-runtime-experience-overlay__sweep {
+  opacity: 0.46;
+  animation-duration: 2.2s;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="anchored"] .ooh-runtime-experience-overlay__vignette,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="anchored"] .ooh-runtime-experience-overlay__vignette {
+  opacity: 0.78;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="reading"] .ooh-runtime-experience-overlay__interference,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-force-presence="reading"] .ooh-runtime-experience-overlay__interference {
+  opacity: 0.38;
 }
 
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-cadence-state="silence"] .ooh-runtime-experience-overlay__vignette,

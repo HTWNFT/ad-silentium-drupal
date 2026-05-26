@@ -77,6 +77,24 @@
     ]
   };
 
+  const forceResponses = {
+    scan: [
+      'FIELD EDGE DISTURBED BY OPERATOR PROBE',
+      'PRESSURE RECOILS FROM THE SCAN LINE',
+      'CONTACT TRACE RESISTS THE OPERATOR PRESENCE'
+    ],
+    hold: [
+      'ROUTE QUIETED BY OPERATOR ANCHOR',
+      'FIELD PRESSURE FORCED TO SETTLE',
+      'MANIFESTATION PRESSURE HELD OUTSIDE THE LINE'
+    ],
+    signal: [
+      'FIELD RESISTANCE READ THROUGH THE CHANNEL',
+      'SIGNAL PRESSURE RETURNS AGAINST THE OPERATOR',
+      'CONTACT FIELD MEASURES THE OPERATOR PRESENCE'
+    ]
+  };
+
   const runtimeStatePressure = {
     pressure: 'RISING',
     degraded: 'UNSTABLE',
@@ -384,6 +402,7 @@
       '<div><span>SOUNDTRACK</span><strong data-ooh-runtime-experience-playlist>LINKED</strong></div>',
       '<div><span>ROUTE</span><strong data-ooh-runtime-experience-route-depth>UNTRACED</strong></div>',
       '<div><span>RESIDUE</span><strong data-ooh-runtime-experience-residue>CLEAR</strong></div>',
+      '<div><span>PRESENCE</span><strong data-ooh-runtime-experience-presence>DORMANT</strong></div>',
       '</div>',
       '<p class="ooh-runtime-experience-panel__feed" data-ooh-runtime-experience-feed>Awaiting mission activation.</p>'
     ].join('');
@@ -469,6 +488,7 @@
       playlist: panel.querySelector('[data-ooh-runtime-experience-playlist]'),
       routeDepth: panel.querySelector('[data-ooh-runtime-experience-route-depth]'),
       residue: panel.querySelector('[data-ooh-runtime-experience-residue]'),
+      presence: panel.querySelector('[data-ooh-runtime-experience-presence]'),
       loopPreview: loopPreview,
       loopVideo: loopPreview.querySelector('[data-ooh-runtime-experience-loop-video]'),
       feed: panel.querySelector('[data-ooh-runtime-experience-feed]')
@@ -640,6 +660,39 @@
       return environmentFeed(environment, previous.residue + ' STILL CARRYING FORWARD');
     }
     return environmentFeed(environment, line);
+  }
+
+  function presenceLabel(state, active) {
+    if (!active) {
+      return 'DORMANT';
+    }
+    if (state.forcePulseUntil > Date.now()) {
+      if (state.lastForceAction === 'scan') {
+        return 'PROBING';
+      }
+      if (state.lastForceAction === 'hold') {
+        return 'ANCHORED';
+      }
+      if (state.lastForceAction === 'signal') {
+        return 'READING';
+      }
+    }
+    if (state.operatorPresence >= 5) {
+      return 'FELT';
+    }
+    if (state.operatorPresence >= 2) {
+      return 'WAKING';
+    }
+    return 'QUIET';
+  }
+
+  function forceResponse(state, environment, action) {
+    const list = forceResponses[action] || [];
+    const justTriggeredContact = Date.now() - (state.lastManifestationAt || 0) < 160;
+    if (!list.length || state.actionCount % 2 === 0 || justTriggeredContact) {
+      return '';
+    }
+    return environmentFeed(environment, nextFrom(list, state.actionCount + state.stageIndex));
   }
 
   function loopPathForStage(stageId) {
@@ -841,6 +894,7 @@
     root.setAttribute('data-ooh-runtime-experience-cadence-state', active ? state.cadencePhase : 'standby');
     root.setAttribute('data-ooh-runtime-environment', active ? environment.id : 'standby');
     root.setAttribute('data-ooh-runtime-route-depth', active ? routeDepthLabel(state, active).toLowerCase().replace(/\s+/g, '-') : 'standby');
+    root.setAttribute('data-ooh-runtime-force-presence', presenceLabel(state, active).toLowerCase());
 
     syncLoopPreview(experience, active, stage.id);
 
@@ -866,6 +920,9 @@
     }
     if (experience.residue) {
       experience.residue.textContent = active ? sectorResidueLabel(state) : 'CLEAR';
+    }
+    if (experience.presence) {
+      experience.presence.textContent = presenceLabel(state, active);
     }
     if (state.pendingSectorTransitionMessage && state.sectorTransitionUntil <= Date.now()) {
       state.pendingSectorTransitionMessage = '';
@@ -897,6 +954,10 @@
     state.sectorTransitionUntil = 0;
     window.clearTimeout(state.sectorTransitionTimer);
     state.transitionIndex = 0;
+    state.forcePulseUntil = 0;
+    state.lastForceAction = '';
+    state.operatorPresence = 1;
+    window.clearTimeout(state.forcePresenceTimer);
     state.nextManifestationAt = Date.now() + 7200;
     state.warningIssued = false;
     setCadence(root, state, 'silence');
@@ -917,10 +978,19 @@
     state.actionCount += 1;
     state.feedIndex += 1;
     state.lastAction = action;
+    state.lastForceAction = action;
+    state.forcePulseUntil = Date.now() + 1800;
+    state.operatorPresence = clamp(state.operatorPresence + (action === 'hold' ? 1 : 2), 0, 6);
+    window.clearTimeout(state.forcePresenceTimer);
+    state.forcePresenceTimer = window.setTimeout(function () {
+      state.forcePulseUntil = 0;
+      render(root, state);
+    }, 1850);
 
     const stage = escalationStages[effectiveStageIndex(root, state)];
     const eventMessage = sampleCadence(root, state, stage, action);
-    const message = eventMessage || nextFrom(responses, state.actionCount - 1);
+    const environment = environmentForStage(stage);
+    const message = forceResponse(state, environment, action) || eventMessage || nextFrom(responses, state.actionCount - 1);
     render(root, state, message);
     pulse(root, action);
 
@@ -994,6 +1064,10 @@
           pendingSectorTransitionMessage: '',
           sectorTransitionUntil: 0,
           sectorTransitionTimer: null,
+          forcePulseUntil: 0,
+          forcePresenceTimer: null,
+          lastForceAction: '',
+          operatorPresence: 0,
           stageIndex: 0,
           startedAt: root.classList.contains('is-mission-active') ? Date.now() : 0,
           transitionIndex: 0,
