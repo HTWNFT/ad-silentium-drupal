@@ -118,6 +118,39 @@
     ]
   };
 
+  const cadenceProfiles = {
+    insertion: { intervalMs: 11800, warningMs: 3200, recoveryMs: 1800, label: 'QUIET' },
+    contact: { intervalMs: 9800, warningMs: 3400, recoveryMs: 1700, label: 'WATCHING' },
+    instability: { intervalMs: 8200, warningMs: 3600, recoveryMs: 1600, label: 'UNSTABLE' },
+    'collapse-risk': { intervalMs: 6900, warningMs: 3900, recoveryMs: 1450, label: 'PRESSING' },
+    'extraction-window': { intervalMs: 7600, warningMs: 3500, recoveryMs: 1500, label: 'CLOSING' }
+  };
+
+  const cadenceWarnings = [
+    'THE FIELD HAS GONE QUIET',
+    'CONTACT PRESSURE BUILDING OUTSIDE VISIBILITY',
+    'ROUTE STATIC GATHERING AHEAD',
+    'SOMETHING IS NEARBY'
+  ];
+
+  const cadenceSamples = {
+    scan: [
+      'SCAN RETURNS EMPTY CORRIDOR',
+      'SCAN FINDS PRESSURE BUT NO SHAPE',
+      'SCAN PICKS UP DISTANT MOTION'
+    ],
+    hold: [
+      'HOLDING POSITION DELAYS THE PRESSURE',
+      'ANCHOR STEADY // FIELD RESPONSE SLOWS',
+      'STABILIZATION WINDOW EXTENDED'
+    ],
+    signal: [
+      'SIGNAL CHECK MAPS THE NEXT INTERRUPTION',
+      'SIGNAL RHYTHM CONFIRMED',
+      'CADENCE TRACE LOCKED'
+    ]
+  };
+
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
   }
@@ -176,6 +209,7 @@
       '<div><span>PRESSURE</span><strong data-ooh-runtime-experience-pressure>QUIET</strong></div>',
       '<div><span>DISTINCTION</span><strong data-ooh-runtime-experience-distinction>0</strong></div>',
       '<div><span>CONTACT</span><strong data-ooh-runtime-experience-contact>NONE</strong></div>',
+      '<div><span>CADENCE</span><strong data-ooh-runtime-experience-cadence>QUIET</strong></div>',
       '<div><span>SOUNDTRACK</span><strong data-ooh-runtime-experience-playlist>LINKED</strong></div>',
       '</div>',
       '<p class="ooh-runtime-experience-panel__feed" data-ooh-runtime-experience-feed>Awaiting mission activation.</p>'
@@ -257,6 +291,7 @@
       pressure: panel.querySelector('[data-ooh-runtime-experience-pressure]'),
       distinction: panel.querySelector('[data-ooh-runtime-experience-distinction]'),
       contact: panel.querySelector('[data-ooh-runtime-experience-contact]'),
+      cadence: panel.querySelector('[data-ooh-runtime-experience-cadence]'),
       playlist: panel.querySelector('[data-ooh-runtime-experience-playlist]'),
       loopPreview: loopPreview,
       loopVideo: loopPreview.querySelector('[data-ooh-runtime-experience-loop-video]'),
@@ -275,6 +310,23 @@
       return state.stageIndex > 0 ? 'DISTANT' : 'NONE';
     }
     return state.lastManifestation.label;
+  }
+
+  function cadenceProfile(stageId) {
+    return cadenceProfiles[stageId] || cadenceProfiles.insertion;
+  }
+
+  function cadenceLabel(state, stage) {
+    if (state.cadencePhase === 'interruption') {
+      return 'INTERRUPT';
+    }
+    if (state.cadencePhase === 'warning') {
+      return 'NEAR';
+    }
+    if (state.cadencePhase === 'stabilized') {
+      return 'HELD';
+    }
+    return cadenceProfile(stage.id).label;
   }
 
   function loopPathForStage(stageId) {
@@ -332,6 +384,25 @@
     window.clearTimeout(root.oohRuntimeManifestationTimer);
   }
 
+  function cadenceInterval(state, stage) {
+    const profile = cadenceProfile(stage.id);
+    const pressureTrim = state.stageIndex * 620;
+    const actionTrim = Math.min(1500, state.actionCount * 120);
+    const breath = (state.cadenceIndex % 3) * 900;
+    return clamp(profile.intervalMs - pressureTrim - actionTrim + breath, 5600, 12800);
+  }
+
+  function scheduleNextCadence(state, stage, now, extraDelay) {
+    state.cadenceIndex += 1;
+    state.nextManifestationAt = now + cadenceInterval(state, stage) + (extraDelay || 0);
+    state.warningIssued = false;
+  }
+
+  function setCadence(root, state, phase) {
+    state.cadencePhase = phase;
+    root.setAttribute('data-ooh-runtime-experience-cadence-state', phase);
+  }
+
   function triggerManifestation(root, state, stage, immediate) {
     if (!root.classList.contains('is-mission-active')) {
       return '';
@@ -345,7 +416,9 @@
     const event = eventForStage(stage.id, state);
     state.eventIndex += 1;
     state.lastManifestation = event;
-    state.nextManifestationAt = now + clamp(8800 - (state.stageIndex * 900), 5200, 8800);
+    state.lastManifestationAt = now;
+    setCadence(root, state, 'interruption');
+    scheduleNextCadence(state, stage, now, cadenceProfile(stage.id).recoveryMs);
 
     root.setAttribute('data-ooh-runtime-experience-contact', event.id);
     window.clearTimeout(root.oohRuntimeManifestationTimer);
@@ -354,6 +427,54 @@
     }, immediate ? 1250 : 1680);
 
     return event.feed;
+  }
+
+  function cadenceTick(root, state, stage) {
+    const now = Date.now();
+    const profile = cadenceProfile(stage.id);
+
+    if (!state.nextManifestationAt) {
+      scheduleNextCadence(state, stage, now, 1800);
+      setCadence(root, state, 'silence');
+      return '';
+    }
+
+    if (now >= state.nextManifestationAt) {
+      return triggerManifestation(root, state, stage, false);
+    }
+
+    if (!state.warningIssued && state.nextManifestationAt - now <= profile.warningMs) {
+      state.warningIssued = true;
+      setCadence(root, state, 'warning');
+      return nextFrom(cadenceWarnings, state.cadenceIndex + state.stageIndex);
+    }
+
+    if (state.cadencePhase !== 'stabilized') {
+      setCadence(root, state, 'silence');
+    }
+    return '';
+  }
+
+  function sampleCadence(root, state, stage, action) {
+    const now = Date.now();
+    const timeSinceEvent = now - (state.lastManifestationAt || 0);
+    const nearEvent = state.nextManifestationAt && state.nextManifestationAt - now <= cadenceProfile(stage.id).warningMs;
+
+    if (action === 'scan' && nearEvent && timeSinceEvent > 4200) {
+      return triggerManifestation(root, state, stage, true);
+    }
+
+    if (action === 'hold') {
+      state.nextManifestationAt = Math.max(state.nextManifestationAt || now, now + 4200);
+      state.warningIssued = false;
+      setCadence(root, state, 'stabilized');
+    }
+
+    if (action === 'signal' && nearEvent) {
+      setCadence(root, state, 'warning');
+    }
+
+    return nextFrom(cadenceSamples[action] || cadenceSamples.scan, state.actionCount + state.stageIndex);
   }
 
   function readPressure(root, state, stage) {
@@ -393,6 +514,7 @@
     root.setAttribute('data-ooh-runtime-experience-stage', active ? stage.id : 'standby');
     root.setAttribute('data-ooh-runtime-experience-pressure', pressure.toLowerCase());
     root.setAttribute('data-ooh-runtime-experience-intensity', String(state.stageIndex));
+    root.setAttribute('data-ooh-runtime-experience-cadence-state', active ? state.cadencePhase : 'standby');
 
     syncLoopPreview(experience, active, stage.id);
 
@@ -403,6 +525,9 @@
     experience.distinction.textContent = String(state.distinction);
     if (experience.contact) {
       experience.contact.textContent = active ? contactLabel(state) : 'NONE';
+    }
+    if (experience.cadence) {
+      experience.cadence.textContent = active ? cadenceLabel(state, stage) : 'QUIET';
     }
     if (experience.playlist) {
       experience.playlist.textContent = playlistLabel(root);
@@ -423,7 +548,9 @@
     state.startedAt = Date.now();
     state.feedIndex = 0;
     state.stageIndex = 0;
-    state.nextManifestationAt = Date.now() + 5200;
+    state.nextManifestationAt = Date.now() + 7200;
+    state.warningIssued = false;
+    setCadence(root, state, 'silence');
     render(root, state, 'YOU ARE INSIDE THE FIELD');
     pulse(root, 'activate');
   }
@@ -443,7 +570,7 @@
     state.lastAction = action;
 
     const stage = escalationStages[effectiveStageIndex(root, state)];
-    const eventMessage = (action === 'scan' || state.actionCount % 4 === 0) ? triggerManifestation(root, state, stage, true) : '';
+    const eventMessage = sampleCadence(root, state, stage, action);
     const message = eventMessage || nextFrom(responses, state.actionCount - 1);
     render(root, state, message);
     pulse(root, action);
@@ -494,7 +621,7 @@
       }
       state.feedIndex += 1;
       const stage = escalationStages[effectiveStageIndex(root, state)];
-      render(root, state, triggerManifestation(root, state, stage, false));
+      render(root, state, cadenceTick(root, state, stage));
     }, 5200);
   }
 
@@ -505,13 +632,17 @@
           activated: root.classList.contains('is-mission-active'),
           actionCount: 0,
           distinction: 0,
+          cadenceIndex: 0,
+          cadencePhase: 'standby',
           eventIndex: 0,
           feedIndex: 0,
           lastManifestation: null,
+          lastManifestationAt: 0,
           lastAction: '',
           nextManifestationAt: 0,
           stageIndex: 0,
-          startedAt: root.classList.contains('is-mission-active') ? Date.now() : 0
+          startedAt: root.classList.contains('is-mission-active') ? Date.now() : 0,
+          warningIssued: false
         };
 
         ensureExperience(root);
