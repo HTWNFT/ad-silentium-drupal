@@ -376,6 +376,45 @@
     'extraction-window': 'bunkerApproach'
   };
 
+  function identityRegistries() {
+    return window.OOHIdentityRegistries || {};
+  }
+
+  function identityKeyFromLabel(value) {
+    return String(value || '')
+      .replace(/([a-z])([A-Z])/g, '$1_$2')
+      .replace(/[^A-Za-z0-9]+/g, '_')
+      .replace(/^_+|_+$/g, '')
+      .toUpperCase();
+  }
+
+  function registryEnvironmentIdentity(environment) {
+    const registry = identityRegistries().environment || {};
+    const keys = Object.keys(registry);
+    for (let index = 0; index < keys.length; index += 1) {
+      if (registry[keys[index]].id === environment.id) {
+        return registry[keys[index]];
+      }
+    }
+    return null;
+  }
+
+  function registrySoundtrackIdentity(root, environment) {
+    const registry = identityRegistries().soundtrack || {};
+    const environmentIdentity = registryEnvironmentIdentity(environment || {});
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    const authoredLabel = shell ? shell.getAttribute('data-playlist-label') : '';
+    const authoredKey = identityKeyFromLabel(authoredLabel);
+
+    return registry[authoredKey] || registry[environmentIdentity && environmentIdentity.soundtrackIdentity] || null;
+  }
+
+  function registrySectorLightIdentity(environment) {
+    const registry = identityRegistries().sectorLight || {};
+    const environmentIdentity = registryEnvironmentIdentity(environment || {});
+    return registry[environmentIdentity && environmentIdentity.sectorLightIdentity] || null;
+  }
+
   const sectorTransitionPhrases = {
     'dead-riverbed>utility-corridor': [
       'SERVICE LINE DEGRADATION DETECTED // ASH RESIDUE ON THE CONCRETE',
@@ -463,6 +502,7 @@
       '<div><span>CONTACT</span><strong data-ooh-runtime-experience-contact>NONE</strong></div>',
       '<div><span>CADENCE</span><strong data-ooh-runtime-experience-cadence>QUIET</strong></div>',
       '<div><span>ENVIRONMENT</span><strong data-ooh-runtime-experience-environment>UNMAPPED</strong></div>',
+      '<div><span>LIGHT</span><strong data-ooh-runtime-experience-sector-light>UNMAPPED</strong></div>',
       '<div><span>SOUNDTRACK</span><strong data-ooh-runtime-experience-playlist>LINKED</strong></div>',
       '<div><span>ROUTE</span><strong data-ooh-runtime-experience-route-depth>UNTRACED</strong></div>',
       '<div><span>RESIDUE</span><strong data-ooh-runtime-experience-residue>CLEAR</strong></div>',
@@ -551,6 +591,7 @@
       contact: panel.querySelector('[data-ooh-runtime-experience-contact]'),
       cadence: panel.querySelector('[data-ooh-runtime-experience-cadence]'),
       environment: panel.querySelector('[data-ooh-runtime-experience-environment]'),
+      sectorLight: panel.querySelector('[data-ooh-runtime-experience-sector-light]'),
       playlist: panel.querySelector('[data-ooh-runtime-experience-playlist]'),
       routeDepth: panel.querySelector('[data-ooh-runtime-experience-route-depth]'),
       residue: panel.querySelector('[data-ooh-runtime-experience-residue]'),
@@ -563,9 +604,15 @@
     };
   }
 
-  function playlistLabel(root) {
+  function playlistLabel(root, environment) {
     const shell = root.querySelector('[data-ooh-scene-shell]');
     const label = shell ? shell.getAttribute('data-playlist-label') : '';
+    const soundtrackIdentity = registrySoundtrackIdentity(root, environment || {});
+
+    if (soundtrackIdentity && soundtrackIdentity.displayName) {
+      return soundtrackIdentity.displayName.toUpperCase();
+    }
+
     return label || (root.getAttribute('data-ooh-media-attached') === 'true' ? 'ACTIVE' : 'LINKED');
   }
 
@@ -692,10 +739,17 @@
 
   function sectorEnvironmentLabel(state, environment) {
     const previous = environmentById(state.previousEnvironmentId);
+    const environmentIdentity = registryEnvironmentIdentity(environment);
+    const label = environmentIdentity && environmentIdentity.label ? environmentIdentity.label.toUpperCase() : environment.label;
     if (state.sectorTransitionUntil > Date.now() && previous) {
-      return environment.label + ' / ' + previous.residue;
+      return label + ' / ' + previous.residue;
     }
-    return environment.label;
+    return label;
+  }
+
+  function sectorLightLabel(environment) {
+    const sectorLightIdentity = registrySectorLightIdentity(environment);
+    return sectorLightIdentity && sectorLightIdentity.label ? sectorLightIdentity.label.toUpperCase() : 'UNMAPPED';
   }
 
   function sectorResidueLabel(state) {
@@ -1101,6 +1155,8 @@
     root.setAttribute('data-ooh-runtime-experience-intensity', String(state.stageIndex));
     root.setAttribute('data-ooh-runtime-experience-cadence-state', active ? state.cadencePhase : 'standby');
     root.setAttribute('data-ooh-runtime-environment', active ? environment.id : 'standby');
+    root.setAttribute('data-ooh-runtime-sector-light', active ? (registrySectorLightIdentity(environment) || {}).id || 'unmapped' : 'standby');
+    root.setAttribute('data-ooh-runtime-soundtrack-identity', active ? (registrySoundtrackIdentity(root, environment) || {}).id || 'unmapped' : 'standby');
     root.setAttribute('data-ooh-runtime-route-depth', active ? routeDepthLabel(state, active).toLowerCase().replace(/\s+/g, '-') : 'standby');
     root.setAttribute('data-ooh-runtime-force-presence', presenceLabel(state, active).toLowerCase());
     root.setAttribute('data-ooh-runtime-contact-tension', contactTensionState(state, active));
@@ -1123,8 +1179,11 @@
     if (experience.environment) {
       experience.environment.textContent = active ? sectorEnvironmentLabel(state, environment) : 'UNMAPPED';
     }
+    if (experience.sectorLight) {
+      experience.sectorLight.textContent = active ? sectorLightLabel(environment) : 'UNMAPPED';
+    }
     if (experience.playlist) {
-      experience.playlist.textContent = playlistLabel(root);
+      experience.playlist.textContent = playlistLabel(root, environment);
     }
     if (experience.routeDepth) {
       experience.routeDepth.textContent = routeDepthLabel(state, active);

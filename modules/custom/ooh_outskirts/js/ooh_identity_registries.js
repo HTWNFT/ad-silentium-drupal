@@ -106,8 +106,66 @@
     })
   });
 
+  const environmentRegistry = Object.freeze({
+    DEAD_RIVERBED: Object.freeze({
+      id: 'dead-riverbed',
+      label: 'Dead Riverbed',
+      sectorLightIdentity: 'WASHED_GRAY_DAYLIGHT',
+      soundtrackIdentity: 'STEEL_WRECKONING',
+      cadenceVocabulary: 'ash-haze-operational',
+      routePressureVocabulary: 'funnelled-field-channel',
+      manifestationVocabulary: 'distant-shape-trace'
+    }),
+    UTILITY_CORRIDOR: Object.freeze({
+      id: 'utility-corridor',
+      label: 'Utility Corridor',
+      sectorLightIdentity: 'FLUORESCENT_INDUSTRIAL',
+      soundtrackIdentity: 'STEEL_WRECKONING',
+      cadenceVocabulary: 'service-line-static',
+      routePressureVocabulary: 'flooded-concrete-return',
+      manifestationVocabulary: 'fence-line-contact'
+    }),
+    INDUSTRIAL_MARSH: Object.freeze({
+      id: 'industrial-marsh',
+      label: 'Industrial Marsh',
+      sectorLightIdentity: 'REFLECTIVE_MARSH',
+      soundtrackIdentity: 'SIGNAL_COLLAPSE',
+      cadenceVocabulary: 'waterline-interference',
+      routePressureVocabulary: 'submerged-signal-bed',
+      manifestationVocabulary: 'ripple-pattern-contact'
+    }),
+    SIGNAL_GROVE: Object.freeze({
+      id: 'signal-grove',
+      label: 'Signal Grove',
+      sectorLightIdentity: 'PALE_CYAN_SIGNAL',
+      soundtrackIdentity: 'SIGNAL_COLLAPSE',
+      cadenceVocabulary: 'root-static-beacon',
+      routePressureVocabulary: 'narrow-signal-passage',
+      manifestationVocabulary: 'split-trace-presence'
+    }),
+    AERIAL_TRENCH_GATE: Object.freeze({
+      id: 'aerial-trench-gate',
+      label: 'Trench Gate',
+      sectorLightIdentity: 'MOONLIT_TRENCH',
+      soundtrackIdentity: 'ASHEN_FRONTIER',
+      cadenceVocabulary: 'stormfront-corridor',
+      routePressureVocabulary: 'gate-arch-extraction',
+      manifestationVocabulary: 'trench-wall-pressure'
+    }),
+    BUNKER_APPROACH: Object.freeze({
+      id: 'bunker-approach',
+      label: 'Bunker Approach',
+      sectorLightIdentity: 'SPECTRAL_OVEREXPOSED',
+      soundtrackIdentity: 'SILENT_APPROACH',
+      cadenceVocabulary: 'buried-signal-pulse',
+      routePressureVocabulary: 'thin-signal-path',
+      manifestationVocabulary: 'subsurface-pressure'
+    })
+  });
+
   window.OOHIdentityRegistries = Object.freeze({
     soundtrack: soundtrackRegistry,
-    sectorLight: sectorLightRegistry
+    sectorLight: sectorLightRegistry,
+    environment: environmentRegistry
   });
 })(window);
