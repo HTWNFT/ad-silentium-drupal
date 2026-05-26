@@ -7587,6 +7587,42 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-environment=
   filter: saturate(0.96) contrast(1.1) brightness(0.96);
 }
 
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] .ooh-runtime-experience-panel,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] .ooh-runtime-experience-panel {
+  border-color: rgba(216, 250, 255, 0.22);
+  box-shadow:
+    inset 0 0 24px rgba(84, 225, 255, 0.055),
+    inset 0 -18px 38px rgba(255, 70, 180, 0.035);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] .ooh-runtime-experience-overlay__corridor,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] .ooh-runtime-experience-overlay__corridor {
+  opacity: 0.36;
+  animation-duration: 5.6s;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] .ooh-runtime-experience-overlay__vignette,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-transition="bleed"] .ooh-runtime-experience-overlay__vignette {
+  opacity: 0.72;
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-residue="dead-riverbed"] .ooh-runtime-experience-overlay__interference,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-residue="dead-riverbed"] .ooh-runtime-experience-overlay__interference {
+  background-image: linear-gradient(90deg, transparent, rgba(255, 70, 180, 0.1), transparent);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-residue="utility-corridor"] .ooh-runtime-experience-overlay__interference,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-residue="utility-corridor"] .ooh-runtime-experience-overlay__interference {
+  background-image: linear-gradient(90deg, transparent, rgba(136, 255, 86, 0.095), transparent);
+}
+
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-residue="industrial-marsh"] .ooh-runtime-experience-overlay__interference,
+body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-residue="signal-grove"] .ooh-runtime-experience-overlay__interference,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-residue="industrial-marsh"] .ooh-runtime-experience-overlay__interference,
+body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-sector-residue="signal-grove"] .ooh-runtime-experience-overlay__interference {
+  background-image: linear-gradient(90deg, transparent, rgba(84, 225, 255, 0.1), transparent);
+}
+
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="corridor"] .ooh-runtime-experience-overlay__corridor,
 body.path-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="rupture"] .ooh-runtime-experience-overlay__corridor,
 body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-contact="corridor"] .ooh-runtime-experience-overlay__corridor,

@@ -157,6 +157,7 @@
       label: 'DEAD RIVERBED',
       mood: 'ASH HAZE',
       accent: 'magenta',
+      residue: 'ASH RESIDUE',
       visualAnchors: ['collapsed ridges', 'skeletal pylons', 'ash channel'],
       stageSuitability: ['insertion', 'contact'],
       cadenceSuitability: ['silence', 'warning'],
@@ -178,6 +179,7 @@
       label: 'UTILITY CORRIDOR',
       mood: 'WET CONCRETE',
       accent: 'green',
+      residue: 'SERVICE-LINE HUM',
       visualAnchors: ['chain fence', 'service cables', 'flooded concrete'],
       stageSuitability: ['contact', 'instability'],
       cadenceSuitability: ['warning', 'interruption'],
@@ -199,6 +201,7 @@
       label: 'INDUSTRIAL MARSH',
       mood: 'BLUE FOG',
       accent: 'cyan',
+      residue: 'WATERLINE STATIC',
       visualAnchors: ['standing water', 'antenna ruin', 'submerged cables'],
       stageSuitability: ['instability', 'collapse-risk'],
       cadenceSuitability: ['warning', 'interruption'],
@@ -220,6 +223,7 @@
       label: 'SIGNAL GROVE',
       mood: 'ROOT STATIC',
       accent: 'cyan',
+      residue: 'ROOT STATIC',
       visualAnchors: ['root-wrapped trees', 'shallow water', 'cyan runes'],
       stageSuitability: ['instability', 'collapse-risk'],
       cadenceSuitability: ['silence', 'warning'],
@@ -241,6 +245,7 @@
       label: 'TRENCH GATE',
       mood: 'STORMFRONT',
       accent: 'blue',
+      residue: 'STORMFRONT PRESSURE',
       visualAnchors: ['cathedral gate', 'ruined trench', 'storm corridor'],
       stageSuitability: ['collapse-risk', 'extraction-window'],
       cadenceSuitability: ['interruption', 'stabilized'],
@@ -262,6 +267,7 @@
       label: 'BUNKER APPROACH',
       mood: 'BURIED SIGNAL',
       accent: 'cyan',
+      residue: 'BURIED SIGNAL',
       visualAnchors: ['buried door', 'wet cables', 'cyan beacon'],
       stageSuitability: ['extraction-window'],
       cadenceSuitability: ['stabilized', 'interruption'],
@@ -286,6 +292,25 @@
     instability: 'industrialMarsh',
     'collapse-risk': 'signalGrove',
     'extraction-window': 'bunkerApproach'
+  };
+
+  const sectorTransitionPhrases = {
+    'dead-riverbed>utility-corridor': [
+      'SERVICE LINE DEGRADATION DETECTED // ASH RESIDUE ON THE CONCRETE',
+      'PYLON HAZE CARRYING INTO THE FLOODED PASSAGE'
+    ],
+    'utility-corridor>industrial-marsh': [
+      'FLOODED UTILITY RUN BLEEDS INTO MARSH SIGNAL',
+      'SERVICE-LINE HUM SINKING UNDER THE WATER'
+    ],
+    'industrial-marsh>signal-grove': [
+      'LOW ROOT INTERFERENCE ALONG THE SIGNAL BED',
+      'WATERLINE STATIC THREADING INTO THE GROVE'
+    ],
+    'signal-grove>bunker-approach': [
+      'BURIED SIGNAL CARRYING ROOT STATIC FORWARD',
+      'ROOT ECHOES CLINGING TO THE BUNKER APPROACH'
+    ]
   };
 
   function clamp(value, min, max) {
@@ -472,6 +497,17 @@
     return environmentRegistry[stageEnvironmentMap[stage.id]] || environmentRegistry.deadRiverbed;
   }
 
+  function environmentById(id) {
+    const keys = Object.keys(environmentRegistry);
+    for (let index = 0; index < keys.length; index += 1) {
+      const environment = environmentRegistry[keys[index]];
+      if (environment.id === id) {
+        return environment;
+      }
+    }
+    return null;
+  }
+
   function environmentPhrase(environment, field, fallback, index) {
     const list = environment[field] || [];
     if (!list.length) {
@@ -485,6 +521,71 @@
       return '';
     }
     return environment.label + ' // ' + message;
+  }
+
+  function sectorTransitionPhrase(previous, current, state) {
+    if (!previous || !current) {
+      return '';
+    }
+    const key = previous.id + '>' + current.id;
+    const authored = sectorTransitionPhrases[key] || [];
+    if (authored.length) {
+      return nextFrom(authored, state.transitionIndex);
+    }
+    return previous.residue + ' CARRYING INTO ' + current.label;
+  }
+
+  function updateSectorMemory(root, state, environment, active) {
+    const now = Date.now();
+
+    if (!active) {
+      state.currentEnvironmentId = '';
+      state.previousEnvironmentId = '';
+      state.pendingSectorTransitionMessage = '';
+      state.sectorTransitionUntil = 0;
+      window.clearTimeout(state.sectorTransitionTimer);
+      root.setAttribute('data-ooh-runtime-sector-transition', 'standby');
+      root.removeAttribute('data-ooh-runtime-sector-residue');
+      return;
+    }
+
+    if (!state.currentEnvironmentId) {
+      state.currentEnvironmentId = environment.id;
+      root.setAttribute('data-ooh-runtime-sector-transition', 'stable');
+      root.removeAttribute('data-ooh-runtime-sector-residue');
+      return;
+    }
+
+    if (state.currentEnvironmentId !== environment.id) {
+      const previous = environmentById(state.currentEnvironmentId);
+      state.previousEnvironmentId = previous ? previous.id : '';
+      state.currentEnvironmentId = environment.id;
+      state.transitionIndex += 1;
+      state.sectorTransitionUntil = now + 6800;
+      state.pendingSectorTransitionMessage = sectorTransitionPhrase(previous, environment, state);
+      window.clearTimeout(state.sectorTransitionTimer);
+      state.sectorTransitionTimer = window.setTimeout(function () {
+        state.sectorTransitionUntil = 0;
+        render(root, state);
+      }, 6900);
+    }
+
+    if (state.sectorTransitionUntil > now && state.previousEnvironmentId) {
+      root.setAttribute('data-ooh-runtime-sector-transition', 'bleed');
+      root.setAttribute('data-ooh-runtime-sector-residue', state.previousEnvironmentId);
+      return;
+    }
+
+    root.setAttribute('data-ooh-runtime-sector-transition', 'stable');
+    root.removeAttribute('data-ooh-runtime-sector-residue');
+  }
+
+  function sectorEnvironmentLabel(state, environment) {
+    const previous = environmentById(state.previousEnvironmentId);
+    if (state.sectorTransitionUntil > Date.now() && previous) {
+      return environment.label + ' / ' + previous.residue;
+    }
+    return environment.label;
   }
 
   function loopPathForStage(stageId) {
@@ -676,6 +777,7 @@
     const stage = active ? escalationStages[state.stageIndex] : stageById('insertion');
     const environment = environmentForStage(stage);
     const pressure = readPressure(root, state, stage);
+    updateSectorMemory(root, state, environment, active);
     updateDistinction(state);
 
     root.setAttribute('data-ooh-runtime-experience', active ? 'active' : 'standby');
@@ -699,12 +801,19 @@
       experience.cadence.textContent = active ? cadenceLabel(state, stage) : 'QUIET';
     }
     if (experience.environment) {
-      experience.environment.textContent = active ? environment.label : 'UNMAPPED';
+      experience.environment.textContent = active ? sectorEnvironmentLabel(state, environment) : 'UNMAPPED';
     }
     if (experience.playlist) {
       experience.playlist.textContent = playlistLabel(root);
     }
-    experience.feed.textContent = message || (active ? environmentFeed(environment, nextFrom(stage.feed, state.feedIndex)) : 'Awaiting mission activation.');
+    if (state.pendingSectorTransitionMessage && state.sectorTransitionUntil <= Date.now()) {
+      state.pendingSectorTransitionMessage = '';
+    }
+    const transitionMessage = active && !message ? state.pendingSectorTransitionMessage : '';
+    if (transitionMessage) {
+      state.pendingSectorTransitionMessage = '';
+    }
+    experience.feed.textContent = message || transitionMessage || (active ? environmentFeed(environment, nextFrom(stage.feed, state.feedIndex)) : 'Awaiting mission activation.');
   }
 
   function pulse(root, action) {
@@ -720,6 +829,12 @@
     state.startedAt = Date.now();
     state.feedIndex = 0;
     state.stageIndex = 0;
+    state.currentEnvironmentId = '';
+    state.previousEnvironmentId = '';
+    state.pendingSectorTransitionMessage = '';
+    state.sectorTransitionUntil = 0;
+    window.clearTimeout(state.sectorTransitionTimer);
+    state.transitionIndex = 0;
     state.nextManifestationAt = Date.now() + 7200;
     state.warningIssued = false;
     setCadence(root, state, 'silence');
@@ -812,8 +927,14 @@
           lastManifestationAt: 0,
           lastAction: '',
           nextManifestationAt: 0,
+          currentEnvironmentId: '',
+          previousEnvironmentId: '',
+          pendingSectorTransitionMessage: '',
+          sectorTransitionUntil: 0,
+          sectorTransitionTimer: null,
           stageIndex: 0,
           startedAt: root.classList.contains('is-mission-active') ? Date.now() : 0,
+          transitionIndex: 0,
           warningIssued: false
         };
 
