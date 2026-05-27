@@ -93,6 +93,12 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
             </div>
             <p class="ooh-operation-alpha__playlist-confirmation" data-ooh-alpha-playlist-confirmation aria-live="polite">Awaiting signal selection.</p>
+            <div class="ooh-operation-alpha__runtime-handoff" data-ooh-alpha-runtime-handoff hidden>
+              <span class="ooh-operation-alpha__runtime-kicker">ACTIVE SIGNAL</span>
+              <p class="ooh-operation-alpha__runtime-title" data-ooh-alpha-runtime-title>Signal pending.</p>
+              <p class="ooh-operation-alpha__runtime-copy" data-ooh-alpha-runtime-copy>Signal selected. Runtime handoff pending.</p>
+              <a class="ooh-operation-alpha__runtime-button" href="/oaplay" data-ooh-alpha-runtime-proceed>PROCEED TO RUNTIME</a>
+            </div>
             <p class="ooh-operation-alpha__playlist-note">No playback, account link, or runtime launch is active in this shell.</p>
           </div>
         </section>',

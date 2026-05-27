@@ -360,38 +360,92 @@
     catch (e) {}
   }
 
-  function initPlaylistShell(root) {
+  function getPlaylistSelection() {
+    try {
+      var stored = window.localStorage.getItem(playlistStorageKey);
+
+      return stored ? JSON.parse(stored) : null;
+    }
+    catch (e) {
+      return null;
+    }
+  }
+
+  function setActivePlaylist(root, slug, title) {
     var confirmation = root.querySelector('[data-ooh-alpha-playlist-confirmation]');
+    var handoff = root.querySelector('[data-ooh-alpha-runtime-handoff]');
+    var handoffTitle = root.querySelector('[data-ooh-alpha-runtime-title]');
+    var handoffCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
+    var selectedButton = null;
+
+    root.querySelectorAll('[data-ooh-alpha-playlist-card]').forEach(function (playlistCard) {
+      playlistCard.classList.remove('is-selected');
+    });
+
+    root.querySelectorAll('[data-ooh-alpha-playlist-select]').forEach(function (selectButton) {
+      selectButton.textContent = 'SELECT SIGNAL';
+      selectButton.removeAttribute('aria-pressed');
+
+      if (selectButton.getAttribute('data-playlist-slug') === slug) {
+        selectedButton = selectButton;
+      }
+    });
+
+    if (selectedButton) {
+      var card = selectedButton.closest('[data-ooh-alpha-playlist-card]');
+
+      if (card) {
+        card.classList.add('is-selected');
+      }
+
+      selectedButton.textContent = 'SIGNAL SELECTED';
+      selectedButton.setAttribute('aria-pressed', 'true');
+    }
+
+    if (confirmation) {
+      confirmation.textContent = title + ' selected. Runtime handoff pending.';
+    }
+
+    if (handoff) {
+      handoff.hidden = false;
+    }
+    if (handoffTitle) {
+      handoffTitle.textContent = title;
+    }
+    if (handoffCopy) {
+      handoffCopy.textContent = 'Signal selected. Runtime handoff pending.';
+    }
+  }
+
+  function initPlaylistShell(root) {
+    var proceed = root.querySelector('[data-ooh-alpha-runtime-proceed]');
+    var storedSelection = getPlaylistSelection();
+
+    if (storedSelection && storedSelection.slug && storedSelection.title) {
+      setActivePlaylist(root, storedSelection.slug, storedSelection.title);
+    }
 
     root.querySelectorAll('[data-ooh-alpha-playlist-select]').forEach(function (button) {
       button.addEventListener('click', function () {
         var slug = button.getAttribute('data-playlist-slug') || '';
         var title = button.getAttribute('data-playlist-title') || 'SELECTED SIGNAL';
-        var card = button.closest('[data-ooh-alpha-playlist-card]');
 
         storePlaylistSelection(slug, title);
-
-        root.querySelectorAll('[data-ooh-alpha-playlist-card]').forEach(function (playlistCard) {
-          playlistCard.classList.remove('is-selected');
-        });
-
-        root.querySelectorAll('[data-ooh-alpha-playlist-select]').forEach(function (selectButton) {
-          selectButton.textContent = 'SELECT SIGNAL';
-          selectButton.removeAttribute('aria-pressed');
-        });
-
-        if (card) {
-          card.classList.add('is-selected');
-        }
-
-        button.textContent = 'SIGNAL SELECTED';
-        button.setAttribute('aria-pressed', 'true');
-
-        if (confirmation) {
-          confirmation.textContent = title + ' selected. Runtime handoff pending.';
-        }
+        setActivePlaylist(root, slug, title);
       });
     });
+
+    if (proceed) {
+      proceed.addEventListener('click', function (event) {
+        var handoffCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
+
+        event.preventDefault();
+
+        if (handoffCopy) {
+          handoffCopy.textContent = 'Runtime shell pending activation.';
+        }
+      });
+    }
   }
 
   function init() {

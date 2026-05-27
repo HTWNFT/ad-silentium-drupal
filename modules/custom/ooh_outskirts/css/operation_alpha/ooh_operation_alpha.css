@@ -556,6 +556,84 @@ body.ooh-operation-alpha-runtime .row {
   text-align: center;
 }
 
+.ooh-operation-alpha__runtime-handoff {
+  width: min(520px, 100%);
+  margin: 18px auto 0;
+  padding: 16px 18px;
+  border: 1px solid rgba(130, 245, 255, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.045), rgba(89, 243, 255, 0.014)),
+    rgba(1, 8, 11, 0.58);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: center;
+}
+
+.ooh-operation-alpha__runtime-handoff[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__runtime-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.78);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__runtime-title {
+  margin: 0;
+  color: #dffcff;
+  font-size: clamp(1rem, 3vw, 1.24rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__runtime-copy {
+  min-height: 1.4rem;
+  margin: 8px 0 0;
+  color: rgba(223, 252, 255, 0.76);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__runtime-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  min-width: min(100%, 220px);
+  margin-top: 14px;
+  padding: 0.72rem 0.95rem;
+  border: 1px solid rgba(130, 245, 255, 0.4);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.66);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.04);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__runtime-button:hover,
+.ooh-operation-alpha__runtime-button:focus-visible {
+  border-color: rgba(223, 252, 255, 0.7);
+  color: #dffcff;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.055),
+    0 0 16px rgba(89, 243, 255, 0.16);
+  text-decoration: none;
+}
+
 .ooh-operation-alpha__enter {
   min-height: 44px;
   padding: 0.8rem 1.35rem;
@@ -616,5 +694,13 @@ body.ooh-operation-alpha-runtime .row {
 
   .ooh-operation-alpha__playlist-body {
     padding: 16px;
+  }
+
+  .ooh-operation-alpha__runtime-handoff {
+    padding: 14px;
+  }
+
+  .ooh-operation-alpha__runtime-button {
+    width: 100%;
   }
 }
