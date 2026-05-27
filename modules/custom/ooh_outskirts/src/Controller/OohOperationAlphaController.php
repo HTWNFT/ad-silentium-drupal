@@ -113,4 +113,49 @@ final class OohOperationAlphaController extends ControllerBase {
     ];
   }
 
+  /**
+   * Builds the contained Operation Alpha runtime shell.
+   */
+  public function runtime(): array {
+    return [
+      '#type' => 'inline_template',
+      '#template' => '
+        <section class="ooh-operation-alpha ooh-operation-alpha--runtime" data-ooh-operation-alpha-runtime>
+          <div class="ooh-operation-alpha__shell ooh-operation-alpha__shell--runtime">
+            <p class="ooh-operation-alpha__eyebrow">RUNTIME ACCESS</p>
+            <h1 class="ooh-operation-alpha__title">OPERATION ALPHA RUNTIME</h1>
+            <p class="ooh-operation-alpha__copy">Contained runtime shell active. Gameplay authority pending.</p>
+            <div class="ooh-operation-alpha__runtime-status">
+              <span class="ooh-operation-alpha__runtime-kicker">ACTIVE SIGNAL</span>
+              <p class="ooh-operation-alpha__runtime-title" data-ooh-alpha-runtime-signal>Signal pending.</p>
+              <p class="ooh-operation-alpha__runtime-copy" data-ooh-alpha-runtime-status>Runtime shell standing by. No simulation is active.</p>
+            </div>
+            <div class="ooh-operation-alpha__runtime-grid" aria-label="Operation Alpha runtime shell status">
+              <div class="ooh-operation-alpha__runtime-cell">
+                <span class="ooh-operation-alpha__runtime-kicker">FIELD STATE</span>
+                <p class="ooh-operation-alpha__runtime-copy">Runtime surface isolated.</p>
+              </div>
+              <div class="ooh-operation-alpha__runtime-cell">
+                <span class="ooh-operation-alpha__runtime-kicker">AUTHORITY</span>
+                <p class="ooh-operation-alpha__runtime-copy">No combat, mission, timer, payment, or account authority active.</p>
+              </div>
+              <div class="ooh-operation-alpha__runtime-cell">
+                <span class="ooh-operation-alpha__runtime-kicker">NEXT PHASE</span>
+                <p class="ooh-operation-alpha__runtime-copy">Operational systems pending activation.</p>
+              </div>
+            </div>
+            <a class="ooh-operation-alpha__runtime-button" href="oaplaylists">CHANGE SIGNAL</a>
+          </div>
+        </section>',
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/operation_alpha',
+        ],
+      ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
+  }
+
 }

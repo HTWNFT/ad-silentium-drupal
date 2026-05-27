@@ -1,6 +1,7 @@
 html:has(.ooh-operation-alpha),
 body:has(.ooh-operation-alpha),
 body.path-operation-alpha,
+body.path-oaplay,
 body.ooh-operation-alpha-runtime {
   min-height: 100%;
   margin: 0;
@@ -10,12 +11,16 @@ body.ooh-operation-alpha-runtime {
 
 body.path-operation-alpha #header,
 body.path-oaplaylists #header,
+body.path-oaplay #header,
 body.path-operation-alpha .highlighted,
 body.path-oaplaylists .highlighted,
+body.path-oaplay .highlighted,
 body.path-operation-alpha #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-oaplaylists #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha .site-footer,
 body.path-oaplaylists .site-footer,
+body.path-oaplay .site-footer,
 body.ooh-operation-alpha-runtime #header,
 body.ooh-operation-alpha-runtime .highlighted,
 body.ooh-operation-alpha-runtime #block-bootstrap-barrio-subtheme-breadcrumbs,
@@ -25,20 +30,28 @@ body.ooh-operation-alpha-runtime .site-footer {
 
 body.path-operation-alpha .dialog-off-canvas-main-canvas,
 body.path-oaplaylists .dialog-off-canvas-main-canvas,
+body.path-oaplay .dialog-off-canvas-main-canvas,
 body.path-operation-alpha #page-wrapper,
 body.path-oaplaylists #page-wrapper,
+body.path-oaplay #page-wrapper,
 body.path-operation-alpha #page,
 body.path-oaplaylists #page,
+body.path-oaplay #page,
 body.path-operation-alpha #main-wrapper,
 body.path-oaplaylists #main-wrapper,
+body.path-oaplay #main-wrapper,
 body.path-operation-alpha #main,
 body.path-oaplaylists #main,
+body.path-oaplay #main,
 body.path-operation-alpha .row,
 body.path-oaplaylists .row,
+body.path-oaplay .row,
 body.path-operation-alpha .main-content,
 body.path-oaplaylists .main-content,
+body.path-oaplay .main-content,
 body.path-operation-alpha .section,
 body.path-oaplaylists .section,
+body.path-oaplay .section,
 body.ooh-operation-alpha-runtime .dialog-off-canvas-main-canvas,
 body.ooh-operation-alpha-runtime #page-wrapper,
 body.ooh-operation-alpha-runtime #page,
@@ -57,6 +70,7 @@ body.ooh-operation-alpha-runtime .section {
 
 body.path-operation-alpha .row,
 body.path-oaplaylists .row,
+body.path-oaplay .row,
 body.ooh-operation-alpha-runtime .row {
   display: block !important;
 }
@@ -420,6 +434,10 @@ body.ooh-operation-alpha-runtime .row {
   width: min(1080px, 100%);
 }
 
+.ooh-operation-alpha__shell--runtime {
+  width: min(860px, 100%);
+}
+
 .ooh-operation-alpha__playlist-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
@@ -567,6 +585,37 @@ body.ooh-operation-alpha-runtime .row {
     rgba(1, 8, 11, 0.58);
   box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
   text-align: center;
+}
+
+.ooh-operation-alpha__runtime-status {
+  width: min(560px, 100%);
+  margin: 24px auto 0;
+  padding: 18px;
+  border: 1px solid rgba(130, 245, 255, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.045), rgba(89, 243, 255, 0.014)),
+    rgba(1, 8, 11, 0.58);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: center;
+}
+
+.ooh-operation-alpha__runtime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.ooh-operation-alpha__runtime-cell {
+  min-height: 132px;
+  padding: 16px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.032), rgba(89, 243, 255, 0.012)),
+    rgba(1, 8, 11, 0.48);
+  text-align: left;
 }
 
 .ooh-operation-alpha__runtime-handoff[hidden] {

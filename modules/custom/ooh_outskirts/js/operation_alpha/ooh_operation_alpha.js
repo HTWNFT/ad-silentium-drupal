@@ -371,6 +371,13 @@
     }
   }
 
+  function routePath(path) {
+    var currentPath = window.location.pathname || '';
+    var basePath = currentPath.replace(/\/(?:operation-alpha|oaplaylists|oaplay)\/?$/, '');
+
+    return (basePath || '') + path;
+  }
+
   function setActivePlaylist(root, slug, title) {
     var confirmation = root.querySelector('[data-ooh-alpha-playlist-confirmation]');
     var handoff = root.querySelector('[data-ooh-alpha-runtime-handoff]');
@@ -436,15 +443,26 @@
     });
 
     if (proceed) {
-      proceed.addEventListener('click', function (event) {
-        var handoffCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
+      proceed.setAttribute('aria-label', 'Proceed to contained Operation Alpha runtime shell');
+      proceed.setAttribute('href', routePath('/oaplay'));
+    }
+  }
 
-        event.preventDefault();
+  function initRuntimeShell(root) {
+    var signal = root.querySelector('[data-ooh-alpha-runtime-signal]');
+    var status = root.querySelector('[data-ooh-alpha-runtime-status]');
+    var storedSelection = getPlaylistSelection();
 
-        if (handoffCopy) {
-          handoffCopy.textContent = 'Runtime shell pending activation.';
-        }
-      });
+    if (storedSelection && storedSelection.title) {
+      if (signal) {
+        signal.textContent = storedSelection.title;
+      }
+      if (status) {
+        status.textContent = 'Runtime shell received local signal selection. Gameplay authority pending.';
+      }
+    }
+    else if (status) {
+      status.textContent = 'Runtime shell standing by. Select a signal before active runtime activation.';
     }
   }
 
@@ -455,6 +473,7 @@
 
     document.querySelectorAll('[data-ooh-operation-alpha]').forEach(initOperationAlphaGate);
     document.querySelectorAll('[data-ooh-operation-alpha-playlists]').forEach(initPlaylistShell);
+    document.querySelectorAll('[data-ooh-operation-alpha-runtime]').forEach(initRuntimeShell);
   }
 
   if (document.readyState === 'loading') {

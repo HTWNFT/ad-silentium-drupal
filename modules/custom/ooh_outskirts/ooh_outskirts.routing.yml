@@ -96,6 +96,14 @@ ooh_outskirts.operation_alpha_playlists:
   requirements:
     _permission: 'access content'
 
+ooh_outskirts.operation_alpha_runtime:
+  path: '/oaplay'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::runtime'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
 ooh_outskirts.clearance:
   path: '/clearance'
   defaults:
