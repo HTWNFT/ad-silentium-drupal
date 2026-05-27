@@ -83,6 +83,20 @@ class OohPageController extends ControllerBase {
     return $build;
   }
 
+  public function operationAlpha() {
+    return [
+      '#theme' => 'ooh_operation_alpha_page',
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/operation_alpha',
+        ],
+      ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
+  }
+
   public function credits() {
     return [
       '#theme' => 'ooh_credits_page',

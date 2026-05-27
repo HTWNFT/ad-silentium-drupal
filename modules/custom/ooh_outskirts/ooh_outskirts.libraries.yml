@@ -56,6 +56,17 @@ play:
     - core/once
     - core/drupalSettings
 
+operation_alpha:
+  version: 1.x
+  css:
+    theme:
+      css/ooh_operation_alpha.css: {}
+  js:
+    js/ooh_operation_alpha.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
 game_generator:
   version: 2.0.2-lockdown
   css:

@@ -80,6 +80,14 @@ ooh_outskirts.play:
   requirements:
     _permission: 'access content'
 
+ooh_outskirts.operation_alpha:
+  path: '/operation-alpha'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::operationAlpha'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
 ooh_outskirts.clearance:
   path: '/clearance'
   defaults:
