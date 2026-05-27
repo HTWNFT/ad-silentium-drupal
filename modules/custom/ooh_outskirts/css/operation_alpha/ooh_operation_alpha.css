@@ -417,28 +417,73 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__shell--playlists {
-  width: min(880px, 100%);
+  width: min(1080px, 100%);
 }
 
 .ooh-operation-alpha__playlist-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: 14px;
   margin-top: 24px;
 }
 
 .ooh-operation-alpha__playlist-card {
-  padding: 18px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
   border: 1px solid rgba(130, 245, 255, 0.2);
   border-radius: 8px;
   background:
     linear-gradient(180deg, rgba(89, 243, 255, 0.04), rgba(89, 243, 255, 0.016)),
     rgba(1, 8, 11, 0.48);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.025);
   text-align: left;
+}
+
+.ooh-operation-alpha__playlist-card.is-selected {
+  border-color: rgba(145, 250, 255, 0.58);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.055),
+    0 0 20px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__playlist-visual {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(89, 243, 255, 0.08), rgba(1, 8, 11, 0.9)),
+    rgba(1, 8, 11, 0.74);
+}
+
+.ooh-operation-alpha__playlist-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 58%, rgba(1, 8, 11, 0.78)),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 4px);
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__playlist-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+  filter: saturate(0.82) contrast(1.08);
+}
+
+.ooh-operation-alpha__playlist-body {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px;
 }
 
 .ooh-operation-alpha__playlist-kicker {
   display: block;
-  margin-bottom: 8px;
   color: rgba(145, 250, 255, 0.68);
   font-size: 0.72rem;
   font-weight: 700;
@@ -447,7 +492,7 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__playlist-title {
-  margin: 0 0 8px;
+  margin: 0;
   color: #dffcff;
   font-size: clamp(1rem, 3.2vw, 1.38rem);
   letter-spacing: 0.08em;
@@ -456,6 +501,7 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__playlist-copy,
+.ooh-operation-alpha__playlist-confirmation,
 .ooh-operation-alpha__playlist-note {
   margin: 0;
   color: rgba(223, 252, 255, 0.76);
@@ -463,8 +509,50 @@ body.ooh-operation-alpha-runtime .row {
   line-height: 1.45;
 }
 
-.ooh-operation-alpha__playlist-note {
+.ooh-operation-alpha__playlist-select {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 8px;
+  padding: 0.72rem 0.9rem;
+  border: 1px solid rgba(130, 245, 255, 0.34);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.62);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__playlist-select:hover,
+.ooh-operation-alpha__playlist-select:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.045),
+    0 0 16px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__playlist-card.is-selected .ooh-operation-alpha__playlist-select {
+  border-color: rgba(145, 250, 255, 0.62);
+  color: #dffcff;
+  background: rgba(8, 35, 43, 0.76);
+}
+
+.ooh-operation-alpha__playlist-confirmation {
+  min-height: 1.4rem;
   margin-top: 18px;
+  color: rgba(145, 250, 255, 0.86);
+  text-align: center;
+}
+
+.ooh-operation-alpha__playlist-note {
+  margin-top: 8px;
   text-align: center;
 }
 
@@ -524,5 +612,9 @@ body.ooh-operation-alpha-runtime .row {
 
   .ooh-operation-alpha__access-button {
     width: 100%;
+  }
+
+  .ooh-operation-alpha__playlist-body {
+    padding: 16px;
   }
 }

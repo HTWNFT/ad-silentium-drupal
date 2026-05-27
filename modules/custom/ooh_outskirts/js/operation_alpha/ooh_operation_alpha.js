@@ -3,6 +3,7 @@
 
   var storageKey = 'ooh_operation_alpha_intro_seen_v1';
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
+  var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var scenarioDelayMs = 1500;
 
   var scenarios = [
@@ -349,12 +350,57 @@
     renderScenario(root, 0);
   }
 
+  function storePlaylistSelection(slug, title) {
+    try {
+      window.localStorage.setItem(playlistStorageKey, JSON.stringify({
+        slug: slug,
+        title: title
+      }));
+    }
+    catch (e) {}
+  }
+
+  function initPlaylistShell(root) {
+    var confirmation = root.querySelector('[data-ooh-alpha-playlist-confirmation]');
+
+    root.querySelectorAll('[data-ooh-alpha-playlist-select]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var slug = button.getAttribute('data-playlist-slug') || '';
+        var title = button.getAttribute('data-playlist-title') || 'SELECTED SIGNAL';
+        var card = button.closest('[data-ooh-alpha-playlist-card]');
+
+        storePlaylistSelection(slug, title);
+
+        root.querySelectorAll('[data-ooh-alpha-playlist-card]').forEach(function (playlistCard) {
+          playlistCard.classList.remove('is-selected');
+        });
+
+        root.querySelectorAll('[data-ooh-alpha-playlist-select]').forEach(function (selectButton) {
+          selectButton.textContent = 'SELECT SIGNAL';
+          selectButton.removeAttribute('aria-pressed');
+        });
+
+        if (card) {
+          card.classList.add('is-selected');
+        }
+
+        button.textContent = 'SIGNAL SELECTED';
+        button.setAttribute('aria-pressed', 'true');
+
+        if (confirmation) {
+          confirmation.textContent = title + ' selected. Runtime handoff pending.';
+        }
+      });
+    });
+  }
+
   function init() {
     if (document.body) {
       document.body.classList.add('ooh-operation-alpha-runtime');
     }
 
     document.querySelectorAll('[data-ooh-operation-alpha]').forEach(initOperationAlphaGate);
+    document.querySelectorAll('[data-ooh-operation-alpha-playlists]').forEach(initPlaylistShell);
   }
 
   if (document.readyState === 'loading') {
