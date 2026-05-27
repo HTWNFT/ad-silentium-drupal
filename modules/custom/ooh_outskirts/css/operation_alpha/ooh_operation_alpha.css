@@ -89,6 +89,34 @@ body.ooh-operation-alpha-runtime .row {
   display: none;
 }
 
+.ooh-operation-alpha__signal-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 24;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(1, 6, 9, 0.76);
+}
+
+.ooh-operation-alpha__signal-modal[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__signal-card {
+  width: min(520px, 100%);
+  padding: 26px;
+  border: 1px solid rgba(130, 245, 255, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.05), rgba(89, 243, 255, 0.018)),
+    rgba(2, 12, 16, 0.94);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+    0 0 34px rgba(89, 243, 255, 0.14);
+  text-align: center;
+}
+
 .ooh-operation-alpha__eyebrow {
   margin: 0 0 14px;
   color: rgba(145, 250, 255, 0.86);
@@ -99,13 +127,19 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__intro-title,
-.ooh-operation-alpha__title {
+.ooh-operation-alpha__title,
+.ooh-operation-alpha__signal-title {
   margin: 0 0 18px;
   color: #59f3ff;
   font-size: clamp(2rem, 7vw, 4.2rem);
   line-height: 0.98;
   text-transform: uppercase;
   text-shadow: 0 0 22px rgba(89, 243, 255, 0.28);
+}
+
+.ooh-operation-alpha__signal-title {
+  font-size: clamp(1.5rem, 5vw, 2.45rem);
+  line-height: 1.04;
 }
 
 .ooh-operation-alpha__intro-copy {
@@ -127,6 +161,85 @@ body.ooh-operation-alpha-runtime .row {
   color: rgba(223, 252, 255, 0.82);
   font-size: clamp(1rem, 2.8vw, 1.18rem);
   line-height: 1.5;
+}
+
+.ooh-operation-alpha__signal-copy {
+  margin: 0 0 18px;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__signal-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid rgba(130, 245, 255, 0.28);
+  border-radius: 4px;
+  color: #dffcff;
+  background: rgba(1, 8, 11, 0.76);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.035);
+  font: inherit;
+  text-align: center;
+}
+
+.ooh-operation-alpha__signal-input::placeholder {
+  color: rgba(223, 252, 255, 0.44);
+  text-transform: lowercase;
+}
+
+.ooh-operation-alpha__signal-input:focus {
+  border-color: rgba(223, 252, 255, 0.68);
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.045),
+    0 0 16px rgba(89, 243, 255, 0.12);
+}
+
+.ooh-operation-alpha__signal-status {
+  min-height: 1.4rem;
+  margin: 12px 0 0;
+  color: rgba(145, 250, 255, 0.82);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.ooh-operation-alpha__signal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.ooh-operation-alpha__signal-button {
+  min-height: 42px;
+  min-width: min(100%, 160px);
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(130, 245, 255, 0.36);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.62);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__signal-button--ghost {
+  border-color: rgba(130, 245, 255, 0.2);
+  background: rgba(1, 8, 11, 0.44);
+}
+
+.ooh-operation-alpha__signal-button:hover,
+.ooh-operation-alpha__signal-button:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  outline: none;
+  box-shadow: 0 0 16px rgba(89, 243, 255, 0.14);
 }
 
 .ooh-operation-alpha__scenario {
@@ -324,6 +437,15 @@ body.ooh-operation-alpha-runtime .row {
 
   .ooh-operation-alpha__scenario {
     padding: 18px;
+  }
+
+  .ooh-operation-alpha__signal-card {
+    padding: 22px 18px;
+  }
+
+  .ooh-operation-alpha__signal-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .ooh-operation-alpha__access-panel {

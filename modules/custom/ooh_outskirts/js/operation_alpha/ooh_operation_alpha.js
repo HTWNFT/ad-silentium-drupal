@@ -2,6 +2,7 @@
   'use strict';
 
   var storageKey = 'ooh_operation_alpha_intro_seen_v1';
+  var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var scenarioDelayMs = 1500;
 
   var scenarios = [
@@ -191,6 +192,22 @@
     catch (e) {}
   }
 
+  function signalDismissed() {
+    try {
+      return window.localStorage.getItem(signalStorageKey) === '1';
+    }
+    catch (e) {
+      return false;
+    }
+  }
+
+  function storeSignalDismissed() {
+    try {
+      window.localStorage.setItem(signalStorageKey, '1');
+    }
+    catch (e) {}
+  }
+
   function hideIntro(intro) {
     if (!intro) {
       return;
@@ -198,6 +215,53 @@
 
     intro.hidden = true;
     intro.setAttribute('aria-hidden', 'true');
+  }
+
+  function showSignalModal(root) {
+    var modal = root.querySelector('[data-ooh-operation-alpha-signal]');
+
+    if (!modal || signalDismissed()) {
+      return;
+    }
+
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+  }
+
+  function hideSignalModal(modal) {
+    if (!modal) {
+      return;
+    }
+
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  function initSignalModal(root) {
+    var modal = root.querySelector('[data-ooh-operation-alpha-signal]');
+    var form = root.querySelector('[data-ooh-operation-alpha-signal-form]');
+    var dismiss = root.querySelector('[data-ooh-operation-alpha-signal-dismiss]');
+    var status = root.querySelector('[data-ooh-operation-alpha-signal-status]');
+
+    if (!modal || !form || !dismiss) {
+      return;
+    }
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      storeSignalDismissed();
+      if (status) {
+        status.textContent = 'Signal captured locally. Provider connection pending.';
+      }
+      window.setTimeout(function () {
+        hideSignalModal(modal);
+      }, 1500);
+    });
+
+    dismiss.addEventListener('click', function () {
+      storeSignalDismissed();
+      hideSignalModal(modal);
+    });
   }
 
   function renderScenario(root, index) {
@@ -263,22 +327,33 @@
     var intro = root.querySelector('[data-ooh-operation-alpha-intro]');
     var enter = root.querySelector('[data-ooh-operation-alpha-enter]');
 
+    initSignalModal(root);
+
     if (intro && enter) {
       if (storageFlagSeen()) {
         hideIntro(intro);
+        showSignalModal(root);
       }
       else {
         enter.addEventListener('click', function () {
           storeSeenFlag();
           hideIntro(intro);
+          showSignalModal(root);
         });
       }
+    }
+    else {
+      showSignalModal(root);
     }
 
     renderScenario(root, 0);
   }
 
   function init() {
+    if (document.body) {
+      document.body.classList.add('ooh-operation-alpha-runtime');
+    }
+
     document.querySelectorAll('[data-ooh-operation-alpha]').forEach(initOperationAlphaGate);
   }
 
