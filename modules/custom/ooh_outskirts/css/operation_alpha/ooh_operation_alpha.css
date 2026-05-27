@@ -1,0 +1,210 @@
+.ooh-operation-alpha {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  color: #dffcff;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(89, 243, 255, 0.1), transparent 34%),
+    linear-gradient(180deg, #03080b 0%, #061014 54%, #020507 100%);
+}
+
+.ooh-operation-alpha__shell,
+.ooh-operation-alpha__intro-card {
+  width: min(760px, 100%);
+  padding: 32px;
+  border: 1px solid rgba(130, 245, 255, 0.26);
+  border-radius: 8px;
+  background: rgba(3, 12, 16, 0.78);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+    0 0 34px rgba(89, 243, 255, 0.12);
+  text-align: center;
+}
+
+.ooh-operation-alpha__intro {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(1, 6, 9, 0.92);
+}
+
+.ooh-operation-alpha__intro[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__eyebrow {
+  margin: 0 0 14px;
+  color: rgba(145, 250, 255, 0.86);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-title,
+.ooh-operation-alpha__title {
+  margin: 0 0 18px;
+  color: #59f3ff;
+  font-size: clamp(2rem, 7vw, 4.2rem);
+  line-height: 0.98;
+  text-transform: uppercase;
+  text-shadow: 0 0 22px rgba(89, 243, 255, 0.28);
+}
+
+.ooh-operation-alpha__intro-copy {
+  margin: 0 auto 26px;
+  color: rgba(223, 252, 255, 0.84);
+  font-size: clamp(0.95rem, 2.5vw, 1.12rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-copy p,
+.ooh-operation-alpha__copy {
+  margin: 8px 0 0;
+}
+
+.ooh-operation-alpha__copy {
+  color: rgba(223, 252, 255, 0.82);
+  font-size: clamp(1rem, 2.8vw, 1.18rem);
+  line-height: 1.5;
+}
+
+.ooh-operation-alpha__scenario {
+  margin: 28px 0 22px;
+  padding: 22px;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.045), rgba(89, 243, 255, 0.018)),
+    rgba(1, 8, 11, 0.46);
+  text-align: left;
+}
+
+.ooh-operation-alpha__scenario-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.ooh-operation-alpha__pressure-label,
+.ooh-operation-alpha__pressure-value {
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__pressure-label {
+  color: rgba(145, 250, 255, 0.68);
+}
+
+.ooh-operation-alpha__pressure-value {
+  color: rgba(223, 252, 255, 0.94);
+}
+
+.ooh-operation-alpha__scenario-title {
+  margin: 0 0 12px;
+  color: #dffcff;
+  font-size: clamp(1.1rem, 4vw, 1.55rem);
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__situation {
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__situation p {
+  margin: 0 0 6px;
+}
+
+.ooh-operation-alpha__interventions {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.ooh-operation-alpha__intervention {
+  min-height: 42px;
+  padding: 0.72rem 0.95rem;
+  border: 1px solid rgba(130, 245, 255, 0.36);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.62);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intervention:hover,
+.ooh-operation-alpha__intervention:focus-visible {
+  border-color: rgba(223, 252, 255, 0.7);
+  outline: none;
+  box-shadow: 0 0 18px rgba(89, 243, 255, 0.16);
+}
+
+.ooh-operation-alpha__intervention:disabled {
+  cursor: default;
+  opacity: 0.58;
+}
+
+.ooh-operation-alpha__reaction {
+  min-height: 3rem;
+  margin: 18px 0 0;
+  color: rgba(145, 250, 255, 0.86);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__enter {
+  min-height: 44px;
+  padding: 0.8rem 1.35rem;
+  border: 1px solid rgba(130, 245, 255, 0.55);
+  border-radius: 4px;
+  color: #dffcff;
+  background: rgba(4, 22, 28, 0.72);
+  box-shadow: 0 0 18px rgba(89, 243, 255, 0.14);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__enter:hover,
+.ooh-operation-alpha__enter:focus-visible {
+  border-color: rgba(223, 252, 255, 0.78);
+  outline: none;
+  box-shadow: 0 0 24px rgba(89, 243, 255, 0.22);
+}
+
+@media (max-width: 560px) {
+  .ooh-operation-alpha {
+    padding: 18px;
+  }
+
+  .ooh-operation-alpha__shell,
+  .ooh-operation-alpha__intro-card {
+    padding: 24px 18px;
+  }
+
+  .ooh-operation-alpha__scenario {
+    padding: 18px;
+  }
+}
