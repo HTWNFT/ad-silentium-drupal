@@ -1,5 +1,58 @@
+html:has(.ooh-operation-alpha),
+body:has(.ooh-operation-alpha),
+body.path-operation-alpha,
+body.ooh-operation-alpha-runtime {
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  background: #020507 !important;
+}
+
+body.path-operation-alpha #header,
+body.path-operation-alpha .highlighted,
+body.path-operation-alpha #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha .site-footer,
+body.ooh-operation-alpha-runtime #header,
+body.ooh-operation-alpha-runtime .highlighted,
+body.ooh-operation-alpha-runtime #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.ooh-operation-alpha-runtime .site-footer {
+  display: none !important;
+}
+
+body.path-operation-alpha .dialog-off-canvas-main-canvas,
+body.path-operation-alpha #page-wrapper,
+body.path-operation-alpha #page,
+body.path-operation-alpha #main-wrapper,
+body.path-operation-alpha #main,
+body.path-operation-alpha .row,
+body.path-operation-alpha .main-content,
+body.path-operation-alpha .section,
+body.ooh-operation-alpha-runtime .dialog-off-canvas-main-canvas,
+body.ooh-operation-alpha-runtime #page-wrapper,
+body.ooh-operation-alpha-runtime #page,
+body.ooh-operation-alpha-runtime #main-wrapper,
+body.ooh-operation-alpha-runtime #main,
+body.ooh-operation-alpha-runtime .row,
+body.ooh-operation-alpha-runtime .main-content,
+body.ooh-operation-alpha-runtime .section {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+body.path-operation-alpha .row,
+body.ooh-operation-alpha-runtime .row {
+  display: block !important;
+}
+
 .ooh-operation-alpha {
   min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  box-sizing: border-box;
   display: grid;
   place-items: center;
   padding: 32px;
@@ -172,6 +225,71 @@
   line-height: 1.45;
 }
 
+.ooh-operation-alpha__access-panel {
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.04), transparent 28%, transparent 72%, rgba(89, 243, 255, 0.028)),
+    rgba(1, 8, 11, 0.5);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: center;
+}
+
+.ooh-operation-alpha__access-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__access-line {
+  margin: 5px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__access-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.ooh-operation-alpha__access-button {
+  min-width: min(100%, 210px);
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(130, 245, 255, 0.34);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.58);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__access-button:hover,
+.ooh-operation-alpha__access-button:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  color: #dffcff;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.045),
+    0 0 16px rgba(89, 243, 255, 0.14);
+  text-decoration: none;
+}
+
 .ooh-operation-alpha__enter {
   min-height: 44px;
   padding: 0.8rem 1.35rem;
@@ -206,5 +324,18 @@
 
   .ooh-operation-alpha__scenario {
     padding: 18px;
+  }
+
+  .ooh-operation-alpha__access-panel {
+    padding: 14px;
+  }
+
+  .ooh-operation-alpha__access-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ooh-operation-alpha__access-button {
+    width: 100%;
   }
 }
