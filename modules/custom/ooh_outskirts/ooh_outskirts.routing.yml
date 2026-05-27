@@ -83,7 +83,15 @@ ooh_outskirts.play:
 ooh_outskirts.operation_alpha:
   path: '/operation-alpha'
   defaults:
-    _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::operationAlpha'
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::page'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ooh_outskirts.operation_alpha_playlists:
+  path: '/oaplaylists'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::playlists'
     _title: ''
   requirements:
     _permission: 'access content'
@@ -112,4 +120,3 @@ ooh_outskirts.mission_lookup:
   requirements:
     _permission: 'access content'
     _csrf_request_header_token: 'TRUE'
-

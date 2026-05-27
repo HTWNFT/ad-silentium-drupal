@@ -9,9 +9,13 @@ body.ooh-operation-alpha-runtime {
 }
 
 body.path-operation-alpha #header,
+body.path-oaplaylists #header,
 body.path-operation-alpha .highlighted,
+body.path-oaplaylists .highlighted,
 body.path-operation-alpha #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-oaplaylists #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha .site-footer,
+body.path-oaplaylists .site-footer,
 body.ooh-operation-alpha-runtime #header,
 body.ooh-operation-alpha-runtime .highlighted,
 body.ooh-operation-alpha-runtime #block-bootstrap-barrio-subtheme-breadcrumbs,
@@ -20,13 +24,21 @@ body.ooh-operation-alpha-runtime .site-footer {
 }
 
 body.path-operation-alpha .dialog-off-canvas-main-canvas,
+body.path-oaplaylists .dialog-off-canvas-main-canvas,
 body.path-operation-alpha #page-wrapper,
+body.path-oaplaylists #page-wrapper,
 body.path-operation-alpha #page,
+body.path-oaplaylists #page,
 body.path-operation-alpha #main-wrapper,
+body.path-oaplaylists #main-wrapper,
 body.path-operation-alpha #main,
+body.path-oaplaylists #main,
 body.path-operation-alpha .row,
+body.path-oaplaylists .row,
 body.path-operation-alpha .main-content,
+body.path-oaplaylists .main-content,
 body.path-operation-alpha .section,
+body.path-oaplaylists .section,
 body.ooh-operation-alpha-runtime .dialog-off-canvas-main-canvas,
 body.ooh-operation-alpha-runtime #page-wrapper,
 body.ooh-operation-alpha-runtime #page,
@@ -44,6 +56,7 @@ body.ooh-operation-alpha-runtime .section {
 }
 
 body.path-operation-alpha .row,
+body.path-oaplaylists .row,
 body.ooh-operation-alpha-runtime .row {
   display: block !important;
 }
@@ -401,6 +414,58 @@ body.ooh-operation-alpha-runtime .row {
     inset 0 0 14px rgba(89, 243, 255, 0.045),
     0 0 16px rgba(89, 243, 255, 0.14);
   text-decoration: none;
+}
+
+.ooh-operation-alpha__shell--playlists {
+  width: min(880px, 100%);
+}
+
+.ooh-operation-alpha__playlist-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.ooh-operation-alpha__playlist-card {
+  padding: 18px;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.04), rgba(89, 243, 255, 0.016)),
+    rgba(1, 8, 11, 0.48);
+  text-align: left;
+}
+
+.ooh-operation-alpha__playlist-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.68);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__playlist-title {
+  margin: 0 0 8px;
+  color: #dffcff;
+  font-size: clamp(1rem, 3.2vw, 1.38rem);
+  letter-spacing: 0.08em;
+  line-height: 1.12;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__playlist-copy,
+.ooh-operation-alpha__playlist-note {
+  margin: 0;
+  color: rgba(223, 252, 255, 0.76);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__playlist-note {
+  margin-top: 18px;
+  text-align: center;
 }
 
 .ooh-operation-alpha__enter {
