@@ -372,8 +372,14 @@
   }
 
   function routePath(path) {
+    var routedLink = document.querySelector('[href$="' + path + '"]');
+
+    if (routedLink) {
+      return routedLink.getAttribute('href');
+    }
+
     var currentPath = window.location.pathname || '';
-    var basePath = currentPath.replace(/\/(?:operation-alpha|oaplaylists|oaplay)\/?$/, '');
+    var basePath = currentPath.replace(/\/(?:operation-alpha|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
 
     return (basePath || '') + path;
   }
