@@ -42,7 +42,7 @@
           document.body.classList.remove('ooh-modal-open');
         };
 
-        if (openBtn) {
+        if (openBtn && !openBtn.hasAttribute('disabled') && openBtn.getAttribute('aria-disabled') !== 'true') {
           openBtn.addEventListener('click', openModal);
         }
         if (closeBtn) {
@@ -119,9 +119,6 @@
 
         const startTimer = () => {
           stopTimer();
-          timer = window.setInterval(() => {
-            goNext();
-          }, delay);
         };
 
         const restartTimer = () => {
