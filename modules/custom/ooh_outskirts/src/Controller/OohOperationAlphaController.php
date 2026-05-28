@@ -28,7 +28,7 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the Operation Alpha playlist-selection shell.
    */
   public function playlists(): array {
-    $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_runtime')->toString();
+    $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_runtime')->toString();
     $system_reset_url = 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=da8354a0326a44c0';
 
     return [
@@ -132,7 +132,8 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the contained Operation Alpha runtime shell.
    */
   public function runtime(): array {
-    $playlists_url = Url::fromRoute('ooh_outskirts.operation_alpha_runtime_playlists')->toString();
+    $home_url = Url::fromRoute('<front>')->toString();
+    $playlists_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_playlists')->toString();
 
     return [
       '#type' => 'inline_template',
@@ -161,7 +162,10 @@ final class OohOperationAlphaController extends ControllerBase {
                 <p class="ooh-operation-alpha__runtime-copy">Operational systems pending activation.</p>
               </div>
             </div>
-            <a class="ooh-operation-alpha__runtime-button" href="' . $playlists_url . '">CHANGE SIGNAL</a>
+            <div class="ooh-operation-alpha__runtime-actions">
+              <a class="ooh-operation-alpha__runtime-button" href="' . $playlists_url . '">CHANGE SIGNAL</a>
+              <a class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--home" href="' . $home_url . '">HOME</a>
+            </div>
           </div>
         </section>',
       '#attached' => [

@@ -104,6 +104,22 @@ ooh_outskirts.operation_alpha_runtime_playlists:
   requirements:
     _permission: 'access content'
 
+ooh_outskirts.operation_alpha_nested_playlists:
+  path: '/operation-alpha/oaplay/playlists'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::playlists'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ooh_outskirts.operation_alpha_nested_runtime:
+  path: '/operation-alpha/oaplay'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::runtime'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
 ooh_outskirts.operation_alpha_runtime:
   path: '/oaplay'
   defaults:

@@ -379,7 +379,7 @@
     }
 
     var currentPath = window.location.pathname || '';
-    var basePath = currentPath.replace(/\/(?:operation-alpha|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
+    var basePath = currentPath.replace(/\/(?:operation-alpha(?:\/oaplay(?:\/playlists)?)?|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
 
     return (basePath || '') + path;
   }
