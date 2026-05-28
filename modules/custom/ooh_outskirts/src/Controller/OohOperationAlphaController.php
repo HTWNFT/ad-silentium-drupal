@@ -29,6 +29,8 @@ final class OohOperationAlphaController extends ControllerBase {
    */
   public function playlists(): array {
     $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_runtime')->toString();
+    $credits_url = Url::fromRoute('ooh_outskirts.credits')->toString();
+    $login_url = Url::fromRoute('user.login')->toString();
     $system_reset_url = 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=da8354a0326a44c0';
 
     return [
@@ -36,6 +38,10 @@ final class OohOperationAlphaController extends ControllerBase {
       '#template' => '
         <section class="ooh-operation-alpha ooh-operation-alpha--playlists" data-ooh-operation-alpha-playlists>
           <div class="ooh-operation-alpha__shell ooh-operation-alpha__shell--playlists">
+            <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
+              <a class="ooh-operation-alpha__cta-link" href="' . $credits_url . '">CREDITS AVAILABLE: 15</a>
+              <a class="ooh-operation-alpha__cta-link" href="' . $login_url . '">LOGIN / ACCOUNT</a>
+            </nav>
             <p class="ooh-operation-alpha__eyebrow">PLAYLIST SIGNAL</p>
             <h1 class="ooh-operation-alpha__title">OPERATION ALPHA PLAYLISTS</h1>
             <p class="ooh-operation-alpha__copy">Select a staged signal profile before active runtime opens.</p>
@@ -134,12 +140,18 @@ final class OohOperationAlphaController extends ControllerBase {
   public function runtime(): array {
     $home_url = Url::fromRoute('<front>')->toString();
     $playlists_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_playlists')->toString();
+    $credits_url = Url::fromRoute('ooh_outskirts.credits')->toString();
+    $login_url = Url::fromRoute('user.login')->toString();
 
     return [
       '#type' => 'inline_template',
       '#template' => '
         <section class="ooh-operation-alpha ooh-operation-alpha--runtime" data-ooh-operation-alpha-runtime>
           <div class="ooh-operation-alpha__shell ooh-operation-alpha__shell--runtime">
+            <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
+              <a class="ooh-operation-alpha__cta-link" href="' . $credits_url . '">CREDITS AVAILABLE: 15</a>
+              <a class="ooh-operation-alpha__cta-link" href="' . $login_url . '">LOGIN / ACCOUNT</a>
+            </nav>
             <p class="ooh-operation-alpha__eyebrow">RUNTIME ACCESS</p>
             <h1 class="ooh-operation-alpha__title">OPERATION ALPHA RUNTIME</h1>
             <p class="ooh-operation-alpha__copy">Contained runtime shell active. Gameplay authority pending.</p>

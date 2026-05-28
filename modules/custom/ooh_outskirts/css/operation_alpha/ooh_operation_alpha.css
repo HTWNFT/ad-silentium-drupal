@@ -273,6 +273,42 @@ body.ooh-operation-alpha-runtime .row {
   line-height: 1.4;
 }
 
+.ooh-operation-alpha__cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  margin: 0 0 18px;
+}
+
+.ooh-operation-alpha__cta-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0.52rem 0.72rem;
+  border: 1px solid rgba(130, 245, 255, 0.28);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.86);
+  background: rgba(1, 8, 11, 0.46);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__cta-link:hover,
+.ooh-operation-alpha__cta-link:focus-visible {
+  border-color: rgba(223, 252, 255, 0.62);
+  color: #dffcff;
+  outline: none;
+  box-shadow: 0 0 14px rgba(89, 243, 255, 0.12);
+  text-decoration: none;
+}
+
 .ooh-operation-alpha__signal-actions {
   display: flex;
   flex-wrap: wrap;
@@ -812,6 +848,14 @@ a.ooh-operation-alpha__playlist-select {
   .ooh-operation-alpha__signal-actions {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .ooh-operation-alpha__cta-row {
+    justify-content: stretch;
+  }
+
+  .ooh-operation-alpha__cta-link {
+    flex: 1 1 100%;
   }
 
   .ooh-operation-alpha__access-panel {

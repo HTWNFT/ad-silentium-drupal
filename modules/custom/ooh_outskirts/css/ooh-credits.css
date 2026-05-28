@@ -244,8 +244,19 @@ body.path-clearance .ooh-credits-page .ooh-pack-button:focus-visible {
 }
 
 /* Return */
+body.path-clearance .ooh-credits-page .ooh-credits-return {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 28px;
+}
+
 body.path-clearance .ooh-credits-page .ooh-return-link {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
   padding: 12px 24px;
   border: 1px solid rgba(73, 244, 255, 0.78);
   border-radius: 999px;
@@ -256,8 +267,23 @@ body.path-clearance .ooh-credits-page .ooh-return-link {
   letter-spacing: 0.16em;
 }
 
+body.path-clearance .ooh-credits-page .ooh-return-link--disabled {
+  border-color: rgba(73, 244, 255, 0.28);
+  color: rgba(207, 249, 255, 0.54);
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+body.path-clearance .ooh-credits-page .ooh-return-link--operation-alpha {
+  border-color: rgba(73, 244, 255, 0.9);
+}
+
 body.path-clearance .ooh-credits-page .ooh-return-link:hover {
   box-shadow: 0 0 20px rgba(0, 223, 255, 0.35);
+}
+
+body.path-clearance .ooh-credits-page .ooh-return-link--disabled:hover {
+  box-shadow: none;
 }
 
 /* Responsive */
@@ -283,6 +309,10 @@ body.path-clearance .ooh-credits-page .ooh-return-link:hover {
   body.path-clearance .ooh-credits-page .ooh-credits-status,
   body.path-clearance .ooh-credits-page .ooh-credit-pack-grid {
     grid-template-columns: 1fr;
+  }
+
+  body.path-clearance .ooh-credits-page .ooh-credits-return {
+    flex-direction: column;
   }
 }
 
