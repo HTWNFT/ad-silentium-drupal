@@ -5,6 +5,35 @@
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var scenarioDelayMs = 1500;
+  var atmosphereClasses = [
+    'is-atmosphere-low',
+    'is-atmosphere-static',
+    'is-atmosphere-pressure',
+    'is-atmosphere-bleed'
+  ];
+
+  var atmosphereStates = [
+    {
+      label: 'ATMOSPHERE: LOW HUM',
+      pressure: 'SIGNAL PRESSURE 01',
+      className: 'is-atmosphere-low'
+    },
+    {
+      label: 'ATMOSPHERE: SIGNAL STATIC',
+      pressure: 'SIGNAL PRESSURE 02',
+      className: 'is-atmosphere-static'
+    },
+    {
+      label: 'ATMOSPHERE: FIELD PRESSURE',
+      pressure: 'SIGNAL PRESSURE 03',
+      className: 'is-atmosphere-pressure'
+    },
+    {
+      label: 'ATMOSPHERE: CONTACT BLEED',
+      pressure: 'SIGNAL PRESSURE 04',
+      className: 'is-atmosphere-bleed'
+    }
+  ];
 
   var contactSlots = [
     {
@@ -13,8 +42,16 @@
       faction: 'Ronin cell / unstable ally',
       source: 'Transmission source: Ronin low-band relay',
       status: 'Cell signal wavering',
-      transmission: 'We see the channel. Keep the patrol looking at shadows.',
-      response: 'Ronin cell adjusted. Your field pressure was felt.',
+      transmissions: [
+        'We see the channel. Keep the patrol looking at shadows.',
+        'Field listens. Do not answer too quickly.',
+        'Veyra holds the line, but the static is learning your rhythm.'
+      ],
+      responses: [
+        'Ronin cell adjusted. Your field pressure was felt.',
+        'Veyra moved through the blind interval. Patrol attention split.',
+        'Ronin relay tightened. The channel trusts your hand for now.'
+      ],
       portrait: '/sites/default/files/outskirts/portraits/Ronins/Asset__Portraits__Ronins__chatgpt_image_dec_26_2025_05_38_53_pm.webp'
     },
     {
@@ -23,8 +60,16 @@
       faction: 'Mutant corridor anomaly',
       source: 'Transmission source: bio-static corridor',
       status: 'Biological pressure rising',
-      transmission: 'Heat moves under the bridge. The corridor is not alone.',
-      response: 'Corridor pulse shifted. Mutant pressure is listening.',
+      transmissions: [
+        'Heat moves under the bridge. The corridor is not alone.',
+        'Bone-corridor pressure rising.',
+        'Grain-9 hears the floor breathe before the signal breaks.'
+      ],
+      responses: [
+        'Corridor pulse shifted. Mutant pressure is listening.',
+        'Bio-static folded inward. Grain-9 changed direction.',
+        'The corridor opened its throat, then went quiet.'
+      ],
       portrait: '/sites/default/files/outskirts/portraits/Genetic%20Warlords/Asset__Portraits__Mutants__chatgpt_image_dec_26_2025_05_25_48_pm.webp'
     },
     {
@@ -33,8 +78,16 @@
       faction: 'Warlord command signal',
       source: 'Transmission source: hostile command band',
       status: 'Hostile pursuit pressure',
-      transmission: 'Unknown hand detected. Return the signal or be found.',
-      response: 'Warlord command signal distorted. Pursuit pressure delayed.',
+      transmissions: [
+        'Unknown hand detected. Return the signal or be found.',
+        'Korr has marked the channel.',
+        'Command band sharpens. Something armed is listening.'
+      ],
+      responses: [
+        'Warlord command signal distorted. Pursuit pressure delayed.',
+        'Korr lost one clean trace. The next sweep will be meaner.',
+        'Hostile command band stuttered. Pursuit pressure displaced.'
+      ],
       portrait: '/sites/default/files/outskirts/portraits/Genetic%20Warlords/Asset__Portraits__Genetic_Warlords__chatgpt_image_dec_26_2025_03_59_31_pm.webp'
     }
   ];
@@ -339,6 +392,35 @@
     return (basePath || '') + path;
   }
 
+  function selectContactLine(contact, mode, index) {
+    var lines = mode === 'response' ? contact.responses : contact.transmissions;
+
+    if (!lines || !lines.length) {
+      return '';
+    }
+
+    return lines[index % lines.length];
+  }
+
+  function setAtmosphere(root, index) {
+    var state = atmosphereStates[index % atmosphereStates.length];
+    var atmosphere = root.querySelector('[data-ooh-alpha-atmosphere]');
+    var pressure = root.querySelector('[data-ooh-alpha-signal-pressure]');
+
+    atmosphereClasses.forEach(function (className) {
+      root.classList.remove(className);
+    });
+
+    root.classList.add(state.className);
+
+    if (atmosphere) {
+      atmosphere.textContent = state.label;
+    }
+    if (pressure) {
+      pressure.textContent = state.pressure;
+    }
+  }
+
   function renderContact(root, index, mode) {
     var contact = contactSlots[index % contactSlots.length];
     var frame = root.querySelector('[data-ooh-alpha-contact]');
@@ -354,6 +436,7 @@
     }
 
     root.oohAlphaContactIndex = index % contactSlots.length;
+    root.oohAlphaTransmissionIndex = root.oohAlphaTransmissionIndex || 0;
     frame.hidden = false;
     frame.setAttribute('data-contact-type', contact.type);
     frame.classList.remove('is-contact-responding');
@@ -369,7 +452,7 @@
     faction.textContent = contact.faction;
     source.textContent = contact.source;
     status.textContent = mode === 'response' ? 'Field response acknowledged' : contact.status;
-    transmission.textContent = mode === 'response' ? contact.response : contact.transmission;
+    transmission.textContent = selectContactLine(contact, mode, root.oohAlphaTransmissionIndex);
 
     if (mode === 'response') {
       frame.classList.add('is-contact-responding');
@@ -407,6 +490,7 @@
 
     renderScenario(root, 0);
     renderContact(root, 0, 'activation');
+    setAtmosphere(root, 0);
   }
 
   function setInterventionsDisabled(root, disabled) {
@@ -419,8 +503,14 @@
     var reaction = root.querySelector('[data-ooh-alpha-reaction]');
     var pressure = root.querySelector('[data-ooh-alpha-pressure]');
     var nextIndex = ((root.oohAlphaScenarioIndex || 0) + 1) % scenarios.length;
+    var nextContactIndex;
+    var nextAtmosphereIndex;
 
     setInterventionsDisabled(root, true);
+    root.oohAlphaInteractionCount = (root.oohAlphaInteractionCount || 0) + 1;
+    root.oohAlphaTransmissionIndex = root.oohAlphaInteractionCount + buttonIndex;
+    nextContactIndex = root.oohAlphaInteractionCount % contactSlots.length;
+    nextAtmosphereIndex = root.oohAlphaInteractionCount % atmosphereStates.length;
 
     if (reaction) {
       reaction.textContent = scenario.reactions[buttonIndex] || scenario.reactions[0];
@@ -428,7 +518,8 @@
     if (pressure) {
       pressure.textContent = 'FIELD RESPONSE RECORDED';
     }
-    renderContact(root, buttonIndex + 1, 'response');
+    renderContact(root, nextContactIndex, 'response');
+    setAtmosphere(root, nextAtmosphereIndex);
 
     window.clearTimeout(root.oohAlphaScenarioTimer);
     root.oohAlphaScenarioTimer = window.setTimeout(function () {
