@@ -6,6 +6,33 @@
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var scenarioDelayMs = 1500;
 
+  var contactSlots = [
+    {
+      type: 'ronin',
+      name: 'Veyra Null',
+      faction: 'Ronin cell / unstable ally',
+      status: 'Cell signal wavering',
+      transmission: 'We see the channel. Keep the patrol looking at shadows.',
+      response: 'Ronin cell adjusted. Your field pressure was felt.'
+    },
+    {
+      type: 'mutant',
+      name: 'Grain-9',
+      faction: 'Mutant corridor anomaly',
+      status: 'Biological pressure rising',
+      transmission: 'Heat moves under the bridge. The corridor is not alone.',
+      response: 'Corridor pulse shifted. Mutant pressure is listening.'
+    },
+    {
+      type: 'warlord',
+      name: 'Marshal Korr',
+      faction: 'Warlord command signal',
+      status: 'Hostile pursuit pressure',
+      transmission: 'Unknown hand detected. Return the signal or be found.',
+      response: 'Warlord command signal distorted. Pursuit pressure delayed.'
+    }
+  ];
+
   var scenarios = [
     {
       title: 'RONIN CELL DETECTED',
@@ -299,6 +326,33 @@
     });
   }
 
+  function renderContact(root, index, mode) {
+    var contact = contactSlots[index % contactSlots.length];
+    var frame = root.querySelector('[data-ooh-alpha-contact]');
+    var name = root.querySelector('[data-ooh-alpha-contact-name]');
+    var faction = root.querySelector('[data-ooh-alpha-contact-faction]');
+    var status = root.querySelector('[data-ooh-alpha-contact-status]');
+    var transmission = root.querySelector('[data-ooh-alpha-contact-transmission]');
+
+    if (!contact || !frame || !name || !faction || !status || !transmission) {
+      return;
+    }
+
+    root.oohAlphaContactIndex = index % contactSlots.length;
+    frame.hidden = false;
+    frame.setAttribute('data-contact-type', contact.type);
+    frame.classList.remove('is-contact-responding');
+
+    name.textContent = contact.name;
+    faction.textContent = contact.faction;
+    status.textContent = mode === 'response' ? 'Field response acknowledged' : contact.status;
+    transmission.textContent = mode === 'response' ? contact.response : contact.transmission;
+
+    if (mode === 'response') {
+      frame.classList.add('is-contact-responding');
+    }
+  }
+
   function activateOperationAlphaRuntime(root) {
     var runtimeCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
     var activationStatus = root.querySelector('[data-ooh-alpha-activation-status]');
@@ -326,6 +380,7 @@
     }
 
     renderScenario(root, 0);
+    renderContact(root, 0, 'activation');
   }
 
   function setInterventionsDisabled(root, disabled) {
@@ -347,6 +402,7 @@
     if (pressure) {
       pressure.textContent = 'FIELD RESPONSE RECORDED';
     }
+    renderContact(root, buttonIndex + 1, 'response');
 
     window.clearTimeout(root.oohAlphaScenarioTimer);
     root.oohAlphaScenarioTimer = window.setTimeout(function () {
