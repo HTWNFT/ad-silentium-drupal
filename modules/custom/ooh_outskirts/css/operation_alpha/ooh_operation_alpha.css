@@ -521,7 +521,7 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha__contact-frame {
   position: relative;
   display: grid;
-  grid-template-columns: 92px 1fr;
+  grid-template-columns: 112px 1fr;
   gap: 14px;
   overflow: hidden;
   margin-top: 16px;
@@ -533,6 +533,7 @@ body.ooh-operation-alpha-runtime .row {
     rgba(2, 14, 18, 0.64);
   color: rgba(223, 252, 255, 0.8);
   text-align: left;
+  animation: ooh-alpha-contact-fade 420ms ease-out both;
 }
 
 .ooh-operation-alpha__contact-frame::after {
@@ -545,6 +546,7 @@ body.ooh-operation-alpha-runtime .row {
   mix-blend-mode: screen;
   opacity: 0.18;
   pointer-events: none;
+  animation: ooh-alpha-scanline 1.7s linear infinite;
 }
 
 .ooh-operation-alpha__contact-frame.is-contact-responding {
@@ -554,13 +556,20 @@ body.ooh-operation-alpha-runtime .row {
     0 0 18px rgba(89, 243, 255, 0.1);
 }
 
+.ooh-operation-alpha__contact-frame.is-contact-locking {
+  animation:
+    ooh-alpha-contact-fade 420ms ease-out both,
+    ooh-alpha-contact-lock 1.35s ease-out 1;
+}
+
 .ooh-operation-alpha__contact-frame[hidden] {
   display: none;
 }
 
 .ooh-operation-alpha__contact-portrait {
   position: relative;
-  min-height: 118px;
+  min-height: 132px;
+  overflow: hidden;
   border: 1px solid rgba(145, 250, 255, 0.18);
   border-radius: 6px;
   background:
@@ -568,6 +577,7 @@ body.ooh-operation-alpha-runtime .row {
     linear-gradient(180deg, transparent 34%, rgba(89, 243, 255, 0.14) 35% 64%, transparent 65%),
     linear-gradient(135deg, rgba(89, 243, 255, 0.08), rgba(1, 8, 11, 0.9));
   box-shadow: inset 0 0 24px rgba(89, 243, 255, 0.045);
+  animation: ooh-alpha-portrait-pulse 2.8s ease-in-out infinite;
 }
 
 .ooh-operation-alpha__contact-portrait::before,
@@ -592,6 +602,31 @@ body.ooh-operation-alpha-runtime .row {
   width: 48px;
   height: 42px;
   border-radius: 50% 50% 10px 10px;
+}
+
+.ooh-operation-alpha__contact-frame.is-contact-imaged .ooh-operation-alpha__contact-portrait::before,
+.ooh-operation-alpha__contact-frame.is-contact-imaged .ooh-operation-alpha__contact-portrait::after {
+  display: none;
+}
+
+.ooh-operation-alpha__contact-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 132px;
+  object-fit: cover;
+  opacity: 0.78;
+  filter: saturate(0.75) contrast(1.08) brightness(0.82);
+}
+
+.ooh-operation-alpha__contact-image[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__contact-portrait::after {
+  z-index: 2;
 }
 
 .ooh-operation-alpha__contact-frame[data-contact-type="mutant"] .ooh-operation-alpha__contact-portrait {
@@ -634,6 +669,17 @@ body.ooh-operation-alpha-runtime .row {
   text-transform: uppercase;
 }
 
+.ooh-operation-alpha__contact-source {
+  display: block;
+  margin-top: 6px;
+  color: rgba(223, 252, 255, 0.54);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
 .ooh-operation-alpha__contact-frame p {
   margin: 8px 0 0;
 }
@@ -648,6 +694,55 @@ body.ooh-operation-alpha-runtime .row {
   color: rgba(145, 250, 255, 0.9);
   font-size: 0.95rem;
   line-height: 1.45;
+}
+
+@keyframes ooh-alpha-contact-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ooh-alpha-contact-lock {
+  0%,
+  28%,
+  52% {
+    filter: brightness(1.5);
+  }
+
+  14%,
+  42%,
+  100% {
+    filter: brightness(1);
+  }
+}
+
+@keyframes ooh-alpha-portrait-pulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 24px rgba(89, 243, 255, 0.045);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 28px rgba(89, 243, 255, 0.08),
+      0 0 16px rgba(89, 243, 255, 0.08);
+  }
+}
+
+@keyframes ooh-alpha-scanline {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 120px 0, 0 16px;
+  }
 }
 
 .ooh-operation-alpha__access-panel {
@@ -1063,8 +1158,12 @@ a.ooh-operation-alpha__playlist-select {
 
   .ooh-operation-alpha__contact-portrait {
     width: min(150px, 100%);
-    min-height: 108px;
+    min-height: 150px;
     margin: 0 auto;
+  }
+
+  .ooh-operation-alpha__contact-image {
+    min-height: 150px;
   }
 
   .ooh-operation-alpha__signal-card {

@@ -11,25 +11,31 @@
       type: 'ronin',
       name: 'Veyra Null',
       faction: 'Ronin cell / unstable ally',
+      source: 'Transmission source: Ronin low-band relay',
       status: 'Cell signal wavering',
       transmission: 'We see the channel. Keep the patrol looking at shadows.',
-      response: 'Ronin cell adjusted. Your field pressure was felt.'
+      response: 'Ronin cell adjusted. Your field pressure was felt.',
+      portrait: '/sites/default/files/outskirts/portraits/Ronins/Asset__Portraits__Ronins__chatgpt_image_dec_26_2025_05_38_53_pm.webp'
     },
     {
       type: 'mutant',
       name: 'Grain-9',
       faction: 'Mutant corridor anomaly',
+      source: 'Transmission source: bio-static corridor',
       status: 'Biological pressure rising',
       transmission: 'Heat moves under the bridge. The corridor is not alone.',
-      response: 'Corridor pulse shifted. Mutant pressure is listening.'
+      response: 'Corridor pulse shifted. Mutant pressure is listening.',
+      portrait: '/sites/default/files/outskirts/portraits/Genetic%20Warlords/Asset__Portraits__Mutants__chatgpt_image_dec_26_2025_05_25_48_pm.webp'
     },
     {
       type: 'warlord',
       name: 'Marshal Korr',
       faction: 'Warlord command signal',
+      source: 'Transmission source: hostile command band',
       status: 'Hostile pursuit pressure',
       transmission: 'Unknown hand detected. Return the signal or be found.',
-      response: 'Warlord command signal distorted. Pursuit pressure delayed.'
+      response: 'Warlord command signal distorted. Pursuit pressure delayed.',
+      portrait: '/sites/default/files/outskirts/portraits/Genetic%20Warlords/Asset__Portraits__Genetic_Warlords__chatgpt_image_dec_26_2025_03_59_31_pm.webp'
     }
   ];
 
@@ -326,15 +332,24 @@
     });
   }
 
+  function containedAssetPath(path) {
+    var currentPath = window.location.pathname || '';
+    var basePath = currentPath.replace(/\/(?:operation-alpha(?:\/oaplay(?:\/playlists)?)?|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
+
+    return (basePath || '') + path;
+  }
+
   function renderContact(root, index, mode) {
     var contact = contactSlots[index % contactSlots.length];
     var frame = root.querySelector('[data-ooh-alpha-contact]');
+    var image = root.querySelector('[data-ooh-alpha-contact-image]');
     var name = root.querySelector('[data-ooh-alpha-contact-name]');
     var faction = root.querySelector('[data-ooh-alpha-contact-faction]');
+    var source = root.querySelector('[data-ooh-alpha-contact-source]');
     var status = root.querySelector('[data-ooh-alpha-contact-status]');
     var transmission = root.querySelector('[data-ooh-alpha-contact-transmission]');
 
-    if (!contact || !frame || !name || !faction || !status || !transmission) {
+    if (!contact || !frame || !name || !faction || !source || !status || !transmission) {
       return;
     }
 
@@ -342,14 +357,25 @@
     frame.hidden = false;
     frame.setAttribute('data-contact-type', contact.type);
     frame.classList.remove('is-contact-responding');
+    frame.classList.remove('is-contact-locking');
+    frame.classList.remove('is-contact-imaged');
 
+    if (image && contact.portrait) {
+      image.src = containedAssetPath(contact.portrait);
+      image.hidden = false;
+      frame.classList.add('is-contact-imaged');
+    }
     name.textContent = contact.name;
     faction.textContent = contact.faction;
+    source.textContent = contact.source;
     status.textContent = mode === 'response' ? 'Field response acknowledged' : contact.status;
     transmission.textContent = mode === 'response' ? contact.response : contact.transmission;
 
     if (mode === 'response') {
       frame.classList.add('is-contact-responding');
+    }
+    else {
+      frame.classList.add('is-contact-locking');
     }
   }
 
