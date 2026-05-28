@@ -64,7 +64,7 @@ final class OohOperationAlphaController extends ControllerBase {
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL B</span>
                   <h2 class="ooh-operation-alpha__playlist-title">Signal Blitz</h2>
-                  <p class="ooh-operation-alpha__playlist-copy">Fast-contact signal pressure for immediate runtime alignment.</p>
+                  <p class="ooh-operation-alpha__playlist-copy">Fast-mark signal pressure for immediate runtime alignment.</p>
                   <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="signal-blitz" data-playlist-title="Signal Blitz">SELECT SIGNAL</button>
                 </div>
               </article>
@@ -140,6 +140,7 @@ final class OohOperationAlphaController extends ControllerBase {
   public function runtime(): array {
     $home_url = Url::fromRoute('<front>')->toString();
     $playlists_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_playlists')->toString();
+    $operation_url = Url::fromRoute('ooh_outskirts.operation_alpha_operation')->toString();
     $credits_url = Url::fromRoute('ooh_outskirts.credits')->toString();
     $login_url = Url::fromRoute('user.login')->toString();
 
@@ -167,7 +168,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </div>
               <div class="ooh-operation-alpha__runtime-cell">
                 <span class="ooh-operation-alpha__runtime-kicker">AUTHORITY</span>
-                <p class="ooh-operation-alpha__runtime-copy">No combat, mission, timer, payment, or account authority active.</p>
+                <p class="ooh-operation-alpha__runtime-copy">No combat, timer, payment, account, or progression authority active.</p>
               </div>
               <div class="ooh-operation-alpha__runtime-cell">
                 <span class="ooh-operation-alpha__runtime-kicker">NEXT PHASE</span>
@@ -176,6 +177,68 @@ final class OohOperationAlphaController extends ControllerBase {
             </div>
             <div class="ooh-operation-alpha__runtime-actions">
               <a class="ooh-operation-alpha__runtime-button" href="' . $playlists_url . '">CHANGE SIGNAL</a>
+              <a class="ooh-operation-alpha__runtime-button" href="' . $operation_url . '" data-ooh-alpha-begin-operation>BEGIN OPERATION</a>
+              <a class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--home" href="' . $home_url . '">HOME</a>
+            </div>
+          </div>
+        </section>',
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/operation_alpha',
+        ],
+      ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
+  }
+
+  /**
+   * Builds the contained active Operation Alpha operation surface.
+   */
+  public function operation(): array {
+    $home_url = Url::fromRoute('<front>')->toString();
+    $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_runtime')->toString();
+    $credits_url = Url::fromRoute('ooh_outskirts.credits')->toString();
+    $login_url = Url::fromRoute('user.login')->toString();
+
+    return [
+      '#type' => 'inline_template',
+      '#template' => '
+        <section class="ooh-operation-alpha ooh-operation-alpha--operation" data-ooh-operation-alpha-operation>
+          <div class="ooh-operation-alpha__shell ooh-operation-alpha__shell--operation">
+            <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
+              <a class="ooh-operation-alpha__cta-link" href="' . $credits_url . '">CREDITS AVAILABLE: 15</a>
+              <a class="ooh-operation-alpha__cta-link" href="' . $login_url . '">LOGIN / ACCOUNT</a>
+            </nav>
+            <p class="ooh-operation-alpha__eyebrow">ACTIVE OPERATION</p>
+            <h1 class="ooh-operation-alpha__title">OPERATION ACTIVE</h1>
+            <p class="ooh-operation-alpha__copy">Operation staging surface active. Gameplay authority remains pending.</p>
+            <section class="ooh-operation-alpha__operation-panel" aria-label="Active Operation briefing">
+              <div class="ooh-operation-alpha__operation-head">
+                <span class="ooh-operation-alpha__runtime-kicker">ACTIVE OPERATION</span>
+                <strong class="ooh-operation-alpha__operation-field" data-ooh-alpha-operation-field>FIELD OPEN</strong>
+              </div>
+              <div class="ooh-operation-alpha__operation-grid">
+                <div class="ooh-operation-alpha__runtime-cell">
+                  <span class="ooh-operation-alpha__runtime-kicker">MARK</span>
+                  <p class="ooh-operation-alpha__runtime-title" data-ooh-alpha-operation-mark>Mark pending.</p>
+                  <p class="ooh-operation-alpha__runtime-copy" data-ooh-alpha-operation-mark-status>Signal mark resolving.</p>
+                </div>
+                <div class="ooh-operation-alpha__runtime-cell">
+                  <span class="ooh-operation-alpha__runtime-kicker">MISSION SOURCE</span>
+                  <p class="ooh-operation-alpha__runtime-title" data-ooh-alpha-operation-source>Mission source pending.</p>
+                  <p class="ooh-operation-alpha__runtime-copy" data-ooh-alpha-operation-atmosphere>Atmosphere pending.</p>
+                </div>
+              </div>
+              <div class="ooh-operation-alpha__mission ooh-operation-alpha__mission--operation">
+                <span class="ooh-operation-alpha__mission-kicker">MISSION BRIEF</span>
+                <strong class="ooh-operation-alpha__mission-title" data-ooh-alpha-operation-title>Mission seed pending</strong>
+                <p class="ooh-operation-alpha__mission-brief" data-ooh-alpha-operation-brief>Awaiting operation seed.</p>
+              </div>
+            </section>
+            <div class="ooh-operation-alpha__runtime-actions">
+              <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '">RETURN TO RUNTIME</a>
               <a class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--home" href="' . $home_url . '">HOME</a>
             </div>
           </div>

@@ -120,6 +120,14 @@ ooh_outskirts.operation_alpha_nested_runtime:
   requirements:
     _permission: 'access content'
 
+ooh_outskirts.operation_alpha_operation:
+  path: '/operation-alpha/operation'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::operation'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
 ooh_outskirts.operation_alpha_runtime:
   path: '/oaplay'
   defaults:

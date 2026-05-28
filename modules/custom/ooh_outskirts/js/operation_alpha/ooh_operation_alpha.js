@@ -29,7 +29,7 @@
       className: 'is-atmosphere-pressure'
     },
     {
-      label: 'ATMOSPHERE: CONTACT BLEED',
+      label: 'ATMOSPHERE: MARK BLEED',
       pressure: 'SIGNAL PRESSURE 04',
       className: 'is-atmosphere-bleed'
     }
@@ -39,7 +39,7 @@
     {
       type: 'ronin',
       name: 'Veyra Null',
-      faction: 'Ronin cell / unstable ally',
+      faction: 'Ronin mark / unstable ally',
       source: 'Transmission source: Ronin low-band relay',
       status: 'Cell signal wavering',
       transmissions: [
@@ -57,7 +57,7 @@
     {
       type: 'mutant',
       name: 'Grain-9',
-      faction: 'Mutant corridor anomaly',
+      faction: 'Mutant mark / corridor anomaly',
       source: 'Transmission source: bio-static corridor',
       status: 'Biological pressure rising',
       transmissions: [
@@ -75,7 +75,7 @@
     {
       type: 'warlord',
       name: 'Marshal Korr',
-      faction: 'Warlord command signal',
+      faction: 'Warlord mark / command signal',
       source: 'Transmission source: hostile command band',
       status: 'Hostile pursuit pressure',
       transmissions: [
@@ -100,7 +100,7 @@
       },
       {
         title: 'Relay Corridor Hold',
-        brief: 'Hold the corridor long enough for the Ronin cell to break contact.'
+        brief: 'Hold the corridor long enough for the Ronin cell to break trace.'
       },
       {
         title: 'Extraction Coordinate Check',
@@ -126,7 +126,7 @@
       },
       {
         title: 'Bio-Static Quarantine',
-        brief: 'Narrow the bio-static field around the contact zone.'
+        brief: 'Narrow the bio-static field around the mark zone.'
       }
     ],
     warlord: [
@@ -504,6 +504,48 @@
     brief.textContent = seeds[root.oohAlphaMissionSeedIndex].brief;
   }
 
+  function renderOperationSurface(root) {
+    var contactIndex = 0;
+    var seedIndex = 0;
+    var contact = contactSlots[contactIndex];
+    var seeds = missionSeeds[contact.type] || [];
+    var mark = root.querySelector('[data-ooh-alpha-operation-mark]');
+    var markStatus = root.querySelector('[data-ooh-alpha-operation-mark-status]');
+    var source = root.querySelector('[data-ooh-alpha-operation-source]');
+    var atmosphere = root.querySelector('[data-ooh-alpha-operation-atmosphere]');
+    var field = root.querySelector('[data-ooh-alpha-operation-field]');
+    var title = root.querySelector('[data-ooh-alpha-operation-title]');
+    var brief = root.querySelector('[data-ooh-alpha-operation-brief]');
+
+    if (!contact || !seeds.length) {
+      return;
+    }
+
+    if (mark) {
+      mark.textContent = contact.name;
+    }
+    if (markStatus) {
+      markStatus.textContent = contact.faction;
+    }
+    if (source) {
+      source.textContent = contact.name;
+    }
+    if (atmosphere) {
+      atmosphere.textContent = atmosphereStates[1].label + ' // ' + atmosphereStates[1].pressure;
+    }
+    if (field) {
+      field.textContent = 'FIELD OPEN';
+    }
+    if (title) {
+      title.textContent = seeds[seedIndex].title;
+    }
+    if (brief) {
+      brief.textContent = seeds[seedIndex].brief;
+    }
+
+    root.classList.add('is-atmosphere-static');
+  }
+
   function cycleMission(root) {
     var contactIndex = root.oohAlphaMissionContactIndex || 0;
     var seedIndex = (root.oohAlphaMissionSeedIndex || 0) + 1;
@@ -565,7 +607,7 @@
       runtimeCopy.textContent = 'Runtime shell active.';
     }
     if (activationStatus) {
-      activationStatus.textContent = 'Acknowledgment received. Field pressure entering first contact.';
+      activationStatus.textContent = 'Acknowledgment received. Field pressure entering first mark.';
     }
     if (activationButton) {
       activationButton.disabled = true;
@@ -786,6 +828,7 @@
     document.querySelectorAll('[data-ooh-operation-alpha]').forEach(initOperationAlphaGate);
     document.querySelectorAll('[data-ooh-operation-alpha-playlists]').forEach(initPlaylistShell);
     document.querySelectorAll('[data-ooh-operation-alpha-runtime]').forEach(initRuntimeShell);
+    document.querySelectorAll('[data-ooh-operation-alpha-operation]').forEach(renderOperationSurface);
   }
 
   if (document.readyState === 'loading') {

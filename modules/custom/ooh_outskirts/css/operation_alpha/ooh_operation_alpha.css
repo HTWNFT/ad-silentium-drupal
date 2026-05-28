@@ -3,6 +3,7 @@ body:has(.ooh-operation-alpha),
 body.path-operation-alpha,
 body.path-operation-alpha-oaplay-playlists,
 body.path-operation-alpha-oaplay,
+body.path-operation-alpha-operation,
 body.path-oaplay-playlists,
 body.path-oaplay,
 body.ooh-operation-alpha-runtime {
@@ -15,24 +16,28 @@ body.ooh-operation-alpha-runtime {
 body.path-operation-alpha #header,
 body.path-operation-alpha-oaplay-playlists #header,
 body.path-operation-alpha-oaplay #header,
+body.path-operation-alpha-operation #header,
 body.path-oaplay-playlists #header,
 body.path-oaplaylists #header,
 body.path-oaplay #header,
 body.path-operation-alpha .highlighted,
 body.path-operation-alpha-oaplay-playlists .highlighted,
 body.path-operation-alpha-oaplay .highlighted,
+body.path-operation-alpha-operation .highlighted,
 body.path-oaplay-playlists .highlighted,
 body.path-oaplaylists .highlighted,
 body.path-oaplay .highlighted,
 body.path-operation-alpha #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha-oaplay-playlists #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-operation #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-oaplay-playlists #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-oaplaylists #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha .site-footer,
 body.path-operation-alpha-oaplay-playlists .site-footer,
 body.path-operation-alpha-oaplay .site-footer,
+body.path-operation-alpha-operation .site-footer,
 body.path-oaplay-playlists .site-footer,
 body.path-oaplaylists .site-footer,
 body.path-oaplay .site-footer,
@@ -46,48 +51,56 @@ body.ooh-operation-alpha-runtime .site-footer {
 body.path-operation-alpha .dialog-off-canvas-main-canvas,
 body.path-operation-alpha-oaplay-playlists .dialog-off-canvas-main-canvas,
 body.path-operation-alpha-oaplay .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-operation .dialog-off-canvas-main-canvas,
 body.path-oaplay-playlists .dialog-off-canvas-main-canvas,
 body.path-oaplaylists .dialog-off-canvas-main-canvas,
 body.path-oaplay .dialog-off-canvas-main-canvas,
 body.path-operation-alpha #page-wrapper,
 body.path-operation-alpha-oaplay-playlists #page-wrapper,
 body.path-operation-alpha-oaplay #page-wrapper,
+body.path-operation-alpha-operation #page-wrapper,
 body.path-oaplay-playlists #page-wrapper,
 body.path-oaplaylists #page-wrapper,
 body.path-oaplay #page-wrapper,
 body.path-operation-alpha #page,
 body.path-operation-alpha-oaplay-playlists #page,
 body.path-operation-alpha-oaplay #page,
+body.path-operation-alpha-operation #page,
 body.path-oaplay-playlists #page,
 body.path-oaplaylists #page,
 body.path-oaplay #page,
 body.path-operation-alpha #main-wrapper,
 body.path-operation-alpha-oaplay-playlists #main-wrapper,
 body.path-operation-alpha-oaplay #main-wrapper,
+body.path-operation-alpha-operation #main-wrapper,
 body.path-oaplay-playlists #main-wrapper,
 body.path-oaplaylists #main-wrapper,
 body.path-oaplay #main-wrapper,
 body.path-operation-alpha #main,
 body.path-operation-alpha-oaplay-playlists #main,
 body.path-operation-alpha-oaplay #main,
+body.path-operation-alpha-operation #main,
 body.path-oaplay-playlists #main,
 body.path-oaplaylists #main,
 body.path-oaplay #main,
 body.path-operation-alpha .row,
 body.path-operation-alpha-oaplay-playlists .row,
 body.path-operation-alpha-oaplay .row,
+body.path-operation-alpha-operation .row,
 body.path-oaplay-playlists .row,
 body.path-oaplaylists .row,
 body.path-oaplay .row,
 body.path-operation-alpha .main-content,
 body.path-operation-alpha-oaplay-playlists .main-content,
 body.path-operation-alpha-oaplay .main-content,
+body.path-operation-alpha-operation .main-content,
 body.path-oaplay-playlists .main-content,
 body.path-oaplaylists .main-content,
 body.path-oaplay .main-content,
 body.path-operation-alpha .section,
 body.path-operation-alpha-oaplay-playlists .section,
 body.path-operation-alpha-oaplay .section,
+body.path-operation-alpha-operation .section,
 body.path-oaplay-playlists .section,
 body.path-oaplaylists .section,
 body.path-oaplay .section,
@@ -110,6 +123,7 @@ body.ooh-operation-alpha-runtime .section {
 body.path-operation-alpha .row,
 body.path-operation-alpha-oaplay-playlists .row,
 body.path-operation-alpha-oaplay .row,
+body.path-operation-alpha-operation .row,
 body.path-oaplay-playlists .row,
 body.path-oaplaylists .row,
 body.path-oaplay .row,
@@ -946,6 +960,45 @@ body.ooh-operation-alpha-runtime .row {
   width: min(860px, 100%);
 }
 
+.ooh-operation-alpha__shell--operation {
+  width: min(920px, 100%);
+}
+
+.ooh-operation-alpha__operation-panel {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid rgba(130, 245, 255, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.04), rgba(89, 243, 255, 0.014)),
+    rgba(1, 8, 11, 0.52);
+  box-shadow: inset 0 0 20px rgba(89, 243, 255, 0.035);
+  text-align: left;
+}
+
+.ooh-operation-alpha__operation-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.ooh-operation-alpha__operation-field {
+  color: rgba(223, 252, 255, 0.94);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__operation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
 .ooh-operation-alpha__playlist-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1351,5 +1404,16 @@ a.ooh-operation-alpha__playlist-select {
 
   .ooh-operation-alpha__runtime-button {
     width: 100%;
+  }
+
+  .ooh-operation-alpha__operation-panel {
+    padding: 16px;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__operation-head,
+  .ooh-operation-alpha__operation-grid {
+    grid-template-columns: 1fr;
+    justify-content: center;
   }
 }
