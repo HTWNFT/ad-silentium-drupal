@@ -92,6 +92,63 @@
     }
   ];
 
+  var missionSeeds = {
+    ronin: [
+      {
+        title: 'Dead-Drop Signal',
+        brief: 'Intercept a dead-drop pulse before the patrol maps the relay corridor.'
+      },
+      {
+        title: 'Relay Corridor Hold',
+        brief: 'Hold the corridor long enough for the Ronin cell to break contact.'
+      },
+      {
+        title: 'Extraction Coordinate Check',
+        brief: 'Verify extraction coordinates through static before the window collapses.'
+      },
+      {
+        title: 'Checkpoint Ghosting',
+        brief: 'Misalign checkpoint echoes so civilian movement stays unseen.'
+      }
+    ],
+    mutant: [
+      {
+        title: 'Biological Corruption Trace',
+        brief: 'Observe the corruption bloom and mark where the corridor changes shape.'
+      },
+      {
+        title: 'Corridor Instability Containment',
+        brief: 'Contain the unstable passage before it pulls nearby signals apart.'
+      },
+      {
+        title: 'Anomalous Movement Watch',
+        brief: 'Track movement below the bridge without drawing the swarm upward.'
+      },
+      {
+        title: 'Bio-Static Quarantine',
+        brief: 'Narrow the bio-static field around the contact zone.'
+      }
+    ],
+    warlord: [
+      {
+        title: 'Patrol Detection Avoidance',
+        brief: 'Keep the channel dark while the Warlord patrol sweeps the outer fog.'
+      },
+      {
+        title: 'Command Drift Tracking',
+        brief: 'Track command signal drift before Korr reacquires the relay.'
+      },
+      {
+        title: 'Hostile Channel Disruption',
+        brief: 'Disrupt hostile routing without revealing the unseen hand.'
+      },
+      {
+        title: 'Pursuit Echo Split',
+        brief: 'Split the pursuit echo across false corridors.'
+      }
+    ]
+  };
+
   var scenarios = [
     {
       title: 'RONIN CELL DETECTED',
@@ -421,6 +478,39 @@
     }
   }
 
+  function renderMission(root, contactIndex, seedOffset) {
+    var contact = contactSlots[contactIndex % contactSlots.length];
+    var seeds = missionSeeds[contact.type] || [];
+    var mission = root.querySelector('[data-ooh-alpha-mission]');
+    var title = root.querySelector('[data-ooh-alpha-mission-title]');
+    var source = root.querySelector('[data-ooh-alpha-mission-source]');
+    var brief = root.querySelector('[data-ooh-alpha-mission-brief]');
+
+    if (!contact || !seeds.length || !mission || !title || !source || !brief) {
+      return;
+    }
+
+    root.oohAlphaMissionContactIndex = contactIndex % contactSlots.length;
+    root.oohAlphaMissionSeedIndex = seedOffset % seeds.length;
+    mission.hidden = false;
+    mission.setAttribute('data-mission-source', contact.type);
+    mission.classList.remove('is-mission-updated');
+    window.setTimeout(function () {
+      mission.classList.add('is-mission-updated');
+    }, 0);
+
+    title.textContent = seeds[root.oohAlphaMissionSeedIndex].title;
+    source.textContent = 'MISSION SOURCE: ' + contact.name;
+    brief.textContent = seeds[root.oohAlphaMissionSeedIndex].brief;
+  }
+
+  function cycleMission(root) {
+    var contactIndex = root.oohAlphaMissionContactIndex || 0;
+    var seedIndex = (root.oohAlphaMissionSeedIndex || 0) + 1;
+
+    renderMission(root, contactIndex, seedIndex);
+  }
+
   function renderContact(root, index, mode) {
     var contact = contactSlots[index % contactSlots.length];
     var frame = root.querySelector('[data-ooh-alpha-contact]');
@@ -490,6 +580,7 @@
 
     renderScenario(root, 0);
     renderContact(root, 0, 'activation');
+    renderMission(root, 0, 0);
     setAtmosphere(root, 0);
   }
 
@@ -519,6 +610,7 @@
       pressure.textContent = 'FIELD RESPONSE RECORDED';
     }
     renderContact(root, nextContactIndex, 'response');
+    renderMission(root, nextContactIndex, root.oohAlphaInteractionCount + buttonIndex);
     setAtmosphere(root, nextAtmosphereIndex);
 
     window.clearTimeout(root.oohAlphaScenarioTimer);
@@ -531,6 +623,7 @@
     var intro = root.querySelector('[data-ooh-operation-alpha-intro]');
     var enter = root.querySelector('[data-ooh-operation-alpha-enter]');
     var activationButton = root.querySelector('[data-ooh-alpha-activate]');
+    var missionCycle = root.querySelector('[data-ooh-alpha-mission-cycle]');
 
     initSignalModal(root);
 
@@ -554,6 +647,11 @@
     if (activationButton) {
       activationButton.addEventListener('click', function () {
         activateOperationAlphaRuntime(root);
+      });
+    }
+    if (missionCycle) {
+      missionCycle.addEventListener('click', function () {
+        cycleMission(root);
       });
     }
   }
