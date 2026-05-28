@@ -1,6 +1,7 @@
 html:has(.ooh-operation-alpha),
 body:has(.ooh-operation-alpha),
 body.path-operation-alpha,
+body.path-oaplay-playlists,
 body.path-oaplay,
 body.ooh-operation-alpha-runtime {
   min-height: 100%;
@@ -10,15 +11,19 @@ body.ooh-operation-alpha-runtime {
 }
 
 body.path-operation-alpha #header,
+body.path-oaplay-playlists #header,
 body.path-oaplaylists #header,
 body.path-oaplay #header,
 body.path-operation-alpha .highlighted,
+body.path-oaplay-playlists .highlighted,
 body.path-oaplaylists .highlighted,
 body.path-oaplay .highlighted,
 body.path-operation-alpha #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-oaplay-playlists #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-oaplaylists #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha .site-footer,
+body.path-oaplay-playlists .site-footer,
 body.path-oaplaylists .site-footer,
 body.path-oaplay .site-footer,
 body.ooh-operation-alpha-runtime #header,
@@ -29,27 +34,35 @@ body.ooh-operation-alpha-runtime .site-footer {
 }
 
 body.path-operation-alpha .dialog-off-canvas-main-canvas,
+body.path-oaplay-playlists .dialog-off-canvas-main-canvas,
 body.path-oaplaylists .dialog-off-canvas-main-canvas,
 body.path-oaplay .dialog-off-canvas-main-canvas,
 body.path-operation-alpha #page-wrapper,
+body.path-oaplay-playlists #page-wrapper,
 body.path-oaplaylists #page-wrapper,
 body.path-oaplay #page-wrapper,
 body.path-operation-alpha #page,
+body.path-oaplay-playlists #page,
 body.path-oaplaylists #page,
 body.path-oaplay #page,
 body.path-operation-alpha #main-wrapper,
+body.path-oaplay-playlists #main-wrapper,
 body.path-oaplaylists #main-wrapper,
 body.path-oaplay #main-wrapper,
 body.path-operation-alpha #main,
+body.path-oaplay-playlists #main,
 body.path-oaplaylists #main,
 body.path-oaplay #main,
 body.path-operation-alpha .row,
+body.path-oaplay-playlists .row,
 body.path-oaplaylists .row,
 body.path-oaplay .row,
 body.path-operation-alpha .main-content,
+body.path-oaplay-playlists .main-content,
 body.path-oaplaylists .main-content,
 body.path-oaplay .main-content,
 body.path-operation-alpha .section,
+body.path-oaplay-playlists .section,
 body.path-oaplaylists .section,
 body.path-oaplay .section,
 body.ooh-operation-alpha-runtime .dialog-off-canvas-main-canvas,
@@ -69,6 +82,7 @@ body.ooh-operation-alpha-runtime .section {
 }
 
 body.path-operation-alpha .row,
+body.path-oaplay-playlists .row,
 body.path-oaplaylists .row,
 body.path-oaplay .row,
 body.ooh-operation-alpha-runtime .row {
@@ -431,7 +445,7 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__shell--playlists {
-  width: min(1080px, 100%);
+  width: min(1120px, 100%);
 }
 
 .ooh-operation-alpha__shell--runtime {
@@ -440,7 +454,7 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__playlist-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
   margin-top: 24px;
 }
@@ -465,13 +479,37 @@ body.ooh-operation-alpha-runtime .row {
     0 0 20px rgba(89, 243, 255, 0.14);
 }
 
+.ooh-operation-alpha__playlist-card--outbound {
+  border-color: rgba(223, 252, 255, 0.26);
+}
+
 .ooh-operation-alpha__playlist-visual {
   position: relative;
+  display: grid;
+  place-items: center;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background:
     linear-gradient(135deg, rgba(89, 243, 255, 0.08), rgba(1, 8, 11, 0.9)),
     rgba(1, 8, 11, 0.74);
+}
+
+.ooh-operation-alpha__playlist-frame {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  border: 1px solid rgba(145, 250, 255, 0.2);
+  color: rgba(145, 250, 255, 0.48);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 24px rgba(89, 243, 255, 0.035),
+    0 0 18px rgba(89, 243, 255, 0.04);
 }
 
 .ooh-operation-alpha__playlist-visual::after {
@@ -485,6 +523,8 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__playlist-visual img {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
@@ -515,7 +555,6 @@ body.ooh-operation-alpha-runtime .row {
   font-size: clamp(1rem, 3.2vw, 1.38rem);
   letter-spacing: 0.08em;
   line-height: 1.12;
-  text-transform: uppercase;
 }
 
 .ooh-operation-alpha__playlist-copy,
@@ -545,6 +584,13 @@ body.ooh-operation-alpha-runtime .row {
   line-height: 1.25;
   text-align: center;
   text-transform: uppercase;
+}
+
+a.ooh-operation-alpha__playlist-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .ooh-operation-alpha__playlist-select:hover,
@@ -743,6 +789,10 @@ body.ooh-operation-alpha-runtime .row {
 
   .ooh-operation-alpha__playlist-body {
     padding: 16px;
+  }
+
+  .ooh-operation-alpha__playlist-grid {
+    grid-template-columns: 1fr;
   }
 
   .ooh-operation-alpha__runtime-handoff {

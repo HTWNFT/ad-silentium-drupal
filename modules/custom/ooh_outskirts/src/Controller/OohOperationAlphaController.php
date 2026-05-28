@@ -3,6 +3,7 @@
 namespace Drupal\ooh_outskirts\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Url;
 
 /**
  * Provides the Operation Alpha control page.
@@ -27,6 +28,9 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the Operation Alpha playlist-selection shell.
    */
   public function playlists(): array {
+    $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_runtime')->toString();
+    $system_reset_url = 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=da8354a0326a44c0';
+
     return [
       '#type' => 'inline_template',
       '#template' => '
@@ -38,57 +42,68 @@ final class OohOperationAlphaController extends ControllerBase {
             <div class="ooh-operation-alpha__playlist-grid" aria-label="Operation Alpha playlist shell">
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="/sites/default/files/outskirts/Sigils/scrapbroker.webp" alt="" loading="lazy">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL A</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL A</span>
-                  <h2 class="ooh-operation-alpha__playlist-title">WAR BANGAZ</h2>
+                  <h2 class="ooh-operation-alpha__playlist-title">War Bangaz</h2>
                   <p class="ooh-operation-alpha__playlist-copy">Impact-forward pressure channel for hostile-field entry.</p>
-                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="war-bangaz" data-playlist-title="WAR BANGAZ">SELECT SIGNAL</button>
+                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="war-bangaz" data-playlist-title="War Bangaz">SELECT SIGNAL</button>
                 </div>
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="/sites/default/files/outskirts/portraits/Recruiters/Asset__Portraits__Recruiters__scrapbroker.webp" alt="" loading="lazy">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL B</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL B</span>
-                  <h2 class="ooh-operation-alpha__playlist-title">WAR ROCK</h2>
-                  <p class="ooh-operation-alpha__playlist-copy">Guitar-driven field pressure for unstable contact zones.</p>
-                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="war-rock" data-playlist-title="WAR ROCK">SELECT SIGNAL</button>
+                  <h2 class="ooh-operation-alpha__playlist-title">Signal Blitz</h2>
+                  <p class="ooh-operation-alpha__playlist-copy">Fast-contact signal pressure for immediate runtime alignment.</p>
+                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="signal-blitz" data-playlist-title="Signal Blitz">SELECT SIGNAL</button>
                 </div>
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="/sites/default/files/outskirts/Sigils/mergedpathfinder.webp" alt="" loading="lazy">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL C</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL C</span>
-                  <h2 class="ooh-operation-alpha__playlist-title">DARK AMBIENT TACTICAL SUSPENSE</h2>
-                  <p class="ooh-operation-alpha__playlist-copy">Low-visibility atmosphere for uncertain runtime pressure.</p>
-                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="dark-ambient-tactical-suspense" data-playlist-title="DARK AMBIENT TACTICAL SUSPENSE">SELECT SIGNAL</button>
+                  <h2 class="ooh-operation-alpha__playlist-title">Dust March</h2>
+                  <p class="ooh-operation-alpha__playlist-copy">Forward field cadence for long-range signal movement.</p>
+                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="dust-march" data-playlist-title="Dust March">SELECT SIGNAL</button>
                 </div>
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="/sites/default/files/outskirts/portraits/Ronins/Asset__Portraits__Ronins__chatgpt_image_dec_26_2025_05_54_31_pm.webp" alt="" loading="lazy">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL D</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL D</span>
-                  <h2 class="ooh-operation-alpha__playlist-title">RONIN SIGNAL</h2>
-                  <p class="ooh-operation-alpha__playlist-copy">Sparse renegade channel for broken-cell movement.</p>
-                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="ronin-signal" data-playlist-title="RONIN SIGNAL">SELECT SIGNAL</button>
+                  <h2 class="ooh-operation-alpha__playlist-title">Black Banner</h2>
+                  <p class="ooh-operation-alpha__playlist-copy">Heavy signal channel for hostile threshold pressure.</p>
+                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="black-banner" data-playlist-title="Black Banner">SELECT SIGNAL</button>
                 </div>
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="/sites/default/files/outskirts/backgrounds/bg_warlord_enclave_signal_drift.webp" alt="" loading="lazy">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL E</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL E</span>
-                  <h2 class="ooh-operation-alpha__playlist-title">OUTER FOG TRANSMISSION</h2>
-                  <p class="ooh-operation-alpha__playlist-copy">Distant field residue for unstable reality drift.</p>
-                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="outer-fog-transmission" data-playlist-title="OUTER FOG TRANSMISSION">SELECT SIGNAL</button>
+                  <h2 class="ooh-operation-alpha__playlist-title">Steel Wreckoning</h2>
+                  <p class="ooh-operation-alpha__playlist-copy">Industrial impact channel for contained runtime staging.</p>
+                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="steel-wreckoning" data-playlist-title="Steel Wreckoning">SELECT SIGNAL</button>
+                </div>
+              </article>
+              <article class="ooh-operation-alpha__playlist-card ooh-operation-alpha__playlist-card--outbound" data-ooh-alpha-playlist-card>
+                <div class="ooh-operation-alpha__playlist-visual">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">RESET</span>
+                </div>
+                <div class="ooh-operation-alpha__playlist-body">
+                  <span class="ooh-operation-alpha__playlist-kicker">SIGNAL F</span>
+                  <h2 class="ooh-operation-alpha__playlist-title">System Reset (Free)</h2>
+                  <p class="ooh-operation-alpha__playlist-copy">Outbound static reset signal. No playback or provider connection is active here.</p>
+                  <a class="ooh-operation-alpha__playlist-select" href="' . $system_reset_url . '" target="_blank" rel="noopener noreferrer">OPEN SIGNAL</a>
                 </div>
               </article>
             </div>
@@ -97,7 +112,7 @@ final class OohOperationAlphaController extends ControllerBase {
               <span class="ooh-operation-alpha__runtime-kicker">ACTIVE SIGNAL</span>
               <p class="ooh-operation-alpha__runtime-title" data-ooh-alpha-runtime-title>Signal pending.</p>
               <p class="ooh-operation-alpha__runtime-copy" data-ooh-alpha-runtime-copy>Signal selected. Runtime handoff pending.</p>
-              <a class="ooh-operation-alpha__runtime-button" href="/oaplay" data-ooh-alpha-runtime-proceed>PROCEED TO RUNTIME</a>
+              <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '" data-ooh-alpha-runtime-proceed>PROCEED TO RUNTIME</a>
             </div>
             <p class="ooh-operation-alpha__playlist-note">No playback, account link, or runtime launch is active in this shell.</p>
           </div>
@@ -117,6 +132,8 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the contained Operation Alpha runtime shell.
    */
   public function runtime(): array {
+    $playlists_url = Url::fromRoute('ooh_outskirts.operation_alpha_runtime_playlists')->toString();
+
     return [
       '#type' => 'inline_template',
       '#template' => '
@@ -144,7 +161,7 @@ final class OohOperationAlphaController extends ControllerBase {
                 <p class="ooh-operation-alpha__runtime-copy">Operational systems pending activation.</p>
               </div>
             </div>
-            <a class="ooh-operation-alpha__runtime-button" href="oaplaylists">CHANGE SIGNAL</a>
+            <a class="ooh-operation-alpha__runtime-button" href="' . $playlists_url . '">CHANGE SIGNAL</a>
           </div>
         </section>',
       '#attached' => [
