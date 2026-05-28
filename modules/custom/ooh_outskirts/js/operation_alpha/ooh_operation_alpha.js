@@ -149,6 +149,36 @@
     ]
   };
 
+  var consequenceOutcomes = [
+    {
+      title: 'Extraction corridor stabilizes.',
+      field: 'FIELD STABLE',
+      mark: {
+        ronin: 'Veyra Null: cooperative',
+        mutant: 'Grain-9: curious',
+        warlord: 'Marshal Korr: searching'
+      }
+    },
+    {
+      title: 'Warlord pressure decreases.',
+      field: 'CHANNEL INTEGRITY RISING',
+      mark: {
+        ronin: 'Veyra Null: cautious',
+        mutant: 'Grain-9: unstable',
+        warlord: 'Marshal Korr: tracking'
+      }
+    },
+    {
+      title: 'Field pressure shifts.',
+      field: 'FIELD UNSTABLE',
+      mark: {
+        ronin: 'Veyra Null: silent',
+        mutant: 'Grain-9: agitated',
+        warlord: 'Marshal Korr: escalating'
+      }
+    }
+  ];
+
   var scenarios = [
     {
       title: 'RONIN CELL DETECTED',
@@ -553,6 +583,30 @@
     renderMission(root, contactIndex, seedIndex);
   }
 
+  function renderConsequence(root, contactIndex, buttonIndex) {
+    var contact = contactSlots[contactIndex % contactSlots.length];
+    var outcome = consequenceOutcomes[buttonIndex % consequenceOutcomes.length];
+    var result = root.querySelector('[data-ooh-alpha-result]');
+    var title = root.querySelector('[data-ooh-alpha-result-title]');
+    var field = root.querySelector('[data-ooh-alpha-result-field]');
+    var mark = root.querySelector('[data-ooh-alpha-result-mark]');
+
+    if (!contact || !outcome || !result || !title || !field || !mark) {
+      return;
+    }
+
+    result.hidden = false;
+    result.setAttribute('data-result-field', outcome.field.toLowerCase().replace(/\s+/g, '-'));
+    result.classList.remove('is-result-updated');
+    window.setTimeout(function () {
+      result.classList.add('is-result-updated');
+    }, 0);
+
+    title.textContent = outcome.title;
+    field.textContent = 'FIELD STATUS: ' + outcome.field;
+    mark.textContent = 'MARK RESPONSE: ' + (outcome.mark[contact.type] || contact.name + ': observing');
+  }
+
   function renderContact(root, index, mode) {
     var contact = contactSlots[index % contactSlots.length];
     var frame = root.querySelector('[data-ooh-alpha-contact]');
@@ -653,6 +707,7 @@
     }
     renderContact(root, nextContactIndex, 'response');
     renderMission(root, nextContactIndex, root.oohAlphaInteractionCount + buttonIndex);
+    renderConsequence(root, nextContactIndex, buttonIndex);
     setAtmosphere(root, nextAtmosphereIndex);
 
     window.clearTimeout(root.oohAlphaScenarioTimer);

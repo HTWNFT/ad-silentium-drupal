@@ -838,6 +838,81 @@ body.ooh-operation-alpha-runtime .row {
   box-shadow: 0 0 14px rgba(89, 243, 255, 0.12);
 }
 
+.ooh-operation-alpha__result {
+  position: relative;
+  overflow: hidden;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid rgba(130, 245, 255, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.055), transparent 42%, rgba(255, 212, 107, 0.035)),
+    rgba(1, 8, 11, 0.56);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.04);
+  text-align: left;
+}
+
+.ooh-operation-alpha__result[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__result::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-left: 3px solid rgba(255, 212, 107, 0.42);
+  opacity: 0.74;
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__result.is-result-updated {
+  border-color: rgba(255, 212, 107, 0.46);
+  box-shadow:
+    inset 0 0 20px rgba(89, 243, 255, 0.045),
+    0 0 18px rgba(255, 212, 107, 0.08);
+}
+
+.ooh-operation-alpha__result[data-result-field="field-stable"],
+.ooh-operation-alpha__result[data-result-field="channel-integrity-rising"] {
+  border-color: rgba(145, 250, 255, 0.4);
+}
+
+.ooh-operation-alpha__result[data-result-field="field-unstable"] {
+  border-color: rgba(255, 212, 107, 0.52);
+}
+
+.ooh-operation-alpha__result-kicker,
+.ooh-operation-alpha__result-field {
+  display: block;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__result-title {
+  display: block;
+  margin-top: 8px;
+  color: #dffcff;
+  font-size: clamp(1rem, 3vw, 1.18rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__result-field {
+  margin-top: 8px;
+}
+
+.ooh-operation-alpha__result-mark {
+  margin: 10px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
 @keyframes ooh-alpha-contact-fade {
   from {
     opacity: 0;
@@ -1353,6 +1428,10 @@ a.ooh-operation-alpha__playlist-select {
   }
 
   .ooh-operation-alpha__mission {
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__result {
     text-align: center;
   }
 
