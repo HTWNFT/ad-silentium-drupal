@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="{{ path('<front>') ~ 'modules/custom/ooh_outskirts/css/operation_alpha/ooh_operation_alpha.css' }}">
-
 <section class="ooh-operation-alpha" data-ooh-operation-alpha>
   <div class="ooh-operation-alpha__intro" data-ooh-operation-alpha-intro role="dialog" aria-modal="true" aria-labelledby="ooh-operation-alpha-intro-title">
     <div class="ooh-operation-alpha__intro-card">
@@ -36,7 +34,13 @@
       <a class="ooh-operation-alpha__cta-link" href="{{ path('user.login') }}">LOGIN / ACCOUNT</a>
     </nav>
     <h2 class="ooh-operation-alpha__title">OPERATION ALPHA CONTROL</h2>
-    <p class="ooh-operation-alpha__copy">Operation Alpha runtime pending.</p>
+    <p class="ooh-operation-alpha__copy" data-ooh-alpha-runtime-copy>Operation Alpha runtime pending.</p>
+
+    <section class="ooh-operation-alpha__activation" aria-label="Operation Alpha runtime activation">
+      <span class="ooh-operation-alpha__activation-kicker">LINK STATUS</span>
+      <p class="ooh-operation-alpha__activation-line" data-ooh-alpha-activation-status>Shell dormant. Awaiting unseen-hand confirmation.</p>
+      <button class="ooh-operation-alpha__activation-button" type="button" data-ooh-alpha-activate>INITIALIZE FIELD</button>
+    </section>
 
     <section class="ooh-operation-alpha__scenario" aria-live="polite">
       <div class="ooh-operation-alpha__scenario-head">
@@ -50,6 +54,10 @@
       </div>
       <div class="ooh-operation-alpha__interventions" data-ooh-alpha-interventions></div>
       <p class="ooh-operation-alpha__reaction" data-ooh-alpha-reaction>Choose an intervention when the field opens.</p>
+      <div class="ooh-operation-alpha__contact-frame" data-ooh-alpha-contact hidden>
+        <span class="ooh-operation-alpha__contact-kicker">UNSEEN CONTACT</span>
+        <p>The field has noticed your hand.</p>
+      </div>
     </section>
 
     <section class="ooh-operation-alpha__access-panel" aria-label="Operation Alpha access status">
@@ -63,5 +71,3 @@
     </section>
   </div>
 </section>
-
-<script src="{{ path('<front>') ~ 'modules/custom/ooh_outskirts/js/operation_alpha/ooh_operation_alpha.js' }}" defer></script>

@@ -317,6 +317,69 @@ body.ooh-operation-alpha-runtime .row {
   margin-top: 14px;
 }
 
+.ooh-operation-alpha__activation {
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.035), rgba(89, 243, 255, 0.012)),
+    rgba(1, 8, 11, 0.48);
+  text-align: center;
+}
+
+.ooh-operation-alpha__activation-kicker,
+.ooh-operation-alpha__contact-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__activation-line {
+  margin: 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__activation-button {
+  min-height: 42px;
+  min-width: min(100%, 220px);
+  margin-top: 14px;
+  padding: 0.72rem 0.95rem;
+  border: 1px solid rgba(130, 245, 255, 0.48);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.94);
+  background: rgba(5, 31, 39, 0.72);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.045);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__activation-button:hover,
+.ooh-operation-alpha__activation-button:focus-visible {
+  border-color: rgba(223, 252, 255, 0.74);
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.06),
+    0 0 18px rgba(89, 243, 255, 0.16);
+}
+
+.ooh-operation-alpha__activation-button:disabled {
+  cursor: default;
+  opacity: 0.74;
+}
+
 .ooh-operation-alpha__signal-button {
   min-height: 42px;
   min-width: min(100%, 160px);
@@ -356,6 +419,18 @@ body.ooh-operation-alpha-runtime .row {
     linear-gradient(180deg, rgba(89, 243, 255, 0.045), rgba(89, 243, 255, 0.018)),
     rgba(1, 8, 11, 0.46);
   text-align: left;
+}
+
+.ooh-operation-alpha:not(.is-field-active) .ooh-operation-alpha__interventions {
+  display: none;
+}
+
+.ooh-operation-alpha__shell.is-runtime-acknowledged,
+.ooh-operation-alpha.is-runtime-acknowledged .ooh-operation-alpha__shell {
+  border-color: rgba(145, 250, 255, 0.46);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    0 0 42px rgba(89, 243, 255, 0.18);
 }
 
 .ooh-operation-alpha__scenario-head {
@@ -441,6 +516,26 @@ body.ooh-operation-alpha-runtime .row {
   color: rgba(145, 250, 255, 0.86);
   font-size: 0.95rem;
   line-height: 1.45;
+}
+
+.ooh-operation-alpha__contact-frame {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(145, 250, 255, 0.22);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 5px),
+    rgba(2, 14, 18, 0.64);
+  color: rgba(223, 252, 255, 0.8);
+  text-align: center;
+}
+
+.ooh-operation-alpha__contact-frame[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__contact-frame p {
+  margin: 0;
 }
 
 .ooh-operation-alpha__access-panel {
@@ -839,6 +934,14 @@ a.ooh-operation-alpha__playlist-select {
 
   .ooh-operation-alpha__scenario {
     padding: 18px;
+  }
+
+  .ooh-operation-alpha__activation {
+    padding: 14px;
+  }
+
+  .ooh-operation-alpha__activation-button {
+    width: 100%;
   }
 
   .ooh-operation-alpha__signal-card {

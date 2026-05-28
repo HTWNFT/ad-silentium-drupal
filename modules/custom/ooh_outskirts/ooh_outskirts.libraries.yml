@@ -57,7 +57,7 @@ play:
     - core/drupalSettings
 
 operation_alpha:
-  version: 1.x
+  version: 1.0.2
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha.css: {}

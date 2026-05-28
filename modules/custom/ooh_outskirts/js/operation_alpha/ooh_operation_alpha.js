@@ -280,6 +280,7 @@
     root.oohAlphaScenarioIndex = index % scenarios.length;
     title.textContent = scenario.title;
     pressure.textContent = scenario.pressure;
+    root.classList.add('is-field-active');
     situation.innerHTML = scenario.situation.map(function (line) {
       return '<p>' + line + '</p>';
     }).join('');
@@ -296,6 +297,35 @@
       });
       interventions.appendChild(button);
     });
+  }
+
+  function activateOperationAlphaRuntime(root) {
+    var runtimeCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
+    var activationStatus = root.querySelector('[data-ooh-alpha-activation-status]');
+    var activationButton = root.querySelector('[data-ooh-alpha-activate]');
+    var reaction = root.querySelector('[data-ooh-alpha-reaction]');
+    var contact = root.querySelector('[data-ooh-alpha-contact]');
+
+    root.classList.add('is-runtime-acknowledged');
+
+    if (runtimeCopy) {
+      runtimeCopy.textContent = 'Runtime shell active.';
+    }
+    if (activationStatus) {
+      activationStatus.textContent = 'Acknowledgment received. Field pressure entering first contact.';
+    }
+    if (activationButton) {
+      activationButton.disabled = true;
+      activationButton.textContent = 'FIELD INITIALIZED';
+    }
+    if (reaction) {
+      reaction.textContent = 'Unseen hand recognized. Choose a staged field influence.';
+    }
+    if (contact) {
+      contact.hidden = false;
+    }
+
+    renderScenario(root, 0);
   }
 
   function setInterventionsDisabled(root, disabled) {
@@ -327,6 +357,7 @@
   function initOperationAlphaGate(root) {
     var intro = root.querySelector('[data-ooh-operation-alpha-intro]');
     var enter = root.querySelector('[data-ooh-operation-alpha-enter]');
+    var activationButton = root.querySelector('[data-ooh-alpha-activate]');
 
     initSignalModal(root);
 
@@ -347,7 +378,11 @@
       showSignalModal(root);
     }
 
-    renderScenario(root, 0);
+    if (activationButton) {
+      activationButton.addEventListener('click', function () {
+        activateOperationAlphaRuntime(root);
+      });
+    }
   }
 
   function storePlaylistSelection(slug, title) {
