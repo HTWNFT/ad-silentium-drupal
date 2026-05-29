@@ -501,6 +501,10 @@ body.ooh-operation-alpha-runtime .row {
     0 0 18px rgba(89, 243, 255, 0.1);
 }
 
+.ooh-operation-alpha__battlefield.is-movement-updated .ooh-operation-alpha__movement-feed {
+  border-color: rgba(255, 212, 107, 0.34);
+}
+
 .ooh-operation-alpha__battlefield-kicker {
   display: block;
   margin-bottom: 12px;
@@ -543,6 +547,62 @@ body.ooh-operation-alpha-runtime .row {
   color: rgba(223, 252, 255, 0.8);
   font-size: 0.9rem;
   line-height: 1.45;
+}
+
+.ooh-operation-alpha__movement-feed {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.032), transparent 56%, rgba(255, 212, 107, 0.026)),
+    rgba(1, 8, 11, 0.42);
+}
+
+.ooh-operation-alpha__movement-kicker {
+  display: block;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__movement-list {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ooh-operation-alpha__movement-item {
+  position: relative;
+  min-height: 34px;
+  padding: 0.58rem 0.72rem 0.58rem 1.68rem;
+  border: 1px solid rgba(130, 245, 255, 0.14);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.84);
+  background: rgba(4, 22, 28, 0.42);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__movement-item::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0.72rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(145, 250, 255, 0.72);
+  box-shadow: 0 0 10px rgba(89, 243, 255, 0.22);
+  transform: translateY(-50%);
 }
 
 .ooh-operation-alpha__signal-button {
@@ -1579,6 +1639,11 @@ a.ooh-operation-alpha__playlist-select {
 
   .ooh-operation-alpha__battlefield-grid {
     grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__movement-item {
+    padding-right: 0.58rem;
+    text-align: left;
   }
 
   .ooh-operation-alpha__contact-frame {

@@ -43,7 +43,8 @@
         field: 'Observation priority increased across Sector 17.',
         movement: 'Friendly elements holding shadow line.',
         signal: 'Contact risk contained under low-band silence.'
-      }
+      },
+      movementMode: 'hold'
     },
     advance: {
       state: 'ADVANCE',
@@ -52,7 +53,8 @@
         field: 'Forward pressure building beyond the fog line.',
         movement: 'Ronin scout element pushing toward the mark channel.',
         signal: 'Contact risk increasing along hostile sweep bands.'
-      }
+      },
+      movementMode: 'advance'
     },
     extract: {
       state: 'EXTRACT',
@@ -61,7 +63,8 @@
         field: 'Extraction corridor opening through unstable cover.',
         movement: 'Civilian route markers shifting toward safe passage.',
         signal: 'Exposure decreasing as pursuit traffic thins.'
-      }
+      },
+      movementMode: 'extract'
     },
     signal: {
       state: 'DEPLOY SIGNAL',
@@ -70,7 +73,8 @@
         field: 'False traffic inserted into the outer approach.',
         movement: 'Hostile attention splitting across duplicate traces.',
         signal: 'Signal confusion spreading near the mark channel.'
-      }
+      },
+      movementMode: 'signal'
     },
     divert: {
       state: 'DIVERT',
@@ -79,8 +83,48 @@
         field: 'Operational attention redirected away from exposed movement.',
         movement: 'Asset path bending through secondary cover.',
         signal: 'Decoy pressure rising on the wrong corridor.'
-      }
+      },
+      movementMode: 'divert'
     }
+  };
+
+  var movementFeeds = {
+    idle: [
+      'RONIN SCOUT ADVANCING',
+      'MUTANT PACK RELOCATING',
+      'UNKNOWN TRAFFIC INTERCEPTED',
+      'OUTER CORRIDOR ACTIVITY INCREASING'
+    ],
+    hold: [
+      'RONIN SCOUT HOLDING POSITION',
+      'ASSET ENTERING LOW VISIBILITY ZONE',
+      'UNKNOWN TRAFFIC SLOWING NEAR SECTOR 17',
+      'OBSERVATION LINE STABILIZING'
+    ],
+    advance: [
+      'RONIN SCOUT ADVANCING',
+      'OUTER CORRIDOR ACTIVITY INCREASING',
+      'ASSET ENTERING LOW VISIBILITY ZONE',
+      'MUTANT CONTACT DETECTED'
+    ],
+    extract: [
+      'RONIN SCOUT FALLING BACK',
+      'CIVILIAN ROUTE MARKERS SHIFTING',
+      'EXTRACTION CORRIDOR TRAFFIC DECREASING',
+      'REAR SIGNAL COVER HOLDING'
+    ],
+    signal: [
+      'WARLORD SIGNAL DETECTED',
+      'UNKNOWN TRAFFIC INTERCEPTED',
+      'FALSE MARK CHANNEL PROPAGATING',
+      'ENCRYPTED TRAFFIC SPLITTING'
+    ],
+    divert: [
+      'MUTANT PACK RELOCATING',
+      'WARLORD SIGNAL DRIFTING EAST',
+      'ASSET PATH SHIFTING TO SECONDARY COVER',
+      'OUTER CORRIDOR ATTENTION DIVERTED'
+    ]
   };
 
   var contactSlots = [
@@ -631,6 +675,30 @@
     renderMission(root, contactIndex, seedIndex);
   }
 
+  function setAssetMovementFeed(root, mode) {
+    var feed = movementFeeds[mode] || movementFeeds.idle;
+    var offset = root.oohAlphaMovementIndex || 0;
+    var items = root.querySelectorAll('[data-ooh-alpha-movement-feed]');
+    var panel = root.querySelector('[data-ooh-alpha-battlefield]');
+
+    if (!feed || !feed.length || !items.length) {
+      return;
+    }
+
+    items.forEach(function (item, index) {
+      item.textContent = feed[(offset + index) % feed.length];
+    });
+
+    root.oohAlphaMovementIndex = (offset + 1) % feed.length;
+
+    if (panel) {
+      panel.classList.remove('is-movement-updated');
+      window.setTimeout(function () {
+        panel.classList.add('is-movement-updated');
+      }, 0);
+    }
+  }
+
   function setBattlefieldPresence(root, battlefield) {
     var field = root.querySelector('[data-ooh-alpha-battlefield-field]');
     var movement = root.querySelector('[data-ooh-alpha-battlefield-movement]');
@@ -666,6 +734,7 @@
     state.textContent = directive.state;
     acknowledgement.textContent = directive.acknowledgement;
     setBattlefieldPresence(root, directive.battlefield);
+    setAssetMovementFeed(root, directive.movementMode);
 
     root.querySelectorAll('[data-ooh-alpha-command]').forEach(function (button) {
       if (button.getAttribute('data-ooh-alpha-command') === commandKey) {
