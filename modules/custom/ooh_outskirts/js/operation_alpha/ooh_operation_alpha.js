@@ -35,6 +35,54 @@
     }
   ];
 
+  var commandDirectives = {
+    hold: {
+      state: 'HOLD POSITION',
+      acknowledgement: 'UNSEEN HAND DIRECTIVE RECEIVED // HOLD POSITION',
+      battlefield: {
+        field: 'Observation priority increased across Sector 17.',
+        movement: 'Friendly elements holding shadow line.',
+        signal: 'Contact risk contained under low-band silence.'
+      }
+    },
+    advance: {
+      state: 'ADVANCE',
+      acknowledgement: 'FORWARD PRESSURE AUTHORIZED',
+      battlefield: {
+        field: 'Forward pressure building beyond the fog line.',
+        movement: 'Ronin scout element pushing toward the mark channel.',
+        signal: 'Contact risk increasing along hostile sweep bands.'
+      }
+    },
+    extract: {
+      state: 'EXTRACT',
+      acknowledgement: 'EXTRACTION ORDER ISSUED',
+      battlefield: {
+        field: 'Extraction corridor opening through unstable cover.',
+        movement: 'Civilian route markers shifting toward safe passage.',
+        signal: 'Exposure decreasing as pursuit traffic thins.'
+      }
+    },
+    signal: {
+      state: 'DEPLOY SIGNAL',
+      acknowledgement: 'SIGNAL DEPLOYMENT AUTHORIZED',
+      battlefield: {
+        field: 'False traffic inserted into the outer approach.',
+        movement: 'Hostile attention splitting across duplicate traces.',
+        signal: 'Signal confusion spreading near the mark channel.'
+      }
+    },
+    divert: {
+      state: 'DIVERT',
+      acknowledgement: 'OPERATIONAL ATTENTION REDIRECTED',
+      battlefield: {
+        field: 'Operational attention redirected away from exposed movement.',
+        movement: 'Asset path bending through secondary cover.',
+        signal: 'Decoy pressure rising on the wrong corridor.'
+      }
+    }
+  };
+
   var contactSlots = [
     {
       type: 'ronin',
@@ -583,6 +631,62 @@
     renderMission(root, contactIndex, seedIndex);
   }
 
+  function setBattlefieldPresence(root, battlefield) {
+    var field = root.querySelector('[data-ooh-alpha-battlefield-field]');
+    var movement = root.querySelector('[data-ooh-alpha-battlefield-movement]');
+    var signal = root.querySelector('[data-ooh-alpha-battlefield-signal]');
+    var panel = root.querySelector('[data-ooh-alpha-battlefield]');
+
+    if (!battlefield || !field || !movement || !signal) {
+      return;
+    }
+
+    field.textContent = battlefield.field;
+    movement.textContent = battlefield.movement;
+    signal.textContent = battlefield.signal;
+
+    if (panel) {
+      panel.classList.remove('is-battlefield-updated');
+      window.setTimeout(function () {
+        panel.classList.add('is-battlefield-updated');
+      }, 0);
+    }
+  }
+
+  function setActiveCommand(root, commandKey) {
+    var directive = commandDirectives[commandKey];
+    var state = root.querySelector('[data-ooh-alpha-command-state]');
+    var acknowledgement = root.querySelector('[data-ooh-alpha-command-ack]');
+
+    if (!directive || !state || !acknowledgement) {
+      return;
+    }
+
+    root.oohAlphaCommand = commandKey;
+    state.textContent = directive.state;
+    acknowledgement.textContent = directive.acknowledgement;
+    setBattlefieldPresence(root, directive.battlefield);
+
+    root.querySelectorAll('[data-ooh-alpha-command]').forEach(function (button) {
+      if (button.getAttribute('data-ooh-alpha-command') === commandKey) {
+        button.classList.add('is-command-active');
+        button.setAttribute('aria-pressed', 'true');
+      }
+      else {
+        button.classList.remove('is-command-active');
+        button.removeAttribute('aria-pressed');
+      }
+    });
+  }
+
+  function initCommandConsole(root) {
+    root.querySelectorAll('[data-ooh-alpha-command]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        setActiveCommand(root, button.getAttribute('data-ooh-alpha-command'));
+      });
+    });
+  }
+
   function renderConsequence(root, contactIndex, buttonIndex) {
     var contact = contactSlots[contactIndex % contactSlots.length];
     var outcome = consequenceOutcomes[buttonIndex % consequenceOutcomes.length];
@@ -746,6 +850,7 @@
         activateOperationAlphaRuntime(root);
       });
     }
+    initCommandConsole(root);
     if (missionCycle) {
       missionCycle.addEventListener('click', function () {
         cycleMission(root);

@@ -42,6 +42,39 @@
       <button class="ooh-operation-alpha__activation-button" type="button" data-ooh-alpha-activate>INITIALIZE FIELD</button>
     </section>
 
+    <section class="ooh-operation-alpha__command-console" aria-label="Unseen Hand command console">
+      <div class="ooh-operation-alpha__command-head">
+        <span class="ooh-operation-alpha__command-kicker">UNSEEN HAND COMMAND CONSOLE</span>
+        <strong class="ooh-operation-alpha__command-state" data-ooh-alpha-command-state>DIRECTIVE CHANNEL IDLE</strong>
+      </div>
+      <div class="ooh-operation-alpha__command-grid" data-ooh-alpha-command-console>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="hold">HOLD POSITION</button>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="advance">ADVANCE</button>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="extract">EXTRACT</button>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="signal">DEPLOY SIGNAL</button>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="divert">DIVERT</button>
+      </div>
+      <p class="ooh-operation-alpha__command-ack" data-ooh-alpha-command-ack aria-live="polite">Awaiting directive.</p>
+    </section>
+
+    <section class="ooh-operation-alpha__battlefield" aria-label="Battlefield Presence" data-ooh-alpha-battlefield>
+      <span class="ooh-operation-alpha__battlefield-kicker">BATTLEFIELD PRESENCE</span>
+      <div class="ooh-operation-alpha__battlefield-grid">
+        <div class="ooh-operation-alpha__battlefield-cell">
+          <span class="ooh-operation-alpha__battlefield-label">FIELD CONDITIONS</span>
+          <p class="ooh-operation-alpha__battlefield-line" data-ooh-alpha-battlefield-field>Low visibility across Sector 17.</p>
+        </div>
+        <div class="ooh-operation-alpha__battlefield-cell">
+          <span class="ooh-operation-alpha__battlefield-label">ASSET MOVEMENT</span>
+          <p class="ooh-operation-alpha__battlefield-line" data-ooh-alpha-battlefield-movement>Ronin scout element repositioning.</p>
+        </div>
+        <div class="ooh-operation-alpha__battlefield-cell">
+          <span class="ooh-operation-alpha__battlefield-label">SIGNAL PRESSURE</span>
+          <p class="ooh-operation-alpha__battlefield-line" data-ooh-alpha-battlefield-signal>Encrypted traffic increasing near mark channel.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="ooh-operation-alpha__scenario" aria-live="polite">
       <div class="ooh-operation-alpha__scenario-head">
         <span class="ooh-operation-alpha__pressure-label">FIELD PRESSURE</span>
