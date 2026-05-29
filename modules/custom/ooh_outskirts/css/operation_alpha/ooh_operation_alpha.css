@@ -482,6 +482,93 @@ body.ooh-operation-alpha-runtime .row {
   text-transform: uppercase;
 }
 
+.ooh-operation-alpha__actor-transmission {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  gap: 14px;
+  overflow: hidden;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid rgba(145, 250, 255, 0.22);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 5px),
+    rgba(2, 14, 18, 0.58);
+  color: rgba(223, 252, 255, 0.8);
+  text-align: left;
+}
+
+.ooh-operation-alpha__actor-transmission[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__actor-portrait {
+  min-height: 118px;
+  overflow: hidden;
+  border: 1px solid rgba(145, 250, 255, 0.18);
+  border-radius: 6px;
+  background:
+    radial-gradient(circle at 50% 32%, rgba(223, 252, 255, 0.2), transparent 18%),
+    linear-gradient(135deg, rgba(89, 243, 255, 0.08), rgba(1, 8, 11, 0.9));
+  box-shadow: inset 0 0 22px rgba(89, 243, 255, 0.045);
+}
+
+.ooh-operation-alpha__actor-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 118px;
+  object-fit: cover;
+  opacity: 0.8;
+  filter: saturate(0.78) contrast(1.08) brightness(0.84);
+}
+
+.ooh-operation-alpha__actor-image[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__actor-body {
+  min-width: 0;
+}
+
+.ooh-operation-alpha__actor-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__actor-name {
+  display: block;
+  color: #dffcff;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__actor-meta {
+  display: block;
+  margin-top: 5px;
+  color: rgba(145, 250, 255, 0.68);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__actor-copy {
+  margin: 10px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
 .ooh-operation-alpha__battlefield {
   margin-top: 18px;
   padding: 18px;
@@ -1630,6 +1717,21 @@ a.ooh-operation-alpha__playlist-select {
 
   .ooh-operation-alpha__command-head {
     justify-content: center;
+  }
+
+  .ooh-operation-alpha__actor-transmission {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__actor-portrait {
+    width: min(140px, 100%);
+    min-height: 140px;
+    margin: 0 auto;
+  }
+
+  .ooh-operation-alpha__actor-image {
+    min-height: 140px;
   }
 
   .ooh-operation-alpha__battlefield {

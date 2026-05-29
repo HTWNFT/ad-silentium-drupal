@@ -5,6 +5,23 @@
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var scenarioDelayMs = 1500;
+  var actorRegistryPaths = [
+    '/operation_alpha/oa_actor_registry.csv',
+    '/operation_alpha/generated_actor_registry/oa_actor_registry.csv'
+  ];
+  var actorRegistryColumnMap = {
+    Portrait: 'portrait',
+    Path: 'path',
+    Faction: 'faction',
+    Role: 'role',
+    'Transmission Style': 'transmissionStyle',
+    'Mission Usage': 'missionUsage',
+    'Original File': 'originalFile',
+    'Path Color': 'pathColor',
+    'Path Alignment': 'pathColor',
+    Loyalty: 'loyalty',
+    Name: 'name'
+  };
   var atmosphereClasses = [
     'is-atmosphere-low',
     'is-atmosphere-static',
@@ -571,6 +588,258 @@
     return (basePath || '') + path;
   }
 
+  function operationAlphaRootPath(path) {
+    var currentPath = window.location.pathname || '';
+    var basePath = currentPath.replace(/\/(?:operation-alpha(?:\/oaplay(?:\/playlists)?)?|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
+
+    return (basePath || '') + path;
+  }
+
+  function parseCsvRows(csvText) {
+    var rows = [];
+    var row = [];
+    var value = '';
+    var inQuotes = false;
+    var index;
+    var character;
+    var nextCharacter;
+
+    for (index = 0; index < csvText.length; index++) {
+      character = csvText[index];
+      nextCharacter = csvText[index + 1];
+
+      if (character === '"' && inQuotes && nextCharacter === '"') {
+        value += '"';
+        index++;
+      }
+      else if (character === '"') {
+        inQuotes = !inQuotes;
+      }
+      else if (character === ',' && !inQuotes) {
+        row.push(value);
+        value = '';
+      }
+      else if ((character === '\n' || character === '\r') && !inQuotes) {
+        if (character === '\r' && nextCharacter === '\n') {
+          index++;
+        }
+        row.push(value);
+        if (row.some(function (cell) { return cell.trim() !== ''; })) {
+          rows.push(row);
+        }
+        row = [];
+        value = '';
+      }
+      else {
+        value += character;
+      }
+    }
+
+    row.push(value);
+    if (row.some(function (cell) { return cell.trim() !== ''; })) {
+      rows.push(row);
+    }
+
+    return rows;
+  }
+
+  function normalizeActorRegistry(csvText) {
+    var rows = parseCsvRows(csvText);
+    var headers = rows.shift() || [];
+
+    return rows.map(function (row) {
+      var actor = {};
+
+      headers.forEach(function (header, index) {
+        var normalizedKey = actorRegistryColumnMap[header.trim()];
+
+        if (normalizedKey) {
+          actor[normalizedKey] = (row[index] || '').trim();
+        }
+      });
+
+      return actor;
+    }).filter(function (actor) {
+      return actor.missionUsage;
+    });
+  }
+
+  function actorRegistryUrl(actorRegistryPath) {
+    return operationAlphaRootPath(actorRegistryPath);
+  }
+
+  function loadActorRegistryFromPath(actorRegistryPath) {
+    return window.fetch(actorRegistryUrl(actorRegistryPath), {
+      cache: 'no-store',
+      credentials: 'same-origin'
+    }).then(function (response) {
+      if (!response.ok) {
+        throw new Error('Actor registry unavailable');
+      }
+
+      return response.text();
+    }).then(function (csvText) {
+      return normalizeActorRegistry(csvText);
+    });
+  }
+
+  function loadActorRegistry(pathIndex) {
+    var index = pathIndex || 0;
+
+    if (!window.fetch || index >= actorRegistryPaths.length) {
+      return Promise.resolve([]);
+    }
+
+    return loadActorRegistryFromPath(actorRegistryPaths[index]).catch(function () {
+      return loadActorRegistry(index + 1);
+    });
+  }
+
+  function actorMissionUsage(actor, usage) {
+    return (actor.missionUsage || '').trim().toLowerCase() === usage.toLowerCase();
+  }
+
+  function actorRegistrySlug(value) {
+    return (value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+  }
+
+  function actorPortraitPath(actor) {
+    var pathSlug = actorRegistrySlug(actor.path);
+    var factionSlug = actorRegistrySlug(actor.faction === 'Genealord' ? 'Unknown' : actor.faction);
+    var nameSlug = actorRegistrySlug(actor.name || actor.portrait);
+
+    if (!pathSlug || !factionSlug || !nameSlug) {
+      return '';
+    }
+
+    return operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/oa_' + pathSlug + '_' + factionSlug + '_' + nameSlug + '.webp');
+  }
+
+  function actorPortraitFallbackPath(actor) {
+    var pathSlug = actorRegistrySlug(actor.path);
+    var factionSlug = actorRegistrySlug(actor.faction === 'Genealord' ? 'Unknown' : actor.faction);
+    var nameSlug = actorRegistrySlug(actor.name || actor.portrait);
+
+    if (!pathSlug || !factionSlug || !nameSlug) {
+      return '';
+    }
+
+    return operationAlphaRootPath('/operation_alpha/portraits/oa_' + pathSlug + '_' + factionSlug + '_' + nameSlug + '.webp');
+  }
+
+
+  function actorTransmissionCopy(actor) {
+    var style = (actor.transmissionStyle || '').toLowerCase();
+    var name = actor.portrait || actor.name || 'Unknown actor';
+
+    if (style.indexOf('brutality') !== -1 || style.indexOf('threat') !== -1) {
+      return name + ' pushes a violent signal through the field. The channel bends, but does not break.';
+    }
+    if (style.indexOf('erratic') !== -1 || style.indexOf('fragment') !== -1) {
+      return name + ' arrives in broken intervals. Movement is readable, intent is not.';
+    }
+    if (style.indexOf('coded') !== -1 || style.indexOf('minimal') !== -1 || style.indexOf('direct') !== -1) {
+      return name + ' transmits in controlled bursts. The Unseen Hand has a clean line.';
+    }
+    if (style.indexOf('devotional') !== -1 || style.indexOf('ritual') !== -1) {
+      return name + ' repeats the path signal like a vow. Pressure gathers around the mark.';
+    }
+
+    return name + ' enters the Operation Alpha channel. The field registers a living asset.';
+  }
+
+  function renderActorTransmission(root, actor) {
+    var frame = root.querySelector('[data-ooh-alpha-actor-transmission]');
+    var image = root.querySelector('[data-ooh-alpha-actor-image]');
+    var name = root.querySelector('[data-ooh-alpha-actor-name]');
+    var path = root.querySelector('[data-ooh-alpha-actor-path]');
+    var faction = root.querySelector('[data-ooh-alpha-actor-faction]');
+    var role = root.querySelector('[data-ooh-alpha-actor-role]');
+    var style = root.querySelector('[data-ooh-alpha-actor-style]');
+    var color = root.querySelector('[data-ooh-alpha-actor-color]');
+    var copy = root.querySelector('[data-ooh-alpha-actor-copy]');
+    var portraitPath;
+    var portraitFallbackPath;
+
+    if (!frame || !actor) {
+      return;
+    }
+
+    portraitPath = actorPortraitPath(actor);
+    portraitFallbackPath = actorPortraitFallbackPath(actor);
+    frame.hidden = false;
+
+    if (image && portraitPath) {
+      image.src = portraitPath;
+      image.hidden = false;
+      image.onerror = function () {
+        if (portraitFallbackPath && image.src !== portraitFallbackPath) {
+          image.src = portraitFallbackPath;
+          return;
+        }
+
+        image.hidden = true;
+      };
+    }
+    if (name) {
+      name.textContent = actor.portrait || actor.name || 'Unknown actor';
+    }
+    if (path) {
+      path.textContent = 'PATH: ' + (actor.path || 'unresolved');
+    }
+    if (faction) {
+      faction.textContent = 'FACTION: ' + (actor.faction || 'unresolved');
+    }
+    if (role) {
+      role.textContent = 'ROLE: ' + (actor.role || 'unresolved');
+    }
+    if (style) {
+      style.textContent = 'STYLE: ' + (actor.transmissionStyle || 'unresolved');
+    }
+    if (color) {
+      color.textContent = 'PATH COLOR: ' + (actor.pathColor || 'unresolved');
+    }
+    if (copy) {
+      copy.textContent = actorTransmissionCopy(actor);
+    }
+  }
+
+  function selectOperationAlphaActor(root) {
+    if (root.oohAlphaSelectedActor) {
+      renderActorTransmission(root, root.oohAlphaSelectedActor);
+      return;
+    }
+
+    var eligibleActors = (root.oohAlphaActorRegistry || []).filter(function (actor) {
+      return actorMissionUsage(actor, 'Operation Alpha');
+    });
+    var selectedActor;
+
+    if (!eligibleActors.length) {
+      return;
+    }
+
+    selectedActor = eligibleActors[Math.floor(Math.random() * eligibleActors.length)];
+    root.oohAlphaSelectedActor = selectedActor;
+    renderActorTransmission(root, selectedActor);
+    window.console.log('Operation Alpha actor selected:', selectedActor.portrait || selectedActor.name || 'Unknown actor');
+  }
+
+  function initActorRegistry(root) {
+    loadActorRegistry().then(function (actors) {
+      root.oohAlphaActorRegistry = actors;
+
+      if (actors.length) {
+        window.console.log('Operation Alpha actor registry loaded:', actors.length + ' actors');
+      }
+      if (root.classList.contains('is-runtime-acknowledged')) {
+        selectOperationAlphaActor(root);
+      }
+    }).catch(function () {
+      root.oohAlphaActorRegistry = [];
+    });
+  }
+
   function selectContactLine(contact, mode, index) {
     var lines = mode === 'response' ? contact.responses : contact.transmissions;
 
@@ -851,6 +1120,7 @@
     renderContact(root, 0, 'activation');
     renderMission(root, 0, 0);
     setAtmosphere(root, 0);
+    selectOperationAlphaActor(root);
   }
 
   function setInterventionsDisabled(root, disabled) {
@@ -895,6 +1165,7 @@
     var activationButton = root.querySelector('[data-ooh-alpha-activate]');
     var missionCycle = root.querySelector('[data-ooh-alpha-mission-cycle]');
 
+    initActorRegistry(root);
     initSignalModal(root);
 
     if (intro && enter) {
