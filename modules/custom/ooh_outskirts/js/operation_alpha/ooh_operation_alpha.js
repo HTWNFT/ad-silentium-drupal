@@ -848,6 +848,15 @@
     return [slug];
   }
 
+  var genealordPortraitFilenameOverrides = {
+    lhatoris_path: 'Asset__Portraits__Genetic_Warlords__chatgpt_image_dec_26_2025_04_07_13_pm.webp',
+    hebrenes_path: 'Asset__Portraits__Genetic_Warlords__chatgpt_image_dec_26_2025_03_59_57_pm.webp'
+  };
+
+  function genealordPortraitFilename(pathSlug) {
+    return genealordPortraitFilenameOverrides[pathSlug] || '';
+  }
+
   function actorPortraitFilename(pathSlug, factionSlug, nameSlug) {
     return 'oa_' + pathSlug + '_' + factionSlug + '_' + nameSlug + '.webp';
   }
@@ -866,10 +875,16 @@
 
     if (actor.faction === 'Genealord') {
       pathAliases.forEach(function (pathAlias) {
-        nameAliases.forEach(function (nameAlias) {
-          candidates.push(operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/' + pathAlias + '/Genealord/' + actorPortraitFilename(pathAlias, factionSlug, nameAlias)));
-        });
+        var filename = genealordPortraitFilename(pathAlias);
+
+        if (filename) {
+          candidates.push(operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/' + pathAlias + '/Genealord/' + filename));
+        }
       });
+
+      if (candidates.length) {
+        return candidates;
+      }
     }
 
     candidates.push(operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/' + actorPortraitFilename(pathSlug, factionSlug, nameSlug)));
