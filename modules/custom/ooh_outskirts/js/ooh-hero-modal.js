@@ -19,8 +19,8 @@
         const modal = landing.querySelector('#ooh-prologue-modal');
         const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
         const crawl = landing.querySelector('#ooh-prologue-crawl');
-        const prologueAutoOpenKey = 'ooh_prologue_auto_opened_v1';
         const fullBuildLocked = true;
+        const prologueAutoFireDisabled = true;
 
         if (!root) {
           warnOnce('hero-missing', 'OOH landing: hero root not found.');
@@ -63,42 +63,6 @@
           document.body.classList.remove('ooh-modal-open');
         };
 
-        const hasAutoOpenedPrologue = () => {
-          try {
-            return window.localStorage.getItem(prologueAutoOpenKey) === '1';
-          }
-          catch (error) {
-            return true;
-          }
-        };
-
-        const markAutoOpenedPrologue = () => {
-          try {
-            window.localStorage.setItem(prologueAutoOpenKey, '1');
-          }
-          catch (error) {}
-        };
-
-        const deferAutoOpenPrologue = () => {
-          const defer = window.requestAnimationFrame || ((callback) => window.setTimeout(callback, 16));
-
-          defer(() => {
-            defer(() => {
-              window.setTimeout(() => {
-                if (modal.classList.contains('is-open')) {
-                  markAutoOpenedPrologue();
-                  return;
-                }
-                if (hasAutoOpenedPrologue()) {
-                  return;
-                }
-                markAutoOpenedPrologue();
-                openModal();
-              }, 400);
-            });
-          });
-        };
-
         if (enterBtn) {
           enterBtn.setAttribute('disabled', 'disabled');
           enterBtn.setAttribute('aria-disabled', 'true');
@@ -116,7 +80,6 @@
               event.preventDefault();
               return;
             }
-            markAutoOpenedPrologue();
             openModal();
           });
         }
@@ -133,12 +96,8 @@
           }
         });
 
-        if (fullBuildLocked) {
-          markAutoOpenedPrologue();
+        if (prologueAutoFireDisabled || fullBuildLocked) {
           closeModal();
-        }
-        else if (modal && !hasAutoOpenedPrologue()) {
-          deferAutoOpenPrologue();
         }
 
         // ----- Landing monetization UI scaffold -----
