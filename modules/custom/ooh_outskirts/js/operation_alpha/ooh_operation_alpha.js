@@ -241,43 +241,43 @@
     {
       slug: 'war-bangaz',
       label: 'War Bangaz',
-      playlistId: '',
-      spotifyUrl: '',
+      playlistId: '6CaO0WNPwOyB4ZBIwgJF3O',
+      spotifyUrl: 'https://open.spotify.com/playlist/6CaO0WNPwOyB4ZBIwgJF3O?si=46f8eacb11d34816',
       moodTags: 'Aggressive • Kinetic • Chaotic'
     },
     {
       slug: 'black-banner',
       label: 'Black Banner',
-      playlistId: '',
-      spotifyUrl: '',
+      playlistId: '6aLCJNyLO0zN6qsb3LTZoy',
+      spotifyUrl: 'https://open.spotify.com/playlist/6aLCJNyLO0zN6qsb3LTZoy?si=f7005bed79194ef0',
       moodTags: 'Ominous • Authoritarian • Oppressive'
     },
     {
       slug: 'signal-blitz',
       label: 'Signal Blitz',
-      playlistId: '',
-      spotifyUrl: '',
+      playlistId: '5yXFPozHV4eW9Aal5Ys7Mn',
+      spotifyUrl: 'https://open.spotify.com/playlist/5yXFPozHV4eW9Aal5Ys7Mn?si=19228e24361844a7',
       moodTags: 'Recon • Communications • Uncertainty'
     },
     {
       slug: 'dust-march',
       label: 'Dust March',
-      playlistId: '',
-      spotifyUrl: '',
+      playlistId: '76AhLGUeJhcZbgQYt8oqo8',
+      spotifyUrl: 'https://open.spotify.com/playlist/76AhLGUeJhcZbgQYt8oqo8?si=d4de23f690ee433e',
       moodTags: 'Isolation • Distance • Endurance'
     },
     {
       slug: 'steel-wreckoning',
       label: 'Steel Wreckoning',
-      playlistId: '',
-      spotifyUrl: '',
+      playlistId: '3wVMs0gb2svMUITiu0PJY4',
+      spotifyUrl: 'https://open.spotify.com/playlist/3wVMs0gb2svMUITiu0PJY4?si=f070819920d640a1',
       moodTags: 'Impact • Escalation • Consequence'
     },
     {
       slug: 'system-reset-free',
       label: 'System Reset Free',
       playlistId: '0cZlbYVRnkxwViBJPw8oDR',
-      spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR',
+      spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=d10eef44e3f54078',
       moodTags: 'Abandoned Systems • Collapse • Aftermath'
     }
   ];

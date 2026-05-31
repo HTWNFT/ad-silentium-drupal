@@ -1974,6 +1974,7 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha__playlist-frame {
   position: relative;
   z-index: 1;
+  grid-area: 1 / 1;
   display: grid;
   place-items: center;
   width: calc(100% - 24px);
@@ -2002,12 +2003,17 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha__playlist-visual img {
   position: relative;
   z-index: 1;
+  grid-area: 1 / 1;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   opacity: 0.82;
   filter: saturate(0.82) contrast(1.08);
+}
+
+.ooh-operation-alpha__playlist-visual img:not([hidden]) + .ooh-operation-alpha__playlist-frame {
+  opacity: 0;
 }
 
 .ooh-operation-alpha__playlist-body {

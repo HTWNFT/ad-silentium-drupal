@@ -49,12 +49,19 @@ final class OohOperationAlphaController extends ControllerBase {
     $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_runtime')->toString();
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
     $login_url = Url::fromRoute('user.login')->toString();
-    $war_bangaz_url = '';
-    $signal_blitz_url = '';
-    $dust_march_url = '';
-    $black_banner_url = '';
-    $steel_wreckoning_url = '';
-    $system_reset_url = 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR';
+    $war_bangaz_url = 'https://open.spotify.com/playlist/6CaO0WNPwOyB4ZBIwgJF3O?si=46f8eacb11d34816';
+    $signal_blitz_url = 'https://open.spotify.com/playlist/5yXFPozHV4eW9Aal5Ys7Mn?si=19228e24361844a7';
+    $dust_march_url = 'https://open.spotify.com/playlist/76AhLGUeJhcZbgQYt8oqo8?si=d4de23f690ee433e';
+    $black_banner_url = 'https://open.spotify.com/playlist/6aLCJNyLO0zN6qsb3LTZoy?si=f7005bed79194ef0';
+    $steel_wreckoning_url = 'https://open.spotify.com/playlist/3wVMs0gb2svMUITiu0PJY4?si=f070819920d640a1';
+    $system_reset_url = 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=d10eef44e3f54078';
+    $avatar_base = base_path() . 'operation_alpha/spotify_avatars/';
+    $war_bangaz_avatar = $avatar_base . 'warbangaz.png';
+    $signal_blitz_avatar = $avatar_base . 'signalblitz.png';
+    $dust_march_avatar = $avatar_base . 'dustmarch.png';
+    $black_banner_avatar = $avatar_base . 'blackbanner.png';
+    $steel_wreckoning_avatar = $avatar_base . 'SteelWreckoning.png';
+    $system_reset_avatar = $avatar_base . 'systemreset.png';
 
     return [
       '#type' => 'inline_template',
@@ -72,6 +79,7 @@ final class OohOperationAlphaController extends ControllerBase {
             <div class="ooh-operation-alpha__playlist-grid" aria-label="Operation Alpha playlist shell">
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
+                  <img src="' . $war_bangaz_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL A</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -83,6 +91,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
+                  <img src="' . $signal_blitz_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL B</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -94,6 +103,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
+                  <img src="' . $dust_march_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL C</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -105,6 +115,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
+                  <img src="' . $black_banner_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL D</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -116,6 +127,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
+                  <img src="' . $steel_wreckoning_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL E</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -127,6 +139,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card ooh-operation-alpha__playlist-card--outbound" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
+                  <img src="' . $system_reset_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">RESET</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
