@@ -60,7 +60,7 @@ final class OohOperationAlphaController extends ControllerBase {
     $signal_blitz_avatar = $avatar_base . 'signalblitz.png';
     $dust_march_avatar = $avatar_base . 'dustmarch.png';
     $black_banner_avatar = $avatar_base . 'blackbanner.png';
-    $steel_wreckoning_avatar = $avatar_base . 'SteelWreckoning.png';
+    $steel_wreckoning_avatar = $avatar_base . 'steelwreckoning.png';
     $system_reset_avatar = $avatar_base . 'systemreset.png';
 
     return [
