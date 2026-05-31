@@ -30,7 +30,8 @@
 
   <div class="ooh-operation-alpha__shell" data-ooh-operation-alpha-control>
     <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
-      <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.credits') }}">CREDITS AVAILABLE: 15</a>
+      <a class="ooh-operation-alpha__cta-link" href="/">RETURN TO LAUNCH</a>
+      <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">PURCHASE CREDITS</a>
       <a class="ooh-operation-alpha__cta-link" href="{{ path('user.login') }}">LOGIN / ACCOUNT</a>
     </nav>
     <h2 class="ooh-operation-alpha__title">OPERATION ALPHA CONTROL</h2>
@@ -73,6 +74,80 @@
       </div>
     </section>
 
+    <section class="ooh-operation-alpha__payload" data-ooh-alpha-operational-payload hidden aria-live="polite" aria-label="Unseen Hand operational payload">
+      <span class="ooh-operation-alpha__payload-kicker">UNSEEN HAND SELECTION</span>
+      <div class="ooh-operation-alpha__payload-grid">
+        <div class="ooh-operation-alpha__payload-cell">
+          <span class="ooh-operation-alpha__payload-label">SELECTED ASSET</span>
+          <strong class="ooh-operation-alpha__payload-value" data-ooh-alpha-payload-asset>Pending</strong>
+        </div>
+        <div class="ooh-operation-alpha__payload-cell">
+          <span class="ooh-operation-alpha__payload-label">FACTION</span>
+          <strong class="ooh-operation-alpha__payload-value" data-ooh-alpha-payload-faction>Pending</strong>
+        </div>
+        <div class="ooh-operation-alpha__payload-cell">
+          <span class="ooh-operation-alpha__payload-label">PORTRAIT URL</span>
+          <strong class="ooh-operation-alpha__payload-value ooh-operation-alpha__payload-value--path" data-ooh-alpha-payload-portrait>Pending</strong>
+        </div>
+        <div class="ooh-operation-alpha__payload-cell">
+          <span class="ooh-operation-alpha__payload-label">ASSIGNED OPERATION</span>
+          <strong class="ooh-operation-alpha__payload-value" data-ooh-alpha-payload-mission>Pending</strong>
+        </div>
+        <div class="ooh-operation-alpha__payload-cell">
+          <span class="ooh-operation-alpha__payload-label">CURRENT CONDITION</span>
+          <strong class="ooh-operation-alpha__payload-value" data-ooh-alpha-payload-condition>Pending</strong>
+        </div>
+        <div class="ooh-operation-alpha__payload-cell">
+          <span class="ooh-operation-alpha__payload-label">CHANNEL</span>
+          <strong class="ooh-operation-alpha__payload-value" data-ooh-alpha-payload-playlist>Pending</strong>
+        </div>
+        <div class="ooh-operation-alpha__payload-cell">
+          <span class="ooh-operation-alpha__payload-label">OPERATIONAL STATUS</span>
+          <strong class="ooh-operation-alpha__payload-value" data-ooh-alpha-payload-status>Signal Window Open</strong>
+        </div>
+      </div>
+      <p class="ooh-operation-alpha__payload-summary" data-ooh-alpha-payload-summary>Operational payload pending.</p>
+      <div class="ooh-operation-alpha__active-channel" data-ooh-alpha-active-channel>
+        <span class="ooh-operation-alpha__active-channel-kicker">ACTIVE CHANNEL</span>
+        <strong class="ooh-operation-alpha__active-channel-name" data-ooh-alpha-channel-name>Pending</strong>
+        <span class="ooh-operation-alpha__active-channel-mood" data-ooh-alpha-channel-mood>Signal mood pending</span>
+        <span class="ooh-operation-alpha__active-channel-status">STATUS: AVAILABLE</span>
+        <a class="ooh-operation-alpha__channel-link" href="#" target="_blank" rel="noopener noreferrer" data-ooh-alpha-channel-link hidden>OPEN CHANNEL</a>
+      </div>
+      <div class="ooh-operation-alpha__consequence" data-ooh-alpha-operational-consequence>
+        <span class="ooh-operation-alpha__consequence-kicker">OPERATIONAL CONSEQUENCE</span>
+        <div class="ooh-operation-alpha__consequence-grid">
+          <div class="ooh-operation-alpha__consequence-cell">
+            <span class="ooh-operation-alpha__consequence-label">STATUS</span>
+            <strong class="ooh-operation-alpha__consequence-value" data-ooh-alpha-consequence-status>Pending</strong>
+          </div>
+          <div class="ooh-operation-alpha__consequence-cell">
+            <span class="ooh-operation-alpha__consequence-label">SUMMARY</span>
+            <p class="ooh-operation-alpha__consequence-summary" data-ooh-alpha-consequence-summary>Outcome report pending.</p>
+          </div>
+        </div>
+      </div>
+      <div class="ooh-operation-alpha__narrative" data-ooh-alpha-narrative-seed>
+        <span class="ooh-operation-alpha__narrative-kicker">NARRATIVE SEED</span>
+        <p class="ooh-operation-alpha__narrative-copy" data-ooh-alpha-narrative-copy>Scene seed pending.</p>
+      </div>
+      <div class="ooh-operation-alpha__director" data-ooh-alpha-director-layer>
+        <span class="ooh-operation-alpha__director-kicker">DIRECTOR ACTION</span>
+        <div class="ooh-operation-alpha__director-actions" aria-label="Unseen Hand director actions">
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="observe">OBSERVE</button>
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="hold-channel">HOLD CHANNEL</button>
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="escalate-pressure">ESCALATE PRESSURE</button>
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="divert-asset">DIVERT ASSET</button>
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="authorize-extraction">AUTHORIZE EXTRACTION</button>
+        </div>
+        <div class="ooh-operation-alpha__director-report" data-ooh-alpha-director-report hidden aria-live="polite">
+          <span class="ooh-operation-alpha__director-label">DIRECTOR ACTION</span>
+          <strong class="ooh-operation-alpha__director-choice" data-ooh-alpha-director-choice>Pending</strong>
+          <span class="ooh-operation-alpha__director-label">REACTION BEAT</span>
+          <p class="ooh-operation-alpha__director-reaction" data-ooh-alpha-director-reaction>Reaction beat pending.</p>
+        </div>
+      </div>
+    </section>
     <section class="ooh-operation-alpha__battlefield" aria-label="Battlefield Presence" data-ooh-alpha-battlefield>
       <span class="ooh-operation-alpha__battlefield-kicker">BATTLEFIELD PRESENCE</span>
       <div class="ooh-operation-alpha__battlefield-grid">
@@ -149,7 +224,7 @@
       <p class="ooh-operation-alpha__access-line">Runtime and credit access are staged for the next shell.</p>
       <div class="ooh-operation-alpha__access-actions">
         <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.operation_alpha_nested_playlists') }}">ENTER ACTIVE RUNTIME</a>
-        <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.credits') }}">CREDITS AVAILABLE: 15</a>
+        <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">PURCHASE CREDITS</a>
         <a class="ooh-operation-alpha__access-button" href="{{ path('user.login') }}">LOGIN / ACCOUNT</a>
       </div>
     </section>

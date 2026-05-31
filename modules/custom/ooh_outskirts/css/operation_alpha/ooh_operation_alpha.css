@@ -1,6 +1,7 @@
 html:has(.ooh-operation-alpha),
 body:has(.ooh-operation-alpha),
 body.path-operation-alpha,
+body.path-operation-alpha-credits,
 body.path-operation-alpha-oaplay-playlists,
 body.path-operation-alpha-oaplay,
 body.path-operation-alpha-operation,
@@ -14,6 +15,7 @@ body.ooh-operation-alpha-runtime {
 }
 
 body.path-operation-alpha #header,
+body.path-operation-alpha-credits #header,
 body.path-operation-alpha-oaplay-playlists #header,
 body.path-operation-alpha-oaplay #header,
 body.path-operation-alpha-operation #header,
@@ -21,6 +23,7 @@ body.path-oaplay-playlists #header,
 body.path-oaplaylists #header,
 body.path-oaplay #header,
 body.path-operation-alpha .highlighted,
+body.path-operation-alpha-credits .highlighted,
 body.path-operation-alpha-oaplay-playlists .highlighted,
 body.path-operation-alpha-oaplay .highlighted,
 body.path-operation-alpha-operation .highlighted,
@@ -28,6 +31,7 @@ body.path-oaplay-playlists .highlighted,
 body.path-oaplaylists .highlighted,
 body.path-oaplay .highlighted,
 body.path-operation-alpha #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-credits #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha-oaplay-playlists #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha-operation #block-bootstrap-barrio-subtheme-breadcrumbs,
@@ -35,6 +39,7 @@ body.path-oaplay-playlists #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-oaplaylists #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
 body.path-operation-alpha .site-footer,
+body.path-operation-alpha-credits .site-footer,
 body.path-operation-alpha-oaplay-playlists .site-footer,
 body.path-operation-alpha-oaplay .site-footer,
 body.path-operation-alpha-operation .site-footer,
@@ -49,6 +54,7 @@ body.ooh-operation-alpha-runtime .site-footer {
 }
 
 body.path-operation-alpha .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-credits .dialog-off-canvas-main-canvas,
 body.path-operation-alpha-oaplay-playlists .dialog-off-canvas-main-canvas,
 body.path-operation-alpha-oaplay .dialog-off-canvas-main-canvas,
 body.path-operation-alpha-operation .dialog-off-canvas-main-canvas,
@@ -56,6 +62,7 @@ body.path-oaplay-playlists .dialog-off-canvas-main-canvas,
 body.path-oaplaylists .dialog-off-canvas-main-canvas,
 body.path-oaplay .dialog-off-canvas-main-canvas,
 body.path-operation-alpha #page-wrapper,
+body.path-operation-alpha-credits #page-wrapper,
 body.path-operation-alpha-oaplay-playlists #page-wrapper,
 body.path-operation-alpha-oaplay #page-wrapper,
 body.path-operation-alpha-operation #page-wrapper,
@@ -63,6 +70,7 @@ body.path-oaplay-playlists #page-wrapper,
 body.path-oaplaylists #page-wrapper,
 body.path-oaplay #page-wrapper,
 body.path-operation-alpha #page,
+body.path-operation-alpha-credits #page,
 body.path-operation-alpha-oaplay-playlists #page,
 body.path-operation-alpha-oaplay #page,
 body.path-operation-alpha-operation #page,
@@ -70,6 +78,7 @@ body.path-oaplay-playlists #page,
 body.path-oaplaylists #page,
 body.path-oaplay #page,
 body.path-operation-alpha #main-wrapper,
+body.path-operation-alpha-credits #main-wrapper,
 body.path-operation-alpha-oaplay-playlists #main-wrapper,
 body.path-operation-alpha-oaplay #main-wrapper,
 body.path-operation-alpha-operation #main-wrapper,
@@ -77,6 +86,7 @@ body.path-oaplay-playlists #main-wrapper,
 body.path-oaplaylists #main-wrapper,
 body.path-oaplay #main-wrapper,
 body.path-operation-alpha #main,
+body.path-operation-alpha-credits #main,
 body.path-operation-alpha-oaplay-playlists #main,
 body.path-operation-alpha-oaplay #main,
 body.path-operation-alpha-operation #main,
@@ -84,6 +94,7 @@ body.path-oaplay-playlists #main,
 body.path-oaplaylists #main,
 body.path-oaplay #main,
 body.path-operation-alpha .row,
+body.path-operation-alpha-credits .row,
 body.path-operation-alpha-oaplay-playlists .row,
 body.path-operation-alpha-oaplay .row,
 body.path-operation-alpha-operation .row,
@@ -91,6 +102,7 @@ body.path-oaplay-playlists .row,
 body.path-oaplaylists .row,
 body.path-oaplay .row,
 body.path-operation-alpha .main-content,
+body.path-operation-alpha-credits .main-content,
 body.path-operation-alpha-oaplay-playlists .main-content,
 body.path-operation-alpha-oaplay .main-content,
 body.path-operation-alpha-operation .main-content,
@@ -98,6 +110,7 @@ body.path-oaplay-playlists .main-content,
 body.path-oaplaylists .main-content,
 body.path-oaplay .main-content,
 body.path-operation-alpha .section,
+body.path-operation-alpha-credits .section,
 body.path-operation-alpha-oaplay-playlists .section,
 body.path-operation-alpha-oaplay .section,
 body.path-operation-alpha-operation .section,
@@ -120,7 +133,25 @@ body.ooh-operation-alpha-runtime .section {
   background: transparent !important;
 }
 
+body:has(.ooh-operation-alpha) .container,
+body:has(.ooh-operation-alpha) .container-fluid,
+body:has(.ooh-operation-alpha) .layout-container,
+body:has(.ooh-operation-alpha) .layout-main-wrapper,
+body:has(.ooh-operation-alpha) .region,
+body:has(.ooh-operation-alpha) .region-content,
+body:has(.ooh-operation-alpha) #content,
+body:has(.ooh-operation-alpha) .block,
+body:has(.ooh-operation-alpha) .block-system-main-block {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
 body.path-operation-alpha .row,
+body.path-operation-alpha-credits .row,
 body.path-operation-alpha-oaplay-playlists .row,
 body.path-operation-alpha-oaplay .row,
 body.path-operation-alpha-operation .row,
@@ -134,11 +165,17 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha {
   min-height: 100vh;
   min-height: 100dvh;
-  width: 100%;
+  width: 100vw;
+  max-width: none;
+  margin-inline: calc(50% - 50vw);
   box-sizing: border-box;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
   padding: 32px;
+  overflow-x: clip;
   color: #dffcff;
   background:
     radial-gradient(circle at 50% 20%, rgba(89, 243, 255, 0.1), transparent 34%),
@@ -158,6 +195,10 @@ body.ooh-operation-alpha-runtime .row {
   text-align: center;
 }
 
+.ooh-operation-alpha__shell {
+  order: 1;
+}
+
 .ooh-operation-alpha__intro {
   position: fixed;
   inset: 0;
@@ -173,13 +214,13 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__signal-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 24;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  background: rgba(1, 6, 9, 0.76);
+  order: 2;
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  display: block;
+  padding: 0;
+  background: transparent;
 }
 
 .ooh-operation-alpha__signal-modal[hidden] {
@@ -187,8 +228,8 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__signal-card {
-  width: min(520px, 100%);
-  padding: 26px;
+  width: 100%;
+  padding: 18px 20px;
   border: 1px solid rgba(130, 245, 255, 0.24);
   border-radius: 8px;
   background:
@@ -196,7 +237,7 @@ body.ooh-operation-alpha-runtime .row {
     rgba(2, 12, 16, 0.94);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.025),
-    0 0 34px rgba(89, 243, 255, 0.14);
+    0 0 24px rgba(89, 243, 255, 0.08);
   text-align: center;
 }
 
@@ -439,12 +480,13 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__command-button {
+  appearance: none;
   min-height: 42px;
   padding: 0.7rem 0.78rem;
-  border: 1px solid rgba(130, 245, 255, 0.34);
+  border: 1px solid rgba(130, 245, 255, 0.34) !important;
   border-radius: 4px;
-  color: rgba(223, 252, 255, 0.9);
-  background: rgba(4, 22, 28, 0.58);
+  color: rgba(223, 252, 255, 0.9) !important;
+  background: rgba(4, 22, 28, 0.58) !important;
   box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
   cursor: pointer;
   font: inherit;
@@ -468,7 +510,7 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__command-button.is-command-active {
-  background: rgba(8, 35, 43, 0.76);
+  background: rgba(8, 35, 43, 0.76) !important;
 }
 
 .ooh-operation-alpha__command-ack {
@@ -503,7 +545,10 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__actor-portrait {
-  min-height: 118px;
+  width: 104px;
+  max-width: 100%;
+  min-height: 0;
+  aspect-ratio: 1;
   overflow: hidden;
   border: 1px solid rgba(145, 250, 255, 0.18);
   border-radius: 6px;
@@ -517,7 +562,9 @@ body.ooh-operation-alpha-runtime .row {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 118px;
+  max-width: 100%;
+  min-height: 0;
+  max-height: 150px;
   object-fit: cover;
   opacity: 0.8;
   filter: saturate(0.78) contrast(1.08) brightness(0.84);
@@ -567,6 +614,344 @@ body.ooh-operation-alpha-runtime .row {
   color: rgba(223, 252, 255, 0.78);
   font-size: 0.92rem;
   line-height: 1.45;
+}
+
+.ooh-operation-alpha__payload {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid rgba(130, 245, 255, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.045), transparent 46%, rgba(255, 212, 107, 0.022)),
+    rgba(1, 8, 11, 0.52);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: left;
+}
+
+.ooh-operation-alpha__payload[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__payload.is-payload-updated {
+  border-color: rgba(145, 250, 255, 0.4);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.055),
+    0 0 18px rgba(89, 243, 255, 0.1);
+}
+
+.ooh-operation-alpha__payload-kicker {
+  display: block;
+  margin-bottom: 12px;
+  color: rgba(145, 250, 255, 0.78);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__payload-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ooh-operation-alpha__payload-cell {
+  min-height: 82px;
+  padding: 12px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.44);
+}
+
+.ooh-operation-alpha__payload-label {
+  display: block;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__payload-value {
+  display: block;
+  margin-top: 9px;
+  color: #dffcff;
+  font-size: 0.92rem;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__payload-value--path {
+  overflow-wrap: anywhere;
+  text-transform: none;
+}
+
+.ooh-operation-alpha__payload-summary {
+  margin: 12px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__active-channel {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.38);
+}
+
+.ooh-operation-alpha__active-channel-kicker,
+.ooh-operation-alpha__active-channel-mood,
+.ooh-operation-alpha__active-channel-status {
+  display: block;
+  color: rgba(145, 250, 255, 0.7);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__active-channel-name {
+  display: block;
+  margin-top: 8px;
+  color: #dffcff;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__active-channel-mood {
+  margin-top: 8px;
+  color: rgba(223, 252, 255, 0.78);
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+.ooh-operation-alpha__active-channel-status {
+  margin-top: 8px;
+}
+
+.ooh-operation-alpha__channel-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  margin-top: 12px;
+  padding: 0.62rem 0.9rem;
+  border: 1px solid rgba(130, 245, 255, 0.34);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.58);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__channel-link[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__channel-link:hover,
+.ooh-operation-alpha__channel-link:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  color: #dffcff;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.055),
+    0 0 16px rgba(89, 243, 255, 0.14);
+  text-decoration: none;
+}
+
+.ooh-operation-alpha__consequence {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.38);
+}
+
+.ooh-operation-alpha__consequence-kicker {
+  display: block;
+  margin-bottom: 10px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__consequence-grid {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.6fr) minmax(0, 1.4fr);
+  gap: 10px;
+}
+
+.ooh-operation-alpha__consequence-cell {
+  min-height: 76px;
+  padding: 12px;
+  border: 1px solid rgba(130, 245, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(1, 8, 11, 0.36);
+}
+
+.ooh-operation-alpha__consequence-label {
+  display: block;
+  color: rgba(145, 250, 255, 0.68);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__consequence-value {
+  display: block;
+  margin-top: 9px;
+  color: #dffcff;
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__consequence-summary {
+  margin: 9px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__narrative {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.035), transparent 56%),
+    rgba(1, 8, 11, 0.34);
+}
+
+.ooh-operation-alpha__narrative-kicker {
+  display: block;
+  margin-bottom: 9px;
+  color: rgba(145, 250, 255, 0.7);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__narrative-copy {
+  margin: 0;
+  color: rgba(223, 252, 255, 0.8);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.ooh-operation-alpha__director {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.035), transparent 54%, rgba(255, 212, 107, 0.018)),
+    rgba(1, 8, 11, 0.36);
+}
+
+.ooh-operation-alpha__director-kicker,
+.ooh-operation-alpha__director-label {
+  display: block;
+  color: rgba(145, 250, 255, 0.7);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__director-actions {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ooh-operation-alpha__director-button {
+  appearance: none;
+  min-height: 40px;
+  padding: 0.62rem 0.58rem;
+  border: 1px solid rgba(130, 245, 255, 0.28) !important;
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.9) !important;
+  background: rgba(4, 22, 28, 0.52) !important;
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__director-button:hover,
+.ooh-operation-alpha__director-button:focus-visible,
+.ooh-operation-alpha__director-button.is-director-active {
+  border-color: rgba(223, 252, 255, 0.68) !important;
+  color: #dffcff !important;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.055),
+    0 0 16px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__director-report {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(130, 245, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(1, 8, 11, 0.38);
+}
+
+.ooh-operation-alpha__director-report[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__director-choice {
+  display: block;
+  margin: 8px 0 12px;
+  color: #dffcff;
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__director-reaction {
+  margin: 8px 0 0;
+  color: rgba(223, 252, 255, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .ooh-operation-alpha__battlefield {
@@ -874,7 +1259,7 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha__contact-frame {
   position: relative;
   display: grid;
-  grid-template-columns: 112px 1fr;
+  grid-template-columns: minmax(88px, 112px) minmax(0, 1fr);
   gap: 14px;
   overflow: hidden;
   margin-top: 16px;
@@ -921,7 +1306,10 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__contact-portrait {
   position: relative;
-  min-height: 132px;
+  width: 112px;
+  max-width: 100%;
+  min-height: 0;
+  aspect-ratio: 1;
   overflow: hidden;
   border: 1px solid rgba(145, 250, 255, 0.18);
   border-radius: 6px;
@@ -968,7 +1356,9 @@ body.ooh-operation-alpha-runtime .row {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 132px;
+  max-width: 100%;
+  min-height: 0;
+  max-height: 160px;
   object-fit: cover;
   opacity: 0.78;
   filter: saturate(0.75) contrast(1.08) brightness(0.82);
@@ -1335,6 +1725,164 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__shell--operation {
   width: min(920px, 100%);
+}
+
+.ooh-operation-alpha__shell--credits {
+  width: min(1100px, 100%);
+  padding: clamp(30px, 5vw, 48px);
+  border-color: rgba(0, 220, 255, 0.28);
+  border-radius: 14px;
+  background:
+    linear-gradient(175deg, rgba(5, 10, 22, 0.94), rgba(1, 6, 15, 0.96));
+  box-shadow:
+    inset 0 0 0 1px rgba(158, 248, 255, 0.07),
+    0 18px 52px rgba(0, 0, 0, 0.58),
+    0 0 34px rgba(0, 220, 255, 0.14);
+}
+
+.ooh-operation-alpha__credits-copy {
+  display: grid;
+  gap: 6px;
+  max-width: 760px;
+  margin: 0 auto 28px;
+}
+
+.ooh-operation-alpha__credits-copy p {
+  margin: 0;
+}
+
+.ooh-operation-alpha__credit-status {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ooh-operation-alpha__credit-status-card,
+.ooh-operation-alpha__credit-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.ooh-operation-alpha__credit-status-card {
+  padding: 18px 20px;
+  border: 1px solid rgba(0, 220, 255, 0.3);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(4, 16, 34, 0.9), rgba(2, 9, 22, 0.92));
+  box-shadow: inset 0 0 0 1px rgba(140, 245, 255, 0.05);
+}
+
+.ooh-operation-alpha__credit-status-label,
+.ooh-operation-alpha__credit-kicker {
+  display: block;
+  color: #68f0ff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__credit-status-label {
+  margin-bottom: 8px;
+}
+
+.ooh-operation-alpha__credit-status-card strong {
+  display: block;
+  color: #f4fdff;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.ooh-operation-alpha__credit-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 0;
+}
+
+.ooh-operation-alpha__credit-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 276px;
+  padding: 20px;
+  border: 1px solid rgba(0, 220, 255, 0.3);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(4, 16, 34, 0.9), rgba(2, 9, 22, 0.92));
+  box-shadow: inset 0 0 0 1px rgba(140, 245, 255, 0.05);
+  text-align: center;
+}
+
+.ooh-operation-alpha__credit-card.is-selected {
+  border-color: rgba(145, 250, 255, 0.58);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.06),
+    0 0 20px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__credit-title {
+  margin: 10px 0 0;
+  color: #dffcff;
+  font-size: clamp(1.55rem, 4vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.18;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__credit-amount {
+  display: block;
+  color: #f4fdff;
+  font-size: clamp(1rem, 2.8vw, 1.28rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__credit-select {
+  align-self: end;
+  justify-self: center;
+  min-height: 44px;
+  margin-top: 10px;
+  padding: 0.72rem 1.2rem;
+  border: 1px solid rgba(92, 246, 255, 0.78);
+  border-radius: 999px;
+  color: #dbf8ff;
+  background: linear-gradient(145deg, rgba(2, 48, 67, 0.95), rgba(3, 20, 40, 0.98));
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__credit-select:hover,
+.ooh-operation-alpha__credit-select:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(182, 252, 255, 0.76);
+  color: #dffcff;
+  outline: none;
+  box-shadow: 0 0 14px rgba(0, 223, 255, 0.22);
+}
+
+.ooh-operation-alpha__credit-card.is-selected .ooh-operation-alpha__credit-select {
+  border-color: rgba(145, 250, 255, 0.62);
+  background: rgba(8, 35, 43, 0.76);
+}
+
+.ooh-operation-alpha__credit-confirmation {
+  min-height: 1.5rem;
+  margin: 22px 0 0;
+  color: rgba(145, 250, 255, 0.86);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .ooh-operation-alpha__operation-panel {
@@ -1734,6 +2282,23 @@ a.ooh-operation-alpha__playlist-select {
     min-height: 140px;
   }
 
+  .ooh-operation-alpha__payload {
+    padding: 14px;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__payload-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__consequence-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__director-actions {
+    grid-template-columns: 1fr;
+  }
+
   .ooh-operation-alpha__battlefield {
     padding: 14px;
     text-align: center;
@@ -1811,6 +2376,18 @@ a.ooh-operation-alpha__playlist-select {
 
   .ooh-operation-alpha__playlist-grid {
     grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__credit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__credit-status {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__credit-card {
+    min-height: 0;
   }
 
   .ooh-operation-alpha__runtime-handoff {

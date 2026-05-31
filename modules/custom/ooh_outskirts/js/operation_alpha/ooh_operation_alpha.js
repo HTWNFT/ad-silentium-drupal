@@ -56,6 +56,10 @@
     hold: {
       state: 'HOLD POSITION',
       acknowledgement: 'UNSEEN HAND DIRECTIVE RECEIVED // HOLD POSITION',
+      runtimeCopy: 'Holding current field posture. Observation priority increased.',
+      activationStatus: 'Hold directive accepted. Field elements remain concealed.',
+      reaction: 'Hold pattern established. The field quiets around the mark.',
+      pressure: 'OBSERVATION HOLD',
       battlefield: {
         field: 'Observation priority increased across Sector 17.',
         movement: 'Friendly elements holding shadow line.',
@@ -66,6 +70,10 @@
     advance: {
       state: 'ADVANCE',
       acknowledgement: 'FORWARD PRESSURE AUTHORIZED',
+      runtimeCopy: 'Advance directive active. Forward pressure authorized.',
+      activationStatus: 'Advance directive accepted. Field pressure moving forward.',
+      reaction: 'Forward pressure building. Contact risk begins to climb.',
+      pressure: 'FORWARD PRESSURE',
       battlefield: {
         field: 'Forward pressure building beyond the fog line.',
         movement: 'Ronin scout element pushing toward the mark channel.',
@@ -76,6 +84,10 @@
     extract: {
       state: 'EXTRACT',
       acknowledgement: 'EXTRACTION ORDER ISSUED',
+      runtimeCopy: 'Extract directive active. Corridor opening and exposure decreasing.',
+      activationStatus: 'Extraction directive accepted. Corridor attention is shifting.',
+      reaction: 'Extraction corridor opening. Exposed movement starts to thin.',
+      pressure: 'EXTRACTION WINDOW',
       battlefield: {
         field: 'Extraction corridor opening through unstable cover.',
         movement: 'Civilian route markers shifting toward safe passage.',
@@ -86,6 +98,10 @@
     signal: {
       state: 'DEPLOY SIGNAL',
       acknowledgement: 'SIGNAL DEPLOYMENT AUTHORIZED',
+      runtimeCopy: 'Deploy Signal directive active. False traffic entering the mark channel.',
+      activationStatus: 'Signal directive accepted. False traffic is propagating.',
+      reaction: 'False traffic inserted. Signal confusion spreads across the approach.',
+      pressure: 'SIGNAL CONFUSION',
       battlefield: {
         field: 'False traffic inserted into the outer approach.',
         movement: 'Hostile attention splitting across duplicate traces.',
@@ -96,6 +112,10 @@
     divert: {
       state: 'DIVERT',
       acknowledgement: 'OPERATIONAL ATTENTION REDIRECTED',
+      runtimeCopy: 'Divert directive active. Operational attention redirected.',
+      activationStatus: 'Divert directive accepted. Focus is bending away from the exposed line.',
+      reaction: 'Attention redirected. Secondary cover begins carrying the operation.',
+      pressure: 'DECOY PRESSURE',
       battlefield: {
         field: 'Operational attention redirected away from exposed movement.',
         movement: 'Asset path bending through secondary cover.',
@@ -198,6 +218,107 @@
         'Hostile command band stuttered. Pursuit pressure displaced.'
       ],
       portrait: '/sites/default/files/outskirts/portraits/Genetic%20Warlords/Asset__Portraits__Genetic_Warlords__chatgpt_image_dec_26_2025_03_59_31_pm.webp'
+    }
+  ];
+
+  var runtimeMissions = [
+    'Recon Sweep',
+    'Signal Recovery',
+    'Extraction Probe',
+    'Blackout Transit',
+    'Marker Verification'
+  ];
+
+  var runtimeConditions = [
+    'Signal Distortion',
+    'Storm Interference',
+    'Low Visibility',
+    'Contact Trace',
+    'Route Instability'
+  ];
+
+  var channelRegistry = [
+    {
+      slug: 'war-bangaz',
+      label: 'War Bangaz',
+      playlistId: '87f2c09e6b14433a',
+      spotifyUrl: 'https://open.spotify.com/playlist/87f2c09e6b14433a',
+      moodTags: 'Aggressive • Kinetic • Chaotic'
+    },
+    {
+      slug: 'black-banner',
+      label: 'Black Banner',
+      playlistId: '37cfc8537c8e4871',
+      spotifyUrl: 'https://open.spotify.com/playlist/37cfc8537c8e4871',
+      moodTags: 'Ominous • Authoritarian • Oppressive'
+    },
+    {
+      slug: 'signal-blitz',
+      label: 'Signal Blitz',
+      playlistId: '96b162aed2f048d7',
+      spotifyUrl: 'https://open.spotify.com/playlist/96b162aed2f048d7',
+      moodTags: 'Recon • Communications • Uncertainty'
+    },
+    {
+      slug: 'dust-march',
+      label: 'Dust March',
+      playlistId: 'c0f70ba528a24954',
+      spotifyUrl: 'https://open.spotify.com/playlist/c0f70ba528a24954',
+      moodTags: 'Isolation • Distance • Endurance'
+    },
+    {
+      slug: 'steel-wreckoning',
+      label: 'Steel Wreckoning',
+      playlistId: 'f100d9ff203f449d',
+      spotifyUrl: 'https://open.spotify.com/playlist/f100d9ff203f449d',
+      moodTags: 'Impact • Escalation • Consequence'
+    },
+    {
+      slug: 'system-reset-free',
+      label: 'System Reset Free',
+      playlistId: '53aa34c6da0e42d5',
+      spotifyUrl: 'https://open.spotify.com/playlist/53aa34c6da0e42d5',
+      moodTags: 'Abandoned Systems • Collapse • Aftermath'
+    }
+  ];
+
+  var runtimePlaylists = channelRegistry.filter(function (channel) {
+    return channel.slug !== 'system-reset-free';
+  });
+
+  var runtimeStatuses = [
+    'Signal Window Open',
+    'Observation Window Active',
+    'Channel Stable',
+    'Pressure Reading Active',
+    'Route Signal Open'
+  ];
+
+  var consequenceRegistry = [
+    {
+      status: 'SUCCESS',
+      summary: 'Signal recovered. Observation window expanded.',
+      weight: 28
+    },
+    {
+      status: 'PARTIAL SUCCESS',
+      summary: 'Signal acquired. Integrity degraded.',
+      weight: 30
+    },
+    {
+      status: 'COMPROMISED',
+      summary: 'Asset exposed during operation.',
+      weight: 18
+    },
+    {
+      status: 'FAILED',
+      summary: 'Operation terminated before objective completion.',
+      weight: 10
+    },
+    {
+      status: 'UNKNOWN',
+      summary: 'Telemetry lost. Outcome unresolved.',
+      weight: 14
     }
   ];
 
@@ -703,10 +824,23 @@
     return (value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
   }
 
+  function actorPortraitNameSlug(actor) {
+    var pathRoot = (actor.path || '').replace(/\s+Path\s*$/i, '');
+
+    if (actor.name) {
+      return actorRegistrySlug(actor.name);
+    }
+    if (actor.faction === 'Genealord' && pathRoot) {
+      return actorRegistrySlug(pathRoot + ' Unknown');
+    }
+
+    return actorRegistrySlug(actor.portrait);
+  }
+
   function actorPortraitPath(actor) {
     var pathSlug = actorRegistrySlug(actor.path);
     var factionSlug = actorRegistrySlug(actor.faction === 'Genealord' ? 'Unknown' : actor.faction);
-    var nameSlug = actorRegistrySlug(actor.name || actor.portrait);
+    var nameSlug = actorPortraitNameSlug(actor);
 
     if (!pathSlug || !factionSlug || !nameSlug) {
       return '';
@@ -718,7 +852,7 @@
   function actorPortraitFallbackPath(actor) {
     var pathSlug = actorRegistrySlug(actor.path);
     var factionSlug = actorRegistrySlug(actor.faction === 'Genealord' ? 'Unknown' : actor.faction);
-    var nameSlug = actorRegistrySlug(actor.name || actor.portrait);
+    var nameSlug = actorPortraitNameSlug(actor);
 
     if (!pathSlug || !factionSlug || !nameSlug) {
       return '';
@@ -748,6 +882,341 @@
     return name + ' enters the Operation Alpha channel. The field registers a living asset.';
   }
 
+  function runtimePick(list) {
+    if (!list || !list.length) {
+      return '';
+    }
+
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  function channelBySlug(slug) {
+    var matches = channelRegistry.filter(function (channel) {
+      return channel.slug === slug;
+    });
+
+    return matches[0] || null;
+  }
+
+  function channelByLabel(label) {
+    var normalizedLabel = (label || '').toLowerCase();
+    var matches = channelRegistry.filter(function (channel) {
+      return channel.label.toLowerCase() === normalizedLabel;
+    });
+
+    return matches[0] || null;
+  }
+
+  function operationSummary(mission, condition) {
+    var summaries = {
+      'Recon Sweep': 'Signal integrity degraded. Observation window active.',
+      'Signal Recovery': 'Signal channel unstable. Recovery window active.',
+      'Extraction Probe': 'Extraction trace detected. Coordination window active.',
+      'Blackout Transit': 'Visibility reduced. Transit window active.',
+      'Marker Verification': 'Marker trace unresolved. Verification window active.'
+    };
+
+    return summaries[mission] || condition + '. Observation window active.';
+  }
+
+  function consequenceWeightFor(entry, mission, condition) {
+    var weight = entry.weight;
+
+    if (mission === 'Recon Sweep' && condition === 'Signal Distortion' && entry.status === 'UNKNOWN') {
+      weight += 18;
+    }
+    if (mission === 'Signal Recovery' && entry.status === 'SUCCESS') {
+      weight += 8;
+    }
+    if (mission === 'Extraction Probe' && condition === 'Contact Trace' && entry.status === 'COMPROMISED') {
+      weight += 14;
+    }
+    if (mission === 'Blackout Transit' && condition === 'Low Visibility' && entry.status === 'PARTIAL SUCCESS') {
+      weight += 10;
+    }
+    if (condition === 'Route Instability' && entry.status === 'FAILED') {
+      weight += 8;
+    }
+    if (condition === 'Storm Interference' && entry.status === 'UNKNOWN') {
+      weight += 8;
+    }
+
+    return weight;
+  }
+
+  function buildOperationalConsequence(mission, condition) {
+    var weighted = consequenceRegistry.map(function (entry) {
+      return {
+        status: entry.status,
+        summary: entry.summary,
+        weight: consequenceWeightFor(entry, mission, condition)
+      };
+    });
+    var total = weighted.reduce(function (sum, entry) {
+      return sum + entry.weight;
+    }, 0);
+    var roll = Math.random() * total;
+    var index;
+
+    for (index = 0; index < weighted.length; index++) {
+      roll -= weighted[index].weight;
+      if (roll <= 0) {
+        return {
+          status: weighted[index].status,
+          summary: weighted[index].summary
+        };
+      }
+    }
+
+    return {
+      status: 'UNKNOWN',
+      summary: 'Telemetry lost. Outcome unresolved.'
+    };
+  }
+
+  function narrativeOpening(payload) {
+    var openings = {
+      'Recon Sweep': payload.actorName + ' returned from the perimeter with the channel still breathing.',
+      'Signal Recovery': payload.actorName + ' entered the damaged signal corridor while the field buckled around the feed.',
+      'Extraction Probe': payload.actorName + ' tested the extraction line before the window could collapse.',
+      'Blackout Transit': payload.actorName + ' crossed the blackout corridor under reduced visibility.',
+      'Marker Verification': payload.actorName + ' followed the marker trace into a section of the field that would not stay still.'
+    };
+
+    return openings[payload.mission] || payload.actorName + ' moved through the operation under observation.';
+  }
+
+  function narrativePressure(payload) {
+    var channelLine = payload.playlist ? ' through ' + payload.playlist : '';
+    var moodLine = payload.channelMood ? ', carrying ' + payload.channelMood.toLowerCase() : '';
+    var pressures = {
+      'Signal Distortion': 'Signal distortion bent the report into fragments' + channelLine + moodLine + '.',
+      'Storm Interference': 'Storm interference pressed static into every relay' + channelLine + moodLine + '.',
+      'Low Visibility': 'Low visibility kept the corridor uncertain' + channelLine + moodLine + '.',
+      'Contact Trace': 'A contact trace followed close enough to change the room' + channelLine + moodLine + '.',
+      'Route Instability': 'Route instability shifted the path before the report could settle' + channelLine + moodLine + '.'
+    };
+
+    return pressures[payload.condition] || payload.condition + ' shaped the observation window' + channelLine + moodLine + '.';
+  }
+
+  function narrativeConsequence(payload) {
+    var status = payload.consequence ? payload.consequence.status : 'UNKNOWN';
+    var endings = {
+      SUCCESS: 'The channel held long enough for observation to continue.',
+      'PARTIAL SUCCESS': 'The signal was acquired, but the record arrived degraded.',
+      COMPROMISED: 'The asset was exposed before the feed could close.',
+      FAILED: 'The operation terminated before the objective could resolve.',
+      UNKNOWN: 'Telemetry dropped, leaving the final cost unresolved.'
+    };
+
+    return endings[status] || 'The outcome remained unresolved.';
+  }
+
+  function buildNarrativeSeed(payload) {
+    return narrativeOpening(payload) + ' ' + narrativePressure(payload) + ' ' + narrativeConsequence(payload);
+  }
+
+  var directorActionLabels = {
+    observe: 'OBSERVE',
+    'hold-channel': 'HOLD CHANNEL',
+    'escalate-pressure': 'ESCALATE PRESSURE',
+    'divert-asset': 'DIVERT ASSET',
+    'authorize-extraction': 'AUTHORIZE EXTRACTION'
+  };
+
+  var directorReactionTemplates = {
+    observe: [
+      'The feed remained open long enough to confirm movement beyond the relay glass.',
+      '{asset} stayed inside the observation window while {condition} continued to distort the field.',
+      'The Unseen Hand held position. {channel} carried enough signal to preserve the next report.'
+    ],
+    'hold-channel': [
+      'The channel held, but the report degraded into clipped fragments.',
+      '{channel} stayed available under {mood}. The feed narrowed without closing.',
+      'The Unseen Hand held the channel steady while {operation} continued under pressure.'
+    ],
+    'escalate-pressure': [
+      'Pressure increased across the active perimeter. The asset continued without confirmation.',
+      '{condition} intensified after pressure was raised. {asset} remained visible only through broken signal.',
+      'The Director increased pressure through {channel}. The field answered with sharper static.'
+    ],
+    'divert-asset': [
+      'The route changed before the field team acknowledged the order.',
+      '{asset} shifted away from the cleanest line as {condition} spread across the corridor.',
+      'The Unseen Hand bent the route. {operation} continued, but the feed lost depth.'
+    ],
+    'authorize-extraction': [
+      'Extraction was authorized, but the channel did not confirm receipt.',
+      'The extraction window opened under {mood}. {asset} remained inside the report for one more beat.',
+      'The Director authorized withdrawal. {channel} carried the order into unstable signal.'
+    ]
+  };
+
+  function directorTemplateValue(payload, key) {
+    var values = {
+      asset: payload.actorName,
+      operation: payload.mission,
+      condition: payload.condition,
+      channel: payload.playlist,
+      mood: payload.channelMood ? payload.channelMood.toLowerCase() : 'unresolved channel mood',
+      consequence: payload.consequence ? payload.consequence.status : 'UNKNOWN'
+    };
+
+    return values[key] || '';
+  }
+
+  function directorReactionBeat(payload, actionKey) {
+    var templates = directorReactionTemplates[actionKey] || directorReactionTemplates.observe;
+    var template = runtimePick(templates);
+
+    return template.replace(/\{([^}]+)\}/g, function (match, key) {
+      return directorTemplateValue(payload, key);
+    });
+  }
+
+  function setDirectorAction(root, actionKey) {
+    var payload = root.oohAlphaOperationalPayload;
+    var report = root.querySelector('[data-ooh-alpha-director-report]');
+    var choice = root.querySelector('[data-ooh-alpha-director-choice]');
+    var reaction = root.querySelector('[data-ooh-alpha-director-reaction]');
+    var label = directorActionLabels[actionKey] || 'OBSERVE';
+
+    if (!payload || !report || !choice || !reaction) {
+      return;
+    }
+
+    report.hidden = false;
+    choice.textContent = label;
+    reaction.textContent = directorReactionBeat(payload, actionKey);
+
+    root.querySelectorAll('[data-ooh-alpha-director-action]').forEach(function (button) {
+      if (button.getAttribute('data-ooh-alpha-director-action') === actionKey) {
+        button.classList.add('is-director-active');
+        button.setAttribute('aria-pressed', 'true');
+      }
+      else {
+        button.classList.remove('is-director-active');
+        button.removeAttribute('aria-pressed');
+      }
+    });
+  }
+
+  function initDirectorLayer(root) {
+    root.querySelectorAll('[data-ooh-alpha-director-action]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        setDirectorAction(root, button.getAttribute('data-ooh-alpha-director-action'));
+      });
+    });
+  }
+
+  function buildOperationalPayload(actor) {
+    var mission = runtimePick(runtimeMissions);
+    var condition = runtimePick(runtimeConditions);
+    var channel = runtimePick(runtimePlaylists);
+    var status = runtimePick(runtimeStatuses);
+    var portraitUrl = actorPortraitPath(actor);
+    var consequence = buildOperationalConsequence(mission, condition);
+    var payload;
+
+    payload = {
+      actorName: actor.portrait || actor.name || 'Unknown asset',
+      faction: actor.faction || 'Unresolved',
+      portraitUrl: portraitUrl,
+      mission: mission,
+      condition: condition,
+      playlist: channel.label,
+      playlistId: channel.playlistId,
+      playlistUrl: channel.spotifyUrl,
+      channelKey: channel.slug,
+      channelMood: channel.moodTags,
+      status: status,
+      summary: operationSummary(mission, condition),
+      consequence: consequence
+    };
+    payload.narrativeSeed = buildNarrativeSeed(payload);
+
+    return payload;
+  }
+
+  function renderOperationalPayload(root, actor) {
+    var payloadPanel = root.querySelector('[data-ooh-alpha-operational-payload]');
+    var asset = root.querySelector('[data-ooh-alpha-payload-asset]');
+    var faction = root.querySelector('[data-ooh-alpha-payload-faction]');
+    var portrait = root.querySelector('[data-ooh-alpha-payload-portrait]');
+    var mission = root.querySelector('[data-ooh-alpha-payload-mission]');
+    var condition = root.querySelector('[data-ooh-alpha-payload-condition]');
+    var playlist = root.querySelector('[data-ooh-alpha-payload-playlist]');
+    var status = root.querySelector('[data-ooh-alpha-payload-status]');
+    var summary = root.querySelector('[data-ooh-alpha-payload-summary]');
+    var channelName = root.querySelector('[data-ooh-alpha-channel-name]');
+    var channelMood = root.querySelector('[data-ooh-alpha-channel-mood]');
+    var channelLink = root.querySelector('[data-ooh-alpha-channel-link]');
+    var consequenceStatus = root.querySelector('[data-ooh-alpha-consequence-status]');
+    var consequenceSummary = root.querySelector('[data-ooh-alpha-consequence-summary]');
+    var narrativeCopy = root.querySelector('[data-ooh-alpha-narrative-copy]');
+    var payload;
+
+    if (!payloadPanel || !actor) {
+      return;
+    }
+
+    payload = root.oohAlphaOperationalPayload || buildOperationalPayload(actor);
+    root.oohAlphaOperationalPayload = payload;
+    payloadPanel.hidden = false;
+    payloadPanel.classList.remove('is-payload-updated');
+    payloadPanel.setAttribute('data-portrait-url', payload.portraitUrl);
+    window.setTimeout(function () {
+      payloadPanel.classList.add('is-payload-updated');
+    }, 0);
+
+    if (asset) {
+      asset.textContent = payload.actorName;
+    }
+    if (faction) {
+      faction.textContent = payload.faction;
+    }
+    if (portrait) {
+      portrait.textContent = payload.portraitUrl;
+      portrait.setAttribute('title', payload.portraitUrl);
+    }
+    if (mission) {
+      mission.textContent = payload.mission;
+    }
+    if (condition) {
+      condition.textContent = payload.condition;
+    }
+    if (playlist) {
+      playlist.textContent = payload.channelMood ? payload.playlist + ' // ' + payload.channelMood : payload.playlist;
+    }
+    if (status) {
+      status.textContent = payload.status;
+    }
+    if (summary) {
+      summary.textContent = payload.summary;
+    }
+    if (channelName) {
+      channelName.textContent = payload.playlist;
+    }
+    if (channelMood) {
+      channelMood.textContent = payload.channelMood || 'Mood tags unavailable';
+    }
+    if (channelLink && payload.playlistUrl) {
+      channelLink.href = payload.playlistUrl;
+      channelLink.hidden = false;
+      channelLink.setAttribute('aria-label', 'Open ' + payload.playlist + ' signal channel on Spotify');
+    }
+    if (consequenceStatus && payload.consequence) {
+      consequenceStatus.textContent = payload.consequence.status;
+    }
+    if (consequenceSummary && payload.consequence) {
+      consequenceSummary.textContent = payload.consequence.summary;
+    }
+    if (narrativeCopy) {
+      narrativeCopy.textContent = payload.narrativeSeed;
+    }
+  }
+
   function renderActorTransmission(root, actor) {
     var frame = root.querySelector('[data-ooh-alpha-actor-transmission]');
     var image = root.querySelector('[data-ooh-alpha-actor-image]');
@@ -760,6 +1229,7 @@
     var copy = root.querySelector('[data-ooh-alpha-actor-copy]');
     var portraitPath;
     var portraitFallbackPath;
+    var portraitFrame;
 
     if (!frame || !actor) {
       return;
@@ -767,11 +1237,15 @@
 
     portraitPath = actorPortraitPath(actor);
     portraitFallbackPath = actorPortraitFallbackPath(actor);
+    portraitFrame = image ? image.closest('.ooh-operation-alpha__actor-portrait') : null;
     frame.hidden = false;
 
     if (image && portraitPath) {
       image.src = portraitPath;
       image.hidden = false;
+      if (portraitFrame) {
+        portraitFrame.hidden = false;
+      }
       image.onerror = function () {
         if (portraitFallbackPath && image.src !== portraitFallbackPath) {
           image.src = portraitFallbackPath;
@@ -779,6 +1253,9 @@
         }
 
         image.hidden = true;
+        if (portraitFrame) {
+          portraitFrame.hidden = true;
+        }
       };
     }
     if (name) {
@@ -807,6 +1284,7 @@
   function selectOperationAlphaActor(root) {
     if (root.oohAlphaSelectedActor) {
       renderActorTransmission(root, root.oohAlphaSelectedActor);
+      renderOperationalPayload(root, root.oohAlphaSelectedActor);
       return;
     }
 
@@ -822,6 +1300,7 @@
     selectedActor = eligibleActors[Math.floor(Math.random() * eligibleActors.length)];
     root.oohAlphaSelectedActor = selectedActor;
     renderActorTransmission(root, selectedActor);
+    renderOperationalPayload(root, selectedActor);
     window.console.log('Operation Alpha actor selected:', selectedActor.portrait || selectedActor.name || 'Unknown actor');
   }
 
@@ -994,6 +1473,10 @@
     var directive = commandDirectives[commandKey];
     var state = root.querySelector('[data-ooh-alpha-command-state]');
     var acknowledgement = root.querySelector('[data-ooh-alpha-command-ack]');
+    var runtimeCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
+    var activationStatus = root.querySelector('[data-ooh-alpha-activation-status]');
+    var reaction = root.querySelector('[data-ooh-alpha-reaction]');
+    var pressure = root.querySelector('[data-ooh-alpha-pressure]');
 
     if (!directive || !state || !acknowledgement) {
       return;
@@ -1002,6 +1485,18 @@
     root.oohAlphaCommand = commandKey;
     state.textContent = directive.state;
     acknowledgement.textContent = directive.acknowledgement;
+    if (runtimeCopy) {
+      runtimeCopy.textContent = directive.runtimeCopy;
+    }
+    if (activationStatus) {
+      activationStatus.textContent = directive.activationStatus;
+    }
+    if (reaction) {
+      reaction.textContent = directive.reaction;
+    }
+    if (pressure) {
+      pressure.textContent = directive.pressure;
+    }
     setBattlefieldPresence(root, directive.battlefield);
     setAssetMovementFeed(root, directive.movementMode);
 
@@ -1191,6 +1686,7 @@
       });
     }
     initCommandConsole(root);
+    initDirectorLayer(root);
     if (missionCycle) {
       missionCycle.addEventListener('click', function () {
         cycleMission(root);
@@ -1198,11 +1694,13 @@
     }
   }
 
-  function storePlaylistSelection(slug, title) {
+  function storePlaylistSelection(slug, title, spotifyUrl, moodTags) {
     try {
       window.localStorage.setItem(playlistStorageKey, JSON.stringify({
         slug: slug,
-        title: title
+        title: title,
+        spotifyUrl: spotifyUrl,
+        moodTags: moodTags
       }));
     }
     catch (e) {}
@@ -1232,11 +1730,15 @@
     return (basePath || '') + path;
   }
 
-  function setActivePlaylist(root, slug, title) {
+  function setActivePlaylist(root, slug, title, spotifyUrl, moodTags) {
     var confirmation = root.querySelector('[data-ooh-alpha-playlist-confirmation]');
     var handoff = root.querySelector('[data-ooh-alpha-runtime-handoff]');
     var handoffTitle = root.querySelector('[data-ooh-alpha-runtime-title]');
     var handoffCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
+    var channelLink = root.querySelector('[data-ooh-alpha-playlist-channel-link]');
+    var channel = channelBySlug(slug) || channelByLabel(title);
+    var resolvedUrl = spotifyUrl || (channel ? channel.spotifyUrl : '');
+    var resolvedMood = moodTags || (channel ? channel.moodTags : '');
     var selectedButton = null;
 
     root.querySelectorAll('[data-ooh-alpha-playlist-card]').forEach(function (playlistCard) {
@@ -1274,7 +1776,12 @@
       handoffTitle.textContent = title;
     }
     if (handoffCopy) {
-      handoffCopy.textContent = 'Signal selected. Runtime handoff pending.';
+      handoffCopy.textContent = resolvedMood ? resolvedMood + '. Runtime handoff pending.' : 'Signal selected. Runtime handoff pending.';
+    }
+    if (channelLink && resolvedUrl) {
+      channelLink.href = resolvedUrl;
+      channelLink.hidden = false;
+      channelLink.setAttribute('aria-label', 'Open ' + title + ' signal channel on Spotify');
     }
   }
 
@@ -1283,16 +1790,19 @@
     var storedSelection = getPlaylistSelection();
 
     if (storedSelection && storedSelection.slug && storedSelection.title) {
-      setActivePlaylist(root, storedSelection.slug, storedSelection.title);
+      setActivePlaylist(root, storedSelection.slug, storedSelection.title, storedSelection.spotifyUrl, storedSelection.moodTags);
     }
 
     root.querySelectorAll('[data-ooh-alpha-playlist-select]').forEach(function (button) {
       button.addEventListener('click', function () {
         var slug = button.getAttribute('data-playlist-slug') || '';
         var title = button.getAttribute('data-playlist-title') || 'SELECTED SIGNAL';
+        var spotifyUrl = button.getAttribute('data-playlist-url') || '';
+        var channel = channelBySlug(slug) || channelByLabel(title);
+        var moodTags = channel ? channel.moodTags : '';
 
-        storePlaylistSelection(slug, title);
-        setActivePlaylist(root, slug, title);
+        storePlaylistSelection(slug, title, spotifyUrl, moodTags);
+        setActivePlaylist(root, slug, title, spotifyUrl, moodTags);
       });
     });
 
@@ -1305,19 +1815,61 @@
   function initRuntimeShell(root) {
     var signal = root.querySelector('[data-ooh-alpha-runtime-signal]');
     var status = root.querySelector('[data-ooh-alpha-runtime-status]');
+    var channelLink = root.querySelector('[data-ooh-alpha-runtime-channel-link]');
     var storedSelection = getPlaylistSelection();
+    var storedChannel = storedSelection ? channelBySlug(storedSelection.slug) || channelByLabel(storedSelection.title) : null;
+    var spotifyUrl = storedSelection && storedSelection.spotifyUrl ? storedSelection.spotifyUrl : (storedChannel ? storedChannel.spotifyUrl : '');
+    var moodTags = storedSelection && storedSelection.moodTags ? storedSelection.moodTags : (storedChannel ? storedChannel.moodTags : '');
 
     if (storedSelection && storedSelection.title) {
       if (signal) {
         signal.textContent = storedSelection.title;
       }
       if (status) {
-        status.textContent = 'Runtime shell received local signal selection. Gameplay authority pending.';
+        status.textContent = moodTags ? moodTags + '. Runtime shell received local signal selection.' : 'Runtime shell received local signal selection. Gameplay authority pending.';
+      }
+      if (channelLink && spotifyUrl) {
+        channelLink.href = spotifyUrl;
+        channelLink.hidden = false;
+        channelLink.setAttribute('aria-label', 'Open ' + storedSelection.title + ' signal channel on Spotify');
       }
     }
     else if (status) {
       status.textContent = 'Runtime shell standing by. Select a signal before active runtime activation.';
     }
+  }
+
+  function initCreditsShell(root) {
+    var confirmation = root.querySelector('[data-ooh-alpha-credit-confirmation]');
+
+    root.querySelectorAll('[data-ooh-alpha-credit-select]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var card = button.closest('[data-ooh-alpha-credit-card]');
+        var packageLabel = button.getAttribute('data-credit-package') || 'credit package';
+        var packagePrice = button.getAttribute('data-credit-price') || '';
+        var creditAmount = button.getAttribute('data-credit-amount') || '';
+
+        root.querySelectorAll('[data-ooh-alpha-credit-card]').forEach(function (creditCard) {
+          creditCard.classList.remove('is-selected');
+        });
+
+        root.querySelectorAll('[data-ooh-alpha-credit-select]').forEach(function (selectButton) {
+          selectButton.textContent = 'SELECT';
+          selectButton.removeAttribute('aria-pressed');
+        });
+
+        if (card) {
+          card.classList.add('is-selected');
+        }
+
+        button.textContent = 'STAGED';
+        button.setAttribute('aria-pressed', 'true');
+
+        if (confirmation) {
+          confirmation.textContent = 'CREDIT PACKAGE STAGED: ' + packageLabel.toUpperCase() + ' // ' + packagePrice + ' // ' + creditAmount.toUpperCase();
+        }
+      });
+    });
   }
 
   function init() {
@@ -1328,6 +1880,7 @@
     document.querySelectorAll('[data-ooh-operation-alpha]').forEach(initOperationAlphaGate);
     document.querySelectorAll('[data-ooh-operation-alpha-playlists]').forEach(initPlaylistShell);
     document.querySelectorAll('[data-ooh-operation-alpha-runtime]').forEach(initRuntimeShell);
+    document.querySelectorAll('[data-ooh-operation-alpha-credits]').forEach(initCreditsShell);
     document.querySelectorAll('[data-ooh-operation-alpha-operation]').forEach(renderOperationSurface);
   }
 
