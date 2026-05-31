@@ -950,6 +950,10 @@ body:has(.ooh-landing-page) .ooh-hero__button--secondary {
   box-shadow: none;
 }
 
+body:has(.ooh-landing-page) .ooh-hero__button--operation-alpha {
+  margin-top: 14px;
+}
+
 body:has(.ooh-landing-page) .ooh-account-cluster .ooh-utility-button {
   min-height: 34px;
   padding: 9px 13px;

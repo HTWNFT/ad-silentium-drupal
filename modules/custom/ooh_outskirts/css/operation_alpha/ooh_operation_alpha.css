@@ -777,6 +777,15 @@ body.ooh-operation-alpha-runtime .row {
   text-decoration: none;
 }
 
+.ooh-operation-alpha__channel-link[aria-disabled="true"] {
+  border-color: rgba(130, 245, 255, 0.16);
+  color: rgba(223, 252, 255, 0.48);
+  background: rgba(1, 8, 11, 0.42);
+  box-shadow: none;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .ooh-operation-alpha__consequence {
   margin-top: 14px;
   padding: 14px;

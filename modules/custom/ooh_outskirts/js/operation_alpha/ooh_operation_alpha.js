@@ -241,43 +241,43 @@
     {
       slug: 'war-bangaz',
       label: 'War Bangaz',
-      playlistId: '87f2c09e6b14433a',
-      spotifyUrl: 'https://open.spotify.com/playlist/87f2c09e6b14433a',
+      playlistId: '',
+      spotifyUrl: '',
       moodTags: 'Aggressive • Kinetic • Chaotic'
     },
     {
       slug: 'black-banner',
       label: 'Black Banner',
-      playlistId: '37cfc8537c8e4871',
-      spotifyUrl: 'https://open.spotify.com/playlist/37cfc8537c8e4871',
+      playlistId: '',
+      spotifyUrl: '',
       moodTags: 'Ominous • Authoritarian • Oppressive'
     },
     {
       slug: 'signal-blitz',
       label: 'Signal Blitz',
-      playlistId: '96b162aed2f048d7',
-      spotifyUrl: 'https://open.spotify.com/playlist/96b162aed2f048d7',
+      playlistId: '',
+      spotifyUrl: '',
       moodTags: 'Recon • Communications • Uncertainty'
     },
     {
       slug: 'dust-march',
       label: 'Dust March',
-      playlistId: 'c0f70ba528a24954',
-      spotifyUrl: 'https://open.spotify.com/playlist/c0f70ba528a24954',
+      playlistId: '',
+      spotifyUrl: '',
       moodTags: 'Isolation • Distance • Endurance'
     },
     {
       slug: 'steel-wreckoning',
       label: 'Steel Wreckoning',
-      playlistId: 'f100d9ff203f449d',
-      spotifyUrl: 'https://open.spotify.com/playlist/f100d9ff203f449d',
+      playlistId: '',
+      spotifyUrl: '',
       moodTags: 'Impact • Escalation • Consequence'
     },
     {
       slug: 'system-reset-free',
       label: 'System Reset Free',
-      playlistId: '53aa34c6da0e42d5',
-      spotifyUrl: 'https://open.spotify.com/playlist/53aa34c6da0e42d5',
+      playlistId: '0cZlbYVRnkxwViBJPw8oDR',
+      spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR',
       moodTags: 'Abandoned Systems • Collapse • Aftermath'
     }
   ];
@@ -837,28 +837,57 @@
     return actorRegistrySlug(actor.portrait);
   }
 
-  function actorPortraitPath(actor) {
+  function actorSlugAliases(slug) {
+    if (slug === 'lhantoris_path') {
+      return ['lhatoris_path', slug];
+    }
+    if (slug === 'lhantoris_unknown') {
+      return ['lhatoris_unknown', slug];
+    }
+
+    return [slug];
+  }
+
+  function actorPortraitFilename(pathSlug, factionSlug, nameSlug) {
+    return 'oa_' + pathSlug + '_' + factionSlug + '_' + nameSlug + '.webp';
+  }
+
+  function actorPortraitCandidates(actor) {
     var pathSlug = actorRegistrySlug(actor.path);
     var factionSlug = actorRegistrySlug(actor.faction === 'Genealord' ? 'Unknown' : actor.faction);
     var nameSlug = actorPortraitNameSlug(actor);
+    var pathAliases = actorSlugAliases(pathSlug);
+    var nameAliases = actorSlugAliases(nameSlug);
+    var candidates = [];
 
     if (!pathSlug || !factionSlug || !nameSlug) {
-      return '';
+      return candidates;
     }
 
-    return operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/oa_' + pathSlug + '_' + factionSlug + '_' + nameSlug + '.webp');
+    if (actor.faction === 'Genealord') {
+      pathAliases.forEach(function (pathAlias) {
+        nameAliases.forEach(function (nameAlias) {
+          candidates.push(operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/' + pathAlias + '/Genealord/' + actorPortraitFilename(pathAlias, factionSlug, nameAlias)));
+        });
+      });
+    }
+
+    candidates.push(operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/' + actorPortraitFilename(pathSlug, factionSlug, nameSlug)));
+    candidates.push(operationAlphaRootPath('/operation_alpha/portraits/' + actorPortraitFilename(pathSlug, factionSlug, nameSlug)));
+
+    return candidates;
+  }
+
+  function actorPortraitPath(actor) {
+    var candidates = actorPortraitCandidates(actor);
+
+    return candidates[0] || '';
   }
 
   function actorPortraitFallbackPath(actor) {
-    var pathSlug = actorRegistrySlug(actor.path);
-    var factionSlug = actorRegistrySlug(actor.faction === 'Genealord' ? 'Unknown' : actor.faction);
-    var nameSlug = actorPortraitNameSlug(actor);
+    var candidates = actorPortraitCandidates(actor);
 
-    if (!pathSlug || !factionSlug || !nameSlug) {
-      return '';
-    }
-
-    return operationAlphaRootPath('/operation_alpha/portraits/oa_' + pathSlug + '_' + factionSlug + '_' + nameSlug + '.webp');
+    return candidates[1] || '';
   }
 
 
@@ -1203,8 +1232,19 @@
     }
     if (channelLink && payload.playlistUrl) {
       channelLink.href = payload.playlistUrl;
+      channelLink.textContent = 'OPEN CHANNEL';
+      channelLink.setAttribute('target', '_blank');
+      channelLink.setAttribute('rel', 'noopener noreferrer');
+      channelLink.removeAttribute('aria-disabled');
       channelLink.hidden = false;
       channelLink.setAttribute('aria-label', 'Open ' + payload.playlist + ' signal channel on Spotify');
+    }
+    else if (channelLink) {
+      channelLink.removeAttribute('href');
+      channelLink.removeAttribute('target');
+      channelLink.setAttribute('aria-disabled', 'true');
+      channelLink.textContent = 'CHANNEL OFFLINE';
+      channelLink.hidden = false;
     }
     if (consequenceStatus && payload.consequence) {
       consequenceStatus.textContent = payload.consequence.status;
@@ -1227,28 +1267,29 @@
     var style = root.querySelector('[data-ooh-alpha-actor-style]');
     var color = root.querySelector('[data-ooh-alpha-actor-color]');
     var copy = root.querySelector('[data-ooh-alpha-actor-copy]');
-    var portraitPath;
-    var portraitFallbackPath;
+    var portraitPaths;
+    var portraitIndex;
     var portraitFrame;
 
     if (!frame || !actor) {
       return;
     }
 
-    portraitPath = actorPortraitPath(actor);
-    portraitFallbackPath = actorPortraitFallbackPath(actor);
+    portraitPaths = actorPortraitCandidates(actor);
+    portraitIndex = 0;
     portraitFrame = image ? image.closest('.ooh-operation-alpha__actor-portrait') : null;
     frame.hidden = false;
 
-    if (image && portraitPath) {
-      image.src = portraitPath;
+    if (image && portraitPaths.length) {
+      image.src = portraitPaths[portraitIndex];
       image.hidden = false;
       if (portraitFrame) {
         portraitFrame.hidden = false;
       }
       image.onerror = function () {
-        if (portraitFallbackPath && image.src !== portraitFallbackPath) {
-          image.src = portraitFallbackPath;
+        portraitIndex++;
+        if (portraitPaths[portraitIndex]) {
+          image.src = portraitPaths[portraitIndex];
           return;
         }
 
@@ -1780,8 +1821,19 @@
     }
     if (channelLink && resolvedUrl) {
       channelLink.href = resolvedUrl;
+      channelLink.textContent = 'OPEN CHANNEL';
+      channelLink.setAttribute('target', '_blank');
+      channelLink.setAttribute('rel', 'noopener noreferrer');
+      channelLink.removeAttribute('aria-disabled');
       channelLink.hidden = false;
       channelLink.setAttribute('aria-label', 'Open ' + title + ' signal channel on Spotify');
+    }
+    else if (channelLink) {
+      channelLink.removeAttribute('href');
+      channelLink.removeAttribute('target');
+      channelLink.setAttribute('aria-disabled', 'true');
+      channelLink.textContent = 'CHANNEL OFFLINE';
+      channelLink.hidden = false;
     }
   }
 
@@ -1830,8 +1882,19 @@
       }
       if (channelLink && spotifyUrl) {
         channelLink.href = spotifyUrl;
+        channelLink.textContent = 'OPEN CHANNEL';
+        channelLink.setAttribute('target', '_blank');
+        channelLink.setAttribute('rel', 'noopener noreferrer');
+        channelLink.removeAttribute('aria-disabled');
         channelLink.hidden = false;
         channelLink.setAttribute('aria-label', 'Open ' + storedSelection.title + ' signal channel on Spotify');
+      }
+      else if (channelLink) {
+        channelLink.removeAttribute('href');
+        channelLink.removeAttribute('target');
+        channelLink.setAttribute('aria-disabled', 'true');
+        channelLink.textContent = 'CHANNEL OFFLINE';
+        channelLink.hidden = false;
       }
     }
     else if (status) {

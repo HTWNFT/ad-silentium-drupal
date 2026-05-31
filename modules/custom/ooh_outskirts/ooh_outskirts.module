@@ -68,6 +68,13 @@ function ooh_outskirts_theme($existing, $type, $theme, $path) {
     'ooh_operation_alpha_page' => [
       'variables' => [],
       'template' => 'ooh-operation-alpha-page',
+      'path' => $path . '/templates/operation_alpha',
+    ],
+
+    'ooh_operation_alpha_credits' => [
+      'variables' => [],
+      'template' => 'ooh-operation-alpha-credits',
+      'path' => $path . '/templates/operation_alpha',
     ],
   ];
 }

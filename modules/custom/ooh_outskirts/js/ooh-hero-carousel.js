@@ -9,6 +9,7 @@
 
         // ----- Modal wiring -----
         const openBtn = document.getElementById('ooh-read-prologue');
+        const enterBtn = document.querySelector('[data-ooh-action="enter"]');
         const closeBtn = document.getElementById('ooh-close-prologue');
         const modal = document.getElementById('ooh-prologue-modal');
         const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
@@ -41,6 +42,20 @@
           modal.setAttribute('aria-hidden', 'true');
           document.body.classList.remove('ooh-modal-open');
         };
+
+        if (enterBtn) {
+          enterBtn.setAttribute('disabled', 'disabled');
+          enterBtn.setAttribute('aria-disabled', 'true');
+          enterBtn.removeAttribute('href');
+          enterBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+          });
+        }
+
+        if (openBtn) {
+          openBtn.setAttribute('disabled', 'disabled');
+          openBtn.setAttribute('aria-disabled', 'true');
+        }
 
         if (openBtn && !openBtn.hasAttribute('disabled') && openBtn.getAttribute('aria-disabled') !== 'true') {
           openBtn.addEventListener('click', openModal);

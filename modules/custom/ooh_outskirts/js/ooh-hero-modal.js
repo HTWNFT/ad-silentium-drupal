@@ -14,11 +14,13 @@
 
         // ----- Modal wiring -----
         const openBtn = landing.querySelector('#ooh-read-prologue');
+        const enterBtn = landing.querySelector('[data-ooh-action="enter"]');
         const closeBtn = landing.querySelector('#ooh-close-prologue');
         const modal = landing.querySelector('#ooh-prologue-modal');
         const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
         const crawl = landing.querySelector('#ooh-prologue-crawl');
         const prologueAutoOpenKey = 'ooh_prologue_auto_opened_v1';
+        const fullBuildLocked = true;
 
         if (!root) {
           warnOnce('hero-missing', 'OOH landing: hero root not found.');
@@ -40,6 +42,9 @@
         };
 
         const openModal = () => {
+          if (fullBuildLocked) {
+            return;
+          }
           if (!modal) {
             return;
           }
@@ -94,8 +99,23 @@
           });
         };
 
+        if (enterBtn) {
+          enterBtn.setAttribute('disabled', 'disabled');
+          enterBtn.setAttribute('aria-disabled', 'true');
+          enterBtn.removeAttribute('href');
+          enterBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+          });
+        }
+
         if (openBtn) {
-          openBtn.addEventListener('click', () => {
+          openBtn.setAttribute('disabled', 'disabled');
+          openBtn.setAttribute('aria-disabled', 'true');
+          openBtn.addEventListener('click', (event) => {
+            if (fullBuildLocked || openBtn.hasAttribute('disabled') || openBtn.getAttribute('aria-disabled') === 'true') {
+              event.preventDefault();
+              return;
+            }
             markAutoOpenedPrologue();
             openModal();
           });
@@ -113,7 +133,11 @@
           }
         });
 
-        if (modal && !hasAutoOpenedPrologue()) {
+        if (fullBuildLocked) {
+          markAutoOpenedPrologue();
+          closeModal();
+        }
+        else if (modal && !hasAutoOpenedPrologue()) {
           deferAutoOpenPrologue();
         }
 
