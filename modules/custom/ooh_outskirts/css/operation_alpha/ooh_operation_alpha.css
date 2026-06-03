@@ -150,6 +150,12 @@ body:has(.ooh-operation-alpha) .block-system-main-block {
   background: transparent !important;
 }
 
+body:has(.ooh-operation-alpha) main,
+body:has(.ooh-operation-alpha) [class*="container"],
+body:has(.ooh-operation-alpha) [class*="content"] {
+  max-width: none !important;
+}
+
 body.path-operation-alpha .row,
 body.path-operation-alpha-credits .row,
 body.path-operation-alpha-oaplay-playlists .row,
@@ -172,9 +178,9 @@ body.ooh-operation-alpha-runtime .row {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 20px;
-  padding: 32px;
+  padding: clamp(18px, 3vw, 36px);
   overflow-x: clip;
   color: #dffcff;
   background:
@@ -184,7 +190,8 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__shell,
 .ooh-operation-alpha__intro-card {
-  width: min(760px, 100%);
+  width: min(1760px, calc(100vw - 48px));
+  max-width: none;
   padding: 32px;
   border: 1px solid rgba(130, 245, 255, 0.26);
   border-radius: 8px;
@@ -217,7 +224,8 @@ body.ooh-operation-alpha-runtime .row {
   order: 2;
   position: relative;
   z-index: 1;
-  width: min(760px, 100%);
+  width: min(1760px, calc(100vw - 48px));
+  max-width: none;
   display: block;
   padding: 0;
   background: transparent;
@@ -264,6 +272,10 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha__signal-title {
   font-size: clamp(1.5rem, 5vw, 2.45rem);
   line-height: 1.04;
+}
+
+.ooh-operation-alpha__shell .ooh-operation-alpha__title {
+  font-size: clamp(2rem, 4vw, 4.2rem);
 }
 
 .ooh-operation-alpha__intro-copy {
@@ -474,13 +486,16 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__command-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 142px), 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
 }
 
 .ooh-operation-alpha__command-button {
   appearance: none;
+  flex: 1 1 142px;
+  max-width: 210px;
   min-height: 42px;
   padding: 0.7rem 0.78rem;
   border: 1px solid rgba(130, 245, 255, 0.34) !important;
@@ -632,6 +647,15 @@ body.ooh-operation-alpha-runtime .row {
   display: none;
 }
 
+.ooh-operation-alpha__payload,
+.ooh-operation-alpha__battlefield,
+.ooh-operation-alpha__scenario,
+.ooh-operation-alpha__access-panel,
+.ooh-operation-alpha__command-console,
+.ooh-operation-alpha__actor-transmission {
+  width: 100%;
+}
+
 .ooh-operation-alpha__payload.is-payload-updated {
   border-color: rgba(145, 250, 255, 0.4);
   box-shadow:
@@ -706,6 +730,68 @@ body.ooh-operation-alpha-runtime .row {
   background:
     repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 5px),
     rgba(1, 8, 11, 0.38);
+}
+
+.ooh-operation-alpha__opposition {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg, rgba(255, 212, 107, 0.028), transparent 52%, rgba(89, 243, 255, 0.03)),
+    rgba(1, 8, 11, 0.38);
+}
+
+.ooh-operation-alpha__opposition-kicker {
+  display: block;
+  margin-bottom: 9px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__opposition-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(0, 1.3fr);
+  gap: 10px;
+}
+
+.ooh-operation-alpha__opposition-cell {
+  min-height: 64px;
+  padding: 10px;
+  border: 1px solid rgba(130, 245, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(1, 8, 11, 0.36);
+}
+
+.ooh-operation-alpha__opposition-label {
+  display: block;
+  color: rgba(145, 250, 255, 0.68);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__opposition-value {
+  display: block;
+  margin-top: 7px;
+  color: #dffcff;
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__opposition-line {
+  margin: 7px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.9rem;
+  line-height: 1.45;
 }
 
 .ooh-operation-alpha__active-channel-kicker,
@@ -787,8 +873,8 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__consequence {
-  margin-top: 14px;
-  padding: 14px;
+  margin-top: 10px;
+  padding: 10px;
   border: 1px solid rgba(130, 245, 255, 0.18);
   border-radius: 6px;
   background:
@@ -798,7 +884,7 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__consequence-kicker {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: rgba(145, 250, 255, 0.72);
   font-size: 0.7rem;
   font-weight: 700;
@@ -814,8 +900,8 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__consequence-cell {
-  min-height: 76px;
-  padding: 12px;
+  min-height: 56px;
+  padding: 10px;
   border: 1px solid rgba(130, 245, 255, 0.14);
   border-radius: 6px;
   background: rgba(1, 8, 11, 0.36);
@@ -833,7 +919,7 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__consequence-value {
   display: block;
-  margin-top: 9px;
+  margin-top: 7px;
   color: #dffcff;
   font-size: 0.92rem;
   letter-spacing: 0.08em;
@@ -842,7 +928,7 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__consequence-summary {
-  margin: 9px 0 0;
+  margin: 7px 0 0;
   color: rgba(223, 252, 255, 0.78);
   font-size: 0.9rem;
   line-height: 1.45;
@@ -964,8 +1050,8 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__battlefield {
-  margin-top: 18px;
-  padding: 18px;
+  margin-top: 14px;
+  padding: 14px;
   border: 1px solid rgba(130, 245, 255, 0.2);
   border-radius: 8px;
   background:
@@ -988,7 +1074,7 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__battlefield-kicker {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 9px;
   color: rgba(145, 250, 255, 0.72);
   font-size: 0.72rem;
   font-weight: 700;
@@ -1004,8 +1090,8 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__battlefield-cell {
-  min-height: 112px;
-  padding: 14px;
+  min-height: 74px;
+  padding: 10px;
   border: 1px solid rgba(130, 245, 255, 0.16);
   border-radius: 6px;
   background:
@@ -1024,15 +1110,15 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__battlefield-line {
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   color: rgba(223, 252, 255, 0.8);
   font-size: 0.9rem;
   line-height: 1.45;
 }
 
 .ooh-operation-alpha__movement-feed {
-  margin-top: 12px;
-  padding: 14px;
+  margin-top: 10px;
+  padding: 10px;
   border: 1px solid rgba(130, 245, 255, 0.16);
   border-radius: 6px;
   background:
@@ -1052,16 +1138,17 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__movement-list {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-  margin: 12px 0 0;
+  margin: 9px 0 0;
   padding: 0;
   list-style: none;
 }
 
 .ooh-operation-alpha__movement-item {
   position: relative;
-  min-height: 34px;
-  padding: 0.58rem 0.72rem 0.58rem 1.68rem;
+  min-height: 30px;
+  padding: 0.48rem 0.62rem 0.48rem 1.45rem;
   border: 1px solid rgba(130, 245, 255, 0.14);
   border-radius: 4px;
   color: rgba(223, 252, 255, 0.84);
@@ -1077,13 +1164,69 @@ body.ooh-operation-alpha-runtime .row {
   content: "";
   position: absolute;
   top: 50%;
-  left: 0.72rem;
+  left: 0.62rem;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: rgba(145, 250, 255, 0.72);
   box-shadow: 0 0 10px rgba(89, 243, 255, 0.22);
   transform: translateY(-50%);
+}
+
+.ooh-operation-alpha__battlefield-suite {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  width: 100%;
+}
+
+.ooh-operation-alpha__battlefield-suite .ooh-operation-alpha__battlefield {
+  order: 2;
+  opacity: 0.82;
+}
+
+.ooh-operation-alpha__battlefield-suite .ooh-operation-alpha__scenario {
+  order: 1;
+}
+
+.ooh-operation-alpha__battlefield-suite.is-suite-available {
+  grid-template-columns: minmax(300px, 0.72fr) minmax(520px, 1.28fr);
+  align-items: start;
+}
+
+.ooh-operation-alpha__battlefield-suite.is-suite-available .ooh-operation-alpha__battlefield {
+  order: 1;
+  opacity: 1;
+}
+
+.ooh-operation-alpha__battlefield-suite.is-suite-available .ooh-operation-alpha__scenario {
+  order: 2;
+  margin-top: 14px;
+}
+
+.ooh-operation-alpha__battlefield-suite.is-suite-available .ooh-operation-alpha__battlefield-grid,
+.ooh-operation-alpha__battlefield-suite.is-suite-available .ooh-operation-alpha__movement-list {
+  grid-template-columns: 1fr;
+}
+
+.ooh-operation-alpha__story-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ooh-operation-alpha__story-stat {
+  padding: 8px 9px;
+  border: 1px solid rgba(130, 245, 255, 0.14);
+  border-radius: 4px;
+  background: rgba(1, 8, 11, 0.38);
+  color: rgba(223, 252, 255, 0.82);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
 }
 
 .ooh-operation-alpha__signal-button {
@@ -1117,8 +1260,8 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__scenario {
-  margin: 28px 0 22px;
-  padding: 22px;
+  margin: 18px 0 16px;
+  padding: 16px;
   border: 1px solid rgba(130, 245, 255, 0.2);
   border-radius: 8px;
   background:
@@ -1145,7 +1288,7 @@ body.ooh-operation-alpha-runtime .row {
   gap: 8px 14px;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 9px;
 }
 
 .ooh-operation-alpha__pressure-label,
@@ -1174,8 +1317,8 @@ body.ooh-operation-alpha-runtime .row {
   gap: 8px 12px;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
-  padding: 9px 10px;
+  margin-bottom: 12px;
+  padding: 8px 10px;
   border: 1px solid rgba(130, 245, 255, 0.16);
   border-radius: 6px;
   background: rgba(1, 8, 11, 0.38);
@@ -1205,7 +1348,7 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__scenario-title {
-  margin: 0 0 12px;
+  margin: 0 0 9px;
   color: #dffcff;
   font-size: clamp(1.1rem, 4vw, 1.55rem);
   letter-spacing: 0.08em;
@@ -1215,8 +1358,8 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__situation {
   color: rgba(223, 252, 255, 0.78);
-  font-size: 0.98rem;
-  line-height: 1.45;
+  font-size: 0.92rem;
+  line-height: 1.35;
 }
 
 .ooh-operation-alpha__situation p {
@@ -1226,7 +1369,7 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha__interventions {
   display: grid;
   gap: 10px;
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
 .ooh-operation-alpha__intervention {
@@ -1258,8 +1401,8 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__reaction {
-  min-height: 3rem;
-  margin: 18px 0 0;
+  min-height: 2.2rem;
+  margin: 12px 0 0;
   color: rgba(145, 250, 255, 0.86);
   font-size: 0.95rem;
   line-height: 1.45;
@@ -1451,8 +1594,8 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha__mission {
   position: relative;
   overflow: hidden;
-  margin-top: 16px;
-  padding: 16px;
+  margin-top: 12px;
+  padding: 12px;
   border: 1px solid rgba(130, 245, 255, 0.22);
   border-radius: 8px;
   background:
@@ -1492,7 +1635,7 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__mission-title {
   display: block;
-  margin-top: 8px;
+  margin-top: 6px;
   color: #dffcff;
   font-size: clamp(1rem, 3vw, 1.2rem);
   letter-spacing: 0.08em;
@@ -1501,11 +1644,11 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__mission-source {
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .ooh-operation-alpha__mission-brief {
-  margin: 10px 0 0;
+  margin: 7px 0 0;
   color: rgba(223, 252, 255, 0.78);
   font-size: 0.94rem;
   line-height: 1.45;
@@ -1513,7 +1656,7 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__mission-cycle {
   min-height: 38px;
-  margin-top: 12px;
+  margin-top: 9px;
   padding: 0.62rem 0.82rem;
   border: 1px solid rgba(130, 245, 255, 0.3);
   border-radius: 4px;
@@ -1535,11 +1678,70 @@ body.ooh-operation-alpha-runtime .row {
   box-shadow: 0 0 14px rgba(89, 243, 255, 0.12);
 }
 
+.ooh-operation-alpha__presence-choice-matrix {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.ooh-operation-alpha__presence-choice-matrix[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__presence-choice {
+  appearance: none;
+  flex: 1 1 150px;
+  max-width: 220px;
+  min-height: 36px;
+  padding: 0.56rem 0.68rem;
+  border: 1px solid rgba(130, 245, 255, 0.28);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.88);
+  background: rgba(4, 22, 28, 0.5);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__presence-choice:hover,
+.ooh-operation-alpha__presence-choice:focus-visible,
+.ooh-operation-alpha__presence-choice.is-presence-choice-selected {
+  border-color: rgba(255, 212, 107, 0.56);
+  color: #fff1b8;
+  outline: none;
+  box-shadow: 0 0 14px rgba(255, 212, 107, 0.12);
+}
+
+.ooh-operation-alpha__mission-cycle:disabled {
+  border-color: rgba(130, 245, 255, 0.16);
+  color: rgba(223, 252, 255, 0.48);
+  cursor: default;
+  opacity: 0.72;
+}
+
+.ooh-operation-alpha__mission-cycle.is-presence-ready {
+  border-color: rgba(255, 212, 107, 0.56);
+  color: #fff1b8;
+  box-shadow: 0 0 16px rgba(255, 212, 107, 0.14);
+}
+
+.ooh-operation-alpha__mission-cycle.is-presence-locked {
+  border-color: rgba(145, 250, 255, 0.28);
+  color: rgba(223, 252, 255, 0.64);
+}
+
 .ooh-operation-alpha__result {
   position: relative;
   overflow: hidden;
-  margin-top: 16px;
-  padding: 16px;
+  margin-top: 12px;
+  padding: 12px;
   border: 1px solid rgba(130, 245, 255, 0.24);
   border-radius: 8px;
   background:
@@ -1591,7 +1793,7 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__result-title {
   display: block;
-  margin-top: 8px;
+  margin-top: 6px;
   color: #dffcff;
   font-size: clamp(1rem, 3vw, 1.18rem);
   letter-spacing: 0.08em;
@@ -1600,11 +1802,11 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__result-field {
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .ooh-operation-alpha__result-mark {
-  margin: 10px 0 0;
+  margin: 7px 0 0;
   color: rgba(223, 252, 255, 0.78);
   font-size: 0.94rem;
   line-height: 1.45;
@@ -1725,15 +1927,18 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__shell--playlists {
-  width: min(1120px, 100%);
+  width: min(1760px, calc(100vw - 48px));
+  max-width: none;
 }
 
 .ooh-operation-alpha__shell--runtime {
-  width: min(860px, 100%);
+  width: min(1760px, calc(100vw - 48px));
+  max-width: none;
 }
 
 .ooh-operation-alpha__shell--operation {
-  width: min(920px, 100%);
+  width: min(1760px, calc(100vw - 48px));
+  max-width: none;
 }
 
 .ooh-operation-alpha__shell--credits {
@@ -2248,11 +2453,12 @@ a.ooh-operation-alpha__playlist-select {
 
 @media (max-width: 560px) {
   .ooh-operation-alpha {
-    padding: 18px;
+    padding: 14px;
   }
 
   .ooh-operation-alpha__shell,
   .ooh-operation-alpha__intro-card {
+    width: 100%;
     padding: 24px 18px;
   }
 
@@ -2310,6 +2516,10 @@ a.ooh-operation-alpha__playlist-select {
     grid-template-columns: 1fr;
   }
 
+  .ooh-operation-alpha__opposition-grid {
+    grid-template-columns: 1fr;
+  }
+
   .ooh-operation-alpha__director-actions {
     grid-template-columns: 1fr;
   }
@@ -2321,6 +2531,29 @@ a.ooh-operation-alpha__playlist-select {
 
   .ooh-operation-alpha__battlefield-grid {
     grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__movement-list {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__battlefield-suite,
+  .ooh-operation-alpha__battlefield-suite.is-suite-available {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__battlefield-suite .ooh-operation-alpha__battlefield,
+  .ooh-operation-alpha__battlefield-suite.is-suite-available .ooh-operation-alpha__battlefield {
+    order: 2;
+  }
+
+  .ooh-operation-alpha__battlefield-suite .ooh-operation-alpha__scenario,
+  .ooh-operation-alpha__battlefield-suite.is-suite-available .ooh-operation-alpha__scenario {
+    order: 1;
+  }
+
+  .ooh-operation-alpha__story-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .ooh-operation-alpha__movement-item {
