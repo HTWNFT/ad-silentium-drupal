@@ -25,6 +25,58 @@ final class OohOperationAlphaController extends ControllerBase {
   }
 
   /**
+   * Builds Operation Alpha level 1: Fun and Games.
+   */
+  public function levelOne(): array {
+    return $this->buildLevel('ooh_operation_alpha_level_1', 'operation_alpha_level_1');
+  }
+
+  /**
+   * Builds Operation Alpha level 2: Pressure Net.
+   */
+  public function levelTwo(): array {
+    return $this->buildLevel('ooh_operation_alpha_level_2', 'operation_alpha_level_2');
+  }
+
+  /**
+   * Builds Operation Alpha level 3: midpoint situation report.
+   */
+  public function levelThree(): array {
+    return $this->buildLevel('ooh_operation_alpha_level_3', 'operation_alpha_level_3');
+  }
+
+  /**
+   * Builds Operation Alpha level 4: final breach.
+   */
+  public function levelFour(): array {
+    return $this->buildLevel('ooh_operation_alpha_level_4', 'operation_alpha_level_4');
+  }
+
+  /**
+   * Builds Operation Alpha final debrief.
+   */
+  public function finale(): array {
+    return $this->buildLevel('ooh_operation_alpha_finale', 'operation_alpha_finale');
+  }
+
+  /**
+   * Builds a themed Operation Alpha level page.
+   */
+  private function buildLevel(string $theme, string $library): array {
+    return [
+      '#theme' => $theme,
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/' . $library,
+        ],
+      ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
+  }
+
+  /**
    * Builds the Operation Alpha credit purchase staging page.
    */
   public function credits(): array {
@@ -45,8 +97,8 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the Operation Alpha playlist-selection shell.
    */
   public function playlists(): array {
-    $home_url = Url::fromRoute('<front>')->toString();
-    $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_runtime')->toString();
+    $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
+    $home_url = $runtime_url;
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
     $login_url = Url::fromRoute('user.login')->toString();
     $war_bangaz_url = 'https://open.spotify.com/playlist/6CaO0WNPwOyB4ZBIwgJF3O?si=46f8eacb11d34816';
@@ -146,7 +198,7 @@ final class OohOperationAlphaController extends ControllerBase {
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL F</span>
                   <h2 class="ooh-operation-alpha__playlist-title">System Reset (Free)</h2>
                   <p class="ooh-operation-alpha__playlist-copy">Outbound static reset signal. No playback or provider connection is active here.</p>
-                  <a class="ooh-operation-alpha__playlist-select" href="' . $system_reset_url . '" target="_blank" rel="noopener noreferrer">OPEN CHANNEL</a>
+                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="system-reset-free" data-playlist-title="System Reset (Free)" data-playlist-url="' . $system_reset_url . '" data-playlist-cadence="Outbound static reset signal">SELECT SIGNAL</button>
                 </div>
               </article>
             </div>
@@ -156,7 +208,7 @@ final class OohOperationAlphaController extends ControllerBase {
               <p class="ooh-operation-alpha__runtime-title" data-ooh-alpha-runtime-title>Signal pending.</p>
               <p class="ooh-operation-alpha__runtime-copy" data-ooh-alpha-runtime-copy>Signal selected. Runtime handoff pending.</p>
               <a class="ooh-operation-alpha__channel-link" href="#" target="_blank" rel="noopener noreferrer" data-ooh-alpha-playlist-channel-link hidden>OPEN CHANNEL</a>
-              <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '" data-ooh-alpha-runtime-proceed>PROCEED TO RUNTIME</a>
+              <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '" data-ooh-alpha-runtime-proceed>RETURN TO INTRO</a>
             </div>
             <p class="ooh-operation-alpha__playlist-note">No playback, account link, or runtime launch is active in this shell.</p>
           </div>
@@ -176,7 +228,7 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the contained Operation Alpha runtime shell.
    */
   public function runtime(): array {
-    $home_url = Url::fromRoute('<front>')->toString();
+    $home_url = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
     $playlists_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_playlists')->toString();
     $operation_url = Url::fromRoute('ooh_outskirts.operation_alpha_operation')->toString();
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
@@ -216,7 +268,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </div>
             </div>
             <div class="ooh-operation-alpha__runtime-actions">
-              <a class="ooh-operation-alpha__runtime-button" href="' . $playlists_url . '">CHANGE SIGNAL</a>
+              <a class="ooh-operation-alpha__runtime-button" href="' . $playlists_url . '">SELECT SIGNAL</a>
               <a class="ooh-operation-alpha__runtime-button" href="' . $operation_url . '" data-ooh-alpha-begin-operation>BEGIN OPERATION</a>
               <a class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--home" href="' . $home_url . '">HOME</a>
             </div>
@@ -237,7 +289,7 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the contained active Operation Alpha operation surface.
    */
   public function operation(): array {
-    $home_url = Url::fromRoute('<front>')->toString();
+    $home_url = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
     $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_runtime')->toString();
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
     $login_url = Url::fromRoute('user.login')->toString();
@@ -279,7 +331,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </div>
             </section>
             <div class="ooh-operation-alpha__runtime-actions">
-              <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '">ENTER ACTIVE RUNTIME</a>
+              <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '">SELECT SIGNAL</a>
               <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '">RETURN TO RUNTIME</a>
               <a class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--home" href="' . $home_url . '">HOME</a>
             </div>
