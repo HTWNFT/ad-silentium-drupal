@@ -14,7 +14,7 @@
   data-ooh-login-url="{{ path('user.login') }}"
   data-ooh-credits-url="{{ path('ooh_outskirts.credits') }}"
   data-ooh-wind-src="{{ ooh_wind_src }}">
-  <audio class="ooh-ambient-audio" data-ooh-ambient-audio preload="none" loop playsinline>
+  <audio class="ooh-ambient-audio" data-ooh-ambient-audio preload="auto" loop playsinline>
     <source src="{{ ooh_wind_src }}" type="audio/mpeg">
   </audio>
 
@@ -47,7 +47,7 @@
       {% if loops is not empty %}
         {% for loop in loops %}
           <div class="ooh-hero__slide{% if loop.active %} is-active{% endif %}" aria-hidden="{{ loop.active ? 'false' : 'true' }}">
-            <video class="ooh-hero__loop-video" autoplay muted loop playsinline preload="auto">
+            <video class="ooh-hero__video" muted playsinline preload="metadata" data-ooh-homepage-video-disabled="true" aria-hidden="true">
               <source src="{{ loop.url }}" type="video/mp4">
             </video>
           </div>

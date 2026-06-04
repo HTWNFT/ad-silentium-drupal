@@ -7,9 +7,103 @@
           return;
         }
 
+        const ambientAudio = document.querySelector('[data-ooh-ambient-audio]');
+        const isOperationAlphaRoute = window.location.pathname.indexOf('/operation-alpha') !== -1;
+        const ambientRetryEvents = ['click', 'pointerdown', 'keydown', 'touchstart'];
+        let ambientRetryBound = false;
+
+        const isOperationAlphaEntry = (target) => {
+          if (!target || !target.closest) {
+            return false;
+          }
+
+          return !!target.closest('a[href*="operation-alpha"], button[data-ooh-operation-alpha], .ooh-operation-alpha-button, .ooh-enter-operation-alpha, [data-ooh-action="operation-alpha"]');
+        };
+
+        const removeAmbientRetries = () => {
+          if (!ambientRetryBound) {
+            return;
+          }
+          ambientRetryEvents.forEach((eventName) => {
+            document.removeEventListener(eventName, playAmbient);
+          });
+          ambientRetryBound = false;
+        };
+
+        const stopAmbientNow = () => {
+          if (!ambientAudio) {
+            return;
+          }
+
+          removeAmbientRetries();
+          ambientAudio.pause();
+          ambientAudio.currentTime = 0;
+        };
+
+        const playAmbient = (event) => {
+          if (event && isOperationAlphaEntry(event.target)) {
+            stopAmbientNow();
+            return;
+          }
+          if (!ambientAudio || !ambientAudio.paused) {
+            removeAmbientRetries();
+            return;
+          }
+          ambientAudio.volume = 0.18;
+          ambientAudio.play().then(removeAmbientRetries).catch(() => {});
+        };
+
+        const bindAmbientRetries = () => {
+          if (ambientRetryBound) {
+            return;
+          }
+          ambientRetryEvents.forEach((eventName) => {
+            document.addEventListener(eventName, playAmbient, { passive: true });
+          });
+          ambientRetryBound = true;
+        };
+
+        const fadeAmbientAndRoute = (href) => {
+          if (!ambientAudio) {
+            window.location.href = href;
+            return;
+          }
+
+          removeAmbientRetries();
+
+          if (ambientAudio.paused) {
+            window.location.href = href;
+            return;
+          }
+
+          const startVolume = ambientAudio.volume || 0.18;
+          const steps = 8;
+          let step = 0;
+          const fadeTimer = window.setInterval(() => {
+            step += 1;
+            ambientAudio.volume = Math.max(0, startVolume * (1 - step / steps));
+            if (step >= steps) {
+              window.clearInterval(fadeTimer);
+              ambientAudio.pause();
+              ambientAudio.currentTime = 0;
+              ambientAudio.volume = startVolume;
+              window.location.href = href;
+            }
+          }, 30);
+        };
+
+        if (ambientAudio && isOperationAlphaRoute) {
+          stopAmbientNow();
+        }
+        else if (ambientAudio) {
+          bindAmbientRetries();
+          playAmbient();
+        }
+
         // ----- Modal wiring -----
         const openBtn = document.getElementById('ooh-read-prologue');
         const enterBtn = document.querySelector('[data-ooh-action="enter"]');
+        const operationAlphaBtn = document.querySelector('[data-ooh-action="operation-alpha"]');
         const closeBtn = document.getElementById('ooh-close-prologue');
         const modal = document.getElementById('ooh-prologue-modal');
         const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
@@ -60,6 +154,18 @@
         if (openBtn && !openBtn.hasAttribute('disabled') && openBtn.getAttribute('aria-disabled') !== 'true') {
           openBtn.addEventListener('click', openModal);
         }
+        if (operationAlphaBtn) {
+          operationAlphaBtn.addEventListener('click', (event) => {
+            const href = operationAlphaBtn.getAttribute('href');
+
+            if (!href || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+              return;
+            }
+
+            event.preventDefault();
+            fadeAmbientAndRoute(href);
+          });
+        }
         if (closeBtn) {
           closeBtn.addEventListener('click', closeModal);
         }
@@ -78,7 +184,7 @@
         const dotsWrap = root.querySelector('.ooh-hero__dots');
         const prevBtn = root.querySelector('[data-ooh-carousel-prev]');
         const nextBtn = root.querySelector('[data-ooh-carousel-next]');
-        const video = root.querySelector('.ooh-hero__video');
+        const video = root.querySelector('.ooh-hero__video:not([data-ooh-homepage-video-disabled="true"])');
 
         if (!slides.length) {
           if (video) {
