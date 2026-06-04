@@ -1,4 +1,4 @@
-<section class="ooh-operation-alpha" data-ooh-operation-alpha>
+<section class="ooh-operation-alpha ooh-operation-alpha--intro-stage" data-ooh-operation-alpha>
   <div class="ooh-operation-alpha__intro" data-ooh-operation-alpha-intro role="dialog" aria-modal="true" aria-labelledby="ooh-operation-alpha-intro-title">
     <div class="ooh-operation-alpha__intro-card">
       <p class="ooh-operation-alpha__eyebrow">OPERATION ALPHA</p>
@@ -28,19 +28,27 @@
     </form>
   </div>
 
-  <div class="ooh-operation-alpha__shell" data-ooh-operation-alpha-control>
+    <div class="ooh-operation-alpha__shell" data-ooh-operation-alpha-control>
     <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
-      <a class="ooh-operation-alpha__cta-link" href="/">RETURN TO LAUNCH</a>
+      <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha') }}">RETURN TO LAUNCH</a>
       <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">PURCHASE CREDITS</a>
       <a class="ooh-operation-alpha__cta-link" href="{{ path('user.login') }}">LOGIN / ACCOUNT</a>
     </nav>
-    <h2 class="ooh-operation-alpha__title">OPERATION ALPHA CONTROL</h2>
+    <h2 class="ooh-operation-alpha__title">SIGNAL ACQUISITION</h2>
     <p class="ooh-operation-alpha__copy" data-ooh-alpha-runtime-copy>Operation Alpha runtime pending.</p>
 
     <section class="ooh-operation-alpha__activation" aria-label="Operation Alpha runtime activation">
       <span class="ooh-operation-alpha__activation-kicker">LINK STATUS</span>
-      <p class="ooh-operation-alpha__activation-line" data-ooh-alpha-activation-status>Shell dormant. Awaiting unseen-hand confirmation.</p>
-      <button class="ooh-operation-alpha__activation-button" type="button" data-ooh-alpha-activate>INITIALIZE FIELD</button>
+      <p class="ooh-operation-alpha__activation-line" data-ooh-alpha-activation-status>Choose signal before field initialization.</p>
+      <div class="ooh-operation-alpha__selected-signal" data-ooh-alpha-selected-signal hidden>
+        <span class="ooh-operation-alpha__selected-signal-kicker">ACTIVE SIGNAL</span>
+        <strong class="ooh-operation-alpha__selected-signal-name" data-ooh-alpha-selected-signal-title>Signal pending</strong>
+        <p class="ooh-operation-alpha__selected-signal-copy" data-ooh-alpha-selected-signal-copy>Signal selection required.</p>
+      </div>
+      <div class="ooh-operation-alpha__activation-actions">
+        <a class="ooh-operation-alpha__signal-gate is-signal-gate-ready" href="{{ path('ooh_outskirts.operation_alpha_nested_playlists') }}" aria-disabled="false" data-ooh-alpha-signal-gate>SELECT SIGNAL</a>
+        <button class="ooh-operation-alpha__activation-button is-oa-control-disabled" type="button" disabled data-ooh-alpha-activate>INITIALIZE FIELD</button>
+      </div>
     </section>
 
     <section class="ooh-operation-alpha__command-console" aria-label="Unseen Hand command console">
@@ -49,11 +57,11 @@
         <strong class="ooh-operation-alpha__command-state" data-ooh-alpha-command-state>DIRECTIVE CHANNEL IDLE</strong>
       </div>
       <div class="ooh-operation-alpha__command-grid" data-ooh-alpha-command-console>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="hold">HOLD POSITION</button>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="advance">ADVANCE</button>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="extract">EXTRACT</button>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="signal">DEPLOY SIGNAL</button>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="divert">DIVERT</button>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="hold">WAIT</button>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="advance">TAKE A RISK</button>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="extract">GET THEM OUT</button>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="signal">GATHER INTEL</button>
+        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="divert">CHANGE THE PLAN</button>
       </div>
       <p class="ooh-operation-alpha__command-ack" data-ooh-alpha-command-ack aria-live="polite">Awaiting directive.</p>
     </section>
@@ -69,9 +77,99 @@
         <span class="ooh-operation-alpha__actor-meta" data-ooh-alpha-actor-faction>Faction unresolved</span>
         <span class="ooh-operation-alpha__actor-meta" data-ooh-alpha-actor-role>Role unresolved</span>
         <span class="ooh-operation-alpha__actor-meta" data-ooh-alpha-actor-style>Transmission style unresolved</span>
-        <span class="ooh-operation-alpha__actor-meta" data-ooh-alpha-actor-color>Path color unresolved</span>
+        <span class="ooh-operation-alpha__actor-meta" data-ooh-alpha-actor-color hidden>Path color unresolved</span>
         <p class="ooh-operation-alpha__actor-copy" data-ooh-alpha-actor-copy>Transmission awaiting field activation.</p>
       </div>
+    </section>
+
+    <section class="ooh-operation-alpha__intro-storyblock" data-ooh-alpha-intro-storyblock hidden aria-live="polite">
+      <div class="ooh-operation-alpha__intro-storyhead">
+        <span class="ooh-operation-alpha__intro-story-kicker">PHASE 1 // SIGNAL ACQUISITION</span>
+        <h3 class="ooh-operation-alpha__intro-story-title" data-ooh-alpha-intro-story-title>Intro signal pending</h3>
+        <p class="ooh-operation-alpha__intro-story-copy" data-ooh-alpha-intro-story-copy>Choose a signal, then initialize the field to open the first storyblock.</p>
+      </div>
+      <div class="ooh-operation-alpha__intro-duel" aria-label="Intro protagonist and antagonist">
+        <article class="ooh-operation-alpha__intro-card ooh-operation-alpha__intro-card--protagonist" data-ooh-alpha-intro-protagonist>
+          <span class="ooh-operation-alpha__intro-card-kicker">PROTAGONIST // RONIN</span>
+          <div class="ooh-operation-alpha__intro-card-body">
+            <img class="ooh-operation-alpha__intro-card-image" alt="" data-ooh-alpha-intro-protagonist-image hidden>
+            <div>
+              <strong class="ooh-operation-alpha__intro-card-name" data-ooh-alpha-intro-protagonist-name>Ronin unresolved</strong>
+              <span class="ooh-operation-alpha__intro-card-meta" data-ooh-alpha-intro-protagonist-path>Path unresolved</span>
+              <span class="ooh-operation-alpha__intro-card-meta" data-ooh-alpha-intro-protagonist-faction>Faction unresolved</span>
+              <span class="ooh-operation-alpha__intro-card-meta" data-ooh-alpha-intro-protagonist-role>Role unresolved</span>
+              <span class="ooh-operation-alpha__intro-card-meta" data-ooh-alpha-intro-protagonist-style>Transmission unresolved</span>
+            </div>
+          </div>
+        </article>
+        <article class="ooh-operation-alpha__intro-card ooh-operation-alpha__intro-card--antagonist" data-ooh-alpha-intro-antagonist>
+          <span class="ooh-operation-alpha__intro-card-kicker">ANTAGONIST // GENEALORD</span>
+          <div class="ooh-operation-alpha__intro-card-body">
+            <img class="ooh-operation-alpha__intro-card-image" alt="" data-ooh-alpha-intro-antagonist-image hidden>
+            <div>
+              <strong class="ooh-operation-alpha__intro-card-name" data-ooh-alpha-intro-antagonist-name>Genealord unresolved</strong>
+              <span class="ooh-operation-alpha__intro-card-meta" data-ooh-alpha-intro-antagonist-path>Path unresolved</span>
+              <span class="ooh-operation-alpha__intro-card-meta" data-ooh-alpha-intro-antagonist-faction>Faction unresolved</span>
+              <span class="ooh-operation-alpha__intro-card-meta" data-ooh-alpha-intro-antagonist-role>Role unresolved</span>
+              <span class="ooh-operation-alpha__intro-card-meta" data-ooh-alpha-intro-antagonist-style>Transmission unresolved</span>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="ooh-operation-alpha__intro-catalyst">
+        <span class="ooh-operation-alpha__intro-card-kicker">CATALYST / STIMULUS</span>
+        <p class="ooh-operation-alpha__intro-story-copy" data-ooh-alpha-intro-catalyst>A mutant pressure source disturbs the Genealord field and forces the Ronin toward the corridor.</p>
+        <p class="ooh-operation-alpha__intro-story-copy" data-ooh-alpha-intro-pressure>Starting pressure pending.</p>
+        <p class="ooh-operation-alpha__intro-story-copy" data-ooh-alpha-intro-debate>DIRECTIVE REQUEST: Decide whether the mission outweighs the cost.</p>
+      </div>
+      <div class="ooh-operation-alpha__intro-summary" data-ooh-alpha-intro-summary>
+        <p>FIELD INITIALIZED / SIGNAL REQUIRED / RONIN WAITING</p>
+        <p>GENEALORD PRESSURE / MUTANT STIMULUS / CORRIDOR OPEN</p>
+        <p>FIRST CHOICE / UNIQUE CHAIN / LEVEL ONE PENDING</p>
+      </div>
+      <section class="ooh-operation-alpha__intro-decision-flow" data-ooh-alpha-intro-flow>
+        <div class="ooh-operation-alpha__intro-flow-head">
+          <span class="ooh-operation-alpha__intro-card-kicker">DIRECTIVES LOCKED</span>
+          <strong data-ooh-alpha-intro-counter>SELECTED: 0 / REQUIRED: 3</strong>
+          <span data-ooh-alpha-intro-status>STAGE LOCKED</span>
+        </div>
+        <div class="ooh-operation-alpha__intro-beats" data-ooh-alpha-intro-beats aria-label="Signal acquisition decisions"></div>
+        <div class="ooh-operation-alpha__intro-consequence" data-ooh-alpha-intro-consequence>
+          <span class="ooh-operation-alpha__intro-card-kicker">NARRATIVE CONSEQUENCE</span>
+          <p>Awaiting Unseen Hand directive.</p>
+        </div>
+        <div class="ooh-operation-alpha__intro-consequence" data-ooh-alpha-intro-chain>
+          <span class="ooh-operation-alpha__intro-card-kicker">CHAIN OF CONSEQUENCE</span>
+          <p>ACTION: Awaiting decision.</p>
+          <p>REACTION: Field quiet.</p>
+          <p>CONSEQUENCE: No change recorded.</p>
+          <p>CARRY-FORWARD EFFECT: Risk unresolved.</p>
+        </div>
+      </section>
+      <div class="ooh-operation-alpha__presence-choice-matrix" data-ooh-alpha-presence-choice-matrix hidden></div>
+      <div class="ooh-operation-alpha__intro-next-actions">
+        <a class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--next is-oa-next-locked" href="{{ path('ooh_outskirts.operation_alpha_level_1') }}" aria-disabled="true" data-ooh-alpha-next-level>NEXT STAGE</a>
+      </div>
+      <section class="ooh-operation-alpha__transmission-popup" data-ooh-alpha-transmission-popup hidden aria-hidden="true">
+        <div class="ooh-operation-alpha__transmission-panel">
+          <div class="ooh-operation-alpha__transmission-identity" data-ooh-alpha-transmission-identity hidden>
+            <img class="ooh-operation-alpha__transmission-portrait" alt="" data-ooh-alpha-transmission-portrait hidden>
+            <strong data-ooh-alpha-transmission-name></strong>
+            <span data-ooh-alpha-transmission-faction></span>
+            <span data-ooh-alpha-transmission-role></span>
+            <p data-ooh-alpha-transmission-hook></p>
+          </div>
+          <div>
+            <span class="ooh-operation-alpha__intro-card-kicker">UNSEEN HAND TRANSMISSION</span>
+            <h3 data-ooh-alpha-transmission-title>Signal acquisition complete.</h3>
+            <p data-ooh-alpha-transmission-summary>The route remains open. The next phase will demand more.</p>
+            <p data-ooh-alpha-transmission-gain>GAIN: Operational clarity.</p>
+            <p data-ooh-alpha-transmission-loss>LOSS: Signal certainty.</p>
+            <p data-ooh-alpha-transmission-danger>DANGER: Enemy response inbound.</p>
+            <a class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--next is-oa-next-ready" href="{{ path('ooh_outskirts.operation_alpha_level_1') }}" data-ooh-alpha-transmission-next>NEXT</a>
+          </div>
+        </div>
+      </section>
     </section>
 
     <section class="ooh-operation-alpha__payload" data-ooh-alpha-operational-payload hidden aria-live="polite" aria-label="Unseen Hand operational payload">
@@ -86,7 +184,7 @@
           <strong class="ooh-operation-alpha__payload-value" data-ooh-alpha-payload-faction>Pending</strong>
         </div>
         <div class="ooh-operation-alpha__payload-cell">
-          <span class="ooh-operation-alpha__payload-label">PORTRAIT URL</span>
+          <span class="ooh-operation-alpha__payload-label">PORTRAIT</span>
           <strong class="ooh-operation-alpha__payload-value ooh-operation-alpha__payload-value--path" data-ooh-alpha-payload-portrait>Pending</strong>
         </div>
         <div class="ooh-operation-alpha__payload-cell">
@@ -112,7 +210,7 @@
         <strong class="ooh-operation-alpha__active-channel-name" data-ooh-alpha-channel-name>Pending</strong>
         <span class="ooh-operation-alpha__active-channel-mood" data-ooh-alpha-channel-mood>Signal mood pending</span>
         <span class="ooh-operation-alpha__active-channel-status">STATUS: AVAILABLE</span>
-        <a class="ooh-operation-alpha__channel-link" href="#" target="_blank" rel="noopener noreferrer" data-ooh-alpha-channel-link hidden>OPEN CHANNEL</a>
+        <a class="ooh-operation-alpha__channel-link" href="{{ path('ooh_outskirts.operation_alpha_nested_playlists') }}" data-ooh-alpha-channel-link hidden>SELECT SIGNAL</a>
       </div>
       <div class="ooh-operation-alpha__consequence" data-ooh-alpha-operational-consequence>
         <span class="ooh-operation-alpha__consequence-kicker">OPERATIONAL CONSEQUENCE</span>
@@ -134,11 +232,11 @@
       <div class="ooh-operation-alpha__director" data-ooh-alpha-director-layer>
         <span class="ooh-operation-alpha__director-kicker">DIRECTOR ACTION</span>
         <div class="ooh-operation-alpha__director-actions" aria-label="Unseen Hand director actions">
-          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="observe">OBSERVE</button>
-          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="hold-channel">HOLD CHANNEL</button>
-          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="escalate-pressure">ESCALATE PRESSURE</button>
-          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="divert-asset">DIVERT ASSET</button>
-          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="authorize-extraction">AUTHORIZE EXTRACTION</button>
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="observe">GATHER INTEL</button>
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="hold-channel">WAIT</button>
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="escalate-pressure">TAKE A RISK</button>
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="divert-asset">CHANGE THE PLAN</button>
+          <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="authorize-extraction">GET THEM OUT</button>
         </div>
         <div class="ooh-operation-alpha__director-report" data-ooh-alpha-director-report hidden aria-live="polite">
           <span class="ooh-operation-alpha__director-label">DIRECTOR ACTION</span>
@@ -209,7 +307,7 @@
         <strong class="ooh-operation-alpha__mission-title" data-ooh-alpha-mission-title>Mission seed pending</strong>
         <span class="ooh-operation-alpha__mission-source" data-ooh-alpha-mission-source>MISSION SOURCE: unresolved</span>
         <p class="ooh-operation-alpha__mission-brief" data-ooh-alpha-mission-brief>Awaiting operational situation.</p>
-        <button class="ooh-operation-alpha__mission-cycle" type="button" data-ooh-alpha-mission-cycle>CYCLE SEED</button>
+        <button class="ooh-operation-alpha__mission-cycle" type="button" data-ooh-alpha-mission-cycle>BATTLEFIELD PRESENCE BUILDING</button>
       </div>
       <div class="ooh-operation-alpha__result" data-ooh-alpha-result hidden>
         <span class="ooh-operation-alpha__result-kicker">OPERATION RESULT</span>
@@ -223,7 +321,7 @@
       <span class="ooh-operation-alpha__access-kicker">ACCESS STATUS</span>
       <p class="ooh-operation-alpha__access-line">Runtime and credit access are staged for the next shell.</p>
       <div class="ooh-operation-alpha__access-actions">
-        <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.operation_alpha_nested_playlists') }}">ENTER ACTIVE RUNTIME</a>
+        <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.operation_alpha_nested_playlists') }}">SELECT SIGNAL</a>
         <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">PURCHASE CREDITS</a>
         <a class="ooh-operation-alpha__access-button" href="{{ path('user.login') }}">LOGIN / ACCOUNT</a>
       </div>
