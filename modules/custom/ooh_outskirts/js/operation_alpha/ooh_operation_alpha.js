@@ -1,11 +1,12 @@
 (function () {
   'use strict';
 
-  console.log('OA-206 Operation Alpha runtime loaded');
+  console.log('OA-211 Operation Alpha decision consequence runtime loaded');
 
   var storageKey = 'ooh_operation_alpha_intro_seen_v1';
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
+  var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
   var scenarioDelayMs = 1500;
   var actorRegistryPaths = [
     '/operation_alpha/oa_actor_registry.csv',
@@ -277,7 +278,7 @@
     },
     {
       slug: 'system-reset-free',
-      label: 'System Reset Free',
+      label: 'System Reset (Free)',
       playlistId: '0cZlbYVRnkxwViBJPw8oDR',
       spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=d10eef44e3f54078',
       moodTags: 'Abandoned Systems • Collapse • Aftermath'
@@ -470,41 +471,41 @@
   ];
 
   var runtimeStoryBeats = [
-    'Opening Image',
-    'Theme Stated',
-    'Setup',
-    'Catalyst',
-    'Debate',
-    'Break Into Two',
-    'B Story Signal',
-    'Fun and Games',
-    'Midpoint',
-    'Pressure Closes In',
-    'All Is Lost',
-    'Dark Night of the Signal',
-    'Break Into Three',
-    'Finale',
-    'Final Image'
+    'Channel Selected',
+    'Field Initialized',
+    'Primary Ronin Appears',
+    'Genealord Appears',
+    'Catalyst Event',
+    'Directive Request',
+    'Field Pressure',
+    'Ally Introduced',
+    'Enemy Movement',
+    'Escalation Cascade',
+    'Signal Failure',
+    'Situation Report',
+    'Final Contact',
+    'Last Light',
+    'Final Debrief'
   ];
 
   var runtimePhaseSpine = [
     {
-      key: 'setup',
-      label: 'SETUP',
-      requiredPressure: 3,
+      key: 'intro',
+      label: 'PHASE 1 // SIGNAL ACQUISITION',
+      requiredPressure: 1,
       beatStart: 0,
       beatEnd: 4
     },
     {
-      key: 'confrontation',
-      label: 'CONFRONTATION',
-      requiredPressure: 4,
+      key: 'character',
+      label: 'PHASE 2 // FIELD PRESSURE',
+      requiredPressure: 2,
       beatStart: 5,
       beatEnd: 9
     },
     {
-      key: 'collapse',
-      label: 'COLLAPSE',
+      key: 'crisis',
+      label: 'PHASE 3 // ESCALATION CASCADE',
       requiredPressure: 3,
       beatStart: 10,
       beatEnd: 14
@@ -536,21 +537,21 @@
   ];
 
   var runtimeBeatAarNames = [
-    'Opening Image',
-    'Theme Stated',
-    'Set-Up',
-    'Catalyst',
-    'Debate',
-    'Break Into Two',
-    'B Story',
-    'Fun and Games',
-    'Midpoint',
-    'Bad Guys Close In',
-    'All Is Lost',
-    'Dark Night',
-    'Break Into Three',
-    'Finale',
-    'Final Image'
+    'Channel Selected',
+    'Field Initialized',
+    'Primary Ronin Appears',
+    'Genealord Appears',
+    'Catalyst Event',
+    'Threat Escalation',
+    'Directive Request',
+    'Field Pressure',
+    'Enemy Movement',
+    'Escalation Cascade',
+    'Signal Failure',
+    'Situation Report',
+    'Final Contact',
+    'Last Light',
+    'Final Debrief'
   ];
 
   var runtimePressureActions = [
@@ -581,7 +582,7 @@
   ];
 
   var runtimePresenceChoiceMatrix = {
-    setup: [
+    intro: [
       {
         label: 'SHADOW THE RONIN',
         pressureDelta: 0,
@@ -607,7 +608,7 @@
         narrativeEffect: 'Genealord intent becomes clearer, but exposure rises.'
       }
     ],
-    confrontation: [
+    character: [
       {
         label: 'BREAK THE PURSUIT',
         pressureDelta: -1,
@@ -633,7 +634,7 @@
         narrativeEffect: 'Extraction opens early, but the route burns bright.'
       }
     ],
-    collapse: [
+    crisis: [
       {
         label: 'SAVE THE RONIN',
         pressureDelta: 1,
@@ -662,14 +663,14 @@
   };
 
   var runtimeCharacterTurns = {
-    confrontation: [
+    character: [
       'A Ronin complication changes the route.',
       'Mutant escalation floods the corridor.',
       'The Genealord makes a counter-move.',
       'A hidden ally opens a brief side path.',
       'A false route begins calling back.'
     ],
-    collapse: [
+    crisis: [
       'The Genealord has located the route.',
       'Mutants have found the Ronin trail.',
       'The extraction window is compromised.',
@@ -736,16 +737,14 @@
     }
   };
 
-  // SAVE THE CAT RULE:
-  // Use screenplay structure internally.
-  // Never expose screenplay structure directly.
-  // Never present numbered beats.
-  // Never require scrolling through story nodes.
-  // Never make the UI feel like a screenplay worksheet.
-  // The player experiences only SETUP, CONFRONTATION, COLLAPSE.
-  // The engine may internally track Opening, Catalyst, Debate,
-  // Midpoint, Dark Night, and Finale.
-  // The player is the Unseen Hand, Force Controller, screenwriter,
+  // OPERATION ALPHA NARRATIVE RULE:
+  // Keep story structure internal.
+  // Never expose screenplay terminology directly.
+  // Never present numbered beat worksheets.
+  // Never require scrolling through raw story nodes.
+  // The player experiences only signal acquisition, field pressure,
+  // escalation, situation report, last light, and debrief.
+  // The player is the Unseen Hand, Karma Controller, screenwriter,
   // and director. A director watches a scene unfold and nudges it.
 
   var consequenceRegistry = [
@@ -1150,10 +1149,14 @@
       button.type = 'button';
       button.textContent = action.label;
       button.addEventListener('click', function () {
+        if (button.disabled) {
+          return;
+        }
         triggerIntervention(root, scenario, buttonIndex);
       });
       interventions.appendChild(button);
     });
+    syncRuntimeControlLocks(root, root.oohAlphaRuntimeState);
   }
 
   function containedAssetPath(path) {
@@ -1274,6 +1277,31 @@
     return (actor.missionUsage || '').trim().toLowerCase() === usage.toLowerCase();
   }
 
+  function actorLooksLikeImageReference(value) {
+    return /\.(?:webp|png|jpe?g|gif|avif)(?:[?#].*)?$/i.test((value || '').trim()) || /[\\/]/.test((value || '').trim());
+  }
+
+  function actorPortraitValueToUrl(value) {
+    var normalizedPortrait = (value || '').trim();
+
+    if (!normalizedPortrait || !actorLooksLikeImageReference(normalizedPortrait)) {
+      return '';
+    }
+    if (/^https?:\/\//i.test(normalizedPortrait)) {
+      return normalizedPortrait;
+    }
+
+    normalizedPortrait = normalizedPortrait.replace(/\\/g, '/');
+    normalizedPortrait = normalizedPortrait.replace(/^[a-z]:/i, '');
+    normalizedPortrait = normalizedPortrait.replace(/^.*\/operation_alpha\//i, '/operation_alpha/');
+
+    if (normalizedPortrait.charAt(0) === '/') {
+      return operationAlphaRootPath(normalizedPortrait);
+    }
+
+    return operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/' + normalizedPortrait);
+  }
+
   function actorRegistrySlug(value) {
     return (value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
   }
@@ -1312,25 +1340,11 @@
   }
 
   function actorExplicitPortraitUrl(actor) {
-    var portrait = (actor.portrait || '').trim();
-    var normalizedPortrait;
+    return actorPortraitValueToUrl(actor.portrait);
+  }
 
-    if (!portrait || !/\.(?:webp|png|jpe?g|gif|avif)(?:[?#].*)?$/i.test(portrait)) {
-      return '';
-    }
-    if (/^https?:\/\//i.test(portrait)) {
-      return portrait;
-    }
-
-    normalizedPortrait = portrait.replace(/\\/g, '/');
-    normalizedPortrait = normalizedPortrait.replace(/^[a-z]:/i, '');
-    normalizedPortrait = normalizedPortrait.replace(/^.*\/operation_alpha\//i, '/operation_alpha/');
-
-    if (normalizedPortrait.charAt(0) === '/') {
-      return operationAlphaRootPath(normalizedPortrait);
-    }
-
-    return operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/' + normalizedPortrait);
+  function actorOriginalFilePortraitUrl(actor) {
+    return actorPortraitValueToUrl(actor.originalFile);
   }
 
   function actorPortraitFilename(pathSlug, factionSlug, nameSlug) {
@@ -1367,6 +1381,9 @@
     }
 
     candidates.push(operationAlphaRootPath('/operation_alpha/generated_actor_registry/portraits/' + actorPortraitFilename(pathSlug, factionSlug, nameSlug)));
+    if (actorOriginalFilePortraitUrl(actor)) {
+      candidates.push(actorOriginalFilePortraitUrl(actor));
+    }
     candidates.push(operationAlphaRootPath('/operation_alpha/portraits/' + actorPortraitFilename(pathSlug, factionSlug, nameSlug)));
 
     return candidates;
@@ -1392,7 +1409,7 @@
 
   function actorTransmissionCopy(actor) {
     var style = (actor.transmissionStyle || '').toLowerCase();
-    var name = actor.portrait || actor.name || 'Unknown actor';
+    var name = actorDisplayName(actor);
 
     if (style.indexOf('brutality') !== -1 || style.indexOf('threat') !== -1) {
       return name + ' pushes a violent signal through the field. The channel bends, but does not break.';
@@ -1617,12 +1634,13 @@
 
   function setDirectorAction(root, actionKey) {
     var payload = root.oohAlphaOperationalPayload;
+    var actionButton = root.querySelector('[data-ooh-alpha-director-action="' + actionKey + '"]');
     var report = root.querySelector('[data-ooh-alpha-director-report]');
     var choice = root.querySelector('[data-ooh-alpha-director-choice]');
     var reaction = root.querySelector('[data-ooh-alpha-director-reaction]');
     var label = directorActionLabels[actionKey] || 'OBSERVE';
 
-    if (!payload || !report || !choice || !reaction) {
+    if (!payload || !report || !choice || !reaction || (actionButton && actionButton.disabled)) {
       return;
     }
 
@@ -1645,6 +1663,9 @@
   function initDirectorLayer(root) {
     root.querySelectorAll('[data-ooh-alpha-director-action]').forEach(function (button) {
       button.addEventListener('click', function () {
+        if (button.disabled) {
+          return;
+        }
         setDirectorAction(root, button.getAttribute('data-ooh-alpha-director-action'));
       });
     });
@@ -1718,8 +1739,8 @@
       faction.textContent = payload.faction;
     }
     if (portrait) {
-      portrait.textContent = payload.portraitUrl;
-      portrait.setAttribute('title', payload.portraitUrl);
+      portrait.textContent = payload.portraitUrl ? 'PORTRAIT: LOADED' : 'PORTRAIT: PENDING';
+      portrait.setAttribute('title', payload.portraitUrl ? 'Portrait loaded' : 'Portrait pending');
     }
     if (mission) {
       mission.textContent = payload.mission;
@@ -1743,13 +1764,13 @@
       channelMood.textContent = payload.channelMood || 'Mood tags unavailable';
     }
     if (channelLink && payload.playlistUrl) {
-      channelLink.href = operationAlphaPlaylistsPath();
-      channelLink.textContent = 'CHOOSE SIGNAL';
+      channelLink.href = routePath('/operation-alpha/oaplay/playlists');
+      channelLink.textContent = 'SELECT SIGNAL';
       channelLink.removeAttribute('target');
       channelLink.removeAttribute('rel');
       channelLink.removeAttribute('aria-disabled');
       channelLink.hidden = false;
-      channelLink.setAttribute('aria-label', 'Choose Operation Alpha signal');
+      channelLink.setAttribute('aria-label', 'Select Operation Alpha signal');
     }
     else if (channelLink) {
       channelLink.removeAttribute('href');
@@ -1762,13 +1783,13 @@
       consequenceStatus.textContent = payload.consequence.status;
     }
     if (consequenceSummary && payload.consequence) {
-      consequenceSummary.textContent = root.oohAlphaRuntimeState ? consequenceIncidentSummary(root.oohAlphaRuntimeState) : payload.consequence.summary;
+      consequenceSummary.textContent = payload.consequence.summary;
     }
     if (narrativeCopy) {
       narrativeCopy.textContent = root.oohAlphaRuntimeState && root.oohAlphaRuntimeState.scene ? 'SUBJECT: ' + root.oohAlphaRuntimeState.scene.subject + ' // OPPOSING FORCE: ' + root.oohAlphaRuntimeState.scene.opposingForce + ' // FORCE MULTIPLIER: ' + root.oohAlphaRuntimeState.scene.forceMultiplier + ' // CATALYST: ' + root.oohAlphaRuntimeState.scene.catalyst : payload.narrativeSeed;
     }
     if (root.oohAlphaRuntimeState) {
-      renderOppositionReadout(root, root.oohAlphaRuntimeState);
+      renderIntroStoryBlock(root, root.oohAlphaRuntimeState);
       renderBattlefieldGate(root, root.oohAlphaRuntimeState);
     }
   }
@@ -1842,16 +1863,13 @@
     if (root.oohAlphaSelectedActor) {
       renderActorTransmission(root, root.oohAlphaSelectedActor);
       renderOperationalPayload(root, root.oohAlphaSelectedActor);
-      if (root.oohAlphaStoryState) {
-        renderOa206Stage(root);
-      }
       return;
     }
 
     var eligibleActors = (root.oohAlphaActorRegistry || []).filter(function (actor) {
       return actorMissionUsage(actor, 'Operation Alpha');
     });
-    var roninActors = eligibleActors.filter(function (actor) {
+    var roninActors = (root.oohAlphaActorRegistry || []).filter(function (actor) {
       return (actor.faction || '').toLowerCase() === 'ronin';
     });
     var subjectPool = roninActors.length ? roninActors : eligibleActors;
@@ -1865,9 +1883,6 @@
     root.oohAlphaSelectedActor = selectedActor;
     renderActorTransmission(root, selectedActor);
     renderOperationalPayload(root, selectedActor);
-    if (root.oohAlphaStoryState) {
-      renderOa206Stage(root);
-    }
     window.console.log('Operation Alpha actor selected:', selectedActor.portrait || selectedActor.name || 'Unknown actor');
   }
 
@@ -2073,7 +2088,9 @@
   }
 
   function actorDisplayName(actor) {
-    return actor && (actor.portrait || actor.name) ? (actor.portrait || actor.name) : 'Unknown subject';
+    var portraitLabel = actor && actor.portrait && !actorLooksLikeImageReference(actor.portrait) ? actor.portrait : '';
+
+    return actor && (portraitLabel || actor.name) ? (portraitLabel || actor.name) : 'Unknown subject';
   }
 
   function actorSubjectLine(actor) {
@@ -2119,6 +2136,866 @@
     }
 
     return 'Mutant pressure cell';
+  }
+
+
+  function registryActorsByFaction(registry, faction, exceptActor) {
+    return (registry || []).filter(function (candidate) {
+      var sameName = actorDisplayName(candidate) === actorDisplayName(exceptActor);
+
+      return !sameName && (candidate.faction || '').toLowerCase() === faction;
+    });
+  }
+
+  function pickRegistryActor(registry, faction, exceptActor) {
+    var matches = registryActorsByFaction(registry, faction, exceptActor);
+
+    return matches.length ? runtimePick(matches) : null;
+  }
+
+  function storyCastFallback(label, name, faction, role) {
+    return {
+      storyLabel: label,
+      name: name,
+      portrait: name,
+      faction: faction,
+      role: role,
+      path: 'Unresolved'
+    };
+  }
+
+  function buildStoryCast(actor, registry) {
+    var protagonist = actor && (actor.faction || '').toLowerCase() === 'ronin' ? actor : pickRegistryActor(registry, 'ronin', actor);
+    var ally = protagonist || storyCastFallback('ALLY', 'Ronin courier', 'Ronin', 'route asset');
+    var opposition = pickRegistryActor(registry, 'genealord', actor) || storyCastFallback('OPPOSITION', 'Genealord command voice', 'Genealord', 'pressure authority');
+    var thirdForce = pickRegistryActor(registry, 'mutant', actor) || storyCastFallback('THIRD FORCE', 'Mutant pressure cell', 'Mutant', 'corridor disruptor');
+
+    return {
+      actor: protagonist || actor || storyCastFallback('ACTOR', 'Unknown actor', 'Unresolved', 'field subject'),
+      ally: ally,
+      opposition: opposition,
+      thirdForce: thirdForce,
+      cell: [ally, opposition, thirdForce]
+    };
+  }
+
+  function storyCastName(actor) {
+    return actorDisplayName(actor || {}) || 'Unknown actor';
+  }
+
+  function storyCastRole(actor) {
+    return [actor && actor.faction, actor && actor.role].filter(Boolean).join(' / ') || 'field presence';
+  }
+
+  function storyBlockLabel(state) {
+    if (!state || state.outcomeState !== 'PENDING') {
+      return 'BLOCK 4 // FINAL AAR POPUP';
+    }
+
+    return runtimeVisiblePhase(state);
+  }
+
+  function storyEventCardCopy(state, slot) {
+    var cast = state.storyCast || {};
+    var scene = state.scene || {};
+    var names = {
+      actor: storyCastName(cast.actor),
+      ally: storyCastName(cast.ally),
+      opposition: storyCastName(cast.opposition),
+      thirdForce: storyCastName(cast.thirdForce)
+    };
+    var lines = {
+      actor: names.actor + ' carries ' + (scene.mission ? scene.mission.label : 'the operation') + ' through ' + (state.currentCondition || 'unstable signal') + '.',
+      ally: names.ally + ' enters through a side route and gives the Unseen Hand a human stake.',
+      opposition: names.opposition + ' answers the player action with command pressure.',
+      thirdForce: names.thirdForce + ' shifts the corridor and makes the next choice costlier.'
+    };
+
+    return lines[slot] || 'The field records a new memory hook.';
+  }
+
+  function eventCardPortrait(actor) {
+    var candidates = actorPortraitCandidates(actor || {});
+
+    return candidates[0] || '';
+  }
+
+  function setIntroStoryImage(root, selector, actor) {
+    var image = root.querySelector(selector);
+    var portrait = eventCardPortrait(actor);
+
+    if (!image) {
+      return;
+    }
+    if (portrait) {
+      image.src = portrait;
+      image.hidden = false;
+    }
+    else {
+      image.hidden = true;
+    }
+  }
+
+  function setIntroStoryText(root, prefix, actor) {
+    var name = root.querySelector('[data-ooh-alpha-intro-' + prefix + '-name]');
+    var path = root.querySelector('[data-ooh-alpha-intro-' + prefix + '-path]');
+    var faction = root.querySelector('[data-ooh-alpha-intro-' + prefix + '-faction]');
+    var role = root.querySelector('[data-ooh-alpha-intro-' + prefix + '-role]');
+    var style = root.querySelector('[data-ooh-alpha-intro-' + prefix + '-style]');
+
+    if (name) {
+      name.textContent = storyCastName(actor);
+    }
+    if (path) {
+      path.textContent = 'PATH: ' + (actor && actor.path ? actor.path : 'unresolved');
+    }
+    if (faction) {
+      faction.textContent = 'FACTION: ' + (actor && actor.faction ? actor.faction : 'unresolved');
+    }
+    if (role) {
+      role.textContent = 'ROLE: ' + (actor && actor.role ? actor.role : 'unresolved');
+    }
+    if (style) {
+      style.textContent = 'TRANSMISSION: ' + (actor && actor.transmissionStyle ? actor.transmissionStyle : 'unresolved');
+    }
+  }
+
+  function defaultOAChainState() {
+    return {
+      pressure: 0,
+      trust: 0,
+      enemyAwareness: 0,
+      signalIntegrity: 100,
+      chain: [],
+      introChoices: [],
+      level1Choices: [],
+      level2Choices: [],
+      level4Choices: [],
+      activePortrait: '',
+      activeIdentity: null,
+      narrativeSelections: {},
+      narrativeTokens: {},
+      finalDecision: null
+    };
+  }
+
+  function readOAChainState() {
+    try {
+      return Object.assign(defaultOAChainState(), JSON.parse(window.localStorage.getItem(oaChainStateKey) || '{}'));
+    }
+    catch (e) {
+      return defaultOAChainState();
+    }
+  }
+
+  function writeOAChainState(state) {
+    window.localStorage.setItem(oaChainStateKey, JSON.stringify(state));
+  }
+
+  function narrativeLibrarySection(sectionName) {
+    var library = window.OA_NARRATIVE_LIBRARY || {};
+    return Array.isArray(library[sectionName]) ? library[sectionName] : [];
+  }
+
+  function operationSeed(state) {
+    var source = [state && state.runId, state && state.currentCondition, state && state.mission && state.mission.label].filter(Boolean).join('|') || 'operation-alpha';
+    return source.split('').reduce(function (sum, character) {
+      return sum + character.charCodeAt(0);
+    }, 0);
+  }
+
+  function narrativeEntry(state, key, sectionName, offset) {
+    var section = narrativeLibrarySection(sectionName);
+    var storedId = state.narrativeSelections && state.narrativeSelections[key];
+    var stored = section.filter(function (entry) { return entry.id === storedId; })[0];
+    var selected;
+
+    if (!section.length) {
+      return null;
+    }
+    if (stored) {
+      return stored;
+    }
+    state.narrativeSelections = state.narrativeSelections || {};
+    selected = section[(operationSeed(state) + (offset || 0)) % section.length];
+    state.narrativeSelections[key] = selected.id;
+    return selected;
+  }
+
+  function narrativeTokenValue(tokens, key, fallback) {
+    return tokens && tokens[key] ? tokens[key] : fallback;
+  }
+
+  function fillNarrativeText(text, tokens) {
+    var safeTokens = tokens || {};
+    var fallback = {
+      ronin: 'the Ronin',
+      genealord: 'the Genealord',
+      mutant: 'mutant pressure',
+      ally: 'the ally',
+      enemy: 'the enemy',
+      thirdForce: 'the third force',
+      route: 'the route',
+      signal: 'the signal',
+      mission: 'the mission',
+      cost: 'the cost',
+      injury: 'field injury',
+      loss: 'the loss',
+      gain: 'the gain'
+    };
+
+    return (text || '').replace(/\{\{(\w+)\}\}/g, function (match, key) {
+      return narrativeTokenValue(safeTokens, key, fallback[key] || 'the field');
+    });
+  }
+
+  function buildNarrativeTokens(state, cast, scene, storedSelection) {
+    var missionLabel = state && state.mission && state.mission.label ? state.mission.label : 'the mission';
+
+    return {
+      ronin: storyCastName((cast && (cast.actor || cast.ally)) || {}),
+      genealord: storyCastName(cast && cast.opposition),
+      mutant: storyCastName(cast && cast.thirdForce),
+      ally: storyCastName(cast && cast.ally),
+      enemy: storyCastName(cast && cast.opposition),
+      thirdForce: storyCastName(cast && cast.thirdForce),
+      route: scene && scene.route ? scene.route : 'the relay corridor',
+      signal: storedSelection && storedSelection.title ? storedSelection.title : 'the active signal',
+      mission: missionLabel,
+      cost: 'operational cost',
+      injury: 'field injury',
+      loss: 'route loss',
+      gain: 'route knowledge'
+    };
+  }
+
+  function appendOAChainEvent(state, event) {
+    state.chain = (state.chain || []).filter(function (item) {
+      return item.id !== event.id;
+    });
+    state.chain.push(event);
+    writeOAChainState(state);
+  }
+
+  function introBeatCards(cast, scene) {
+    var protagonist = storyCastName(cast.actor || cast.ally);
+    var antagonist = storyCastName(cast.opposition);
+    var thirdForce = storyCastName(cast.thirdForce);
+    var fieldPressure = scene.fieldPressure || 'The route remains open, but only if pressure is managed.';
+
+    return [
+      {
+        id: 'intro-investigate-insult',
+        title: 'INVESTIGATE THE INSULT',
+        situation: antagonist + ' treats the Ronin interference as a personal humiliation.',
+        directive: 'Trace why the insult matters before the field hardens.',
+        risk: 'Investigation buys clarity while the corridor clock keeps closing.',
+        action: 'Investigated the insult behind the Genealord response.',
+        reaction: antagonist + ' commits a quieter observer to the relay corridor.',
+        consequence: protagonist + ' gains context, but the enemy realizes the Unseen Hand is listening.',
+        carry: 'Enemy awareness increased; rivalry clarified.',
+        narrative: antagonist + ' does not read the interference as random static. The Genealord marks it as an insult against command authority, and ' + protagonist + ' is now tied to that humiliation. The mission gains a reason to matter, but the next contact will be personal.',
+        pressure: 1,
+        trust: 1,
+        awareness: 1,
+        signal: -1
+      },
+      {
+        id: 'intro-verify-ronin',
+        title: 'VERIFY THE RONIN SIGNAL',
+        situation: protagonist + ' reaches the relay station under broken signal cover.',
+        directive: 'Confirm the Ronin is real before committing the field.',
+        risk: 'Verification protects the mission from a false mark but costs time.',
+        action: 'Verified the Ronin signal.',
+        reaction: protagonist + ' answers with a wounded authentication phrase.',
+        consequence: 'The Ronin remains viable and the operation has a human stake.',
+        carry: 'Trust increased; time pressure tightened.',
+        narrative: protagonist + ' is alive, but the channel carries pain through every burst. Verification prevents a false rescue, and it also confirms someone worth saving is already bleeding inside the corridor.',
+        pressure: 1,
+        trust: 2,
+        awareness: 0,
+        signal: -1
+      },
+      {
+        id: 'intro-track-genealord',
+        title: 'TRACK THE GENEALORD RESPONSE',
+        situation: antagonist + ' pushes command traffic through a masked hunting band.',
+        directive: 'Track the response before the hunting line disappears.',
+        risk: 'Tracking reveals intent while exposing the listener.',
+        action: 'Tracked the Genealord response.',
+        reaction: antagonist + ' turns one sweep toward the source of the trace.',
+        consequence: 'Enemy movement becomes readable for one interval.',
+        carry: 'Enemy awareness increased; route forecast improved.',
+        narrative: 'The field gives up one useful truth: ' + antagonist + ' is not reacting blindly. The Genealord is shaping the corridor around ' + protagonist + ', and the Unseen Hand has just become part of that calculation.',
+        pressure: 1,
+        trust: 0,
+        awareness: 2,
+        signal: 0
+      },
+      {
+        id: 'intro-delay-field',
+        title: 'DELAY FIELD INITIALIZATION',
+        situation: 'The field can open now, but the first picture is incomplete.',
+        directive: 'Delay the active hand long enough to collect one more read.',
+        risk: 'Delay preserves clarity and risks losing the first corridor window.',
+        action: 'Delayed field initialization.',
+        reaction: thirdForce + ' presses harder against the Genealord line.',
+        consequence: fieldPressure,
+        carry: 'Signal integrity preserved; pressure increased.',
+        narrative: 'The Unseen Hand refuses to move blind. That restraint protects the signal, but hesitation has a cost: ' + thirdForce + ' uses the pause to tear at the edge of the corridor.',
+        pressure: 2,
+        trust: 0,
+        awareness: 0,
+        signal: 1
+      },
+      {
+        id: 'intro-divert-relay',
+        title: 'DIVERT THE RELAY PATH',
+        situation: 'The relay path is clean enough to use and obvious enough to kill.',
+        directive: 'Divert the path before the enemy can lock it.',
+        risk: 'Diversion hides movement but weakens signal fidelity.',
+        action: 'Diverted the relay path.',
+        reaction: 'The corridor bends through poorer terrain and loses clean timing.',
+        consequence: protagonist + ' stays hidden while the route becomes harder to read.',
+        carry: 'Enemy awareness reduced; signal integrity degraded.',
+        narrative: protagonist + ' survives the first sweep because the route stops behaving like a route. The cost is confusion: future directives will arrive through worse static.',
+        pressure: 0,
+        trust: 1,
+        awareness: -1,
+        signal: -3
+      },
+      {
+        id: 'intro-commit-early',
+        title: 'COMMIT EARLY',
+        situation: protagonist + ' is near the corridor mouth and the enemy has not fully sealed it.',
+        directive: 'Commit before perfect information arrives.',
+        risk: 'Early commitment can save the window and burn reserves.',
+        action: 'Committed to the operation early.',
+        reaction: 'The Ronin moves at once and ' + antagonist + ' accelerates pursuit.',
+        consequence: 'The mission gains momentum at a visible cost.',
+        carry: 'Trust increased; pressure increased.',
+        narrative: 'There is no clean picture, only a closing route. The Unseen Hand commits anyway. ' + protagonist + ' moves because someone finally chose, and ' + antagonist + ' answers by making the hunt louder.',
+        pressure: 2,
+        trust: 2,
+        awareness: 1,
+        signal: -1
+      }
+    ];
+  }
+
+  function setIntroNextLocked(link, locked) {
+    if (!link) {
+      return;
+    }
+    if (!link.dataset.oaHref && link.getAttribute('href')) {
+      link.dataset.oaHref = link.getAttribute('href');
+    }
+    link.disabled = locked;
+    link.classList.toggle('is-oa-next-locked', locked);
+    link.classList.toggle('is-disabled', locked);
+    link.classList.toggle('is-oa-next-ready', !locked);
+    link.setAttribute('aria-disabled', locked ? 'true' : 'false');
+    link.setAttribute('tabindex', locked ? '-1' : '0');
+    if (locked) {
+      link.removeAttribute('href');
+    }
+    else if (link.dataset.oaHref) {
+      link.setAttribute('href', link.dataset.oaHref);
+    }
+  }
+
+  function renderIntroChainPanel(root, state) {
+    var chainPanel = root.querySelector('[data-ooh-alpha-intro-chain]');
+    var latest = (state.chain || [])[state.chain.length - 1];
+
+    if (!chainPanel) {
+      return;
+    }
+    if (!latest) {
+      chainPanel.innerHTML = '<span class="ooh-operation-alpha__intro-card-kicker">CHAIN OF CONSEQUENCE</span><p>ACTION: Awaiting decision.</p><p>REACTION: Field quiet.</p><p>CONSEQUENCE: No change recorded.</p><p>CARRY-FORWARD EFFECT: Risk unresolved.</p>';
+      return;
+    }
+    chainPanel.innerHTML = '<span class="ooh-operation-alpha__intro-card-kicker">CHAIN OF CONSEQUENCE</span><p>ACTION: ' + latest.action + '</p><p>REACTION: ' + latest.reaction + '</p><p>CONSEQUENCE: ' + latest.consequence + '</p><p>CARRY-FORWARD EFFECT: ' + latest.carry + '</p>';
+  }
+
+  function renderIntroDecisionFlow(root, runtimeState) {
+    var flow = root.querySelector('[data-ooh-alpha-intro-flow]');
+    var wrap = root.querySelector('[data-ooh-alpha-intro-beats]');
+    var counter = root.querySelector('[data-ooh-alpha-intro-counter]');
+    var status = root.querySelector('[data-ooh-alpha-intro-status]');
+    var consequence = root.querySelector('[data-ooh-alpha-intro-consequence]');
+    var next = root.querySelector('[data-ooh-alpha-next-level]');
+    var chainState = readOAChainState();
+    var choices = chainState.introChoices || [];
+    var required = 3;
+    var locked = choices.length >= required;
+    var beats = introBeatCards(runtimeState.storyCast || {}, runtimeState.scene || {});
+
+    if (!flow || !wrap) {
+      setIntroNextLocked(next, true);
+      return;
+    }
+
+    wrap.innerHTML = '';
+    beats.forEach(function (beat) {
+      var selected = choices.some(function (choice) { return choice.id === beat.id; });
+      var card = document.createElement('button');
+
+      card.type = 'button';
+      card.className = 'ooh-operation-alpha__intro-beat-card';
+      card.classList.toggle('is-selected', selected);
+      card.classList.toggle('is-disabled', locked && !selected);
+      card.disabled = selected || locked;
+      card.innerHTML = '<span>' + beat.title + '</span><strong>SITUATION</strong><p>' + beat.situation + '</p><strong>DIRECTIVE</strong><p>' + beat.directive + '</p><strong>RISK</strong><p>' + beat.risk + '</p><strong>CONSEQUENCE</strong><p>' + beat.consequence + '</p>';
+      card.addEventListener('click', function () {
+        if (card.disabled) {
+          return;
+        }
+        chainState = readOAChainState();
+        choices = chainState.introChoices || [];
+        if (choices.length >= required || choices.some(function (choice) { return choice.id === beat.id; })) {
+          return;
+        }
+        choices.push(beat);
+        chainState.introChoices = choices;
+        appendOAChainEvent(chainState, beat);
+        renderIntroDecisionFlow(root, runtimeState);
+      });
+      wrap.appendChild(card);
+    });
+
+    if (counter) {
+      counter.textContent = 'SELECTED: ' + choices.length + ' / REQUIRED: ' + required;
+    }
+    if (status) {
+      status.textContent = locked ? 'READY' : 'STAGE LOCKED';
+    }
+    if (consequence) {
+      var latest = choices[choices.length - 1];
+      consequence.innerHTML = '<span class="ooh-operation-alpha__intro-card-kicker">NARRATIVE CONSEQUENCE</span><p>' + (latest ? latest.narrative : 'Awaiting Unseen Hand directive.') + '</p>';
+    }
+    renderIntroChainPanel(root, chainState);
+    setIntroNextLocked(next, !locked);
+    bindIntroTransmission(root, runtimeState, locked);
+    if (locked) {
+      flow.classList.add('is-stage-complete');
+    }
+    else {
+      flow.classList.remove('is-stage-complete');
+    }
+  }
+
+  function setTransmissionPortrait(root, selector, portrait) {
+    var image = root.querySelector(selector);
+    if (!image) {
+      return;
+    }
+    if (portrait) {
+      image.src = portrait;
+      image.hidden = false;
+    }
+    else {
+      image.hidden = true;
+    }
+  }
+
+  function transmissionActorHook(actor, latest, fallback) {
+    if (latest && latest.narrative) {
+      return latest.narrative;
+    }
+    if (actor && (actor.faction || '').toLowerCase() === 'genealord') {
+      return storyCastName(actor) + ' committed pressure before the route could settle.';
+    }
+    if (actor && (actor.faction || '').toLowerCase() === 'mutant') {
+      return storyCastName(actor) + ' changed the corridor pressure and forced the next decision.';
+    }
+    return fallback || storyCastName(actor) + ' kept the route alive under pressure.';
+  }
+
+  function transmissionIdentityFromActor(actor, latest, fallbackHook) {
+    var portrait = eventCardPortrait(actor);
+
+    if (!actor || !portrait) {
+      return null;
+    }
+
+    return {
+      portrait: portrait,
+      name: storyCastName(actor),
+      faction: actor.faction || 'UNRESOLVED',
+      role: actor.role || actor.storyLabel || 'Field Presence',
+      hook: transmissionActorHook(actor, latest, fallbackHook)
+    };
+  }
+
+  function pickTransmissionIdentity(cast, latest) {
+    var candidates = [
+      cast && cast.actor,
+      cast && cast.opposition,
+      cast && cast.ally,
+      cast && cast.thirdForce
+    ];
+    var identity;
+
+    candidates.some(function (actor) {
+      identity = transmissionIdentityFromActor(actor, latest, latest && latest.narrative);
+      return !!identity;
+    });
+
+    return identity || null;
+  }
+
+  function renderTransmissionIdentity(root, identity) {
+    var block = root.querySelector('[data-ooh-alpha-transmission-identity]');
+    var image = root.querySelector('[data-ooh-alpha-transmission-portrait]');
+    var name = root.querySelector('[data-ooh-alpha-transmission-name]');
+    var faction = root.querySelector('[data-ooh-alpha-transmission-faction]');
+    var role = root.querySelector('[data-ooh-alpha-transmission-role]');
+    var hook = root.querySelector('[data-ooh-alpha-transmission-hook]');
+
+    if (!block || !image || !identity || !identity.portrait) {
+      if (block) {
+        block.hidden = true;
+      }
+      if (image) {
+        image.hidden = true;
+        image.removeAttribute('src');
+      }
+      return;
+    }
+
+    image.onerror = function () {
+      image.hidden = true;
+      block.hidden = true;
+      image.removeAttribute('src');
+    };
+    image.onload = function () {
+      image.hidden = false;
+      block.hidden = false;
+    };
+    image.src = identity.portrait;
+    image.hidden = false;
+    block.hidden = false;
+    if (name) {
+      name.textContent = identity.name || 'UNKNOWN FIELD ASSET';
+    }
+    if (faction) {
+      faction.textContent = identity.faction || 'UNRESOLVED';
+    }
+    if (role) {
+      role.textContent = identity.role || 'Field Presence';
+    }
+    if (hook) {
+      hook.textContent = identity.hook || 'The field records an operational presence.';
+    }
+  }
+
+  function bindIntroTransmission(root, runtimeState, ready) {
+    var next = root.querySelector('[data-ooh-alpha-next-level]');
+    var popup = root.querySelector('[data-ooh-alpha-transmission-popup]');
+
+    if (!next || !popup || next.oohAlphaTransmissionBound) {
+      return;
+    }
+    next.oohAlphaTransmissionBound = true;
+    next.addEventListener('click', function (event) {
+      var chainState = readOAChainState();
+      var choices = chainState.introChoices || [];
+      var introReady = choices.length >= 3;
+
+      if (next.disabled || next.getAttribute('aria-disabled') === 'true' || !introReady) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        setIntroNextLocked(next, true);
+        return;
+      }
+      event.preventDefault();
+      var latest = choices[choices.length - 1];
+      var cast = runtimeState.storyCast || {};
+      var identity = pickTransmissionIdentity(cast, latest) || chainState.activeIdentity;
+      var portrait = identity && identity.portrait ? identity.portrait : chainState.activePortrait;
+      var transmission = narrativeEntry(chainState, 'introTransmission', 'unseenHandTransmissionTemplates', 31);
+      var summaryText = transmission ? fillNarrativeText(transmission.text, chainState.narrativeTokens) : '';
+
+      if (identity) {
+        chainState.activeIdentity = identity;
+        chainState.activePortrait = identity.portrait;
+        writeOAChainState(chainState);
+      }
+      else if (portrait) {
+        chainState.activePortrait = portrait;
+        writeOAChainState(chainState);
+      }
+      renderTransmissionIdentity(root, identity);
+      root.querySelector('[data-ooh-alpha-transmission-title]').textContent = 'Signal acquisition complete.';
+      root.querySelector('[data-ooh-alpha-transmission-summary]').textContent = (summaryText || (latest ? latest.narrative : 'The route remains open. The next phase will demand more.')) + ' The route remains open. The cost is now moving with it.';
+      root.querySelector('[data-ooh-alpha-transmission-gain]').textContent = 'GAIN: The Unseen Hand has committed a readable opening chain.';
+      root.querySelector('[data-ooh-alpha-transmission-loss]').textContent = 'LOSS: The field now knows it is being shaped.';
+      root.querySelector('[data-ooh-alpha-transmission-danger]').textContent = 'DANGER: Field pressure will answer the first three directives.';
+      popup.hidden = false;
+      popup.setAttribute('aria-hidden', 'false');
+    });
+  }
+
+  function renderIntroStoryBlock(root, state) {
+    var block = root.querySelector('[data-ooh-alpha-intro-storyblock]');
+    var next = root.querySelector('[data-ooh-alpha-next-level]');
+    var title = root.querySelector('[data-ooh-alpha-intro-story-title]');
+    var copy = root.querySelector('[data-ooh-alpha-intro-story-copy]');
+    var catalyst = root.querySelector('[data-ooh-alpha-intro-catalyst]');
+    var pressure = root.querySelector('[data-ooh-alpha-intro-pressure]');
+    var debate = root.querySelector('[data-ooh-alpha-intro-debate]');
+    var storedSelection = getPlaylistSelection();
+    var cast = state && state.storyCast ? state.storyCast : {};
+    var scene = state && state.scene ? state.scene : {};
+    var protagonist = cast.actor || cast.ally;
+    var antagonist = cast.opposition;
+    var thirdForce = cast.thirdForce;
+    var protagonistName = storyCastName(protagonist);
+    var antagonistName = storyCastName(antagonist);
+    var antagonistPath = antagonist && antagonist.path ? antagonist.path : 'his path';
+    var chainState = readOAChainState();
+    var tokens;
+    var catalystEntry;
+    var rivalryEntry;
+    var grudgeEntry;
+
+    if (!block) {
+      return;
+    }
+    block.hidden = !(state && runtimePhaseCluster(state).key === 'intro' && root.classList.contains('is-runtime-acknowledged') && storedSelection && storedSelection.title);
+    root.classList.toggle('has-intro-storyblock', !block.hidden);
+    if (next) {
+      setIntroNextLocked(next, true);
+    }
+    if (block.hidden) {
+      return;
+    }
+
+    tokens = buildNarrativeTokens(state, cast, scene, storedSelection);
+    chainState.narrativeTokens = tokens;
+    catalystEntry = narrativeEntry(chainState, 'introCatalyst', 'catalystTemplates', 3);
+    rivalryEntry = narrativeEntry(chainState, 'introRivalry', 'rivalryTemplates', 7);
+    grudgeEntry = narrativeEntry(chainState, 'introGrudge', 'grudgeTemplates', 11);
+    writeOAChainState(chainState);
+
+    if (title) {
+      title.textContent = 'The Ronin is forced into the corridor';
+    }
+    if (copy) {
+      copy.textContent = rivalryEntry ? fillNarrativeText(rivalryEntry.text, tokens) : antagonistName + ' considered ' + protagonistName + "'s interference an insult against " + antagonistPath + ' and swore that the Ronin would be hunted before the signal cleared.';
+    }
+    setIntroStoryImage(root, '[data-ooh-alpha-intro-protagonist-image]', protagonist);
+    setIntroStoryImage(root, '[data-ooh-alpha-intro-antagonist-image]', antagonist);
+    setIntroStoryText(root, 'protagonist', protagonist);
+    setIntroStoryText(root, 'antagonist', antagonist);
+    if (catalyst) {
+      catalyst.textContent = catalystEntry ? fillNarrativeText(catalystEntry.text, tokens) : storyCastName(thirdForce) + ' attacks or pressures ' + antagonistName + "'s field. " + protagonistName + ' is pushed into the corridor before either side can control the signal.';
+    }
+    if (pressure) {
+      pressure.textContent = 'STARTING STORYLINE PRESSURE: ' + (grudgeEntry ? fillNarrativeText(grudgeEntry.text, tokens) : (scene.fieldPressure || 'The route remains open, but only if pressure is managed.'));
+    }
+    if (debate) {
+      debate.textContent = 'DEBATE: The Unseen Hand must decide whether the mission outweighs the cost.';
+    }
+    renderIntroDecisionFlow(root, state);
+  }
+
+  function renderStoryEventSuite(root, state) {
+    var battlefield = root.querySelector('[data-ooh-alpha-battlefield]');
+    var suite;
+    var slots = ['actor', 'ally', 'opposition', 'thirdForce'];
+    var labels = {
+      actor: 'ACTOR',
+      ally: 'ALLY',
+      opposition: 'OPPOSITION',
+      thirdForce: 'THIRD FORCE'
+    };
+
+    if (!battlefield || !state || !state.storyCast) {
+      return;
+    }
+
+    suite = battlefield.querySelector('[data-ooh-alpha-story-events]');
+    if (!suite) {
+      suite = document.createElement('div');
+      suite.className = 'ooh-operation-alpha__story-events';
+      suite.setAttribute('data-ooh-alpha-story-events', '');
+      battlefield.appendChild(suite);
+    }
+
+    suite.innerHTML = '';
+    slots.forEach(function (slot, index) {
+      var actor = state.storyCast[slot];
+      var card = document.createElement('article');
+      var portrait = eventCardPortrait(actor);
+      var image;
+      var body;
+
+      card.className = 'ooh-operation-alpha__story-event';
+      card.setAttribute('data-story-slot', slot);
+      if (index === state.eventRotationIndex % slots.length) {
+        card.classList.add('is-story-event-current');
+      }
+
+      if (portrait) {
+        image = document.createElement('img');
+        image.className = 'ooh-operation-alpha__story-event-image';
+        image.alt = '';
+        image.src = portrait;
+        image.onerror = function () {
+          image.hidden = true;
+        };
+        card.appendChild(image);
+      }
+
+      body = document.createElement('div');
+      body.className = 'ooh-operation-alpha__story-event-body';
+      body.innerHTML = '<span class="ooh-operation-alpha__story-event-kicker">' + labels[slot] + '</span>' +
+        '<strong class="ooh-operation-alpha__story-event-name">' + storyCastName(actor) + '</strong>' +
+        '<span class="ooh-operation-alpha__story-event-role">' + storyCastRole(actor) + '</span>' +
+        '<p class="ooh-operation-alpha__story-event-copy">' + storyEventCardCopy(state, slot) + '</p>';
+      card.appendChild(body);
+      suite.appendChild(card);
+    });
+  }
+
+  function pushStoryMemory(state, hook, consequence) {
+    var cast = state.storyCast || {};
+    var memory = {
+      block: storyBlockLabel(state),
+      allyHook: storyCastName(cast.ally),
+      oppositionHook: storyCastName(cast.opposition),
+      rivalHook: storyCastName(cast.opposition),
+      thirdForceHook: storyCastName(cast.thirdForce),
+      memoryHook: hook,
+      consequence: consequence
+    };
+
+    state.storyHooks.push(memory);
+    state.eventRotationIndex = (state.eventRotationIndex + 1) % 4;
+    return memory;
+  }
+
+  function bestDecisionLine(state) {
+    var choices = state.lockedPresenceChoices || [];
+    var best = choices.filter(function (choice) {
+      return choice.clarityDelta > 0 || choice.exposureDelta < 0 || choice.pressureDelta < 0;
+    })[0] || choices[0];
+
+    return best ? best.label + ': ' + best.narrativeEffect : keyChoiceSummary(state);
+  }
+
+  function pressurePointLine(state) {
+    var last = state.storyHooks[state.storyHooks.length - 1];
+
+    if (state.pressureLevel >= 8) {
+      return 'Pressure peaked before the field could fully settle.';
+    }
+    if (state.exposureLevel >= 5) {
+      return 'Exposure stayed high after the corridor reacted.';
+    }
+    if (last) {
+      return last.thirdForceHook + ' made the last clean route unstable.';
+    }
+
+    return 'No single pressure point dominated the report.';
+  }
+
+  function aarResultBand(state) {
+    if (state.outcomeState === 'OPERATION PASSED' || state.outcomeState === 'EXTRACTED' || state.outcomeState === 'STABILIZED') {
+      return 'GO // SUCCESS';
+    }
+    if (state.outcomeState === 'PARTIAL SUCCESS') {
+      return 'GO // PARTIAL';
+    }
+
+    return 'NO-GO // FAILURE';
+  }
+
+  function finalAarLines(state) {
+    var scene = state.scene || {};
+    var hooks = state.storyHooks.slice(-4);
+    var cast = state.storyCast || {};
+    var lines = [
+      'Actor: ' + storyCastName(cast.actor) + '. Ally: ' + storyCastName(cast.ally) + '. Rival: ' + storyCastName(cast.opposition) + '. Opposition: ' + storyCastName(cast.opposition) + '.',
+      'Cause: ' + (scene.catalyst || 'The field opened under pressure') + ' and ' + storyCastName(cast.thirdForce) + ' changed the corridor.',
+      'Best decision: ' + bestDecisionLine(state) + '.',
+      'Pressure point: ' + pressurePointLine(state) + '.'
+    ];
+
+    if (hooks.length) {
+      lines.push('Memory: ' + hooks.map(function (hook) {
+        return hook.memoryHook + ' -> ' + hook.consequence;
+      }).join(' / '));
+    }
+
+    return lines.slice(0, 5);
+  }
+
+  function ensureFinalAarPopup(root, state) {
+    var popup = root.querySelector('[data-ooh-alpha-final-aar]');
+    var title;
+    var status;
+    var lines;
+    var body;
+    var actions;
+
+    if (!popup) {
+      popup = document.createElement('div');
+      popup.className = 'ooh-operation-alpha__final-aar';
+      popup.setAttribute('data-ooh-alpha-final-aar', '');
+      popup.setAttribute('role', 'dialog');
+      popup.setAttribute('aria-modal', 'true');
+      popup.setAttribute('aria-labelledby', 'ooh-alpha-final-aar-title');
+      popup.innerHTML = '<div class="ooh-operation-alpha__final-aar-card">' +
+        '<span class="ooh-operation-alpha__final-aar-kicker">BLOCK 4 // FINAL AAR POPUP</span>' +
+        '<h3 class="ooh-operation-alpha__final-aar-title" id="ooh-alpha-final-aar-title"></h3>' +
+        '<strong class="ooh-operation-alpha__final-aar-status" data-ooh-alpha-final-aar-status></strong>' +
+        '<div class="ooh-operation-alpha__final-aar-lines" data-ooh-alpha-final-aar-lines></div>' +
+        '<div class="ooh-operation-alpha__final-aar-actions">' +
+        '<button class="ooh-operation-alpha__final-aar-button" type="button" data-ooh-alpha-final-aar-run>RUN ANOTHER OPERATION</button>' +
+        '<a class="ooh-operation-alpha__final-aar-button" href="' + routePath('/operation-alpha/credits') + '">PURCHASE CREDITS</a>' +
+        '<a class="ooh-operation-alpha__final-aar-button" href="' + routePath('/operation-alpha') + '">RETURN TO OA HOME</a>' +
+        '<a class="ooh-operation-alpha__final-aar-button" href="' + routePath('/operation-alpha/oaplay/playlists') + '">SELECT SIGNAL</a>' +
+        '</div>' +
+        '</div>';
+      root.appendChild(popup);
+      popup.querySelector('[data-ooh-alpha-final-aar-run]').addEventListener('click', function () {
+        popup.hidden = true;
+        popup.setAttribute('aria-hidden', 'true');
+        activateOperationAlphaRuntime(root);
+      });
+    }
+
+    title = popup.querySelector('.ooh-operation-alpha__final-aar-title');
+    status = popup.querySelector('[data-ooh-alpha-final-aar-status]');
+    lines = popup.querySelector('[data-ooh-alpha-final-aar-lines]');
+    body = finalAarLines(state);
+    actions = popup.querySelectorAll('.ooh-operation-alpha__final-aar-button');
+
+    if (title) {
+      title.textContent = 'FINAL ASSESSMENT: ' + (state.scene && state.scene.sceneName ? state.scene.sceneName : 'OPERATION ALPHA');
+    }
+    if (status) {
+      status.textContent = aarResultBand(state) + ' // ' + state.outcomeState;
+    }
+    if (lines) {
+      lines.innerHTML = '';
+      body.forEach(function (line) {
+        var p = document.createElement('p');
+        p.textContent = line;
+        lines.appendChild(p);
+      });
+    }
+    actions.forEach(function (action) {
+      if ((action.textContent || '').trim() === 'SELECT SIGNAL') {
+        action.setAttribute('href', '/operation-alpha/oaplay/playlists');
+      }
+    });
+
+    popup.hidden = false;
+    popup.setAttribute('aria-hidden', 'false');
   }
 
   function generateRuntimeScene(actor, registry) {
@@ -2208,7 +3085,7 @@
 
     title.textContent = 'FIELD TASK: ' + (scene.mission ? scene.mission.label : 'UNRESOLVED');
     source.textContent = 'SUBJECT: ' + scene.subject;
-    brief.textContent = 'OPPOSING FORCE: ' + scene.opposingForce + ' // FORCE MULTIPLIER: ' + scene.forceMultiplier + ' // CATALYST: ' + scene.catalyst + ' // FIELD PRESSURE: ' + scene.fieldPressure;
+    brief.textContent = 'PROTAGONIST: ' + scene.subject + ' // ANTAGONIST / OPPOSITION: ' + scene.opposingForce + ' // CONDITION: ' + scene.pressureCondition + ' // SIGNAL: ' + scene.interventionWindow + ' // CATALYST: ' + scene.catalyst;
 
     if (state) {
       state.currentCondition = scene.pressureCondition;
@@ -2269,12 +3146,29 @@
     return pressure || 0;
   }
 
+  function pendingPresenceChoices(state) {
+    if (!state) {
+      return [];
+    }
+    if (!state.pendingPresenceChoices) {
+      state.pendingPresenceChoices = [];
+    }
+
+    return state.pendingPresenceChoices;
+  }
+
+  function isCrisisPhase(state) {
+    return state && runtimePhaseCluster(state).key === 'crisis';
+  }
+
   function updateBattlefieldReadiness(state) {
     var phase = runtimePhaseCluster(state);
-    var ready = runtimePhasePressure(state) >= phase.requiredPressure && state.beatIndex >= phase.beatEnd && state.outcomeState === 'PENDING';
+    var ready = isCrisisPhase(state) ?
+      runtimePhasePressure(state) >= phase.requiredPressure && state.outcomeState === 'PENDING' :
+      pendingPresenceChoices(state).length >= phase.requiredPressure && state.outcomeState === 'PENDING';
 
     state.currentPhase = phase.label;
-    state.phaseActionCount = runtimePhasePressure(state);
+    state.phaseActionCount = isCrisisPhase(state) ? runtimePhasePressure(state) : pendingPresenceChoices(state).length;
     state.phaseRequiredCount = phase.requiredPressure;
     state.battlefieldPresenceReady = ready;
     return ready;
@@ -2282,6 +3176,52 @@
 
   function runtimePhaseReady(state) {
     return !!(state && state.battlefieldPresenceReady);
+  }
+
+  function runtimePhaseUiState(state, index) {
+    if (!state || index > state.phaseSpineIndex) {
+      return 'LOCKED';
+    }
+    if (index < state.phaseSpineIndex || (state.outcomeState !== 'PENDING' && index === runtimePhaseSpine.length - 1)) {
+      return 'COMPLETE';
+    }
+    if (runtimePhaseReady(state)) {
+      return 'READY TO PROCEED';
+    }
+
+    return 'ACTIVE';
+  }
+
+  function setRuntimeButtonState(button, enabled) {
+    if (!button) {
+      return;
+    }
+    button.disabled = !enabled;
+    button.classList.toggle('is-oa-control-disabled', !enabled);
+    if (!enabled) {
+      button.removeAttribute('aria-pressed');
+      button.classList.remove('is-command-active', 'is-director-active');
+    }
+  }
+
+  function syncRuntimeControlLocks(root, state) {
+    var crisisActive = !!(state && state.outcomeState === 'PENDING' && isCrisisPhase(state));
+
+    root.querySelectorAll('[data-ooh-alpha-command], [data-ooh-alpha-director-action], .ooh-operation-alpha__intervention').forEach(function (button) {
+      setRuntimeButtonState(button, crisisActive);
+    });
+
+    root.classList.toggle('is-oa-runtime-initialized', !!state);
+    root.classList.toggle('is-oa-battlefield-suite-active', crisisActive);
+    if (state) {
+      root.setAttribute('data-ooh-alpha-phase-key', runtimePhaseCluster(state).key);
+      root.setAttribute('data-ooh-alpha-phase-state', runtimePhaseUiState(state, state.phaseSpineIndex));
+    }
+    else {
+      root.setAttribute('data-ooh-alpha-phase-key', 'startup');
+      root.setAttribute('data-ooh-alpha-phase-state', 'LOCKED');
+    }
+    syncSignalGate(root);
   }
 
   function runtimePhaseStatus(state, index) {
@@ -2294,7 +3234,7 @@
       return phase.label + ' - COMPLETE';
     }
 
-    return phase.label + ' - ACTIVE ' + runtimePhasePressure(state) + '/' + phase.requiredPressure;
+    return phase.label + ' - ' + runtimePhaseUiState(state, index) + ' ' + state.phaseActionCount + '/' + phase.requiredPressure;
   }
 
   function runtimePhaseSummary(state) {
@@ -2312,7 +3252,7 @@
       return 'PRESENCE: LOCKED';
     }
     if (runtimePhaseReady(state)) {
-      return 'PRESENCE: READY TO LOCK';
+      return 'PRESENCE: READY TO PROCEED';
     }
 
     return 'PRESENCE: BUILDING';
@@ -2341,33 +3281,7 @@
   }
 
   function storyPanelText(state) {
-    return 'FORCE: ' + (state.fateLine || 'the scene waits for pressure') + '. EFFECT: ' + (state.screenwriterEffect || state.hookLine);
-  }
-
-  function consequenceIncidentSummary(state) {
-    var scene = state && state.scene ? state.scene : {};
-    var mission = scene.mission || runtimeMissionById('recon');
-    var subject = scene.subject || battlefieldActorLabel(state && state.selectedActor);
-    var opposition = scene.opposingForce || 'the opposing force';
-    var phase = state ? runtimeVisiblePhase(state) : 'SETUP';
-    var status = state ? runtimePresenceStatus(state).replace(/^PRESENCE:\s*/, '').toLowerCase() : 'building';
-    var controlLine = state && state.fateLine ? state.fateLine : 'the scene waits for pressure';
-    var effectLine = state && state.screenwriterEffect ? state.screenwriterEffect : 'you are shaping the field before the subject can see the cost';
-
-    return subject + ' is inside ' + mission.label + ' while ' + opposition + ' presses the route. You are controlling the field posture, not the actor directly: ' + controlLine + '. The moment matters because ' + phase + ' presence is ' + status + ', and ' + effectLine + '.';
-  }
-
-  function renderOppositionReadout(root, state) {
-    var force = root.querySelector('[data-ooh-alpha-opposition-force]');
-    var vector = root.querySelector('[data-ooh-alpha-opposition-vector]');
-    var scene = state && state.scene ? state.scene : {};
-
-    if (force) {
-      force.textContent = scene.opposingForce || 'Pending';
-    }
-    if (vector) {
-      vector.textContent = scene.forceMultiplier ? scene.forceMultiplier + ' is amplifying ' + (scene.fieldPressure || 'field pressure') + '.' : 'Opposition readout pending.';
-    }
+    return 'KARMA: ' + (state.fateLine || 'the scene waits for pressure') + '. EFFECT: ' + (state.screenwriterEffect || state.hookLine);
   }
 
   function battlefieldPressureLabel(level) {
@@ -2418,6 +3332,32 @@
     });
   }
 
+  function setChoiceBattlefieldPresence(root, state, choice) {
+    var scene = state.scene || {};
+    var exposureChange = choice.exposureDelta > 0 ? 'exposure rises +' + choice.exposureDelta : (choice.exposureDelta < 0 ? 'exposure drops ' + choice.exposureDelta : 'exposure holds');
+    var pressureChange = choice.pressureDelta > 0 ? 'pressure rises +' + choice.pressureDelta : (choice.pressureDelta < 0 ? 'pressure drops ' + choice.pressureDelta : 'pressure holds');
+    var clarityChange = choice.clarityDelta > 0 ? 'clarity improves +' + choice.clarityDelta : (choice.clarityDelta < 0 ? 'clarity degrades ' + choice.clarityDelta : 'clarity holds');
+
+    setBattlefieldPresence(root, {
+      field: 'IMMEDIATE CONSEQUENCE: ' + choice.narrativeEffect,
+      movement: 'OPPOSITION REACTION: ' + (scene.opposingForce || 'opposition') + ' adjusts against ' + (scene.forceMultiplier || 'field pressure') + '. ROUTE/FORCE: ' + pressureChange + ', ' + clarityChange + ', ' + exposureChange + '.',
+      signal: 'NEXT PRESSURE: complete ' + runtimeVisiblePhase(state) + ' choice work, then press PROCEED.'
+    });
+  }
+
+  function setCrisisBattlefieldPresence(root, state, action) {
+    var scene = state.scene || {};
+    var pressureChange = action.pressureDelta > 0 ? 'pressure rises +' + action.pressureDelta : (action.pressureDelta < 0 ? 'pressure drops ' + action.pressureDelta : 'pressure holds');
+    var clarityChange = action.clarityDelta > 0 ? 'clarity improves +' + action.clarityDelta : (action.clarityDelta < 0 ? 'clarity degrades ' + action.clarityDelta : 'clarity holds');
+    var exposureChange = action.exposureDelta > 0 ? 'exposure rises +' + action.exposureDelta : (action.exposureDelta < 0 ? 'exposure drops ' + action.exposureDelta : 'exposure holds');
+
+    setBattlefieldPresence(root, {
+      field: 'IMMEDIATE CONSEQUENCE: ' + action.consequence,
+      movement: 'OPPOSITION REACTION: ' + (scene.opposingForce || 'opposition') + ' presses the crisis line. ROUTE/FORCE: ' + pressureChange + ', ' + clarityChange + ', ' + exposureChange + '.',
+      signal: 'NEXT PRESSURE: crisis sequence ' + state.phaseActionCount + '/' + state.phaseRequiredCount + '. ' + (runtimePhaseReady(state) ? 'PROCEED is live.' : 'Continue crisis choices.')
+    });
+  }
+
   function renderBattlefieldGate(root, state) {
     var lockButton = root.querySelector('[data-ooh-alpha-mission-cycle]');
     var matrix = root.querySelector('[data-ooh-alpha-presence-choice-matrix]');
@@ -2425,6 +3365,8 @@
     var consequenceSummary = root.querySelector('[data-ooh-alpha-consequence-summary]');
     var commandState = root.querySelector('[data-ooh-alpha-command-state]');
     var ready = updateBattlefieldReadiness(state);
+    var phase = runtimePhaseCluster(state);
+    var phaseState = runtimePhaseUiState(state, state.phaseSpineIndex);
 
     if (commandState) {
       commandState.textContent = runtimePhaseSummary(state);
@@ -2433,16 +3375,20 @@
       consequenceStatus.textContent = runtimePresenceStatus(state);
     }
     if (consequenceSummary) {
-      consequenceSummary.textContent = consequenceIncidentSummary(state);
+      consequenceSummary.textContent = runtimePhaseSummary(state);
     }
-    renderOppositionReadout(root, state);
     if (lockButton) {
-      lockButton.textContent = ready ? 'SELECT BATTLEFIELD POSTURE' : 'BATTLEFIELD PRESENCE BUILDING';
-      lockButton.disabled = true;
+      lockButton.textContent = state.outcomeState !== 'PENDING' ? 'BLOCK COMPLETE' : (ready ? 'PROCEED' : phaseState + ' // PROCEED LOCKED');
+      lockButton.disabled = !ready || state.outcomeState !== 'PENDING';
+      lockButton.setAttribute('data-ooh-alpha-proceed-state', phaseState);
+      lockButton.setAttribute('aria-disabled', lockButton.disabled ? 'true' : 'false');
+      lockButton.setAttribute('aria-label', phase.label + ' proceed state: ' + phaseState);
       lockButton.classList.toggle('is-presence-ready', ready && state.outcomeState === 'PENDING');
-      lockButton.classList.toggle('is-presence-locked', state.outcomeState !== 'PENDING');
+      lockButton.classList.toggle('is-presence-locked', lockButton.disabled);
     }
+    syncRuntimeControlLocks(root, state);
     renderPresenceChoiceMatrix(root, state, ready);
+    renderStoryEventSuite(root, state);
   }
 
   function phasePresenceChoices(state) {
@@ -2465,7 +3411,7 @@
     }
 
     matrix.innerHTML = '';
-    matrix.hidden = !ready || state.outcomeState !== 'PENDING';
+    matrix.hidden = state.outcomeState !== 'PENDING' || isCrisisPhase(state);
     if (matrix.hidden) {
       return;
     }
@@ -2476,7 +3422,7 @@
       button.className = 'ooh-operation-alpha__presence-choice';
       button.textContent = choice.label;
       button.disabled = false;
-      if (state.selectedBattlefieldPosture && state.selectedBattlefieldPosture.label === choice.label) {
+      if (pendingPresenceChoices(state).some(function (selectedChoice) { return selectedChoice.label === choice.label; })) {
         button.classList.add('is-presence-choice-selected');
         button.setAttribute('aria-pressed', 'true');
       }
@@ -2492,14 +3438,14 @@
     var phase = runtimeVisiblePhase(state);
     var lockedChoice = lastLockedPresenceChoice(state);
 
-    if (phase === 'SETUP') {
-      return 'READ OUTPUT: ' + scene.subject + ' enters the field. ' + scene.opposingForce + ' applies pressure through ' + scene.forceMultiplier + '.';
+    if (phase === 'BLOCK 1 // INTRO / CATALYST') {
+      return 'READ OUTPUT: PROTAGONIST ' + scene.subject + ' enters under ' + scene.pressureCondition + '. ANTAGONIST / OPPOSITION: ' + scene.opposingForce + '. SIGNAL: ' + scene.interventionWindow + '. CATALYST: ' + scene.catalyst + '.';
     }
-    if (phase === 'CONFRONTATION') {
-      return 'READ OUTPUT: ' + (lockedChoice ? lockedChoice.label + ' carries forward. ' + lockedChoice.narrativeEffect : 'The prior field posture carries forward.') + ' ' + (state.characterTurns.confrontation || 'A new pressure turn enters the corridor.');
+    if (phase === 'BLOCK 2 // CHARACTER ENTRY') {
+      return 'READ OUTPUT: ALLY ' + storyCastName(state.storyCast.ally) + ' // RIVAL ' + storyCastName(state.storyCast.opposition) + ' // THIRD FORCE ' + storyCastName(state.storyCast.thirdForce) + '. ' + (lockedChoice ? lockedChoice.label + ' carries forward. ' + lockedChoice.narrativeEffect : 'The prior field posture carries forward.') + ' ' + (state.characterTurns.character || 'A new pressure turn enters the corridor.');
     }
 
-    return 'READ OUTPUT: ' + (lockedChoice ? lockedChoice.label + ' sets the collapse posture. ' : '') + (state.characterTurns.collapse || 'The opposing force closes in.') + ' Pressure ' + state.pressureLevel + ', clarity ' + state.channelClarity + ', exposure ' + state.exposureLevel + ', clock ' + formatOperationTime(state.operationTime) + '.';
+    return 'READ OUTPUT: ' + (lockedChoice ? lockedChoice.label + ' sets the collapse posture. ' : '') + (state.characterTurns.crisis || 'The opposing force closes in.') + ' Pressure ' + state.pressureLevel + ', clarity ' + state.channelClarity + ', exposure ' + state.exposureLevel + ', clock ' + formatOperationTime(state.operationTime) + '.';
   }
 
   function renderStationOutput(root, state) {
@@ -2615,17 +3561,19 @@
       consequenceStatus.textContent = 'PHASE: ' + runtimeVisiblePhase(state);
     }
     if (consequenceSummary) {
-      consequenceSummary.textContent = consequenceIncidentSummary(state);
+      consequenceSummary.textContent = storyPanelText(state);
     }
   }
 
   function buildRuntimeState(root, actor, payload) {
     var scene = generateRuntimeScene(actor, root.oohAlphaActorRegistry || []);
+    var storyCast = buildStoryCast(actor, root.oohAlphaActorRegistry || []);
 
     return {
       selectedActor: actor,
       faction: actor.faction || 'Unresolved',
       scene: scene,
+      storyCast: storyCast,
       currentCondition: scene.pressureCondition || payload.condition || 'Unresolved',
       activeChannel: payload.playlist || 'Unresolved',
       pressureLevel: initialPressureForCondition(payload.condition),
@@ -2646,14 +3594,14 @@
       beatHistory: [],
       phaseSpineIndex: 0,
       phasePressureCounts: {
-        setup: 0,
-        confrontation: 0,
-        collapse: 0
+        intro: 0,
+        character: 0,
+        crisis: 0
       },
       phaseLocks: [],
       totalFieldPressure: 0,
       operationTime: 0,
-      currentPhase: 'SETUP',
+      currentPhase: 'BLOCK 1 // INTRO / CATALYST',
       phaseActionCount: 0,
       phaseRequiredCount: runtimePhaseSpine[0].requiredPressure,
       battlefieldPresenceReady: false,
@@ -2662,10 +3610,12 @@
       lockedPresenceChoices: [],
       pendingPresenceChoice: null,
       stationReports: [],
+      storyHooks: [],
+      eventRotationIndex: 0,
       characterTurns: {
-        setup: 'Ronin subject established against Genealord pressure and mutant force.',
-        confrontation: '',
-        collapse: ''
+        intro: 'Ronin subject established against Genealord pressure and mutant force.',
+        character: '',
+        crisis: ''
       },
       storyTone: storyToneForActor(actor),
       hookLine: runtimePick(runtimeOpeningHooks),
@@ -2688,8 +3638,8 @@
       runtimeLog('hook generated', root.oohAlphaRuntimeState.hookLine);
       renderRuntimeBeatPanel(root, root.oohAlphaRuntimeState);
       setRuntimeBattlefieldPresence(root, root.oohAlphaRuntimeState, { state: 'FIELD INITIALIZED' });
+      renderIntroStoryBlock(root, root.oohAlphaRuntimeState);
       renderBattlefieldGate(root, root.oohAlphaRuntimeState);
-      renderOppositionReadout(root, root.oohAlphaRuntimeState);
       renderStationOutput(root, root.oohAlphaRuntimeState);
       return root.oohAlphaRuntimeState;
     }
@@ -2796,6 +3746,12 @@
 
     state = ensureRuntimeState(root, actor, payload);
 
+    if (!isCrisisPhase(state)) {
+      state.directiveBlocked = true;
+      state.consequenceLine = 'DIRECTIVE LOCKED // complete the current block and press PROCEED.';
+      return state;
+    }
+
     if (state.outcomeState !== 'PENDING') {
       state.directiveBlocked = true;
       state.consequenceLine = 'OPERATION RESOLVED // initialize a new field to continue.';
@@ -2807,6 +3763,7 @@
     state.directiveBlocked = false;
     state.directiveCount++;
     state.lastDirective = commandKey;
+    state.phasePressureCounts[runtimePhaseCluster(state).key] = runtimePhasePressure(state) + 1;
     advanceRuntimeBeat(state, commandKey);
     scene = state.scene || {};
     requiredAdvances = sceneAdvanceRequirement(scene);
@@ -2901,7 +3858,7 @@
       return sceneName + ' closed under controlled pressure. ' + mission.closure;
     }
     if (state.outcomeState === 'STABILIZED') {
-      return 'Force line stabilized before exposure peaked. ' + subject + ' remained inside ' + mission.label + '.';
+      return 'Karma line stabilized before exposure peaked. ' + subject + ' remained inside ' + mission.label + '.';
     }
     if (state.outcomeState === 'COMPROMISED') {
       return 'Intervention failed; ' + mission.pressure.toLowerCase() + ' Consequence consumed the scene around ' + subject + '.';
@@ -2992,8 +3949,9 @@
     var activationButton = root.querySelector('[data-ooh-alpha-activate]');
     var scene = state.scene || {};
     var mission = scene.mission || runtimeMissionById('recon');
+    var finalSuiteReached = state.phaseSpineIndex >= runtimePhaseSpine.length - 1 || state.phaseLocks.indexOf('crisis') !== -1;
 
-    if (!result || !title || !field || !mark || state.outcomeState === 'PENDING') {
+    if (!result || !title || !field || !mark || state.outcomeState === 'PENDING' || !finalSuiteReached) {
       return;
     }
 
@@ -3012,6 +3970,7 @@
       activationButton.disabled = false;
       activationButton.textContent = 'INITIALIZE NEW FIELD';
     }
+    ensureFinalAarPopup(root, state);
   }
 
   function fieldPressureConsequence(state) {
@@ -3041,23 +4000,39 @@
   function selectPresenceChoice(root, choice) {
     var state = root.oohAlphaRuntimeState;
     var reaction = root.querySelector('[data-ooh-alpha-reaction]');
+    var phase;
+    var choices;
+    var existingIndex;
 
-    if (!state || state.outcomeState !== 'PENDING' || !runtimePhaseReady(state)) {
+    if (!state || state.outcomeState !== 'PENDING' || isCrisisPhase(state)) {
       return;
     }
 
-    state.pendingPresenceChoice = choice;
+    phase = runtimePhaseCluster(state);
+    choices = pendingPresenceChoices(state);
+    existingIndex = choices.map(function (selectedChoice) {
+      return selectedChoice.label;
+    }).indexOf(choice.label);
+    if (existingIndex !== -1) {
+      choices.splice(existingIndex, 1);
+    }
+    choices.push(choice);
+    while (choices.length > phase.requiredPressure) {
+      choices.shift();
+    }
     state.selectedBattlefieldPosture = choice;
-    state.consequenceLine = 'BATTLEFIELD POSTURE SELECTED // ' + choice.label + '.';
+    updateBattlefieldReadiness(state);
+    state.consequenceLine = 'CHOICE RECORDED // ' + choice.label + ' // ' + state.phaseActionCount + '/' + state.phaseRequiredCount + '. ' + choice.narrativeEffect;
+    setChoiceBattlefieldPresence(root, state, choice);
     if (reaction) {
-      reaction.textContent = choice.narrativeEffect;
+      reaction.textContent = state.consequenceLine;
     }
     window.console.log('OA Battlefield posture selected', {
       phase: runtimeVisiblePhase(state),
-      choice: choice.label
+      choice: choice.label,
+      ready: runtimePhaseReady(state)
     });
     renderBattlefieldGate(root, state);
-    lockBattlefieldPresence(root);
   }
 
   function applyPresenceChoice(state, choice) {
@@ -3077,6 +4052,12 @@
       narrativeEffect: choice.narrativeEffect
     });
     updateBattlefieldReadiness(state);
+  }
+
+  function applyPendingPresenceChoices(state) {
+    pendingPresenceChoices(state).forEach(function (choice) {
+      applyPresenceChoice(state, choice);
+    });
   }
 
   function lastLockedPresenceChoice(state) {
@@ -3104,6 +4085,15 @@
       clarity: action.clarityDelta,
       exposure: action.exposureDelta
     };
+
+    if (!isCrisisPhase(state)) {
+      state.consequenceLine = 'CRISIS CONTROLS LOCKED // press PROCEED through the current block first.';
+      if (reaction) {
+        reaction.textContent = state.consequenceLine;
+      }
+      renderBattlefieldGate(root, state);
+      return state;
+    }
 
     if (state.outcomeState !== 'PENDING') {
       state.consequenceLine = 'OPERATION RESOLVED // initialize a new field to continue.';
@@ -3163,7 +4153,7 @@
       activationStatus.textContent = runtimePresenceStatus(state) + ' // ' + runtimePhaseSummary(state);
     }
 
-    setRuntimeBattlefieldPresence(root, state, { state: action.label });
+    setCrisisBattlefieldPresence(root, state, action);
     setAssetMovementFeed(root, buttonIndex === 1 ? 'advance' : 'hold');
     renderBattlefieldGate(root, state);
     renderStationOutput(root, state);
@@ -3216,28 +4206,33 @@
     else if (!runtimePhaseReady(state)) {
       state.consequenceLine = 'BATTLEFIELD PRESENCE BUILDING // apply field pressure first.';
     }
-    else if (!state.pendingPresenceChoice) {
+    else if (!isCrisisPhase(state) && !pendingPresenceChoices(state).length) {
       state.consequenceLine = 'BATTLEFIELD PRESENCE READY // choose a posture before locking.';
     }
     else if (state.phaseSpineIndex >= runtimePhaseSpine.length - 1) {
-      applyPresenceChoice(state, state.pendingPresenceChoice);
+      applyPendingPresenceChoices(state);
       state.phaseLocks.push(phase.key);
-      state.stationReports.push(phase.label + ' locked: ' + presenceChoiceSummary(state.pendingPresenceChoice));
+      state.stationReports.push(phase.label + ' locked: crisis sequence complete.');
       state.pendingPresenceChoice = null;
+      state.pendingPresenceChoices = [];
       state.selectedBattlefieldPosture = null;
       state.battlefieldPresenceReady = false;
-      state.consequenceLine = 'COLLAPSE COMPLETE // operation resolving.';
+      state.consequenceLine = 'BLOCK 4 // FINAL AAR POPUP opening.';
       resolveBattlefieldSpine(root, state);
     }
     else {
-      applyPresenceChoice(state, state.pendingPresenceChoice);
+      pendingPresenceChoices(state).forEach(function (choice) {
+        pushStoryMemory(state, choice.label, choice.narrativeEffect);
+      });
+      applyPendingPresenceChoices(state);
       state.phaseLocks.push(phase.key);
-      state.stationReports.push(phase.label + ' locked: ' + presenceChoiceSummary(state.pendingPresenceChoice));
+      state.stationReports.push(phase.label + ' locked: ' + pendingPresenceChoices(state).map(presenceChoiceSummary).join(' / '));
       state.phaseSpineIndex++;
       nextPhase = runtimePhaseCluster(state);
       state.beatIndex = nextPhase.beatStart;
       state.beatName = runtimeStoryBeats[state.beatIndex];
       state.pendingPresenceChoice = null;
+      state.pendingPresenceChoices = [];
       state.selectedBattlefieldPosture = null;
       state.battlefieldPresenceReady = false;
       updateBattlefieldReadiness(state);
@@ -3262,6 +4257,7 @@
 
   function setActiveCommand(root, commandKey) {
     var directive = commandDirectives[commandKey];
+    var commandButton = root.querySelector('[data-ooh-alpha-command="' + commandKey + '"]');
     var state = root.querySelector('[data-ooh-alpha-command-state]');
     var acknowledgement = root.querySelector('[data-ooh-alpha-command-ack]');
     var runtimeCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
@@ -3272,11 +4268,7 @@
     var consequenceSummary = root.querySelector('[data-ooh-alpha-consequence-summary]');
     var runtimeState;
 
-    if (applyOa206CommandShortcut(root, commandKey)) {
-      return;
-    }
-
-    if (!directive || !state || !acknowledgement) {
+    if (!directive || !state || !acknowledgement || (commandButton && commandButton.disabled)) {
       return;
     }
 
@@ -3298,6 +4290,7 @@
       if (reaction) {
         reaction.textContent = runtimeState.consequenceLine;
       }
+      renderBattlefieldGate(root, runtimeState);
       return;
     }
 
@@ -3320,11 +4313,13 @@
       consequenceStatus.textContent = 'PHASE: ' + runtimeVisiblePhase(runtimeState);
     }
     if (consequenceSummary) {
-      consequenceSummary.textContent = consequenceIncidentSummary(runtimeState);
+      consequenceSummary.textContent = storyPanelText(runtimeState);
     }
     setRuntimeBattlefieldPresence(root, runtimeState, directive);
     setAssetMovementFeed(root, directive.movementMode);
     renderRuntimeOutcome(root, runtimeState);
+    renderBattlefieldGate(root, runtimeState);
+    renderStationOutput(root, runtimeState);
 
     root.querySelectorAll('[data-ooh-alpha-command]').forEach(function (button) {
       if (button.getAttribute('data-ooh-alpha-command') === commandKey) {
@@ -3335,13 +4330,16 @@
         button.classList.remove('is-command-active');
         button.removeAttribute('aria-pressed');
       }
-      button.disabled = false;
+      setRuntimeButtonState(button, isCrisisPhase(runtimeState) && runtimeState.outcomeState === 'PENDING');
     });
   }
 
   function initCommandConsole(root) {
     root.querySelectorAll('[data-ooh-alpha-command]').forEach(function (button) {
       button.addEventListener('click', function () {
+        if (button.disabled) {
+          return;
+        }
         setActiveCommand(root, button.getAttribute('data-ooh-alpha-command'));
       });
     });
@@ -3431,6 +4429,10 @@
     root.oohAlphaOperationalPayload = null;
     root.oohAlphaSelectedActor = null;
     root.oohAlphaCommand = null;
+    root.querySelectorAll('[data-ooh-alpha-final-aar]').forEach(function (popup) {
+      popup.hidden = true;
+      popup.setAttribute('aria-hidden', 'true');
+    });
 
     if (commandState) {
       commandState.textContent = 'DIRECTIVE CHANNEL IDLE';
@@ -3483,392 +4485,16 @@
     });
 
     root.querySelectorAll('[data-ooh-alpha-command]').forEach(function (button) {
-      button.disabled = false;
+      button.disabled = true;
       button.classList.remove('is-command-active');
       button.removeAttribute('aria-pressed');
     });
-  }
-
-  var oa206OpeningRounds = [
-    {
-      title: 'B-STORY / CONTACT THREAD',
-      brief: 'The first human cost enters the channel. Lock who the field protects before pressure starts moving.',
-      choices: [
-        { label: 'PROTECT THE ASSET', force: 1, exposure: 0, clarity: 0, stability: 1, presence: 1, team: 1, consequence: 'The asset stays covered and the corridor accepts a quiet handoff.', hook: 'The user is choosing protection over speed; the next pressure will test patience.' },
-        { label: 'FOLLOW THE OPPOSING SIGNAL', force: 1, exposure: 1, clarity: 2, stability: -1, presence: 0, team: 0, consequence: 'The hostile trace becomes readable, but the subject has to move closer to the heat.', hook: 'Clarity rises while exposure starts to matter.' },
-        { label: 'HOLD THE CORRIDOR', force: 0, exposure: -1, clarity: 1, stability: 1, presence: 0, team: 0, consequence: 'The corridor quiets long enough to hear the shape of the threat.', hook: 'The path slows down, but the field stops drifting.' }
-      ]
-    },
-    {
-      title: 'PRESSURE SHIFT',
-      brief: 'The opposing force changes cadence. Pick how the team answers without turning the route into a beacon.',
-      choices: [
-        { label: 'GATHER INTEL', force: 0, exposure: 0, clarity: 2, stability: 0, presence: 1, team: 0, consequence: 'A clean read comes through the static and narrows the next choice.', hook: 'The moment becomes less blind, but pressure is still climbing.' },
-        { label: 'MOVE THE TEAM', force: 2, exposure: 1, clarity: 0, stability: -1, presence: 1, team: 0, consequence: 'The team gains ground before the hostile sweep can settle.', hook: 'Momentum improves, but the route gets louder.' },
-        { label: 'DELAY AND LISTEN', force: 0, exposure: -1, clarity: 1, stability: 1, presence: 0, team: 1, consequence: 'The team holds breath while the signal reveals a second pressure line.', hook: 'The right silence buys stability.' }
-      ]
-    },
-    {
-      title: 'BAD GUYS CLOSE IN',
-      brief: 'The field is no longer neutral. Choose the shape of the counter-move.',
-      choices: [
-        { label: 'COUNTER-PRESSURE', force: 2, exposure: 1, clarity: 0, stability: 0, presence: 1, team: -1, consequence: 'The hostile line bends, but the team absorbs the shock.', hook: 'Force works, and it costs something.' },
-        { label: 'DIVERT ATTENTION', force: 1, exposure: -1, clarity: -1, stability: 1, presence: 1, team: 0, consequence: 'The enemy follows the wrong mark and the route gets one clean breath.', hook: 'The field is safer, but less certain.' },
-        { label: 'BURN THE MARKER', force: 3, exposure: 2, clarity: 1, stability: -2, presence: 0, team: -1, consequence: 'The marker dies bright and buys time at a visible cost.', hook: 'This creates a hard advantage and a dangerous trail.' }
-      ]
-    },
-    {
-      title: 'BREAK INTO FIELD',
-      brief: 'The opening path has to become real. Lock the route that will carry the operation into the Battlefield Suite.',
-      choices: [
-        { label: 'COMMIT ROUTE', force: 1, exposure: 0, clarity: 1, stability: 2, presence: 1, team: 0, consequence: 'The route locks with enough structure to carry the first field push.', hook: 'The suite can open because the path finally has shape.' },
-        { label: 'SPLIT SIGNAL', force: 1, exposure: -1, clarity: -1, stability: 1, presence: 2, team: 0, consequence: 'Two signals divide hostile attention and leave the team moving under cover.', hook: 'Presence rises while clarity becomes something to manage.' },
-        { label: 'FORCE EXTRACTION WINDOW', force: 3, exposure: 2, clarity: 0, stability: -1, presence: 1, team: -1, consequence: 'An extraction window appears early, unstable but usable.', hook: 'The field opens fast; now the operation has to survive its own speed.' }
-      ]
-    }
-  ];
-
-  var oa206StoryBeats = [
-    { title: 'B-STORY / HUMAN COST', brief: 'The subject becomes more than an asset marker. Their risk is now the center of the operation.', choices: [
-      { label: 'COVER THE CIVILIANS', force: 0, exposure: 0, clarity: 1, stability: 1, presence: 1, team: 1, consequence: 'Civilian movement stays under cover and the team remembers why the route matters.', hook: 'The next threat will push against that restraint.' },
-      { label: 'PRESS THE RELAY', force: 2, exposure: 1, clarity: 1, stability: -1, presence: 0, team: 0, consequence: 'The relay answers and gives up a useful pattern.', hook: 'The signal is clearer, and it is watching back.' },
-      { label: 'KEEP THEM MOVING', force: 1, exposure: 1, clarity: 0, stability: 0, presence: 1, team: -1, consequence: 'The group gains distance before fear can settle in.', hook: 'Speed buys space, but the team starts to fray.' }
-    ] },
-    { title: 'OPERATIONAL CONTROL', brief: 'The system gives you leverage. Use it without letting the field learn your rhythm.', choices: [
-      { label: 'THREAD FALSE TRAFFIC', force: 1, exposure: -1, clarity: 0, stability: 1, presence: 1, team: 0, consequence: 'False traffic pulls hostile attention away from the true route.', hook: 'The field is fooled for now.' },
-      { label: 'RAISE FIELD PRESSURE', force: 2, exposure: 1, clarity: 0, stability: -1, presence: 1, team: 0, consequence: 'The operation pushes forward and forces a reaction.', hook: 'Control increases, and so does noise.' },
-      { label: 'READ THE OUTPUT', force: 0, exposure: 0, clarity: 2, stability: 0, presence: 0, team: 0, consequence: 'The station returns a clean tactical read.', hook: 'The next choice can be sharper.' }
-    ] },
-    { title: 'BAD GUYS CLOSE IN', brief: 'The opposing force adapts. It is now answering choices instead of merely reacting.', choices: [
-      { label: 'BREAK PURSUIT', force: 2, exposure: 1, clarity: 0, stability: 0, presence: 1, team: -1, consequence: 'The pursuit line fractures long enough to move.', hook: 'The team gets room, but contact leaves a mark.' },
-      { label: 'KILL THE TRACE', force: 1, exposure: -1, clarity: -1, stability: 1, presence: 0, team: 0, consequence: 'The trace goes dark and takes some certainty with it.', hook: 'Safety improves in the absence of perfect information.' },
-      { label: 'BAIT THE SWEEP', force: 2, exposure: 2, clarity: 1, stability: -1, presence: 1, team: 0, consequence: 'The hostile sweep commits to the wrong pressure lane.', hook: 'The trick works because it is visible.' }
-    ] },
-    { title: 'MIDPOINT REVERSAL', brief: 'The operation turns. The thing you were avoiding becomes the only available route.', choices: [
-      { label: 'ACCEPT THE TURN', force: 1, exposure: 0, clarity: 1, stability: 1, presence: 1, team: 0, consequence: 'The team adjusts before the reversal breaks formation.', hook: 'Flexibility keeps the story alive.' },
-      { label: 'OVERRIDE THE ROUTE', force: 3, exposure: 1, clarity: 0, stability: -2, presence: 1, team: -1, consequence: 'The route obeys, but the system strains under the override.', hook: 'Authority has a cost.' },
-      { label: 'SEND A DECOY TEAM', force: 1, exposure: -1, clarity: -1, stability: 0, presence: 2, team: -1, consequence: 'The decoy carries the heat away from the subject.', hook: 'The right sacrifice buys a dangerous opening.' }
-    ] },
-    { title: 'PRESSURE COLLAPSE', brief: 'The route starts losing shape. Stop the collapse or ride it into a new path.', choices: [
-      { label: 'BRACE THE ROUTE', force: 0, exposure: 0, clarity: 0, stability: 2, presence: 1, team: 1, consequence: 'The route holds under pressure and the team regains breath.', hook: 'Stability becomes the weapon.' },
-      { label: 'PUNCH THROUGH', force: 3, exposure: 2, clarity: 0, stability: -1, presence: 1, team: -1, consequence: 'The team breaks through the collapsing edge.', hook: 'The move is clean only if the aftermath can be carried.' },
-      { label: 'CUT POWER', force: 1, exposure: -1, clarity: -2, stability: 1, presence: 0, team: 0, consequence: 'The field goes dim and hostile targeting stutters.', hook: 'Darkness protects and obscures.' }
-    ] },
-    { title: 'DARK NIGHT OF THE SIGNAL', brief: 'The field stops giving easy answers. You must choose what still matters.', choices: [
-      { label: 'HOLD THE HUMAN LINE', force: 0, exposure: 0, clarity: 1, stability: 1, presence: 1, team: 2, consequence: 'The team steadies because the operation remembers its human cost.', hook: 'Resolve returns without noise.' },
-      { label: 'FOLLOW THE ONLY TRACE', force: 1, exposure: 1, clarity: 2, stability: -1, presence: 0, team: 0, consequence: 'The only trace points through danger and becomes usable.', hook: 'Truth arrives with a threat attached.' },
-      { label: 'LOCK SILENCE', force: 0, exposure: -2, clarity: -1, stability: 1, presence: 0, team: 0, consequence: 'Silence hides the route while the field searches empty air.', hook: 'The quiet move keeps failure at distance.' }
-    ] },
-    { title: 'BREAK INTO THREE', brief: 'The answer forms from what survived. Combine the human thread, the route, and the pressure read.', choices: [
-      { label: 'MERGE THE SIGNALS', force: 1, exposure: 0, clarity: 2, stability: 1, presence: 1, team: 0, consequence: 'The broken signals align into one workable plan.', hook: 'The operation finally has a complete shape.' },
-      { label: 'TRUST THE TEAM', force: 0, exposure: 0, clarity: 0, stability: 1, presence: 1, team: 2, consequence: 'The team acts before the console can resolve every variable.', hook: 'Human judgment fills the gap.' },
-      { label: 'FORCE THE WINDOW', force: 3, exposure: 2, clarity: 0, stability: -1, presence: 1, team: -1, consequence: 'The final window opens under pressure.', hook: 'The ending is reachable and volatile.' }
-    ] },
-    { title: 'FINALE PUSH', brief: 'The final move has to carry the subject through contact.', choices: [
-      { label: 'EXTRACT CLEAN', force: 1, exposure: -1, clarity: 1, stability: 1, presence: 1, team: 1, consequence: 'The subject moves through the window with minimal trace.', hook: 'Control holds to the last practical second.' },
-      { label: 'SHIELD THE TEAM', force: 0, exposure: 0, clarity: 0, stability: 1, presence: 1, team: 2, consequence: 'The team survives the push and keeps the route from becoming a grave.', hook: 'The win becomes human before it becomes tactical.' },
-      { label: 'BREAK THE ENEMY LINE', force: 3, exposure: 1, clarity: 1, stability: -1, presence: 1, team: -1, consequence: 'The enemy line breaks and the field opens hard.', hook: 'Victory comes loud.' }
-    ] },
-    { title: 'FINAL IMAGE / AAR', brief: 'The operation closes. One final choice decides what the report remembers.', choices: [
-      { label: 'PRESERVE THE ROUTE', force: 0, exposure: -1, clarity: 1, stability: 2, presence: 0, team: 0, consequence: 'The route survives for another operation.', hook: 'The final image is control without spectacle.' },
-      { label: 'SAVE THE SUBJECT', force: 1, exposure: 0, clarity: 0, stability: 0, presence: 1, team: 2, consequence: 'The subject comes out alive and changed.', hook: 'The story lands on the cost of survival.' },
-      { label: 'SEAL THE FIELD', force: 2, exposure: 1, clarity: 1, stability: 1, presence: 0, team: -1, consequence: 'The field seals behind the team and cuts off pursuit.', hook: 'The ending is decisive, but not free.' }
-    ] }
-  ];
-
-  function oa206InitialStoryState() {
-    return {
-      mode: 'opening',
-      openingIndex: 0,
-      beatIndex: 0,
-      pathLocked: false,
-      result: 'PENDING',
-      force: 3,
-      exposure: 1,
-      clarity: 3,
-      routeStability: 5,
-      presence: 1,
-      teamCondition: 4,
-      choices: [],
-      currentSummary: 'Choose the first contact thread. The station is waiting for a path, not a diagnosis.'
-    };
-  }
-
-  function oa206StatsText(state) {
-    return 'Force ' + state.force + ' // Exposure ' + state.exposure + ' // Clarity ' + state.clarity + ' // Route Stability ' + state.routeStability + ' // Presence ' + state.presence + ' // Team ' + state.teamCondition;
-  }
-
-  function oa206StatGrid(state) {
-    return '<div class="ooh-operation-alpha__story-stat-grid">' +
-      '<span class="ooh-operation-alpha__story-stat">Force ' + state.force + '</span>' +
-      '<span class="ooh-operation-alpha__story-stat">Exposure ' + state.exposure + '</span>' +
-      '<span class="ooh-operation-alpha__story-stat">Clarity ' + state.clarity + '</span>' +
-      '<span class="ooh-operation-alpha__story-stat">Route ' + state.routeStability + '</span>' +
-      '<span class="ooh-operation-alpha__story-stat">Presence ' + state.presence + '</span>' +
-      '<span class="ooh-operation-alpha__story-stat">Team ' + state.teamCondition + '</span>' +
-    '</div>';
-  }
-
-  function oa206CurrentStage(state) {
-    return state.pathLocked ? oa206StoryBeats[state.beatIndex] : oa206OpeningRounds[state.openingIndex];
-  }
-
-  function oa206ClampState(state) {
-    state.force = clampRuntimeLevel(state.force, 0, 10);
-    state.exposure = clampRuntimeLevel(state.exposure, 0, 10);
-    state.clarity = clampRuntimeLevel(state.clarity, 0, 10);
-    state.routeStability = clampRuntimeLevel(state.routeStability, 0, 10);
-    state.presence = clampRuntimeLevel(state.presence, 0, 10);
-    state.teamCondition = clampRuntimeLevel(state.teamCondition, 0, 10);
-  }
-
-  function oa206ResultForState(state) {
-    var score = state.force + state.clarity + state.routeStability + state.presence + state.teamCondition - state.exposure;
-
-    if (state.exposure >= 9 || state.routeStability <= 0 || state.teamCondition <= 0) {
-      return 'FAILURE';
-    }
-    if (score >= 25 && state.routeStability >= 4 && state.teamCondition >= 3) {
-      return 'SUCCESS';
-    }
-    if (score >= 17) {
-      return 'PARTIAL';
-    }
-
-    return 'FAILURE';
-  }
-
-  function oa206Recap(state) {
-    var first = state.choices[0] ? state.choices[0].label : 'No opening choice';
-    var last = state.choices[state.choices.length - 1] ? state.choices[state.choices.length - 1].label : 'No final choice';
-
-    return 'The operation opened on ' + first + ' and closed on ' + last + '. The route carried Force ' + state.force + ' against Exposure ' + state.exposure + ', with Clarity ' + state.clarity + ' and Route Stability ' + state.routeStability + ' deciding how much of the field survived. ' + (state.result === 'SUCCESS' ? 'The subject exits with the route intact.' : state.result === 'PARTIAL' ? 'The subject survives, but the report carries damage.' : 'The field overwhelms the route before the console can recover it.');
-  }
-
-  function oa206CriticalChoices(state) {
-    return state.choices.slice(-5).map(function (choice) {
-      return choice.stage + ': ' + choice.label;
-    }).join(' // ') || 'No choices recorded.';
-  }
-
-  function setOa206Consequence(root, status, summary) {
-    var consequenceStatus = root.querySelector('[data-ooh-alpha-consequence-status]');
-    var consequenceSummary = root.querySelector('[data-ooh-alpha-consequence-summary]');
-    var reaction = root.querySelector('[data-ooh-alpha-reaction]');
-
-    if (consequenceStatus) {
-      consequenceStatus.textContent = status;
-    }
-    if (consequenceSummary) {
-      consequenceSummary.textContent = summary;
-    }
-    if (reaction) {
-      reaction.textContent = summary;
-    }
-  }
-
-  function renderOa206Aar(root, state) {
-    var title = root.querySelector('[data-ooh-alpha-scenario-title]');
-    var situation = root.querySelector('[data-ooh-alpha-situation]');
-    var interventions = root.querySelector('[data-ooh-alpha-interventions]');
-    var pressure = root.querySelector('[data-ooh-alpha-pressure]');
-    var result = root.querySelector('[data-ooh-alpha-result]');
-    var resultTitle = root.querySelector('[data-ooh-alpha-result-title]');
-    var resultField = root.querySelector('[data-ooh-alpha-result-field]');
-    var resultMark = root.querySelector('[data-ooh-alpha-result-mark]');
-    var mission = root.querySelector('[data-ooh-alpha-mission]');
-    var missionTitle = root.querySelector('[data-ooh-alpha-mission-title]');
-    var missionBrief = root.querySelector('[data-ooh-alpha-mission-brief]');
-    var missionCycle = root.querySelector('[data-ooh-alpha-mission-cycle]');
-
-    root.classList.add('is-oa206-aar');
-    if (title) {
-      title.textContent = 'FINAL IMAGE / AAR';
-    }
-    if (situation) {
-      situation.innerHTML = '<p>Mission result: ' + state.result + '.</p><p>' + oa206Recap(state) + '</p>' + oa206StatGrid(state);
-    }
-    if (interventions) {
-      interventions.innerHTML = '';
-    }
-    if (pressure) {
-      pressure.textContent = 'AAR PENDING OUTCOME // ' + state.result;
-    }
-    if (result) {
-      result.hidden = false;
-    }
-    if (resultTitle) {
-      resultTitle.textContent = 'MISSION RESULT: ' + state.result;
-    }
-    if (resultField) {
-      resultField.textContent = oa206StatsText(state);
-    }
-    if (resultMark) {
-      resultMark.textContent = 'CRITICAL CHOICES: ' + oa206CriticalChoices(state) + ' // RECAP: ' + oa206Recap(state);
-    }
-    if (mission) {
-      mission.hidden = false;
-    }
-    if (missionTitle) {
-      missionTitle.textContent = 'AAR COMPLETE';
-    }
-    if (missionBrief) {
-      missionBrief.textContent = 'Review the result, then run another operation when ready.';
-    }
-    if (missionCycle) {
-      missionCycle.disabled = false;
-      missionCycle.textContent = 'RUN ANOTHER OPERATION';
-      missionCycle.classList.add('is-presence-ready');
-    }
-    setOa206Consequence(root, 'AAR PENDING OUTCOME', oa206Recap(state));
-  }
-
-  function renderOa206Stage(root) {
-    var state = root.oohAlphaStoryState;
-    var stage = state ? oa206CurrentStage(state) : null;
-    var suite = root.querySelector('[data-ooh-alpha-battlefield-suite]');
-    var title = root.querySelector('[data-ooh-alpha-scenario-title]');
-    var situation = root.querySelector('[data-ooh-alpha-situation]');
-    var interventions = root.querySelector('[data-ooh-alpha-interventions]');
-    var pressure = root.querySelector('[data-ooh-alpha-pressure]');
-    var mission = root.querySelector('[data-ooh-alpha-mission]');
-    var missionTitle = root.querySelector('[data-ooh-alpha-mission-title]');
-    var missionSource = root.querySelector('[data-ooh-alpha-mission-source]');
-    var missionBrief = root.querySelector('[data-ooh-alpha-mission-brief]');
-    var missionCycle = root.querySelector('[data-ooh-alpha-mission-cycle]');
-
-    if (!state || !stage) {
-      return;
-    }
-    if (state.result !== 'PENDING') {
-      renderOa206Aar(root, state);
-      return;
-    }
-
-    root.classList.add('is-field-active');
-    root.classList.toggle('is-oa206-path-locked', state.pathLocked);
-    if (suite) {
-      suite.classList.toggle('is-suite-available', state.pathLocked);
-    }
-    if (title) {
-      title.textContent = state.pathLocked ? 'BATTLEFIELD OPERATIONS STATION // ' + stage.title : 'OPENING PATH LOCK ' + (state.openingIndex + 1) + '/4 // ' + stage.title;
-    }
-    if (situation) {
-      situation.innerHTML = '<p>' + stage.brief + '</p><p>' + state.currentSummary + '</p>' + oa206StatGrid(state);
-    }
-    if (pressure) {
-      pressure.textContent = state.pathLocked ? 'FIELD SUITE AVAILABLE // STEP ' + (state.beatIndex + 1) + '/' + oa206StoryBeats.length : 'PATH LOCKING // ROUND ' + (state.openingIndex + 1) + '/4';
-    }
-    if (mission) {
-      mission.hidden = false;
-    }
-    if (missionTitle) {
-      missionTitle.textContent = state.pathLocked ? 'PATH LOCKED' : 'OPENING PATH NOT LOCKED';
-    }
-    if (missionSource) {
-      missionSource.textContent = state.pathLocked ? 'FIELD SUITE AVAILABLE' : 'OPERATIONS STATION PRIMARY';
-    }
-    if (missionBrief) {
-      missionBrief.textContent = state.pathLocked ? 'PATH LOCKED // FIELD SUITE AVAILABLE // AAR PENDING OUTCOME' : 'Complete four opening decisions to open the Battlefield Suite.';
-    }
-    if (missionCycle) {
-      missionCycle.disabled = true;
-      missionCycle.textContent = state.pathLocked ? 'FIELD SUITE AVAILABLE' : 'PATH LOCK IN PROGRESS';
-      missionCycle.classList.toggle('is-presence-locked', state.pathLocked);
-    }
-    if (interventions) {
-      interventions.innerHTML = '';
-      stage.choices.forEach(function (choice, index) {
-        var button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'ooh-operation-alpha__intervention';
-        button.textContent = choice.label;
-        button.setAttribute('data-ooh-alpha-story-choice', String(index));
-        button.addEventListener('click', function () {
-          applyOa206Choice(root, index);
-        });
-        interventions.appendChild(button);
-      });
-    }
-
-    setBattlefieldPresence(root, {
-      field: state.pathLocked ? 'PATH LOCKED // FIELD SUITE AVAILABLE' : 'Opening path lock in progress.',
-      movement: state.choices.length ? 'Last choice: ' + state.choices[state.choices.length - 1].label : 'Awaiting first story choice.',
-      signal: oa206StatsText(state)
+    root.querySelectorAll('[data-ooh-alpha-director-action], .ooh-operation-alpha__intervention').forEach(function (button) {
+      button.disabled = true;
+      button.classList.add('is-oa-control-disabled');
+      button.removeAttribute('aria-pressed');
     });
-    setOa206Consequence(root, state.pathLocked ? 'FIELD SUITE AVAILABLE' : 'PATH LOCK ' + (state.openingIndex + 1) + '/4', state.currentSummary);
-  }
-
-  function applyOa206Choice(root, index) {
-    var state = root.oohAlphaStoryState;
-    var stage = state ? oa206CurrentStage(state) : null;
-    var choice = stage && stage.choices[index] ? stage.choices[index] : null;
-
-    if (!state || !choice || state.result !== 'PENDING') {
-      return;
-    }
-
-    state.force += choice.force;
-    state.exposure += choice.exposure;
-    state.clarity += choice.clarity;
-    state.routeStability += choice.stability;
-    state.presence += choice.presence;
-    state.teamCondition += choice.team;
-    oa206ClampState(state);
-    state.choices.push({
-      stage: stage.title,
-      label: choice.label,
-      consequence: choice.consequence
-    });
-    state.currentSummary = choice.consequence + ' ' + choice.hook + ' Next pressure: ' + (state.pathLocked ? 'the field answers this decision.' : 'the opening route tightens.');
-
-    if (state.exposure >= 9 || state.routeStability <= 0 || state.teamCondition <= 0) {
-      state.result = 'FAILURE';
-      state.currentSummary = choice.consequence + ' The route fails under exposure before the operation can recover.';
-      renderOa206Stage(root);
-      return;
-    }
-
-    if (!state.pathLocked) {
-      state.openingIndex++;
-      if (state.openingIndex >= oa206OpeningRounds.length) {
-        state.pathLocked = true;
-        state.mode = 'story';
-        state.beatIndex = 0;
-        state.currentSummary = 'PATH LOCKED. FIELD SUITE AVAILABLE. AAR PENDING OUTCOME.';
-      }
-      renderOa206Stage(root);
-      return;
-    }
-
-    state.beatIndex++;
-    if (state.beatIndex >= oa206StoryBeats.length) {
-      state.result = oa206ResultForState(state);
-    }
-    renderOa206Stage(root);
-  }
-
-  function resetOa206Operation(root) {
-    resetRuntimeLoop(root);
-    root.oohAlphaStoryState = oa206InitialStoryState();
-    root.classList.remove('is-oa206-aar');
-    renderOa206Stage(root);
-  }
-
-  function applyOa206CommandShortcut(root, commandKey) {
-    var map = {
-      hold: 0,
-      advance: 1,
-      extract: 2,
-      signal: 0,
-      divert: 1
-    };
-
-    if (!root.oohAlphaStoryState || root.oohAlphaStoryState.result !== 'PENDING') {
-      return false;
-    }
-    applyOa206Choice(root, map[commandKey] || 0);
-    return true;
+    syncRuntimeControlLocks(root, null);
   }
 
   function activateOperationAlphaRuntime(root) {
@@ -3877,9 +4503,19 @@
     var activationButton = root.querySelector('[data-ooh-alpha-activate]');
     var reaction = root.querySelector('[data-ooh-alpha-reaction]');
     var contact = root.querySelector('[data-ooh-alpha-contact]');
+    var storedSelection = getPlaylistSelection();
+
+    if (!storedSelection || !storedSelection.title) {
+      syncSignalGate(root);
+      syncFieldInitializeGate(root);
+      return;
+    }
 
     root.classList.add('is-runtime-acknowledged');
+    pauseOperationAlphaAmbient(root);
     resetRuntimeLoop(root);
+    syncSignalGate(root);
+    syncFieldInitializeGate(root);
 
     if (runtimeCopy) {
       runtimeCopy.textContent = 'Runtime shell active.';
@@ -3898,11 +4534,10 @@
       contact.hidden = false;
     }
 
+    renderScenario(root, 0);
     renderContact(root, 0, 'activation');
     setAtmosphere(root, 0);
     selectOperationAlphaActor(root);
-    root.oohAlphaStoryState = oa206InitialStoryState();
-    renderOa206Stage(root);
   }
 
   function setInterventionsDisabled(root, disabled) {
@@ -3930,7 +4565,6 @@
     }
     renderContact(root, nextContactIndex, 'response');
     renderMission(root, nextContactIndex, root.oohAlphaInteractionCount + buttonIndex);
-    renderConsequence(root, nextContactIndex, buttonIndex);
     setAtmosphere(root, nextAtmosphereIndex);
     applyFieldPressure(root, buttonIndex);
 
@@ -3942,6 +4576,7 @@
     var enter = root.querySelector('[data-ooh-operation-alpha-enter]');
     var activationButton = root.querySelector('[data-ooh-alpha-activate]');
     var missionCycle = root.querySelector('[data-ooh-alpha-mission-cycle]');
+    var signalGate = root.querySelector('[data-ooh-alpha-signal-gate]');
     var signalLinks = root.querySelectorAll('a.ooh-operation-alpha__access-button, a.ooh-operation-alpha__runtime-button');
     var shell = root.querySelector('[data-ooh-operation-alpha-control]');
     var title = root.querySelector('.ooh-operation-alpha__title');
@@ -3972,7 +4607,7 @@
       var version = document.createElement('p');
       version.className = 'ooh-operation-alpha__copy';
       version.setAttribute('data-ooh-alpha-runtime-version', '');
-      version.textContent = 'OA RUNTIME VERSION: OA-206 WIDESCREEN STORY CHECK';
+      version.textContent = 'OA RUNTIME VERSION: OA-211 DECISION CONSEQUENCE CHECK';
       if (title && title.parentNode === shell) {
         shell.insertBefore(version, title.nextSibling);
       }
@@ -3982,8 +4617,8 @@
     }
     signalLinks.forEach(function (link) {
       if ((link.textContent || '').trim() === ['ENTER', 'ACTIVE', 'RUNTIME'].join(' ')) {
-        link.textContent = 'CHANGE SIGNAL';
-        link.setAttribute('aria-label', 'Change Operation Alpha audio signal');
+        link.textContent = 'SELECT SIGNAL';
+        link.setAttribute('aria-label', 'Select Operation Alpha audio signal');
       }
     });
     root.querySelectorAll('[data-ooh-alpha-command]').forEach(function (button) {
@@ -4024,15 +4659,53 @@
 
     if (activationButton) {
       activationButton.addEventListener('click', function () {
+        var storedSelection = getPlaylistSelection();
+        var activationStatus = root.querySelector('[data-ooh-alpha-activation-status]');
+
+        if (activationButton.disabled) {
+          if (!storedSelection || !storedSelection.title) {
+            syncFieldInitializeGate(root);
+            if (activationStatus) {
+              activationStatus.textContent = 'SELECT SIGNAL REQUIRED';
+            }
+          }
+          return;
+        }
+        if (!storedSelection || !storedSelection.title) {
+          syncFieldInitializeGate(root);
+          if (activationStatus) {
+            activationStatus.textContent = 'SELECT SIGNAL REQUIRED';
+          }
+          return;
+        }
         activateOperationAlphaRuntime(root);
       });
     }
+    if (signalGate) {
+      syncSignalGate(root);
+      signalGate.addEventListener('click', function (event) {
+        if (signalGate.getAttribute('aria-disabled') === 'true') {
+          event.preventDefault();
+        }
+      });
+    }
+    setupOperationAlphaAmbient(root);
+    renderIntroSelectedSignal(root);
+    syncFieldInitializeGate(root);
+    root.querySelectorAll('[data-ooh-alpha-next-level]').forEach(function (link) {
+      link.addEventListener('click', function (event) {
+        if (link.getAttribute('aria-disabled') === 'true') {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+      });
+    });
+    syncRuntimeControlLocks(root, null);
     initCommandConsole(root);
     initDirectorLayer(root);
     if (missionCycle) {
       missionCycle.addEventListener('click', function () {
-        if (root.oohAlphaStoryState && root.oohAlphaStoryState.result !== 'PENDING') {
-          resetOa206Operation(root);
+        if (missionCycle.disabled) {
           return;
         }
         lockBattlefieldPresence(root);
@@ -4076,8 +4749,105 @@
     return (basePath || '') + path;
   }
 
-  function operationAlphaPlaylistsPath() {
-    return routePath('/operation-alpha/oaplay/playlists');
+  function setupOperationAlphaAmbient(root) {
+    var audio = root.querySelector('[data-ooh-alpha-ambient-audio]');
+
+    if (!audio || audio.dataset.oohAlphaAmbientReady === '1') {
+      return;
+    }
+
+    audio.dataset.oohAlphaAmbientReady = '1';
+    audio.volume = 0.16;
+
+    var tryPlay = function () {
+      if (!audio.paused) {
+        return;
+      }
+
+      audio.play().catch(function () {});
+    };
+
+    var retryOnInteraction = function () {
+      tryPlay();
+    };
+
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (eventName) {
+      document.addEventListener(eventName, retryOnInteraction, { once: true, passive: true });
+    });
+
+    tryPlay();
+  }
+
+  function pauseOperationAlphaAmbient(root) {
+    var audio = root.querySelector('[data-ooh-alpha-ambient-audio]');
+
+    if (!audio || audio.paused) {
+      return;
+    }
+
+    audio.pause();
+  }
+
+  function renderIntroSelectedSignal(root) {
+    var signalPanel = root.querySelector('[data-ooh-alpha-selected-signal]');
+    var signalTitle = root.querySelector('[data-ooh-alpha-selected-signal-title]');
+    var signalCopy = root.querySelector('[data-ooh-alpha-selected-signal-copy]');
+    var storedSelection = getPlaylistSelection();
+    var storedChannel = storedSelection ? channelBySlug(storedSelection.slug) || channelByLabel(storedSelection.title) : null;
+    var moodTags = storedSelection && storedSelection.moodTags ? storedSelection.moodTags : (storedChannel ? storedChannel.moodTags : '');
+
+    if (!signalPanel) {
+      return;
+    }
+
+    if (!storedSelection || !storedSelection.title) {
+      signalPanel.hidden = true;
+      return;
+    }
+
+    signalPanel.hidden = false;
+    if (signalTitle) {
+      signalTitle.textContent = storedSelection.title;
+    }
+    if (signalCopy) {
+      signalCopy.textContent = (moodTags ? moodTags + '. ' : '') + 'Field initialization available.';
+    }
+  }
+
+  function syncSignalGate(root) {
+    var gate = root.querySelector('[data-ooh-alpha-signal-gate]');
+    var storedSelection = getPlaylistSelection();
+    var signalPath = routePath('/operation-alpha/oaplay/playlists');
+
+    if (!gate) {
+      return;
+    }
+    gate.href = signalPath;
+    gate.textContent = 'SELECT SIGNAL';
+    gate.setAttribute('aria-label', gate.textContent + ' for Operation Alpha');
+    gate.setAttribute('aria-disabled', 'false');
+    gate.classList.remove('is-signal-gate-locked');
+    gate.classList.add('is-signal-gate-ready');
+    renderIntroSelectedSignal(root);
+  }
+
+  function syncFieldInitializeGate(root) {
+    var activationButton = root.querySelector('[data-ooh-alpha-activate]');
+    var activationStatus = root.querySelector('[data-ooh-alpha-activation-status]');
+    var storedSelection = getPlaylistSelection();
+    var initialized = root.classList.contains('is-runtime-acknowledged');
+    var locked = !storedSelection || !storedSelection.title;
+
+    if (!activationButton) {
+      return;
+    }
+    activationButton.disabled = locked || initialized;
+    activationButton.classList.toggle('is-oa-control-disabled', locked && !initialized);
+    activationButton.textContent = initialized ? 'FIELD INITIALIZED' : 'INITIALIZE FIELD';
+    if (activationStatus && !initialized) {
+      activationStatus.textContent = locked ? 'Select signal before field initialization.' : storedSelection.title + ' selected. Field initialization available.';
+    }
+    renderIntroSelectedSignal(root);
   }
 
   function setActivePlaylist(root, slug, title, spotifyUrl, moodTags) {
@@ -4130,12 +4900,12 @@
     }
     if (channelLink && resolvedUrl) {
       channelLink.href = resolvedUrl;
-      channelLink.textContent = 'CHOOSE SIGNAL';
+      channelLink.textContent = 'OPEN CHANNEL';
       channelLink.setAttribute('target', '_blank');
       channelLink.setAttribute('rel', 'noopener noreferrer');
       channelLink.removeAttribute('aria-disabled');
       channelLink.hidden = false;
-      channelLink.setAttribute('aria-label', 'Open ' + title + ' signal channel on Spotify');
+      channelLink.setAttribute('aria-label', 'Open selected Operation Alpha signal');
     }
     else if (channelLink) {
       channelLink.removeAttribute('href');
@@ -4168,8 +4938,8 @@
     });
 
     if (proceed) {
-      proceed.setAttribute('aria-label', 'Proceed to contained Operation Alpha runtime shell');
-      proceed.setAttribute('href', routePath('/oaplay'));
+      proceed.setAttribute('aria-label', 'Return to Operation Alpha intro storyblock');
+      proceed.setAttribute('href', routePath('/operation-alpha'));
     }
   }
 
@@ -4190,13 +4960,13 @@
         status.textContent = moodTags ? moodTags + '. Runtime shell received local signal selection.' : 'Runtime shell received local signal selection. Gameplay authority pending.';
       }
       if (channelLink && spotifyUrl) {
-        channelLink.href = spotifyUrl;
-        channelLink.textContent = 'CHOOSE SIGNAL';
-        channelLink.setAttribute('target', '_blank');
-        channelLink.setAttribute('rel', 'noopener noreferrer');
+        channelLink.href = routePath('/operation-alpha/oaplay/playlists');
+        channelLink.textContent = 'SELECT SIGNAL';
+        channelLink.removeAttribute('target');
+        channelLink.removeAttribute('rel');
         channelLink.removeAttribute('aria-disabled');
         channelLink.hidden = false;
-        channelLink.setAttribute('aria-label', 'Open ' + storedSelection.title + ' signal channel on Spotify');
+        channelLink.setAttribute('aria-label', 'Select Operation Alpha signal');
       }
       else if (channelLink) {
         channelLink.removeAttribute('href');
