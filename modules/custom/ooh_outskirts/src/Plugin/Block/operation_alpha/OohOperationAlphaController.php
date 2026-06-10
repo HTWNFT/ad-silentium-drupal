@@ -230,7 +230,7 @@ final class OohOperationAlphaController extends ControllerBase {
   public function runtime(): array {
     $home_url = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
     $playlists_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_playlists')->toString();
-    $operation_url = Url::fromRoute('ooh_outskirts.operation_alpha_level_1')->toString();
+    $operation_url = Url::fromRoute('ooh_outskirts.operation_alpha_operation')->toString();
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
     $login_url = Url::fromRoute('user.login')->toString();
 
