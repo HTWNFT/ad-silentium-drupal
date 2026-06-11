@@ -51,21 +51,6 @@
       </div>
     </section>
 
-    <section class="ooh-operation-alpha__command-console" aria-label="Unseen Hand command console">
-      <div class="ooh-operation-alpha__command-head">
-        <span class="ooh-operation-alpha__command-kicker">UNSEEN HAND COMMAND CONSOLE</span>
-        <strong class="ooh-operation-alpha__command-state" data-ooh-alpha-command-state>DIRECTIVE CHANNEL IDLE</strong>
-      </div>
-      <div class="ooh-operation-alpha__command-grid" data-ooh-alpha-command-console>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="hold">WAIT</button>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="advance">TAKE A RISK</button>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="extract">GET THEM OUT</button>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="signal">GATHER INTEL</button>
-        <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="divert">CHANGE THE PLAN</button>
-      </div>
-      <p class="ooh-operation-alpha__command-ack" data-ooh-alpha-command-ack aria-live="polite">Awaiting directive.</p>
-    </section>
-
     <section class="ooh-operation-alpha__actor-transmission" data-ooh-alpha-actor-transmission hidden aria-live="polite">
       <div class="ooh-operation-alpha__actor-portrait" aria-hidden="true">
         <img class="ooh-operation-alpha__actor-image" alt="" data-ooh-alpha-actor-image>
@@ -127,6 +112,8 @@
         <p>GENEALORD PRESSURE / MUTANT STIMULUS / CORRIDOR OPEN</p>
         <p>FIRST CHOICE / UNIQUE CHAIN / LEVEL ONE PENDING</p>
       </div>
+
+
       <section class="ooh-operation-alpha__intro-decision-flow" data-ooh-alpha-intro-flow>
         <div class="ooh-operation-alpha__intro-flow-head">
           <span class="ooh-operation-alpha__intro-card-kicker">DIRECTIVES LOCKED</span>
@@ -145,6 +132,20 @@
           <p>CONSEQUENCE: No change recorded.</p>
           <p>CARRY-FORWARD EFFECT: Risk unresolved.</p>
         </div>
+      </section>
+      <section class="ooh-operation-alpha__command-console" aria-label="Unseen Hand command console" data-ooh-alpha-command-shell hidden>
+        <div class="ooh-operation-alpha__command-head">
+          <span class="ooh-operation-alpha__command-kicker">UNSEEN HAND COMMAND CONSOLE</span>
+          <strong class="ooh-operation-alpha__command-state" data-ooh-alpha-command-state>DIRECTIVE CHANNEL IDLE</strong>
+        </div>
+        <div class="ooh-operation-alpha__command-grid" data-ooh-alpha-command-console>
+          <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="hold">WAIT</button>
+          <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="advance">TAKE A RISK</button>
+          <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="extract">GET THEM OUT</button>
+          <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="signal">GATHER INTEL</button>
+          <button class="ooh-operation-alpha__command-button" type="button" data-ooh-alpha-command="divert">CHANGE THE PLAN</button>
+        </div>
+        <p class="ooh-operation-alpha__command-ack" data-ooh-alpha-command-ack aria-live="polite">Awaiting directive.</p>
       </section>
       <div class="ooh-operation-alpha__presence-choice-matrix" data-ooh-alpha-presence-choice-matrix hidden></div>
       <div class="ooh-operation-alpha__intro-next-actions">
@@ -212,7 +213,7 @@
         <span class="ooh-operation-alpha__active-channel-status">STATUS: AVAILABLE</span>
         <a class="ooh-operation-alpha__channel-link" href="{{ path('ooh_outskirts.operation_alpha_nested_playlists') }}" data-ooh-alpha-channel-link hidden>SELECT SIGNAL</a>
       </div>
-      <div class="ooh-operation-alpha__consequence" data-ooh-alpha-operational-consequence>
+      <div class="ooh-operation-alpha__consequence" data-ooh-alpha-operational-consequence hidden>
         <span class="ooh-operation-alpha__consequence-kicker">OPERATIONAL CONSEQUENCE</span>
         <div class="ooh-operation-alpha__consequence-grid">
           <div class="ooh-operation-alpha__consequence-cell">
@@ -225,11 +226,11 @@
           </div>
         </div>
       </div>
-      <div class="ooh-operation-alpha__narrative" data-ooh-alpha-narrative-seed>
+      <div class="ooh-operation-alpha__narrative" data-ooh-alpha-narrative-seed hidden>
         <span class="ooh-operation-alpha__narrative-kicker">NARRATIVE SEED</span>
         <p class="ooh-operation-alpha__narrative-copy" data-ooh-alpha-narrative-copy>Scene seed pending.</p>
       </div>
-      <div class="ooh-operation-alpha__director" data-ooh-alpha-director-layer>
+      <div class="ooh-operation-alpha__director" data-ooh-alpha-director-layer hidden>
         <span class="ooh-operation-alpha__director-kicker">DIRECTOR ACTION</span>
         <div class="ooh-operation-alpha__director-actions" aria-label="Unseen Hand director actions">
           <button class="ooh-operation-alpha__director-button" type="button" data-ooh-alpha-director-action="observe">GATHER INTEL</button>
@@ -246,7 +247,7 @@
         </div>
       </div>
     </section>
-    <section class="ooh-operation-alpha__battlefield" aria-label="Battlefield Presence" data-ooh-alpha-battlefield>
+    <section class="ooh-operation-alpha__battlefield" aria-label="Battlefield Presence" data-ooh-alpha-battlefield hidden>
       <span class="ooh-operation-alpha__battlefield-kicker">BATTLEFIELD PRESENCE</span>
       <div class="ooh-operation-alpha__battlefield-grid">
         <div class="ooh-operation-alpha__battlefield-cell">
@@ -272,7 +273,7 @@
       </div>
     </section>
 
-    <section class="ooh-operation-alpha__scenario" aria-live="polite">
+    <section class="ooh-operation-alpha__scenario" aria-live="polite" data-ooh-alpha-scenario-channel hidden>
       <div class="ooh-operation-alpha__scenario-head">
         <span class="ooh-operation-alpha__pressure-label">FIELD PRESSURE</span>
         <strong class="ooh-operation-alpha__pressure-value" data-ooh-alpha-pressure>STANDBY</strong>
@@ -317,7 +318,7 @@
       </div>
     </section>
 
-    <section class="ooh-operation-alpha__access-panel" aria-label="Operation Alpha access status">
+    <section class="ooh-operation-alpha__access-panel" aria-label="Operation Alpha access status" data-ooh-alpha-access-panel hidden>
       <span class="ooh-operation-alpha__access-kicker">ACCESS STATUS</span>
       <p class="ooh-operation-alpha__access-line">Runtime and credit access are staged for the next shell.</p>
       <div class="ooh-operation-alpha__access-actions">
@@ -328,3 +329,5 @@
     </section>
   </div>
 </section>
+
+
