@@ -14,7 +14,7 @@ player_pages:
       css/ooh-player-pages.css: {}
 
 landing:
-  version: 1.0.6-hero-video-playback
+  version: 1.0.2-oa220
   css:
     theme:
       css/ooh-landing.css: {}
@@ -57,7 +57,7 @@ play:
     - core/drupalSettings
 
 operation_alpha:
-  version: 1.0.28-oa-flow-visibility
+  version: 1.0.12-oa214a1
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha.css: {}
@@ -67,10 +67,9 @@ operation_alpha:
   dependencies:
     - core/drupal
     - core/once
-    - core/drupalSettings
 
 operation_alpha_level_1:
-  version: 1.0.6-oa-level1-progression
+  version: 1.0.3-oa214a
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_1.css: {}
@@ -82,7 +81,7 @@ operation_alpha_level_1:
     - core/once
 
 operation_alpha_level_2:
-  version: 1.0.5-oa-run-reset
+  version: 1.0.3-oa214a
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_2.css: {}
@@ -94,7 +93,7 @@ operation_alpha_level_2:
     - core/once
 
 operation_alpha_level_3:
-  version: 1.0.5-oa-run-reset
+  version: 1.0.3-oa214a
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_3.css: {}
@@ -106,7 +105,7 @@ operation_alpha_level_3:
     - core/once
 
 operation_alpha_level_4:
-  version: 1.0.5-oa-run-reset
+  version: 1.0.3-oa214a
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_4.css: {}
@@ -118,7 +117,7 @@ operation_alpha_level_4:
     - core/once
 
 operation_alpha_finale:
-  version: 1.0.5-oa-run-reset
+  version: 1.0.3-oa214a
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_finale.css: {}
@@ -175,22 +174,4 @@ credits:
     - ooh_outskirts/player_pages
     - core/drupal
     - core/once
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

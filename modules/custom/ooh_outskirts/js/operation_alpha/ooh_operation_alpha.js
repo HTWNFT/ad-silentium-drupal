@@ -1,87 +1,13 @@
 (function () {
   'use strict';
 
-  console.log('OA-212 Operation Alpha post-deployment repair loaded');
-  console.log('[OA intro] script loaded');
+  console.log('OA-211 Operation Alpha decision consequence runtime loaded');
 
   var storageKey = 'ooh_operation_alpha_intro_seen_v1';
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
   var scenarioDelayMs = 1500;
-
-  function oohAlphaScrollToTarget(target, options) {
-    var settings = options || {};
-    var root = settings.root || document;
-    var element = null;
-
-    if (typeof target === 'string') {
-      element = (root && root.querySelector && root.querySelector(target)) || document.querySelector(target);
-    }
-    else if (target && target.nodeType === 1) {
-      element = target;
-    }
-
-    if (!element || typeof element.scrollIntoView !== 'function') {
-      if (window.console && console.debug && settings.label) {
-        console.debug('[OA scroll] target missing', settings.label);
-      }
-      return false;
-    }
-
-    var reducedMotion = false;
-    try {
-      reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    }
-    catch (error) {
-      reducedMotion = false;
-    }
-
-    var block = settings.block || 'center';
-    var behavior = reducedMotion ? 'auto' : 'smooth';
-
-    try {
-      element.scrollIntoView({ behavior: behavior, block: block, inline: 'nearest' });
-    }
-    catch (error) {
-      element.scrollIntoView();
-    }
-
-    if (typeof element.focus === 'function' && settings.focus !== false) {
-      window.setTimeout(function () {
-        try {
-          element.focus({ preventScroll: true });
-        }
-        catch (error) {
-          element.focus();
-        }
-      }, reducedMotion ? 0 : 300);
-    }
-
-    if (window.console && console.debug && settings.label) {
-      console.debug('[OA scroll] target reached', settings.label, block);
-      if (settings.label === 'initialize field unlocked') {
-        console.log('[OA intro] initialize unlocked');
-      }
-      if (settings.label === 'intro storyblock revealed') {
-        console.log('[OA intro] story revealed');
-      }
-    }
-
-    return true;
-  }
-
-  function oaScrollToNextPhase(root, target, options) {
-    var scope = root || document;
-    var next = target || (scope.querySelector && scope.querySelector('[data-ooh-alpha-runtime-handoff]:not([hidden]), [data-ooh-alpha-transmission-popup]:not([hidden]), [data-ooh-alpha-final-aar]:not([hidden]), [data-ooh-alpha-finalize]:not(:disabled), [data-ooh-alpha-level-next][aria-disabled="false"], [data-ooh-alpha-transmission-next], [data-ooh-alpha-runtime-proceed]'));
-    var settings = options || {};
-    settings.root = scope;
-    return oohAlphaScrollToTarget(next, settings);
-  }
-
-  window.oohAlphaScrollToTarget = oohAlphaScrollToTarget;
-  window.oaScrollToNextPhase = oaScrollToNextPhase;
-
   var actorRegistryPaths = [
     '/operation_alpha/oa_actor_registry.csv',
     '/operation_alpha/generated_actor_registry/oa_actor_registry.csv'
@@ -319,43 +245,43 @@
       slug: 'war-bangaz',
       label: 'War Bangaz',
       playlistId: '6CaO0WNPwOyB4ZBIwgJF3O',
-      spotifyUrl: 'https://open.spotify.com/playlist/6CaO0WNPwOyB4ZBIwgJF3O?si=52f99b2b20434f21',
-      moodTags: 'Aggressive ? Kinetic ? Chaotic'
+      spotifyUrl: 'https://open.spotify.com/playlist/6CaO0WNPwOyB4ZBIwgJF3O?si=46f8eacb11d34816',
+      moodTags: 'Aggressive • Kinetic • Chaotic'
     },
     {
       slug: 'black-banner',
       label: 'Black Banner',
       playlistId: '6aLCJNyLO0zN6qsb3LTZoy',
-      spotifyUrl: 'https://open.spotify.com/playlist/6aLCJNyLO0zN6qsb3LTZoy?si=40e897e38dd649d3',
-      moodTags: 'Ominous ? Authoritarian ? Oppressive'
+      spotifyUrl: 'https://open.spotify.com/playlist/6aLCJNyLO0zN6qsb3LTZoy?si=f7005bed79194ef0',
+      moodTags: 'Ominous • Authoritarian • Oppressive'
     },
     {
       slug: 'signal-blitz',
       label: 'Signal Blitz',
       playlistId: '5yXFPozHV4eW9Aal5Ys7Mn',
-      spotifyUrl: 'https://open.spotify.com/playlist/5yXFPozHV4eW9Aal5Ys7Mn?si=42c2ddfdcb914759',
-      moodTags: 'Recon ? Communications ? Uncertainty'
+      spotifyUrl: 'https://open.spotify.com/playlist/5yXFPozHV4eW9Aal5Ys7Mn?si=19228e24361844a7',
+      moodTags: 'Recon • Communications • Uncertainty'
     },
     {
       slug: 'dust-march',
       label: 'Dust March',
       playlistId: '76AhLGUeJhcZbgQYt8oqo8',
-      spotifyUrl: 'https://open.spotify.com/playlist/76AhLGUeJhcZbgQYt8oqo8?si=cc77ddcea7764cbf',
-      moodTags: 'Isolation ? Distance ? Endurance'
+      spotifyUrl: 'https://open.spotify.com/playlist/76AhLGUeJhcZbgQYt8oqo8?si=d4de23f690ee433e',
+      moodTags: 'Isolation • Distance • Endurance'
     },
     {
       slug: 'steel-wreckoning',
       label: 'Steel Wreckoning',
       playlistId: '3wVMs0gb2svMUITiu0PJY4',
-      spotifyUrl: 'https://open.spotify.com/playlist/3wVMs0gb2svMUITiu0PJY4?si=88a8f4079dd34d55',
-      moodTags: 'Impact ? Escalation ? Consequence'
+      spotifyUrl: 'https://open.spotify.com/playlist/3wVMs0gb2svMUITiu0PJY4?si=f070819920d640a1',
+      moodTags: 'Impact • Escalation • Consequence'
     },
     {
       slug: 'system-reset-free',
       label: 'System Reset (Free)',
       playlistId: '0cZlbYVRnkxwViBJPw8oDR',
-      spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=e0622e8a06f54c54',
-      moodTags: 'Abandoned Systems ? Collapse ? Aftermath'
+      spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=d10eef44e3f54078',
+      moodTags: 'Abandoned Systems • Collapse • Aftermath'
     }
   ];
 
@@ -1148,93 +1074,6 @@
     intro.setAttribute('aria-hidden', 'true');
   }
 
-  function revealIntroControlSection(root, options) {
-    var settings = options || {};
-    var shell = root ? root.querySelector('[data-ooh-operation-alpha-control]') : null;
-
-    if (!root) {
-      return;
-    }
-
-    root.classList.remove('ooh-operation-alpha--intro-stage');
-    root.classList.add('is-intro-entered');
-
-    if (shell) {
-      shell.hidden = false;
-      shell.removeAttribute('aria-hidden');
-      console.log('[OA intro] shell/control revealed');
-      if (settings.scroll !== false) {
-        oohAlphaScrollToTarget(shell.querySelector('[data-ooh-alpha-signal-gate]') || shell, { root: root, block: 'start', label: 'intro control section revealed', focus: false });
-      }
-    }
-  }
-
-  function handleOperationAlphaEnterClick(button, event) {
-    var root = button && button.closest ? button.closest('[data-ooh-operation-alpha]') : document.querySelector('[data-ooh-operation-alpha]');
-    var intro = root && root.querySelector ? root.querySelector('[data-ooh-operation-alpha-intro]') : null;
-
-    if (event && typeof event.preventDefault === 'function') {
-      event.preventDefault();
-    }
-    if (event && typeof event.stopImmediatePropagation === 'function') {
-      event.stopImmediatePropagation();
-    }
-
-    if (!root) {
-      console.log('[OA intro] root missing');
-      return;
-    }
-
-    console.log('[OA intro] enter clicked');
-    storeSeenFlag();
-    if (intro && intro.contains(document.activeElement)) {
-      document.activeElement.blur();
-    }
-    hideIntro(intro);
-    if (root) {
-      root.setAttribute('data-ooh-operation-alpha-state', 'entered');
-    }
-    revealIntroControlSection(root);
-    syncSignalGate(root);
-    syncFieldInitializeGate(root);
-  }
-
-  function operationAlphaRoots(context) {
-    var scope = context || document;
-    var roots = [];
-
-    if (scope.nodeType === 1 && scope.matches && scope.matches('[data-ooh-operation-alpha]')) {
-      roots.push(scope);
-    }
-    if (scope.querySelectorAll) {
-      scope.querySelectorAll('[data-ooh-operation-alpha]').forEach(function (root) {
-        if (roots.indexOf(root) === -1) {
-          roots.push(root);
-        }
-      });
-    }
-
-    return roots;
-  }
-
-  function bindOperationAlphaEnter(context) {
-    operationAlphaRoots(context).forEach(function (root) {
-      var enter = root.querySelector('[data-ooh-operation-alpha-enter]');
-      console.log('[OA intro] root found');
-      if (!enter) {
-        return;
-      }
-      console.log('[OA intro] enter button found');
-      if (enter.dataset.oohAlphaEnterBound === '1') {
-        return;
-      }
-      enter.dataset.oohAlphaEnterBound = '1';
-      enter.addEventListener('click', function (event) {
-        handleOperationAlphaEnterClick(enter, event);
-      });
-    });
-  }
-
   function showSignalModal(root) {
     var modal = root.querySelector('[data-ooh-operation-alpha-signal]');
 
@@ -1399,7 +1238,7 @@
 
       return actor;
     }).filter(function (actor) {
-      return isOperationAlphaPortraitActor(actor);
+      return actor.missionUsage;
     });
   }
 
@@ -1467,35 +1306,6 @@
     return (value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
   }
 
-  function actorFactionKey(actor) {
-    var faction = (actor && actor.faction || '').toLowerCase();
-
-    if (faction.indexOf('ronin') !== -1) {
-      return 'ronin';
-    }
-    if (faction.indexOf('mutant') !== -1) {
-      return 'mutant';
-    }
-    if (faction.indexOf('genealord') !== -1 || faction.indexOf('warlord') !== -1) {
-      return 'genealord';
-    }
-
-    return '';
-  }
-
-  function isOperationAlphaPortraitActor(actor) {
-    return !!(actor && actorFactionKey(actor) && (actorDisplayName(actor) || actor.path || actor.portrait || actor.originalFile));
-  }
-
-  function actorPortraitFallbackUrl() {
-    var fallbackContact = contactSlots[0] || {};
-
-    return fallbackContact.portrait ? containedAssetPath(fallbackContact.portrait) : '';
-  }
-
-  function actorDisplayPortraitUrl(actor) {
-    return actorPortraitPath(actor) || actorPortraitFallbackPath(actor) || actorPortraitFallbackUrl();
-  }
   function actorPortraitNameSlug(actor) {
     var pathRoot = (actor.path || '').replace(/\s+Path\s*$/i, '');
 
@@ -1979,9 +1789,6 @@
       narrativeCopy.textContent = root.oohAlphaRuntimeState && root.oohAlphaRuntimeState.scene ? 'SUBJECT: ' + root.oohAlphaRuntimeState.scene.subject + ' // OPPOSING FORCE: ' + root.oohAlphaRuntimeState.scene.opposingForce + ' // FORCE MULTIPLIER: ' + root.oohAlphaRuntimeState.scene.forceMultiplier + ' // CATALYST: ' + root.oohAlphaRuntimeState.scene.catalyst : payload.narrativeSeed;
     }
     if (root.oohAlphaRuntimeState) {
-      renderStoryPortraits(root, payloadPanel, root.oohAlphaRuntimeState);
-    }
-    if (root.oohAlphaRuntimeState) {
       renderIntroStoryBlock(root, root.oohAlphaRuntimeState);
       renderBattlefieldGate(root, root.oohAlphaRuntimeState);
     }
@@ -2059,7 +1866,9 @@
       return;
     }
 
-    var eligibleActors = (root.oohAlphaActorRegistry || []).filter(isOperationAlphaPortraitActor);
+    var eligibleActors = (root.oohAlphaActorRegistry || []).filter(function (actor) {
+      return actorMissionUsage(actor, 'Operation Alpha');
+    });
     var roninActors = (root.oohAlphaActorRegistry || []).filter(function (actor) {
       return (actor.faction || '').toLowerCase() === 'ronin';
     });
@@ -2185,7 +1994,6 @@
     if (brief) {
       brief.textContent = seeds[seedIndex].brief;
     }
-    renderStoryPortraits(root, mission, state);
 
     root.classList.add('is-atmosphere-static');
   }
@@ -2302,7 +2110,7 @@
     var eligible = (registry || []).filter(function (candidate) {
       var sameName = actorDisplayName(candidate) === actorDisplayName(actor);
 
-      return !sameName && actorFactionKey(candidate) === 'genealord';
+      return actorMissionUsage(candidate, 'Operation Alpha') && !sameName && (candidate.faction || '').toLowerCase() === 'genealord';
     });
     var opposingActor;
 
@@ -2318,7 +2126,7 @@
     var eligible = (registry || []).filter(function (candidate) {
       var sameName = actorDisplayName(candidate) === actorDisplayName(actor);
 
-      return !sameName && actorFactionKey(candidate) === 'mutant';
+      return actorMissionUsage(candidate, 'Operation Alpha') && !sameName && (candidate.faction || '').toLowerCase() === 'mutant';
     });
     var forceMultiplier;
 
@@ -2335,7 +2143,7 @@
     return (registry || []).filter(function (candidate) {
       var sameName = actorDisplayName(candidate) === actorDisplayName(exceptActor);
 
-      return !sameName && actorFactionKey(candidate) === faction;
+      return !sameName && (candidate.faction || '').toLowerCase() === faction;
     });
   }
 
@@ -2379,112 +2187,6 @@
     return [actor && actor.faction, actor && actor.role].filter(Boolean).join(' / ') || 'field presence';
   }
 
-  function uniqueReferencedActors(actors) {
-    var seen = [];
-
-    return (actors || []).filter(function (actor) {
-      var key = actorDisplayName(actor).toLowerCase() + '|' + actorFactionKey(actor);
-      if (!actor || !actorFactionKey(actor) || seen.indexOf(key) !== -1) {
-        return false;
-      }
-      seen.push(key);
-      return true;
-    });
-  }
-
-  function storyActorsForText(state, text, fallbackActors) {
-    var cast = state && state.storyCast ? state.storyCast : {};
-    var actors = uniqueReferencedActors(fallbackActors || [cast.actor, cast.ally, cast.opposition, cast.thirdForce]);
-    var lowerText = (text || '').toLowerCase();
-    var referenced = actors.filter(function (actor) {
-      var name = actorDisplayName(actor).toLowerCase();
-      var faction = actorFactionKey(actor);
-
-      return (name && lowerText.indexOf(name) !== -1) || (faction && lowerText.indexOf(faction) !== -1) || (faction === 'genealord' && lowerText.indexOf('warlord') !== -1);
-    });
-
-    if (!referenced.length && fallbackActors && fallbackActors.length) {
-      referenced = actors;
-    }
-
-    return uniqueReferencedActors(referenced).sort(function (left, right) {
-      var leftIndex = lowerText.indexOf(actorDisplayName(left).toLowerCase());
-      var rightIndex = lowerText.indexOf(actorDisplayName(right).toLowerCase());
-      leftIndex = leftIndex === -1 ? 99999 : leftIndex;
-      rightIndex = rightIndex === -1 ? 99999 : rightIndex;
-      return leftIndex - rightIndex;
-    });
-  }
-
-  function createPortraitImage(actor, className) {
-    var image = document.createElement('img');
-    var fallback = actorPortraitFallbackUrl();
-
-    image.className = className;
-    image.alt = actorDisplayName(actor);
-    image.src = actorDisplayPortraitUrl(actor);
-    image.onerror = function () {
-      if (fallback && image.src !== fallback) {
-        image.src = fallback;
-      }
-    };
-
-    return image;
-  }
-
-  function renderReferencedPortraits(container, actors) {
-    var portraitActors = uniqueReferencedActors(actors);
-    var stack = container ? container.querySelector('[data-ooh-alpha-referenced-portraits]') : null;
-    var primary;
-    var secondary;
-    var primaryFrame;
-    var secondaryList;
-
-    if (!container) {
-      return;
-    }
-    if (!portraitActors.length) {
-      if (stack) {
-        stack.remove();
-      }
-      return;
-    }
-    if (!stack) {
-      stack = document.createElement('aside');
-      stack.className = 'ooh-operation-alpha__referenced-portraits';
-      stack.setAttribute('data-ooh-alpha-referenced-portraits', '');
-      stack.setAttribute('aria-label', 'Referenced character portraits');
-      container.appendChild(stack);
-    }
-
-    stack.innerHTML = '';
-    primary = portraitActors[0];
-    secondary = portraitActors.slice(1);
-    primaryFrame = document.createElement('figure');
-    primaryFrame.className = 'ooh-operation-alpha__referenced-portrait ooh-operation-alpha__referenced-portrait--primary';
-    primaryFrame.appendChild(createPortraitImage(primary, 'ooh-operation-alpha__referenced-image'));
-    stack.appendChild(primaryFrame);
-
-    if (secondary.length) {
-      secondaryList = document.createElement('div');
-      secondaryList.className = 'ooh-operation-alpha__referenced-secondary-list';
-      secondary.forEach(function (actor) {
-        var frame = document.createElement('figure');
-        var caption = document.createElement('figcaption');
-
-        frame.className = 'ooh-operation-alpha__referenced-portrait ooh-operation-alpha__referenced-portrait--secondary';
-        frame.appendChild(createPortraitImage(actor, 'ooh-operation-alpha__referenced-image'));
-        caption.textContent = actorDisplayName(actor);
-        frame.appendChild(caption);
-        secondaryList.appendChild(frame);
-      });
-      stack.appendChild(secondaryList);
-    }
-  }
-
-  function renderStoryPortraits(root, container, state, fallbackActors) {
-    renderReferencedPortraits(container, storyActorsForText(state, container ? container.textContent : '', fallbackActors));
-  }
   function storyBlockLabel(state) {
     if (!state || state.outcomeState !== 'PENDING') {
       return 'BLOCK 4 // FINAL AAR POPUP';
@@ -2817,7 +2519,6 @@
   }
 
   function renderIntroDecisionFlow(root, runtimeState) {
-    var storyBlock = root.querySelector('[data-ooh-alpha-intro-storyblock]');
     var flow = root.querySelector('[data-ooh-alpha-intro-flow]');
     var wrap = root.querySelector('[data-ooh-alpha-intro-beats]');
     var counter = root.querySelector('[data-ooh-alpha-intro-counter]');
@@ -2830,7 +2531,7 @@
     var locked = choices.length >= required;
     var beats = introBeatCards(runtimeState.storyCast || {}, runtimeState.scene || {});
 
-    if (!flow || !wrap || !storyBlock || storyBlock.hidden) {
+    if (!flow || !wrap) {
       setIntroNextLocked(next, true);
       return;
     }
@@ -2876,7 +2577,6 @@
     renderIntroChainPanel(root, chainState);
     setIntroNextLocked(next, !locked);
     bindIntroTransmission(root, runtimeState, locked);
-    revealOaGameplayPanels(root);
     if (locked) {
       flow.classList.add('is-stage-complete');
     }
@@ -3098,7 +2798,6 @@
     if (debate) {
       debate.textContent = 'DEBATE: The Unseen Hand must decide whether the mission outweighs the cost.';
     }
-    renderStoryPortraits(root, block, state);
     renderIntroDecisionFlow(root, state);
   }
 
@@ -3139,7 +2838,16 @@
         card.classList.add('is-story-event-current');
       }
 
-      renderReferencedPortraits(card, actor ? [actor] : []);
+      if (portrait) {
+        image = document.createElement('img');
+        image.className = 'ooh-operation-alpha__story-event-image';
+        image.alt = '';
+        image.src = portrait;
+        image.onerror = function () {
+          image.hidden = true;
+        };
+        card.appendChild(image);
+      }
 
       body = document.createElement('div');
       body.className = 'ooh-operation-alpha__story-event-body';
@@ -3149,7 +2857,6 @@
         '<p class="ooh-operation-alpha__story-event-copy">' + storyEventCardCopy(state, slot) + '</p>';
       card.appendChild(body);
       suite.appendChild(card);
-      renderStoryPortraits(root, battlefield, state);
     });
   }
 
@@ -3379,7 +3086,6 @@
     title.textContent = 'FIELD TASK: ' + (scene.mission ? scene.mission.label : 'UNRESOLVED');
     source.textContent = 'SUBJECT: ' + scene.subject;
     brief.textContent = 'PROTAGONIST: ' + scene.subject + ' // ANTAGONIST / OPPOSITION: ' + scene.opposingForce + ' // CONDITION: ' + scene.pressureCondition + ' // SIGNAL: ' + scene.interventionWindow + ' // CATALYST: ' + scene.catalyst;
-    renderStoryPortraits(root, mission, state, [scene.actor, scene.opposition, scene.forceMultiplier]);
 
     if (state) {
       state.currentCondition = scene.pressureCondition;
@@ -3496,31 +3202,6 @@
       button.removeAttribute('aria-pressed');
       button.classList.remove('is-command-active', 'is-director-active');
     }
-  }
-
-  function setOaPanelHidden(root, selector, hidden) {
-    var panel = root && root.querySelector ? root.querySelector(selector) : null;
-
-    if (!panel) {
-      return;
-    }
-    panel.hidden = hidden;
-    panel.setAttribute('aria-hidden', hidden ? 'true' : 'false');
-  }
-
-  function revealOaGameplayPanels(root) {
-    [
-      '[data-ooh-alpha-command-shell]',
-      '[data-ooh-alpha-battlefield]',
-      '[data-ooh-alpha-scenario-channel]',
-      '[data-ooh-alpha-operational-payload]',
-      '[data-ooh-alpha-operational-consequence]',
-      '[data-ooh-alpha-narrative-seed]',
-      '[data-ooh-alpha-director-layer]',
-      '[data-ooh-alpha-access-panel]'
-    ].forEach(function (selector) {
-      setOaPanelHidden(root, selector, false);
-    });
   }
 
   function syncRuntimeControlLocks(root, state) {
@@ -4634,7 +4315,6 @@
     if (consequenceSummary) {
       consequenceSummary.textContent = storyPanelText(runtimeState);
     }
-    renderStoryPortraits(root, root.querySelector('[data-ooh-alpha-operational-consequence]'), runtimeState);
     setRuntimeBattlefieldPresence(root, runtimeState, directive);
     setAssetMovementFeed(root, directive.movementMode);
     renderRuntimeOutcome(root, runtimeState);
@@ -4854,15 +4534,10 @@
       contact.hidden = false;
     }
 
-    selectOperationAlphaActor(root);
     renderScenario(root, 0);
     renderContact(root, 0, 'activation');
     setAtmosphere(root, 0);
-    oohAlphaScrollToTarget('[data-ooh-alpha-intro-storyblock]:not([hidden])', { root: root, block: 'start', label: 'intro storyblock revealed' });
-    window.setTimeout(function () {
-      var nextIntroTarget = root.querySelector('[data-ooh-alpha-intro-flow]:not([hidden]), [data-ooh-alpha-intro-beats] button:not(:disabled), [data-ooh-alpha-next-level][aria-disabled="false"]');
-      oaScrollToNextPhase(root, nextIntroTarget, { block: 'center', label: 'next active intro control' });
-    }, 650);
+    selectOperationAlphaActor(root);
   }
 
   function setInterventionsDisabled(root, disabled) {
@@ -4932,7 +4607,7 @@
       var version = document.createElement('p');
       version.className = 'ooh-operation-alpha__copy';
       version.setAttribute('data-ooh-alpha-runtime-version', '');
-      version.textContent = 'OA RUNTIME VERSION: OA-212 POST-DEPLOYMENT REPAIR';
+      version.textContent = 'OA RUNTIME VERSION: OA-211 DECISION CONSEQUENCE CHECK';
       if (title && title.parentNode === shell) {
         shell.insertBefore(version, title.nextSibling);
       }
@@ -4965,13 +4640,21 @@
       }
     });
 
-    bindOperationAlphaEnter(root);
-    if (intro && storageFlagSeen()) {
-      hideIntro(intro);
-      revealIntroControlSection(root, { scroll: false });
+    if (intro && enter) {
+      if (storageFlagSeen()) {
+        hideIntro(intro);
+        showSignalModal(root);
+      }
+      else {
+        enter.addEventListener('click', function () {
+          storeSeenFlag();
+          hideIntro(intro);
+          showSignalModal(root);
+        });
+      }
     }
-    else if (!intro) {
-      revealIntroControlSection(root, { scroll: false });
+    else {
+      showSignalModal(root);
     }
 
     if (activationButton) {
@@ -5066,39 +4749,43 @@
     return (basePath || '') + path;
   }
 
-  function operationAlphaAssetPath(path) {
-    var baseUrl = window.drupalSettings && window.drupalSettings.path && window.drupalSettings.path.baseUrl ? window.drupalSettings.path.baseUrl : '';
-    var assetPath = path && path.charAt(0) === '/' ? path : '/' + (path || '');
-    var currentPath;
-    var markerIndex;
-    var markers = ['/operation-alpha', '/oalevel', '/oafinale', '/oaplay'];
-    var marker;
-    var i;
-
-    if (baseUrl) {
-      return baseUrl.replace(/\/$/, '') + assetPath;
-    }
-
-    currentPath = window.location.pathname || '';
-    markerIndex = -1;
-    for (i = 0; i < markers.length; i += 1) {
-      marker = currentPath.indexOf(markers[i]);
-      if (marker !== -1 && (markerIndex === -1 || marker < markerIndex)) {
-        markerIndex = marker;
-      }
-    }
-    if (markerIndex !== -1) {
-      return currentPath.slice(0, markerIndex) + assetPath;
-    }
-
-    return assetPath;
-  }
   function setupOperationAlphaAmbient(root) {
-    return;
+    var audio = root.querySelector('[data-ooh-alpha-ambient-audio]');
+
+    if (!audio || audio.dataset.oohAlphaAmbientReady === '1') {
+      return;
+    }
+
+    audio.dataset.oohAlphaAmbientReady = '1';
+    audio.volume = 0.16;
+
+    var tryPlay = function () {
+      if (!audio.paused) {
+        return;
+      }
+
+      audio.play().catch(function () {});
+    };
+
+    var retryOnInteraction = function () {
+      tryPlay();
+    };
+
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (eventName) {
+      document.addEventListener(eventName, retryOnInteraction, { once: true, passive: true });
+    });
+
+    tryPlay();
   }
 
   function pauseOperationAlphaAmbient(root) {
-    return;
+    var audio = root.querySelector('[data-ooh-alpha-ambient-audio]');
+
+    if (!audio || audio.paused) {
+      return;
+    }
+
+    audio.pause();
   }
 
   function renderIntroSelectedSignal(root) {
@@ -5161,9 +4848,6 @@
       activationStatus.textContent = locked ? 'Select signal before field initialization.' : storedSelection.title + ' selected. Field initialization available.';
     }
     renderIntroSelectedSignal(root);
-    if (!locked && !initialized) {
-      oohAlphaScrollToTarget(activationButton, { root: root, block: 'center', label: 'initialize field unlocked' });
-    }
   }
 
   function setActivePlaylist(root, slug, title, spotifyUrl, moodTags) {
@@ -5207,7 +4891,6 @@
 
     if (handoff) {
       handoff.hidden = false;
-      handoff.setAttribute('tabindex', '-1');
     }
     if (handoffTitle) {
       handoffTitle.textContent = title;
@@ -5231,11 +4914,9 @@
       channelLink.textContent = 'CHANNEL OFFLINE';
       channelLink.hidden = false;
     }
-    oaScrollToNextPhase(root, handoff || selectedButton);
   }
 
   function initPlaylistShell(root) {
-    setupOperationAlphaAmbient(root);
     var proceed = root.querySelector('[data-ooh-alpha-runtime-proceed]');
     var storedSelection = getPlaylistSelection();
 
@@ -5263,7 +4944,6 @@
   }
 
   function initRuntimeShell(root) {
-    setupOperationAlphaAmbient(root);
     var signal = root.querySelector('[data-ooh-alpha-runtime-signal]');
     var status = root.querySelector('[data-ooh-alpha-runtime-status]');
     var channelLink = root.querySelector('[data-ooh-alpha-runtime-channel-link]');
@@ -5302,7 +4982,6 @@
   }
 
   function initCreditsShell(root) {
-    setupOperationAlphaAmbient(root);
     var confirmation = root.querySelector('[data-ooh-alpha-credit-confirmation]');
 
     root.querySelectorAll('[data-ooh-alpha-credit-select]').forEach(function (button) {
@@ -5335,16 +5014,7 @@
     });
   }
 
-  if (window.Drupal) {
-    window.Drupal.behaviors.oohOperationAlpha = window.Drupal.behaviors.oohOperationAlpha || {};
-    window.Drupal.behaviors.oohOperationAlpha.attach = function (context) {
-      bindOperationAlphaEnter(context || document);
-    };
-  }
-
   function init() {
-    bindOperationAlphaEnter(document);
-    setupOperationAlphaAmbient(document);
     if (document.body) {
       document.body.classList.add('ooh-operation-alpha-runtime');
     }
@@ -5356,7 +5026,6 @@
     document.querySelectorAll('[data-ooh-operation-alpha-operation]').forEach(renderOperationSurface);
   }
 
-
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init, { once: true });
   }
@@ -5364,20 +5033,3 @@
     init();
   }
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
