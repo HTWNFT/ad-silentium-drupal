@@ -107,7 +107,7 @@ final class OohOperationAlphaController extends ControllerBase {
     $black_banner_url = 'https://open.spotify.com/playlist/6aLCJNyLO0zN6qsb3LTZoy?si=f7005bed79194ef0';
     $steel_wreckoning_url = 'https://open.spotify.com/playlist/3wVMs0gb2svMUITiu0PJY4?si=f070819920d640a1';
     $system_reset_url = 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=d10eef44e3f54078';
-    $avatar_base = base_path() . 'operation_alpha/spotify_avatars/';
+    $avatar_base = base_path() . 'modules/custom/ooh_outskirts/operation_alpha/spotify_avatars/';
     $war_bangaz_avatar = $avatar_base . 'warbangaz.png';
     $signal_blitz_avatar = $avatar_base . 'signalblitz.png';
     $dust_march_avatar = $avatar_base . 'dustmarch.png';
@@ -131,8 +131,8 @@ final class OohOperationAlphaController extends ControllerBase {
             <div class="ooh-operation-alpha__playlist-grid" aria-label="Operation Alpha playlist shell">
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="' . $war_bangaz_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
-                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL A</span>
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $war_bangaz_avatar . '" alt="War Bangaz signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="war-bangaz" onerror="this.hidden = true;">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL A</span>
@@ -143,8 +143,8 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="' . $signal_blitz_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
-                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL B</span>
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $signal_blitz_avatar . '" alt="Signal Blitz signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="signal-blitz" onerror="this.hidden = true;">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL B</span>
@@ -155,8 +155,8 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="' . $dust_march_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
-                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL C</span>
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $dust_march_avatar . '" alt="Dust March signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="dust-march" onerror="this.hidden = true;">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL C</span>
@@ -167,8 +167,8 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="' . $black_banner_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
-                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL D</span>
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $black_banner_avatar . '" alt="Black Banner signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="black-banner" onerror="this.hidden = true;">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL D</span>
@@ -179,8 +179,8 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="' . $steel_wreckoning_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
-                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL E</span>
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $steel_wreckoning_avatar . '" alt="Steel Wreckoning signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="steel-wreckoning" onerror="this.hidden = true;">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL E</span>
@@ -191,8 +191,8 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card ooh-operation-alpha__playlist-card--outbound" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img src="' . $system_reset_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
-                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">RESET</span>
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $system_reset_avatar . '" alt="System Reset signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="system-reset-free" onerror="this.hidden = true;">
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL F</span>
