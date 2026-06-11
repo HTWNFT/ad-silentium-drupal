@@ -189,16 +189,16 @@ final class OohOperationAlphaController extends ControllerBase {
                   <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="steel-wreckoning" data-playlist-title="Steel Wreckoning" data-playlist-url="' . $steel_wreckoning_url . '" data-playlist-cadence="Industrial impact cadence">SELECT SIGNAL</button>
                 </div>
               </article>
-              <article class="ooh-operation-alpha__playlist-card ooh-operation-alpha__playlist-card--outbound" data-ooh-alpha-playlist-card>
+              <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
                   <img src="' . $system_reset_avatar . '" alt="" loading="lazy" onerror="this.hidden = true;">
-                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">RESET</span>
+                  <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true">SIGNAL F</span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL F</span>
-                  <h2 class="ooh-operation-alpha__playlist-title">System Reset (Free)</h2>
-                  <p class="ooh-operation-alpha__playlist-copy">Outbound static reset signal. No playback or provider connection is active here.</p>
-                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="system-reset-free" data-playlist-title="System Reset (Free)" data-playlist-url="' . $system_reset_url . '" data-playlist-cadence="Outbound static reset signal">SELECT SIGNAL</button>
+                  <h2 class="ooh-operation-alpha__playlist-title">System Reset</h2>
+                  <p class="ooh-operation-alpha__playlist-copy">Recovery and recalibration channel for runtime decompression and signal stabilization.</p>
+                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="system-reset" data-playlist-title="System Reset" data-playlist-url="' . $system_reset_url . '" data-playlist-cadence="Recovery and recalibration">SELECT SIGNAL</button>
                 </div>
               </article>
             </div>
@@ -210,7 +210,6 @@ final class OohOperationAlphaController extends ControllerBase {
               <a class="ooh-operation-alpha__channel-link" href="#" target="_blank" rel="noopener noreferrer" data-ooh-alpha-playlist-channel-link hidden>OPEN CHANNEL</a>
               <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '" data-ooh-alpha-runtime-proceed>RETURN TO INTRO</a>
             </div>
-            <p class="ooh-operation-alpha__playlist-note">No playback, account link, or runtime launch is active in this shell.</p>
           </div>
         </section>',
       '#attached' => [
