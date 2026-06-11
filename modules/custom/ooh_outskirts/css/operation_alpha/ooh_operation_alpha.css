@@ -2322,10 +2322,6 @@ body.ooh-operation-alpha-runtime .row {
     0 0 20px rgba(89, 243, 255, 0.14);
 }
 
-.ooh-operation-alpha__playlist-card--outbound {
-  border-color: rgba(223, 252, 255, 0.26);
-}
-
 .ooh-operation-alpha__playlist-visual {
   position: relative;
   display: grid;

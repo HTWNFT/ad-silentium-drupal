@@ -4977,26 +4977,6 @@
         var spotifyUrl = button.getAttribute('data-playlist-url') || '';
         var channel = channelBySlug(slug) || channelByLabel(title);
         var moodTags = channel ? channel.moodTags : '';
-        var confirmation = root.querySelector('[data-ooh-alpha-playlist-confirmation]');
-        var handoff = root.querySelector('[data-ooh-alpha-runtime-handoff]');
-
-        if (slug === 'system-reset' || slug === 'system-reset-free') {
-          resetOAIntroRunState(false);
-          root.querySelectorAll('[data-ooh-alpha-playlist-card]').forEach(function (playlistCard) {
-            playlistCard.classList.remove('is-selected');
-          });
-          root.querySelectorAll('[data-ooh-alpha-playlist-select]').forEach(function (selectButton) {
-            selectButton.textContent = 'SELECT SIGNAL';
-            selectButton.removeAttribute('aria-pressed');
-          });
-          if (confirmation) {
-            confirmation.textContent = 'Full reset complete. Select a signal to begin a clean run.';
-          }
-          if (handoff) {
-            handoff.hidden = true;
-          }
-          return;
-        }
 
         storePlaylistSelection(slug, title, spotifyUrl, moodTags);
         setActivePlaylist(root, slug, title, spotifyUrl, moodTags);
