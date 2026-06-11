@@ -293,17 +293,15 @@
       moodTags: 'Impact • Escalation • Consequence'
     },
     {
-      slug: 'system-reset-free',
-      label: 'System Reset (Free)',
+      slug: 'system-reset',
+      label: 'System Reset',
       playlistId: '0cZlbYVRnkxwViBJPw8oDR',
-      spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=d10eef44e3f54078',
+      spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=b992c3418f104ec2',
       moodTags: 'Abandoned Systems • Collapse • Aftermath'
     }
   ];
 
-  var runtimePlaylists = channelRegistry.filter(function (channel) {
-    return channel.slug !== 'system-reset-free';
-  });
+  var runtimePlaylists = channelRegistry;
 
   var runtimeStatuses = [
     'Signal Window Open',
@@ -4982,7 +4980,7 @@
         var confirmation = root.querySelector('[data-ooh-alpha-playlist-confirmation]');
         var handoff = root.querySelector('[data-ooh-alpha-runtime-handoff]');
 
-        if (slug === 'system-reset-free') {
+        if (slug === 'system-reset' || slug === 'system-reset-free') {
           resetOAIntroRunState(false);
           root.querySelectorAll('[data-ooh-alpha-playlist-card]').forEach(function (playlistCard) {
             playlistCard.classList.remove('is-selected');
