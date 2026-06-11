@@ -191,14 +191,14 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card ooh-operation-alpha__playlist-card--outbound" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $system_reset_avatar . '" alt="System Reset signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="system-reset-free" onerror="this.hidden = true;">
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $system_reset_avatar . '" alt="System Reset signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="system-reset" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
                   <span class="ooh-operation-alpha__playlist-kicker">SIGNAL F</span>
-                  <h2 class="ooh-operation-alpha__playlist-title">System Reset (Free)</h2>
-                  <p class="ooh-operation-alpha__playlist-copy">Outbound static reset signal. No playback or provider connection is active here.</p>
-                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="system-reset-free" data-playlist-title="System Reset (Free)" data-playlist-url="' . $system_reset_url . '" data-playlist-cadence="Outbound static reset signal">SELECT SIGNAL</button>
+                  <h2 class="ooh-operation-alpha__playlist-title">System Reset</h2>
+                  <p class="ooh-operation-alpha__playlist-copy">Recovery and recalibration channel for runtime decompression and signal stabilization.</p>
+                  <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="system-reset" data-playlist-title="System Reset" data-playlist-url="' . $system_reset_url . '" data-playlist-cadence="Recovery and recalibration">SELECT SIGNAL</button>
                 </div>
               </article>
             </div>
@@ -349,3 +349,6 @@ final class OohOperationAlphaController extends ControllerBase {
   }
 
 }
+
+
+
