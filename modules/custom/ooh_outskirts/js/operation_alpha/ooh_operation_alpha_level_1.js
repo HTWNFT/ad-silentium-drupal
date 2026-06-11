@@ -358,6 +358,24 @@
     popup.setAttribute('aria-hidden', 'false');
   }
 
+  function logLevelOneProgress(selectedCount, requiredCount, nextUnlocked, nextHref) {
+    if (!window.console || !window.console.log) {
+      return;
+    }
+    window.console.log('[OA level1] selected count:', selectedCount);
+    window.console.log('[OA level1] required count:', requiredCount);
+    window.console.log('[OA level1] next stage unlocked:', nextUnlocked);
+    window.console.log('[OA level1] next stage href:', nextHref || 'missing');
+  }
+
+  function scrollToLevelOneActions(root) {
+    var target = root.querySelector('[data-ooh-alpha-level-actions]') || root.querySelector('[data-ooh-alpha-level-next]');
+    if (!window.oaScrollToNextPhase) {
+      return;
+    }
+
+    window.oaScrollToNextPhase(root, target);
+  }
   function bindTransmissionLink(root, link) {
     if (!link || link.oohAlphaTransmissionBound) {
       return;
@@ -373,6 +391,9 @@
       }
       event.preventDefault();
       showTransmission(root, currentState, link.href);
+      if (window.oaScrollToNextPhase) {
+        window.oaScrollToNextPhase(root);
+      }
     });
   }
 
@@ -419,6 +440,9 @@
           state.level1Choices = selected;
           appendChainEvent(state, beat);
           render(root);
+          if (selected.length >= requiredChoices) {
+            scrollToLevelOneActions(root);
+          }
         });
         choiceWrap.appendChild(button);
       });
@@ -439,6 +463,7 @@
     renderChainPanel(root, state);
     renderThreeLineSummary(summary, state);
     setDisabled(next, !locked);
+    logLevelOneProgress(selected.length, requiredChoices, locked, next ? next.getAttribute('href') || next.dataset.oaHref : '');
     bindLockedLink(next);
     bindTransmissionLink(root, next);
     if (shell) {
@@ -451,3 +476,4 @@
     document.querySelectorAll('[data-ooh-alpha-level="1"]').forEach(render);
   }, { once: true });
 })();
+

@@ -323,6 +323,9 @@
       }
       event.preventDefault();
       showTransmission(root, currentState, link.href);
+      if (window.oaScrollToNextPhase) {
+        window.oaScrollToNextPhase(root);
+      }
     });
   }
 
@@ -369,6 +372,9 @@
           state.level2Choices = choices;
           appendChainEvent(state, beat);
           render(root);
+          if (choices.length >= requiredChoices && window.oaScrollToNextPhase) {
+            window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-level-next]'));
+          }
         });
         wrap.appendChild(button);
       });

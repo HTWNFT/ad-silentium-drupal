@@ -204,6 +204,16 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__shell {
   order: 1;
+  box-sizing: border-box;
+  max-width: min(1760px, 100%);
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.ooh-operation-alpha__shell > * {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .ooh-operation-alpha__intro {
@@ -447,6 +457,63 @@ body.ooh-operation-alpha-runtime .row {
   opacity: 0.74;
 }
 
+.ooh-operation-alpha__activation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.ooh-operation-alpha__activation-actions .ooh-operation-alpha__activation-button {
+  margin-top: 0;
+}
+
+.ooh-operation-alpha__signal-gate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  min-width: min(100%, 220px);
+  padding: 0.72rem 0.95rem;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.42);
+  background: rgba(1, 8, 11, 0.56);
+  box-shadow: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__signal-gate:hover,
+.ooh-operation-alpha__signal-gate:focus-visible {
+  text-decoration: none;
+}
+
+.ooh-operation-alpha__signal-gate.is-signal-gate-locked,
+.ooh-operation-alpha__signal-gate[aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__signal-gate.is-signal-gate-ready,
+.ooh-operation-alpha__signal-gate[aria-disabled="false"] {
+  border-color: rgba(89, 243, 255, 0.72);
+  color: #dffcff;
+  background: rgba(8, 48, 58, 0.82);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.08),
+    0 0 18px rgba(89, 243, 255, 0.16);
+  cursor: pointer;
+}
+
 .ooh-operation-alpha__command-console {
   margin-top: 18px;
   padding: 18px;
@@ -541,8 +608,11 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__actor-transmission {
   display: grid;
-  grid-template-columns: 104px 1fr;
+  grid-template-columns: minmax(88px, 104px) minmax(0, 1fr);
   gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   overflow: hidden;
   margin-top: 18px;
   padding: 14px 16px;
@@ -562,8 +632,8 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha__actor-portrait {
   width: 104px;
   max-width: 100%;
-  min-height: 0;
   aspect-ratio: 1;
+  height: auto;
   overflow: hidden;
   border: 1px solid rgba(145, 250, 255, 0.18);
   border-radius: 6px;
@@ -579,8 +649,9 @@ body.ooh-operation-alpha-runtime .row {
   height: 100%;
   max-width: 100%;
   min-height: 0;
-  max-height: 150px;
+  max-height: 100%;
   object-fit: cover;
+  object-position: center top;
   opacity: 0.8;
   filter: saturate(0.78) contrast(1.08) brightness(0.84);
 }
@@ -591,6 +662,7 @@ body.ooh-operation-alpha-runtime .row {
 
 .ooh-operation-alpha__actor-body {
   min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .ooh-operation-alpha__actor-kicker {
@@ -644,6 +716,12 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__payload[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__command-console[hidden],
+.ooh-operation-alpha__battlefield[hidden],
+.ooh-operation-alpha__scenario[hidden] {
   display: none;
 }
 
@@ -751,6 +829,89 @@ body.ooh-operation-alpha-runtime .row {
   letter-spacing: 0.16em;
   line-height: 1.35;
   text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-storyblock {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.ooh-operation-alpha__intro-storyblock[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__intro-storyhead,
+.ooh-operation-alpha__intro-catalyst,
+.ooh-operation-alpha__intro-summary,
+.ooh-operation-alpha__intro-decision-flow,
+.ooh-operation-alpha__intro-consequence,
+.ooh-operation-alpha__intro-next-actions {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.ooh-operation-alpha__intro-duel,
+.ooh-operation-alpha__intro-beats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 14px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.ooh-operation-alpha__intro-storyblock .ooh-operation-alpha__intro-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 14px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.ooh-operation-alpha__intro-card-body {
+  display: grid;
+  grid-template-columns: minmax(64px, 88px) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+
+.ooh-operation-alpha__intro-card-image {
+  display: block;
+  width: 100%;
+  max-width: 88px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center top;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.ooh-operation-alpha__intro-card-image[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__intro-card-name,
+.ooh-operation-alpha__intro-card-meta,
+.ooh-operation-alpha__intro-story-copy,
+.ooh-operation-alpha__intro-beat-card,
+.ooh-operation-alpha__intro-consequence {
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.ooh-operation-alpha__intro-beat-card {
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .ooh-operation-alpha__opposition-grid {
@@ -2205,8 +2366,9 @@ body.ooh-operation-alpha-runtime .row {
   pointer-events: none;
 }
 
-.ooh-operation-alpha__playlist-visual img {
-  position: relative;
+.ooh-operation-alpha__playlist-avatar {
+  position: absolute;
+  inset: 0;
   z-index: 1;
   grid-area: 1 / 1;
   display: block;
@@ -2217,7 +2379,7 @@ body.ooh-operation-alpha-runtime .row {
   filter: saturate(0.82) contrast(1.08);
 }
 
-.ooh-operation-alpha__playlist-visual img:not([hidden]) + .ooh-operation-alpha__playlist-frame {
+.ooh-operation-alpha__playlist-avatar:not([hidden]) + .ooh-operation-alpha__playlist-frame {
   opacity: 0;
 }
 
@@ -2495,12 +2657,16 @@ a.ooh-operation-alpha__playlist-select {
 
   .ooh-operation-alpha__actor-portrait {
     width: min(140px, 100%);
-    min-height: 140px;
     margin: 0 auto;
   }
 
-  .ooh-operation-alpha__actor-image {
-    min-height: 140px;
+  .ooh-operation-alpha__intro-card-body {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__intro-card-image {
+    margin: 0 auto;
   }
 
   .ooh-operation-alpha__payload {

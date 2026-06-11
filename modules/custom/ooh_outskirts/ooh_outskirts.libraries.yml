@@ -57,7 +57,7 @@ play:
     - core/drupalSettings
 
 operation_alpha:
-  version: 1.0.12-oa214a1
+  version: 1.0.19-oa-containment
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha.css: {}
@@ -69,7 +69,7 @@ operation_alpha:
     - core/once
 
 operation_alpha_level_1:
-  version: 1.0.3-oa214a
+  version: 1.0.5-oa-autoscroll
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_1.css: {}
@@ -81,7 +81,7 @@ operation_alpha_level_1:
     - core/once
 
 operation_alpha_level_2:
-  version: 1.0.3-oa214a
+  version: 1.0.5-oa-autoscroll
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_2.css: {}
@@ -93,7 +93,7 @@ operation_alpha_level_2:
     - core/once
 
 operation_alpha_level_3:
-  version: 1.0.3-oa214a
+  version: 1.0.5-oa-autoscroll
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_3.css: {}
@@ -105,7 +105,7 @@ operation_alpha_level_3:
     - core/once
 
 operation_alpha_level_4:
-  version: 1.0.3-oa214a
+  version: 1.0.6-oa-button-gate
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_4.css: {}
@@ -117,7 +117,7 @@ operation_alpha_level_4:
     - core/once
 
 operation_alpha_finale:
-  version: 1.0.3-oa214a
+  version: 1.0.5-oa-autoscroll
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_finale.css: {}
@@ -174,4 +174,3 @@ credits:
     - ooh_outskirts/player_pages
     - core/drupal
     - core/once
-

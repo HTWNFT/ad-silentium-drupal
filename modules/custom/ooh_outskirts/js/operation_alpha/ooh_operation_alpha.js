@@ -4,10 +4,26 @@
   console.log('OA-211 Operation Alpha decision consequence runtime loaded');
 
   var storageKey = 'ooh_operation_alpha_intro_seen_v1';
+  var sessionIntroSeenKey = 'ooh_operation_alpha_intro_seen_session_v1';
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
   var scenarioDelayMs = 1500;
+
+  function resetOAIntroRunState(keepPlaylist) {
+    try {
+      window.localStorage.removeItem(oaChainStateKey);
+      window.localStorage.removeItem(storageKey);
+      window.localStorage.removeItem(signalStorageKey);
+
+      if (!keepPlaylist) {
+        window.localStorage.removeItem(playlistStorageKey);
+      }
+    }
+    catch (e) {}
+  }
+
+  window.resetOAIntroRunState = resetOAIntroRunState;
   var actorRegistryPaths = [
     '/operation_alpha/oa_actor_registry.csv',
     '/operation_alpha/generated_actor_registry/oa_actor_registry.csv'
@@ -1035,7 +1051,7 @@
 
   function storageFlagSeen() {
     try {
-      return window.localStorage.getItem(storageKey) === '1';
+      return window.localStorage.getItem(storageKey) === '1' || window.sessionStorage.getItem(sessionIntroSeenKey) === '1';
     }
     catch (e) {
       return false;
@@ -1045,8 +1061,15 @@
   function storeSeenFlag() {
     try {
       window.localStorage.setItem(storageKey, '1');
+      window.sessionStorage.setItem(sessionIntroSeenKey, '1');
     }
     catch (e) {}
+  }
+
+  function shouldSuppressIntroOverlay() {
+    var storedSelection = getPlaylistSelection();
+
+    return storageFlagSeen() || !!(storedSelection && storedSelection.title);
   }
 
   function signalDismissed() {
@@ -2560,6 +2583,9 @@
         chainState.introChoices = choices;
         appendOAChainEvent(chainState, beat);
         renderIntroDecisionFlow(root, runtimeState);
+        if (choices.length >= required && window.oaScrollToNextPhase) {
+          window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-next-level]'));
+        }
       });
       wrap.appendChild(card);
     });
@@ -2734,6 +2760,9 @@
       root.querySelector('[data-ooh-alpha-transmission-danger]').textContent = 'DANGER: Field pressure will answer the first three directives.';
       popup.hidden = false;
       popup.setAttribute('aria-hidden', 'false');
+      if (window.oaScrollToNextPhase) {
+        window.oaScrollToNextPhase(root, popup);
+      }
     });
   }
 
@@ -2962,6 +2991,7 @@
         '</div>';
       root.appendChild(popup);
       popup.querySelector('[data-ooh-alpha-final-aar-run]').addEventListener('click', function () {
+        resetOAIntroRunState(true);
         popup.hidden = true;
         popup.setAttribute('aria-hidden', 'true');
         activateOperationAlphaRuntime(root);
@@ -4429,6 +4459,7 @@
     root.oohAlphaOperationalPayload = null;
     root.oohAlphaSelectedActor = null;
     root.oohAlphaCommand = null;
+    setIntroGameplayBlocksVisible(root, false);
     root.querySelectorAll('[data-ooh-alpha-final-aar]').forEach(function (popup) {
       popup.hidden = true;
       popup.setAttribute('aria-hidden', 'true');
@@ -4497,6 +4528,14 @@
     syncRuntimeControlLocks(root, null);
   }
 
+  function setIntroGameplayBlocksVisible(root, visible) {
+    root.querySelectorAll('[data-ooh-alpha-operational-payload], [data-ooh-alpha-battlefield], .ooh-operation-alpha__scenario, .ooh-operation-alpha__command-console').forEach(function (section) {
+      section.hidden = !visible;
+      section.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      section.classList.toggle('is-hidden', !visible);
+    });
+  }
+
   function activateOperationAlphaRuntime(root) {
     var runtimeCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
     var activationStatus = root.querySelector('[data-ooh-alpha-activation-status]');
@@ -4513,6 +4552,7 @@
 
     root.classList.add('is-runtime-acknowledged');
     pauseOperationAlphaAmbient(root);
+    resetOAIntroRunState(true);
     resetRuntimeLoop(root);
     syncSignalGate(root);
     syncFieldInitializeGate(root);
@@ -4538,6 +4578,10 @@
     renderContact(root, 0, 'activation');
     setAtmosphere(root, 0);
     selectOperationAlphaActor(root);
+    setIntroGameplayBlocksVisible(root, false);
+    if (window.oaScrollToNextPhase) {
+      window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-actor-transmission]') || root.querySelector('[data-ooh-alpha-intro-storyblock]'));
+    }
   }
 
   function setInterventionsDisabled(root, disabled) {
@@ -4603,6 +4647,7 @@
 
     initActorRegistry(root);
     initSignalModal(root);
+    setIntroGameplayBlocksVisible(root, false);
     if (shell && !root.querySelector('[data-ooh-alpha-runtime-version]')) {
       var version = document.createElement('p');
       version.className = 'ooh-operation-alpha__copy';
@@ -4641,7 +4686,8 @@
     });
 
     if (intro && enter) {
-      if (storageFlagSeen()) {
+      if (shouldSuppressIntroOverlay()) {
+        storeSeenFlag();
         hideIntro(intro);
         showSignalModal(root);
       }
@@ -4843,6 +4889,8 @@
     }
     activationButton.disabled = locked || initialized;
     activationButton.classList.toggle('is-oa-control-disabled', locked && !initialized);
+    activationButton.setAttribute('aria-disabled', activationButton.disabled ? 'true' : 'false');
+    activationButton.setAttribute('tabindex', activationButton.disabled ? '-1' : '0');
     activationButton.textContent = initialized ? 'FIELD INITIALIZED' : 'INITIALIZE FIELD';
     if (activationStatus && !initialized) {
       activationStatus.textContent = locked ? 'Select signal before field initialization.' : storedSelection.title + ' selected. Field initialization available.';
@@ -4931,6 +4979,26 @@
         var spotifyUrl = button.getAttribute('data-playlist-url') || '';
         var channel = channelBySlug(slug) || channelByLabel(title);
         var moodTags = channel ? channel.moodTags : '';
+        var confirmation = root.querySelector('[data-ooh-alpha-playlist-confirmation]');
+        var handoff = root.querySelector('[data-ooh-alpha-runtime-handoff]');
+
+        if (slug === 'system-reset-free') {
+          resetOAIntroRunState(false);
+          root.querySelectorAll('[data-ooh-alpha-playlist-card]').forEach(function (playlistCard) {
+            playlistCard.classList.remove('is-selected');
+          });
+          root.querySelectorAll('[data-ooh-alpha-playlist-select]').forEach(function (selectButton) {
+            selectButton.textContent = 'SELECT SIGNAL';
+            selectButton.removeAttribute('aria-pressed');
+          });
+          if (confirmation) {
+            confirmation.textContent = 'Full reset complete. Select a signal to begin a clean run.';
+          }
+          if (handoff) {
+            handoff.hidden = true;
+          }
+          return;
+        }
 
         storePlaylistSelection(slug, title, spotifyUrl, moodTags);
         setActivePlaylist(root, slug, title, spotifyUrl, moodTags);

@@ -227,6 +227,9 @@
       }
       event.preventDefault();
       showTransmission(root, currentState, link.href);
+      if (window.oaScrollToNextPhase) {
+        window.oaScrollToNextPhase(root);
+      }
     });
   }
 
@@ -318,6 +321,9 @@
           state.failed = card.id === 'midpoint-no-go' ? true : state.failed;
           appendChainEvent(state, card);
           render(root);
+          if (window.oaScrollToNextPhase) {
+            window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-level-next]'));
+          }
         });
         wrap.appendChild(button);
       });

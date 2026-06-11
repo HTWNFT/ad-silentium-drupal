@@ -509,8 +509,63 @@
   };
 
   var operationAlphaRuntimePrefix = 'ooh_operation_alpha_';
+  var operationAlphaPlaylistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
 
-  function removeOperationAlphaRuntimeKeys(storage) {
+  function isOAStageTargetAvailable(target) {
+    var style;
+
+    if (!target || target.hidden || target.disabled || target.getAttribute('aria-disabled') === 'true') {
+      return false;
+    }
+
+    style = window.getComputedStyle ? window.getComputedStyle(target) : null;
+    return !style || (style.display !== 'none' && style.visibility !== 'hidden');
+  }
+
+  function scrollToOAStage(target, alignToBottom) {
+    if (!isOAStageTargetAvailable(target)) {
+      return;
+    }
+
+    try {
+      var prefersReducedMotion = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      target.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        block: alignToBottom ? 'end' : 'start',
+        inline: 'nearest'
+      });
+    }
+    catch (e) {
+      try {
+        target.scrollIntoView();
+      }
+      catch (ignore) {}
+    }
+  }
+
+  function findOAStageTarget(root) {
+    if (!root || !root.querySelector) {
+      return null;
+    }
+
+    return root.querySelector('[data-ooh-alpha-transmission-popup]:not([hidden])') ||
+      root.querySelector('[data-ooh-alpha-final-aar]:not([hidden])') ||
+      root.querySelector('[data-ooh-alpha-finalize]:not(:disabled)') ||
+      root.querySelector('[data-ooh-alpha-level-next][aria-disabled="false"]') ||
+      root.querySelector('[data-ooh-alpha-transmission-next]') ||
+      root.querySelector('[data-ooh-alpha-next-level][aria-disabled="false"]') ||
+      root.querySelector('[data-ooh-alpha-runtime-proceed]');
+  }
+
+  function oaScrollToNextPhase(root, target, alignToBottom) {
+    window.setTimeout(function () {
+      scrollToOAStage(target || findOAStageTarget(root), !!alignToBottom);
+    }, 80);
+  }
+
+  function removeOperationAlphaRuntimeKeys(storage, keepPlaylist) {
     var removed = [];
     var keys = [];
     var index;
@@ -523,7 +578,7 @@
     try {
       for (index = 0; index < storage.length; index += 1) {
         key = storage.key(index);
-        if (key && key.indexOf(operationAlphaRuntimePrefix) === 0) {
+        if (key && key.indexOf(operationAlphaRuntimePrefix) === 0 && !(keepPlaylist && key === operationAlphaPlaylistStorageKey)) {
           keys.push(key);
         }
       }
@@ -542,10 +597,10 @@
     return removed;
   }
 
-  function resetOperationAlphaRun() {
+  function resetOperationAlphaRun(keepPlaylist) {
     var result = {
-      localStorage: removeOperationAlphaRuntimeKeys(window.localStorage),
-      sessionStorage: removeOperationAlphaRuntimeKeys(window.sessionStorage)
+      localStorage: removeOperationAlphaRuntimeKeys(window.localStorage, keepPlaylist !== false),
+      sessionStorage: removeOperationAlphaRuntimeKeys(window.sessionStorage, keepPlaylist !== false)
     };
 
     if (window.console && window.console.info) {
@@ -553,6 +608,10 @@
     }
 
     return result;
+  }
+
+  function resetOAIntroRunState(keepPlaylist) {
+    return resetOperationAlphaRun(keepPlaylist);
   }
 
   function bindOperationAlphaTryAgainReset() {
@@ -568,16 +627,25 @@
         return;
       }
 
+      trigger = event.target.closest('[data-ooh-alpha-full-reset]');
+      if (trigger) {
+        resetOAIntroRunState(false);
+        return;
+      }
+
       trigger = event.target.closest('[data-ooh-alpha-try-again]');
       if (!trigger) {
         return;
       }
 
-      resetOperationAlphaRun();
+      resetOAIntroRunState(true);
     }, true);
   }
 
   window.resetOperationAlphaRun = resetOperationAlphaRun;
+  window.resetOAIntroRunState = window.resetOAIntroRunState || resetOAIntroRunState;
+  window.scrollToOAStage = scrollToOAStage;
+  window.oaScrollToNextPhase = oaScrollToNextPhase;
 
   if (window.document && window.document.readyState === 'loading') {
     window.document.addEventListener('DOMContentLoaded', bindOperationAlphaTryAgainReset, { once: true });
