@@ -9,6 +9,7 @@
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
   var operationAlphaRuntimePrefix = 'ooh_operation_alpha_';
+  var introRequiredChoices = 3;
   var scenarioDelayMs = 1500;
 
   function removeOARuntimeStorageKeys(storage, keepPlaylist) {
@@ -2550,6 +2551,16 @@
     }
   }
 
+  function setIntroChoiceLocked(button, locked) {
+    if (!button) {
+      return;
+    }
+    button.disabled = locked;
+    button.classList.toggle('is-disabled', locked);
+    button.setAttribute('aria-disabled', locked ? 'true' : 'false');
+    button.setAttribute('tabindex', locked ? '-1' : '0');
+  }
+
   function renderIntroChainPanel(root, state) {
     var chainPanel = root.querySelector('[data-ooh-alpha-intro-chain]');
     var latest = (state.chain || [])[state.chain.length - 1];
@@ -2573,8 +2584,8 @@
     var next = root.querySelector('[data-ooh-alpha-next-level]');
     var chainState = readOAChainState();
     var choices = chainState.introChoices || [];
-    var required = 3;
-    var locked = choices.length >= required;
+    var required = introRequiredChoices;
+    var introComplete = choices.length >= required;
     var beats = introBeatCards(runtimeState.storyCast || {}, runtimeState.scene || {});
 
     if (!flow || !wrap) {
@@ -2590,8 +2601,7 @@
       card.type = 'button';
       card.className = 'ooh-operation-alpha__intro-beat-card';
       card.classList.toggle('is-selected', selected);
-      card.classList.toggle('is-disabled', locked && !selected);
-      card.disabled = selected || locked;
+      setIntroChoiceLocked(card, selected || introComplete);
       card.innerHTML = '<span>' + beat.title + '</span><strong>SITUATION</strong><p>' + beat.situation + '</p><strong>DIRECTIVE</strong><p>' + beat.directive + '</p><strong>RISK</strong><p>' + beat.risk + '</p><strong>CONSEQUENCE</strong><p>' + beat.consequence + '</p>';
       card.addEventListener('click', function () {
         if (card.disabled) {
@@ -2617,16 +2627,16 @@
       counter.textContent = 'SELECTED: ' + choices.length + ' / REQUIRED: ' + required;
     }
     if (status) {
-      status.textContent = locked ? 'READY' : 'STAGE LOCKED';
+      status.textContent = introComplete ? 'READY' : 'STAGE LOCKED';
     }
     if (consequence) {
       var latest = choices[choices.length - 1];
       consequence.innerHTML = '<span class="ooh-operation-alpha__intro-card-kicker">NARRATIVE CONSEQUENCE</span><p>' + (latest ? latest.narrative : 'Awaiting Unseen Hand directive.') + '</p>';
     }
     renderIntroChainPanel(root, chainState);
-    setIntroNextLocked(next, !locked);
-    bindIntroTransmission(root, runtimeState, locked);
-    if (locked) {
+    setIntroNextLocked(next, !introComplete);
+    bindIntroTransmission(root, runtimeState);
+    if (introComplete) {
       flow.classList.add('is-stage-complete');
     }
     else {
@@ -2739,7 +2749,7 @@
     }
   }
 
-  function bindIntroTransmission(root, runtimeState, ready) {
+  function bindIntroTransmission(root, runtimeState) {
     var next = root.querySelector('[data-ooh-alpha-next-level]');
     var popup = root.querySelector('[data-ooh-alpha-transmission-popup]');
 
@@ -2750,7 +2760,7 @@
     next.addEventListener('click', function (event) {
       var chainState = readOAChainState();
       var choices = chainState.introChoices || [];
-      var introReady = choices.length >= 3;
+      var introReady = choices.length >= introRequiredChoices;
 
       if (next.disabled || next.getAttribute('aria-disabled') === 'true' || !introReady) {
         event.preventDefault();
@@ -4748,6 +4758,7 @@
     renderIntroSelectedSignal(root);
     syncFieldInitializeGate(root);
     root.querySelectorAll('[data-ooh-alpha-next-level]').forEach(function (link) {
+      setIntroNextLocked(link, true);
       link.addEventListener('click', function (event) {
         if (link.getAttribute('aria-disabled') === 'true') {
           event.preventDefault();
