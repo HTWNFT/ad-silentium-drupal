@@ -14,7 +14,7 @@ player_pages:
       css/ooh-player-pages.css: {}
 
 landing:
-  version: 1.0.2-oa220
+  version: 1.0.3-homepage-audio
   css:
     theme:
       css/ooh-landing.css: {}
