@@ -4648,6 +4648,25 @@
     window.clearTimeout(root.oohAlphaScenarioTimer);
   }
 
+  function bindOperationAlphaEnter(root, intro, enter) {
+    intro = intro || root.querySelector('[data-ooh-operation-alpha-intro]');
+    enter = enter || root.querySelector('[data-ooh-operation-alpha-enter]');
+
+    if (!intro || !enter) {
+      return;
+    }
+
+    if (root.oohAlphaEnterButton === enter) {
+      return;
+    }
+
+    root.oohAlphaEnterButton = enter;
+    enter.addEventListener('click', function () {
+      storeSeenFlag();
+      hideIntro(intro);
+    });
+  }
+
   function initOperationAlphaGate(root) {
     var intro = root.querySelector('[data-ooh-operation-alpha-intro]');
     var enter = root.querySelector('[data-ooh-operation-alpha-enter]');
@@ -4711,10 +4730,7 @@
         showSignalModal(root);
       }
       else {
-        enter.addEventListener('click', function () {
-          storeSeenFlag();
-          hideIntro(intro);
-        });
+        bindOperationAlphaEnter(root, intro, enter);
       }
     }
     else {
@@ -5101,16 +5117,55 @@
     });
   }
 
-  function init() {
+  function findOperationAlphaRoots(context, selector) {
+    var scope = context || document;
+    var roots = [];
+
+    if (scope.matches && scope.matches(selector)) {
+      roots.push(scope);
+    }
+    if (scope.querySelectorAll) {
+      scope.querySelectorAll(selector).forEach(function (root) {
+        roots.push(root);
+      });
+    }
+
+    return roots;
+  }
+
+  function initOperationAlphaRoot(root) {
+    bindOperationAlphaEnter(root);
+
+    if (root.oohAlphaGateInitialized) {
+      return;
+    }
+
+    root.oohAlphaGateInitialized = true;
+    initOperationAlphaGate(root);
+  }
+
+  function attachOperationAlphaGate(context) {
     if (document.body) {
       document.body.classList.add('ooh-operation-alpha-runtime');
     }
 
-    document.querySelectorAll('[data-ooh-operation-alpha]').forEach(initOperationAlphaGate);
+    findOperationAlphaRoots(context, '[data-ooh-operation-alpha]').forEach(initOperationAlphaRoot);
+  }
+
+  function init() {
+    attachOperationAlphaGate(document);
     document.querySelectorAll('[data-ooh-operation-alpha-playlists]').forEach(initPlaylistShell);
     document.querySelectorAll('[data-ooh-operation-alpha-runtime]').forEach(initRuntimeShell);
     document.querySelectorAll('[data-ooh-operation-alpha-credits]').forEach(initCreditsShell);
     document.querySelectorAll('[data-ooh-operation-alpha-operation]').forEach(renderOperationSurface);
+  }
+
+  if (window.Drupal && window.Drupal.behaviors) {
+    window.Drupal.behaviors.oohOperationAlpha = {
+      attach: function (context) {
+        attachOperationAlphaGate(context || document);
+      }
+    };
   }
 
   if (document.readyState === 'loading') {
