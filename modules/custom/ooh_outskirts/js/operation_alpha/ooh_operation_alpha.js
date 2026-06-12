@@ -8,36 +8,10 @@
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
-  var operationAlphaRuntimePrefix = 'ooh_operation_alpha_';
-  var introRequiredChoices = 3;
   var scenarioDelayMs = 1500;
-
-  function removeOARuntimeStorageKeys(storage, keepPlaylist) {
-    var keys = [];
-    var index;
-    var key;
-
-    if (!storage) {
-      return;
-    }
-
-    for (index = 0; index < storage.length; index += 1) {
-      key = storage.key(index);
-      if (key && key.indexOf(operationAlphaRuntimePrefix) === 0 && !(keepPlaylist && key === playlistStorageKey)) {
-        keys.push(key);
-      }
-    }
-
-    keys.forEach(function (runtimeKey) {
-      storage.removeItem(runtimeKey);
-    });
-  }
 
   function resetOAIntroRunState(keepPlaylist) {
     try {
-      removeOARuntimeStorageKeys(window.localStorage, keepPlaylist);
-      removeOARuntimeStorageKeys(window.sessionStorage, keepPlaylist);
-
       window.localStorage.removeItem(oaChainStateKey);
       window.localStorage.removeItem(storageKey);
       window.localStorage.removeItem(signalStorageKey);
@@ -319,15 +293,17 @@
       moodTags: 'Impact • Escalation • Consequence'
     },
     {
-      slug: 'system-reset',
-      label: 'System Reset',
+      slug: 'system-reset-free',
+      label: 'System Reset (Free)',
       playlistId: '0cZlbYVRnkxwViBJPw8oDR',
-      spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=b992c3418f104ec2',
+      spotifyUrl: 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=d10eef44e3f54078',
       moodTags: 'Abandoned Systems • Collapse • Aftermath'
     }
   ];
 
-  var runtimePlaylists = channelRegistry;
+  var runtimePlaylists = channelRegistry.filter(function (channel) {
+    return channel.slug !== 'system-reset-free';
+  });
 
   var runtimeStatuses = [
     'Signal Window Open',
@@ -2551,16 +2527,6 @@
     }
   }
 
-  function setIntroChoiceLocked(button, locked) {
-    if (!button) {
-      return;
-    }
-    button.disabled = locked;
-    button.classList.toggle('is-disabled', locked);
-    button.setAttribute('aria-disabled', locked ? 'true' : 'false');
-    button.setAttribute('tabindex', locked ? '-1' : '0');
-  }
-
   function renderIntroChainPanel(root, state) {
     var chainPanel = root.querySelector('[data-ooh-alpha-intro-chain]');
     var latest = (state.chain || [])[state.chain.length - 1];
@@ -2584,8 +2550,8 @@
     var next = root.querySelector('[data-ooh-alpha-next-level]');
     var chainState = readOAChainState();
     var choices = chainState.introChoices || [];
-    var required = introRequiredChoices;
-    var introComplete = choices.length >= required;
+    var required = 3;
+    var locked = choices.length >= required;
     var beats = introBeatCards(runtimeState.storyCast || {}, runtimeState.scene || {});
 
     if (!flow || !wrap) {
@@ -2601,7 +2567,8 @@
       card.type = 'button';
       card.className = 'ooh-operation-alpha__intro-beat-card';
       card.classList.toggle('is-selected', selected);
-      setIntroChoiceLocked(card, selected || introComplete);
+      card.classList.toggle('is-disabled', locked && !selected);
+      card.disabled = selected || locked;
       card.innerHTML = '<span>' + beat.title + '</span><strong>SITUATION</strong><p>' + beat.situation + '</p><strong>DIRECTIVE</strong><p>' + beat.directive + '</p><strong>RISK</strong><p>' + beat.risk + '</p><strong>CONSEQUENCE</strong><p>' + beat.consequence + '</p>';
       card.addEventListener('click', function () {
         if (card.disabled) {
@@ -2627,16 +2594,16 @@
       counter.textContent = 'SELECTED: ' + choices.length + ' / REQUIRED: ' + required;
     }
     if (status) {
-      status.textContent = introComplete ? 'READY' : 'STAGE LOCKED';
+      status.textContent = locked ? 'READY' : 'STAGE LOCKED';
     }
     if (consequence) {
       var latest = choices[choices.length - 1];
       consequence.innerHTML = '<span class="ooh-operation-alpha__intro-card-kicker">NARRATIVE CONSEQUENCE</span><p>' + (latest ? latest.narrative : 'Awaiting Unseen Hand directive.') + '</p>';
     }
     renderIntroChainPanel(root, chainState);
-    setIntroNextLocked(next, !introComplete);
-    bindIntroTransmission(root, runtimeState);
-    if (introComplete) {
+    setIntroNextLocked(next, !locked);
+    bindIntroTransmission(root, runtimeState, locked);
+    if (locked) {
       flow.classList.add('is-stage-complete');
     }
     else {
@@ -2749,7 +2716,7 @@
     }
   }
 
-  function bindIntroTransmission(root, runtimeState) {
+  function bindIntroTransmission(root, runtimeState, ready) {
     var next = root.querySelector('[data-ooh-alpha-next-level]');
     var popup = root.querySelector('[data-ooh-alpha-transmission-popup]');
 
@@ -2760,7 +2727,7 @@
     next.addEventListener('click', function (event) {
       var chainState = readOAChainState();
       var choices = chainState.introChoices || [];
-      var introReady = choices.length >= introRequiredChoices;
+      var introReady = choices.length >= 3;
 
       if (next.disabled || next.getAttribute('aria-disabled') === 'true' || !introReady) {
         event.preventDefault();
@@ -4648,25 +4615,6 @@
     window.clearTimeout(root.oohAlphaScenarioTimer);
   }
 
-  function bindOperationAlphaEnter(root, intro, enter) {
-    intro = intro || root.querySelector('[data-ooh-operation-alpha-intro]');
-    enter = enter || root.querySelector('[data-ooh-operation-alpha-enter]');
-
-    if (!intro || !enter) {
-      return;
-    }
-
-    if (root.oohAlphaEnterButton === enter) {
-      return;
-    }
-
-    root.oohAlphaEnterButton = enter;
-    enter.addEventListener('click', function () {
-      storeSeenFlag();
-      hideIntro(intro);
-    });
-  }
-
   function initOperationAlphaGate(root) {
     var intro = root.querySelector('[data-ooh-operation-alpha-intro]');
     var enter = root.querySelector('[data-ooh-operation-alpha-enter]');
@@ -4674,6 +4622,8 @@
     var missionCycle = root.querySelector('[data-ooh-alpha-mission-cycle]');
     var signalGate = root.querySelector('[data-ooh-alpha-signal-gate]');
     var signalLinks = root.querySelectorAll('a.ooh-operation-alpha__access-button, a.ooh-operation-alpha__runtime-button');
+    var shell = root.querySelector('[data-ooh-operation-alpha-control]');
+    var title = root.querySelector('.ooh-operation-alpha__title');
     var battlefieldLabelMap = {
       'FIELD CONDITIONS': 'CURRENT SITUATION',
       'ASSET MOVEMENT': 'RONIN STATUS',
@@ -4698,6 +4648,18 @@
     initActorRegistry(root);
     initSignalModal(root);
     setIntroGameplayBlocksVisible(root, false);
+    if (shell && !root.querySelector('[data-ooh-alpha-runtime-version]')) {
+      var version = document.createElement('p');
+      version.className = 'ooh-operation-alpha__copy';
+      version.setAttribute('data-ooh-alpha-runtime-version', '');
+      version.textContent = 'OA RUNTIME VERSION: OA-211 DECISION CONSEQUENCE CHECK';
+      if (title && title.parentNode === shell) {
+        shell.insertBefore(version, title.nextSibling);
+      }
+      else {
+        shell.insertBefore(version, shell.firstChild);
+      }
+    }
     signalLinks.forEach(function (link) {
       if ((link.textContent || '').trim() === ['ENTER', 'ACTIVE', 'RUNTIME'].join(' ')) {
         link.textContent = 'SELECT SIGNAL';
@@ -4730,7 +4692,11 @@
         showSignalModal(root);
       }
       else {
-        bindOperationAlphaEnter(root, intro, enter);
+        enter.addEventListener('click', function () {
+          storeSeenFlag();
+          hideIntro(intro);
+          showSignalModal(root);
+        });
       }
     }
     else {
@@ -4773,7 +4739,6 @@
     renderIntroSelectedSignal(root);
     syncFieldInitializeGate(root);
     root.querySelectorAll('[data-ooh-alpha-next-level]').forEach(function (link) {
-      setIntroNextLocked(link, true);
       link.addEventListener('click', function (event) {
         if (link.getAttribute('aria-disabled') === 'true') {
           event.preventDefault();
@@ -5017,7 +4982,7 @@
         var confirmation = root.querySelector('[data-ooh-alpha-playlist-confirmation]');
         var handoff = root.querySelector('[data-ooh-alpha-runtime-handoff]');
 
-        if (slug === 'system-reset' || slug === 'system-reset-free') {
+        if (slug === 'system-reset-free') {
           resetOAIntroRunState(false);
           root.querySelectorAll('[data-ooh-alpha-playlist-card]').forEach(function (playlistCard) {
             playlistCard.classList.remove('is-selected');
@@ -5117,55 +5082,16 @@
     });
   }
 
-  function findOperationAlphaRoots(context, selector) {
-    var scope = context || document;
-    var roots = [];
-
-    if (scope.matches && scope.matches(selector)) {
-      roots.push(scope);
-    }
-    if (scope.querySelectorAll) {
-      scope.querySelectorAll(selector).forEach(function (root) {
-        roots.push(root);
-      });
-    }
-
-    return roots;
-  }
-
-  function initOperationAlphaRoot(root) {
-    bindOperationAlphaEnter(root);
-
-    if (root.oohAlphaGateInitialized) {
-      return;
-    }
-
-    root.oohAlphaGateInitialized = true;
-    initOperationAlphaGate(root);
-  }
-
-  function attachOperationAlphaGate(context) {
+  function init() {
     if (document.body) {
       document.body.classList.add('ooh-operation-alpha-runtime');
     }
 
-    findOperationAlphaRoots(context, '[data-ooh-operation-alpha]').forEach(initOperationAlphaRoot);
-  }
-
-  function init() {
-    attachOperationAlphaGate(document);
+    document.querySelectorAll('[data-ooh-operation-alpha]').forEach(initOperationAlphaGate);
     document.querySelectorAll('[data-ooh-operation-alpha-playlists]').forEach(initPlaylistShell);
     document.querySelectorAll('[data-ooh-operation-alpha-runtime]').forEach(initRuntimeShell);
     document.querySelectorAll('[data-ooh-operation-alpha-credits]').forEach(initCreditsShell);
     document.querySelectorAll('[data-ooh-operation-alpha-operation]').forEach(renderOperationSurface);
-  }
-
-  if (window.Drupal && window.Drupal.behaviors) {
-    window.Drupal.behaviors.oohOperationAlpha = {
-      attach: function (context) {
-        attachOperationAlphaGate(context || document);
-      }
-    };
   }
 
   if (document.readyState === 'loading') {
