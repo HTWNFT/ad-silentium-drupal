@@ -8,10 +8,35 @@
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
+  var operationAlphaRuntimePrefix = 'ooh_operation_alpha_';
   var scenarioDelayMs = 1500;
+
+  function removeOARuntimeStorageKeys(storage, keepPlaylist) {
+    var keys = [];
+    var index;
+    var key;
+
+    if (!storage) {
+      return;
+    }
+
+    for (index = 0; index < storage.length; index += 1) {
+      key = storage.key(index);
+      if (key && key.indexOf(operationAlphaRuntimePrefix) === 0 && !(keepPlaylist && key === playlistStorageKey)) {
+        keys.push(key);
+      }
+    }
+
+    keys.forEach(function (runtimeKey) {
+      storage.removeItem(runtimeKey);
+    });
+  }
 
   function resetOAIntroRunState(keepPlaylist) {
     try {
+      removeOARuntimeStorageKeys(window.localStorage, keepPlaylist);
+      removeOARuntimeStorageKeys(window.sessionStorage, keepPlaylist);
+
       window.localStorage.removeItem(oaChainStateKey);
       window.localStorage.removeItem(storageKey);
       window.localStorage.removeItem(signalStorageKey);
@@ -4620,8 +4645,6 @@
     var missionCycle = root.querySelector('[data-ooh-alpha-mission-cycle]');
     var signalGate = root.querySelector('[data-ooh-alpha-signal-gate]');
     var signalLinks = root.querySelectorAll('a.ooh-operation-alpha__access-button, a.ooh-operation-alpha__runtime-button');
-    var shell = root.querySelector('[data-ooh-operation-alpha-control]');
-    var title = root.querySelector('.ooh-operation-alpha__title');
     var battlefieldLabelMap = {
       'FIELD CONDITIONS': 'CURRENT SITUATION',
       'ASSET MOVEMENT': 'RONIN STATUS',
@@ -4646,18 +4669,6 @@
     initActorRegistry(root);
     initSignalModal(root);
     setIntroGameplayBlocksVisible(root, false);
-    if (shell && !root.querySelector('[data-ooh-alpha-runtime-version]')) {
-      var version = document.createElement('p');
-      version.className = 'ooh-operation-alpha__copy';
-      version.setAttribute('data-ooh-alpha-runtime-version', '');
-      version.textContent = 'OA RUNTIME VERSION: OA-211 DECISION CONSEQUENCE CHECK';
-      if (title && title.parentNode === shell) {
-        shell.insertBefore(version, title.nextSibling);
-      }
-      else {
-        shell.insertBefore(version, shell.firstChild);
-      }
-    }
     signalLinks.forEach(function (link) {
       if ((link.textContent || '').trim() === ['ENTER', 'ACTIVE', 'RUNTIME'].join(' ')) {
         link.textContent = 'SELECT SIGNAL';
@@ -4977,6 +4988,26 @@
         var spotifyUrl = button.getAttribute('data-playlist-url') || '';
         var channel = channelBySlug(slug) || channelByLabel(title);
         var moodTags = channel ? channel.moodTags : '';
+        var confirmation = root.querySelector('[data-ooh-alpha-playlist-confirmation]');
+        var handoff = root.querySelector('[data-ooh-alpha-runtime-handoff]');
+
+        if (slug === 'system-reset' || slug === 'system-reset-free') {
+          resetOAIntroRunState(false);
+          root.querySelectorAll('[data-ooh-alpha-playlist-card]').forEach(function (playlistCard) {
+            playlistCard.classList.remove('is-selected');
+          });
+          root.querySelectorAll('[data-ooh-alpha-playlist-select]').forEach(function (selectButton) {
+            selectButton.textContent = 'SELECT SIGNAL';
+            selectButton.removeAttribute('aria-pressed');
+          });
+          if (confirmation) {
+            confirmation.textContent = 'Full reset complete. Select a signal to begin a clean run.';
+          }
+          if (handoff) {
+            handoff.hidden = true;
+          }
+          return;
+        }
 
         storePlaylistSelection(slug, title, spotifyUrl, moodTags);
         setActivePlaylist(root, slug, title, spotifyUrl, moodTags);
