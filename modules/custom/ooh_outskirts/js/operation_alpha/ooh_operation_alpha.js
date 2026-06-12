@@ -4714,7 +4714,6 @@
         enter.addEventListener('click', function () {
           storeSeenFlag();
           hideIntro(intro);
-          showSignalModal(root);
         });
       }
     }
