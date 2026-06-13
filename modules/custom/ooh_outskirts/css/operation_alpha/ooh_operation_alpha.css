@@ -912,10 +912,67 @@ body.ooh-operation-alpha-runtime .row {
 .ooh-operation-alpha__intro-beat-card {
   box-sizing: border-box;
   width: 100%;
+  min-height: 190px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 8px;
+  color: #dffcff;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.44);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.ooh-alpha-choice-card {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 190px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 8px;
+  color: #dffcff;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.44);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.ooh-operation-alpha__intro-beat-card span,
+.ooh-operation-alpha__intro-beat-card strong,
+.ooh-alpha-choice-card span,
+.ooh-alpha-choice-card strong {
+  display: block;
+  margin-bottom: 7px;
+  color: rgba(145, 250, 255, 0.78);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-beat-card p,
+.ooh-alpha-choice-card p {
+  margin: 0 0 8px;
+  color: rgba(223, 252, 255, 0.82);
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__intro-beat-card.is-selected,
+.ooh-alpha-choice-card.is-selected {
+  border-color: rgba(71, 255, 151, 0.72);
+  background: rgba(6, 48, 31, 0.72);
+  box-shadow: 0 0 18px rgba(71, 255, 151, 0.18);
 }
 
 .ooh-operation-alpha__intro-beat-card:disabled,
-.ooh-operation-alpha__intro-beat-card[aria-disabled="true"] {
+.ooh-operation-alpha__intro-beat-card[aria-disabled="true"],
+.ooh-alpha-choice-card:disabled,
+.ooh-alpha-choice-card[aria-disabled="true"] {
   cursor: default;
   opacity: 0.58;
 }

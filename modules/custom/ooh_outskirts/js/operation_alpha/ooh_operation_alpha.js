@@ -2541,6 +2541,29 @@
     chainPanel.innerHTML = '<span class="ooh-operation-alpha__intro-card-kicker">CHAIN OF CONSEQUENCE</span><p>ACTION: ' + latest.action + '</p><p>REACTION: ' + latest.reaction + '</p><p>CONSEQUENCE: ' + latest.consequence + '</p><p>CARRY-FORWARD EFFECT: ' + latest.carry + '</p>';
   }
 
+  function appendIntroBeatCardContent(card, beat) {
+    var title = document.createElement('span');
+    var fields = [
+      ['SITUATION', beat.situation],
+      ['DIRECTIVE', beat.directive],
+      ['RISK', beat.risk],
+      ['CONSEQUENCE', beat.consequence]
+    ];
+
+    title.textContent = beat.title;
+    card.appendChild(title);
+
+    fields.forEach(function (field) {
+      var label = document.createElement('strong');
+      var copy = document.createElement('p');
+
+      label.textContent = field[0];
+      copy.textContent = field[1];
+      card.appendChild(label);
+      card.appendChild(copy);
+    });
+  }
+
   function renderIntroDecisionFlow(root, runtimeState) {
     var flow = root.querySelector('[data-ooh-alpha-intro-flow]');
     var wrap = root.querySelector('[data-ooh-alpha-intro-beats]');
@@ -2565,11 +2588,11 @@
       var card = document.createElement('button');
 
       card.type = 'button';
-      card.className = 'ooh-operation-alpha__intro-beat-card';
+      card.className = 'ooh-operation-alpha__intro-beat-card ooh-alpha-choice-card';
       card.classList.toggle('is-selected', selected);
       card.classList.toggle('is-disabled', locked && !selected);
       card.disabled = selected || locked;
-      card.innerHTML = '<span>' + beat.title + '</span><strong>SITUATION</strong><p>' + beat.situation + '</p><strong>DIRECTIVE</strong><p>' + beat.directive + '</p><strong>RISK</strong><p>' + beat.risk + '</p><strong>CONSEQUENCE</strong><p>' + beat.consequence + '</p>';
+      appendIntroBeatCardContent(card, beat);
       card.addEventListener('click', function () {
         if (card.disabled) {
           return;
