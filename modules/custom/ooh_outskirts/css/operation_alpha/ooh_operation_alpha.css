@@ -14,6 +14,36 @@ body.ooh-operation-alpha-runtime {
   background: #020507 !important;
 }
 
+body.path-operation-alpha #sidebar_first,
+body.path-operation-alpha #sidebar_second,
+body.path-operation-alpha .sidebar_first,
+body.path-operation-alpha .sidebar_second,
+body.path-operation-alpha .sidebar,
+body:has(.ooh-operation-alpha) #sidebar_first,
+body:has(.ooh-operation-alpha) #sidebar_second,
+body:has(.ooh-operation-alpha) .sidebar_first,
+body:has(.ooh-operation-alpha) .sidebar_second,
+body:has(.ooh-operation-alpha) .sidebar {
+  display: none !important;
+}
+
+body.path-operation-alpha .main-content,
+body.path-operation-alpha #content,
+body:has(.ooh-operation-alpha) .main-content,
+body:has(.ooh-operation-alpha) #content {
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+body.path-operation-alpha .row-offcanvas,
+body.path-operation-alpha .row-offcanvas-left,
+body:has(.ooh-operation-alpha) .row-offcanvas,
+body:has(.ooh-operation-alpha) .row-offcanvas-left {
+  left: 0 !important;
+  transform: none !important;
+}
+
 body.path-operation-alpha #header,
 body.path-operation-alpha-credits #header,
 body.path-operation-alpha-oaplay-playlists #header,
