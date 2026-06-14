@@ -85,6 +85,55 @@
     }
   }
 
+  function renderFinalePopupIdentity(root, state) {
+    var block = root.querySelector('[data-ooh-alpha-finale-transmission-identity]');
+    var image = root.querySelector('[data-ooh-alpha-finale-transmission-portrait]');
+    var name = root.querySelector('[data-ooh-alpha-finale-transmission-name]');
+    var faction = root.querySelector('[data-ooh-alpha-finale-transmission-faction]');
+    var role = root.querySelector('[data-ooh-alpha-finale-transmission-role]');
+    var hook = root.querySelector('[data-ooh-alpha-finale-transmission-hook]');
+    var identity = Object.assign({}, state.activeIdentity || {});
+
+    if (!identity.portrait && state.activePortrait) {
+      identity.portrait = state.activePortrait;
+    }
+    if (!block || !image || !identity.portrait) {
+      if (block) {
+        block.hidden = true;
+      }
+      if (image) {
+        image.hidden = true;
+        image.removeAttribute('src');
+      }
+      return;
+    }
+
+    image.onerror = function () {
+      image.hidden = true;
+      block.hidden = true;
+      image.removeAttribute('src');
+    };
+    image.onload = function () {
+      image.hidden = false;
+      block.hidden = false;
+    };
+    image.src = identity.portrait;
+    image.hidden = false;
+    block.hidden = false;
+    if (name) {
+      name.textContent = identity.name || 'UNKNOWN FIELD ASSET';
+    }
+    if (faction) {
+      faction.textContent = identity.faction || 'UNRESOLVED';
+    }
+    if (role) {
+      role.textContent = identity.role || 'Field Presence';
+    }
+    if (hook) {
+      hook.textContent = identity.hook || 'The field records an operational presence.';
+    }
+  }
+
   function narrativeLibrarySection(sectionName) {
     var library = window.OA_NARRATIVE_LIBRARY || {};
     return Array.isArray(library[sectionName]) ? library[sectionName] : [];
@@ -140,6 +189,7 @@
     renderChainPanel(root, '[data-ooh-alpha-finale-chain]', chain);
     renderThreeLineSummary(root.querySelector('[data-ooh-alpha-finale-outcome]'), state);
     setText(root, '[data-ooh-alpha-finale-popup-summary]', 'Mission summary: ' + outcome + '. ' + (state.missionCost || 'Cost unresolved.') + ' Signal stability ' + state.signalIntegrity + '%.');
+    renderFinalePopupIdentity(root, state);
     var popup = root.querySelector('[data-ooh-alpha-finale-popup]');
     if (popup) {
       popup.hidden = false;

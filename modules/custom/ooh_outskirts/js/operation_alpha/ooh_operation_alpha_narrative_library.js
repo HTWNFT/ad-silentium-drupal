@@ -597,7 +597,7 @@
     return removed;
   }
 
-  function resetOperationAlphaRun(keepPlaylist) {
+  function clearOperationAlphaRuntimeState(keepPlaylist) {
     var result = {
       localStorage: removeOperationAlphaRuntimeKeys(window.localStorage, keepPlaylist !== false),
       sessionStorage: removeOperationAlphaRuntimeKeys(window.sessionStorage, keepPlaylist !== false)
@@ -610,8 +610,12 @@
     return result;
   }
 
+  function resetOperationAlphaRun(keepPlaylist) {
+    return clearOperationAlphaRuntimeState(keepPlaylist);
+  }
+
   function resetOAIntroRunState(keepPlaylist) {
-    return resetOperationAlphaRun(keepPlaylist);
+    return clearOperationAlphaRuntimeState(keepPlaylist);
   }
 
   function bindOperationAlphaTryAgainReset() {
@@ -642,6 +646,7 @@
     }, true);
   }
 
+  window.clearOperationAlphaRuntimeState = clearOperationAlphaRuntimeState;
   window.resetOperationAlphaRun = resetOperationAlphaRun;
   window.resetOAIntroRunState = window.resetOAIntroRunState || resetOAIntroRunState;
   window.scrollToOAStage = scrollToOAStage;

@@ -1,0 +1,76 @@
+@import url("./ooh_operation_alpha_level_1.css");
+
+.ooh-operation-alpha-level--finale .ooh-operation-alpha-level__report {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ooh-operation-alpha-level--finale [data-ooh-alpha-finale-timeline] p,
+.ooh-operation-alpha-level--finale [data-ooh-alpha-finale-chain] p {
+  margin: 0 0 10px;
+}
+
+@media (max-width: 900px) {
+  .ooh-operation-alpha-level--finale .ooh-operation-alpha-level__report {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ooh-operation-alpha-level__outcome {
+  color: #ffbd75;
+  display: block;
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.9;
+  margin: 0.35rem 0 0.75rem;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha-level__outcome.is-go {
+  color: #6ff7ff;
+  text-shadow: 0 0 22px rgba(111, 247, 255, 0.38);
+}
+
+.ooh-operation-alpha-level__outcome.is-no-go {
+  color: #ffbd75;
+  text-shadow: 0 0 22px rgba(255, 189, 117, 0.3);
+}
+
+.ooh-operation-alpha-level__debrief-popup {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+
+.ooh-operation-alpha-level__debrief-popup.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ooh-operation-alpha-level__debrief-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  border: 1px solid rgba(111, 247, 255, 0.28);
+  background: rgba(5, 13, 18, 0.94);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+  padding: 1.25rem;
+}
+
+.ooh-operation-alpha-level__debrief-card > span,
+.ooh-operation-alpha-level__debrief-card > h2,
+.ooh-operation-alpha-level__debrief-card > strong,
+.ooh-operation-alpha-level__debrief-card > p,
+.ooh-operation-alpha-level__debrief-card > .ooh-operation-alpha-level__actions {
+  grid-column: 2;
+}
+
+.ooh-operation-alpha-level__debrief-card .ooh-operation-alpha-level__transmission-identity {
+  grid-column: 1;
+  grid-row: 1 / span 6;
+}
+
+.ooh-operation-alpha-level__account-offer {
+  color: rgba(238, 246, 255, 0.78);
+}

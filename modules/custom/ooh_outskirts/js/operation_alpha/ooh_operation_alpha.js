@@ -12,16 +12,22 @@
   var scenarioDelayMs = 1500;
 
   function resetOAIntroRunState(keepPlaylist) {
+    if (window.clearOperationAlphaRuntimeState) {
+      return window.clearOperationAlphaRuntimeState(keepPlaylist);
+    }
     try {
       window.localStorage.removeItem(oaChainStateKey);
       window.localStorage.removeItem(storageKey);
       window.localStorage.removeItem(signalStorageKey);
+      window.sessionStorage.removeItem(sessionIntroSeenKey);
+      window.sessionStorage.removeItem(levelOneTimerKey);
 
       if (!keepPlaylist) {
         window.localStorage.removeItem(playlistStorageKey);
       }
     }
     catch (e) {}
+    return null;
   }
 
   window.resetOAIntroRunState = resetOAIntroRunState;
@@ -2705,6 +2711,45 @@
     return identity || null;
   }
 
+  function rootPopupIdentity(state, latest) {
+    var identity = pickTransmissionIdentity(state && state.storyCast, latest);
+
+    if (!identity && state && state.activeIdentity) {
+      identity = state.activeIdentity;
+    }
+
+    return identity || null;
+  }
+
+  function showIntroTransmissionPopup(root, runtimeState) {
+    var popup = root.querySelector('[data-ooh-alpha-transmission-popup]');
+    var next = root.querySelector('[data-ooh-alpha-transmission-next]');
+    var chainState = readOAChainState();
+    var latest = (chainState.introChoices || [])[chainState.introChoices.length - 1];
+    var identity = rootPopupIdentity(runtimeState, latest);
+
+    if (!popup) {
+      return false;
+    }
+
+    if (identity) {
+      chainState.activeIdentity = identity;
+      chainState.activePortrait = identity.portrait || chainState.activePortrait || '';
+      writeOAChainState(chainState);
+    }
+
+    renderTransmissionIdentity(root, identity);
+    if (next && !next.dataset.oaHref) {
+      next.dataset.oaHref = next.getAttribute('href') || '/operation-alpha/oalevel1';
+    }
+    popup.hidden = false;
+    popup.setAttribute('aria-hidden', 'false');
+    if (window.oaScrollToNextPhase) {
+      window.oaScrollToNextPhase(root, popup);
+    }
+    return true;
+  }
+
   function renderTransmissionIdentity(root, identity) {
     var block = root.querySelector('[data-ooh-alpha-transmission-identity]');
     var image = root.querySelector('[data-ooh-alpha-transmission-portrait]');
@@ -2753,6 +2798,7 @@
   function bindIntroTransmission(root, runtimeState, ready) {
     var next = root.querySelector('[data-ooh-alpha-next-level]');
     var popup = root.querySelector('[data-ooh-alpha-transmission-popup]');
+    var popupNext = root.querySelector('[data-ooh-alpha-transmission-next]');
 
     if (!next || !popup || next.oohAlphaTransmissionBound) {
       return;
@@ -2771,13 +2817,28 @@
         return;
       }
       event.preventDefault();
-      try {
-        window.sessionStorage.setItem(levelOneTimerKey, '210');
+      if (!showIntroTransmissionPopup(root, runtimeState)) {
+        try {
+          window.sessionStorage.setItem(levelOneTimerKey, '210');
+        }
+        catch (e) {}
+        window.console.log('Operation Alpha: routing to Level 1');
+        window.location.href = next.dataset.oaHref || next.getAttribute('href') || '/operation-alpha/oalevel1';
       }
-      catch (e) {}
-      window.console.log('Operation Alpha: routing to Level 1');
-      window.location.href = next.dataset.oaHref || next.getAttribute('href') || '/operation-alpha/oalevel1';
     });
+
+    if (popupNext && !popupNext.oohAlphaTransmissionNextBound) {
+      popupNext.oohAlphaTransmissionNextBound = true;
+      popupNext.addEventListener('click', function (event) {
+        event.preventDefault();
+        try {
+          window.sessionStorage.setItem(levelOneTimerKey, '210');
+        }
+        catch (e) {}
+        window.console.log('Operation Alpha: routing to Level 1');
+        window.location.href = popupNext.dataset.oaHref || popupNext.getAttribute('href') || next.dataset.oaHref || '/operation-alpha/oalevel1';
+      });
+    }
   }
 
   function renderIntroStoryBlock(root, state) {
@@ -2820,6 +2881,8 @@
 
     tokens = buildNarrativeTokens(state, cast, scene, storedSelection);
     chainState.narrativeTokens = tokens;
+    chainState.activeIdentity = rootPopupIdentity(state, null);
+    chainState.activePortrait = chainState.activeIdentity && chainState.activeIdentity.portrait ? chainState.activeIdentity.portrait : chainState.activePortrait;
     catalystEntry = narrativeEntry(chainState, 'introCatalyst', 'catalystTemplates', 3);
     rivalryEntry = narrativeEntry(chainState, 'introRivalry', 'rivalryTemplates', 7);
     grudgeEntry = narrativeEntry(chainState, 'introGrudge', 'grudgeTemplates', 11);
