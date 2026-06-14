@@ -659,6 +659,92 @@ body.ooh-operation-alpha-runtime .row {
   display: none;
 }
 
+.ooh-operation-alpha__transmission-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 5, 8, 0.82);
+}
+
+.ooh-operation-alpha__transmission-popup[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__transmission-panel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  width: min(760px, calc(100vw - 40px));
+  padding: 22px;
+  border: 1px solid rgba(89, 243, 255, 0.38);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 5px),
+    rgba(1, 11, 15, 0.96);
+  box-shadow: 0 0 42px rgba(89, 243, 255, 0.18);
+}
+
+.ooh-operation-alpha__transmission-panel h3 {
+  margin: 6px 0 12px;
+  color: #59f3ff;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__transmission-panel p {
+  margin: 0 0 9px;
+  color: rgba(223, 252, 255, 0.86);
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__transmission-portrait {
+  width: 116px;
+  height: 136px;
+  border: 1px solid rgba(145, 250, 255, 0.28);
+  border-radius: 6px;
+  object-fit: cover;
+  filter: saturate(0.84) contrast(1.08) brightness(0.88);
+}
+
+.ooh-operation-alpha__transmission-identity {
+  width: 154px;
+  color: rgba(223, 252, 255, 0.86);
+}
+
+.ooh-operation-alpha__transmission-identity[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__transmission-identity strong,
+.ooh-operation-alpha__transmission-identity span {
+  display: block;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__transmission-identity strong {
+  margin-top: 10px;
+  color: #ffffff;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.ooh-operation-alpha__transmission-identity span {
+  margin-top: 4px;
+  color: #59f3ff;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.ooh-operation-alpha__transmission-identity p {
+  margin-top: 10px;
+  color: rgba(223, 252, 255, 0.72);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
 .ooh-operation-alpha__actor-portrait {
   width: 104px;
   max-width: 100%;
@@ -875,6 +961,8 @@ body.ooh-operation-alpha-runtime .row {
 }
 
 .ooh-operation-alpha__intro-storyhead,
+.ooh-operation-alpha__intro-foundation,
+.ooh-operation-alpha__theme-signal,
 .ooh-operation-alpha__intro-catalyst,
 .ooh-operation-alpha__intro-summary,
 .ooh-operation-alpha__intro-decision-flow,
@@ -895,6 +983,37 @@ body.ooh-operation-alpha-runtime .row {
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+}
+
+.ooh-operation-alpha__intro-foundation,
+.ooh-operation-alpha__theme-signal,
+.ooh-operation-alpha__intro-catalyst,
+.ooh-operation-alpha__intro-summary {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 8px;
+  color: #dffcff;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.04), transparent 54%, rgba(255, 212, 107, 0.024)),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.014) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.42);
+}
+
+.ooh-operation-alpha__intro-foundation p,
+.ooh-operation-alpha__theme-signal p,
+.ooh-operation-alpha__intro-catalyst p,
+.ooh-operation-alpha__intro-summary p {
+  margin: 0 0 8px;
+  color: rgba(223, 252, 255, 0.82);
+  line-height: 1.5;
+}
+
+.ooh-operation-alpha__intro-foundation p:last-child,
+.ooh-operation-alpha__theme-signal p:last-child,
+.ooh-operation-alpha__intro-catalyst p:last-child,
+.ooh-operation-alpha__intro-summary p:last-child {
+  margin-bottom: 0;
 }
 
 .ooh-operation-alpha__intro-storyblock .ooh-operation-alpha__intro-card {

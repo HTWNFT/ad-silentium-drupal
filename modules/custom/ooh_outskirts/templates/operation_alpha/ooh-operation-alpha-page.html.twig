@@ -88,6 +88,15 @@
         <h3 class="ooh-operation-alpha__intro-story-title" data-ooh-alpha-intro-story-title>Intro signal pending</h3>
         <p class="ooh-operation-alpha__intro-story-copy" data-ooh-alpha-intro-story-copy>Choose a signal, then initialize the field to open the first storyblock.</p>
       </div>
+      <section class="ooh-operation-alpha__intro-foundation" aria-label="Unseen Hand foundation">
+        <span class="ooh-operation-alpha__intro-card-kicker">UNSEEN HAND / OLD BURDEN</span>
+        <p data-ooh-alpha-unseen-history>Operational history pending.</p>
+        <p data-ooh-alpha-unseen-wound>Burden unresolved.</p>
+      </section>
+      <section class="ooh-operation-alpha__theme-signal" aria-label="Theme Signal">
+        <span class="ooh-operation-alpha__intro-card-kicker">THEME SIGNAL</span>
+        <p data-ooh-alpha-theme-signal>Theme pending.</p>
+      </section>
       <div class="ooh-operation-alpha__intro-duel" aria-label="Intro protagonist and antagonist">
         <article class="ooh-operation-alpha__intro-card ooh-operation-alpha__intro-card--protagonist" data-ooh-alpha-intro-protagonist>
           <span class="ooh-operation-alpha__intro-card-kicker">PROTAGONIST // RONIN</span>
@@ -117,10 +126,10 @@
         </article>
       </div>
       <div class="ooh-operation-alpha__intro-catalyst">
-        <span class="ooh-operation-alpha__intro-card-kicker">CATALYST / STIMULUS</span>
+        <span class="ooh-operation-alpha__intro-card-kicker">SIGNAL BREACH / FIELD CONDITION</span>
         <p class="ooh-operation-alpha__intro-story-copy" data-ooh-alpha-intro-catalyst>A mutant pressure source disturbs the Genealord field and forces the Ronin toward the corridor.</p>
         <p class="ooh-operation-alpha__intro-story-copy" data-ooh-alpha-intro-pressure>Starting pressure pending.</p>
-        <p class="ooh-operation-alpha__intro-story-copy" data-ooh-alpha-intro-debate>DIRECTIVE REQUEST: Decide whether the mission outweighs the cost.</p>
+        <p class="ooh-operation-alpha__intro-story-copy" data-ooh-alpha-intro-debate>UNSEEN HAND DILEMMA: Decide what the mission is allowed to cost.</p>
       </div>
       <div class="ooh-operation-alpha__intro-summary" data-ooh-alpha-intro-summary>
         <p>FIELD INITIALIZED / SIGNAL REQUIRED / RONIN WAITING</p>
@@ -150,8 +159,8 @@
       <div class="ooh-operation-alpha__intro-next-actions">
           <a class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--next is-oa-next-locked" data-oa-href="{{ path('ooh_outskirts.operation_alpha_level_1') }}" aria-disabled="true" tabindex="-1" data-ooh-alpha-next-level>NEXT STAGE</a>
       </div>
-      <section class="ooh-operation-alpha__transmission-popup" data-ooh-alpha-transmission-popup hidden aria-hidden="true">
-        <div class="ooh-operation-alpha__transmission-panel">
+      <section class="ooh-operation-alpha__transmission-popup" data-ooh-alpha-transmission-popup data-ooh-alpha-modal-overlay hidden aria-hidden="true">
+        <div class="ooh-operation-alpha__transmission-panel" role="dialog" aria-modal="true" aria-labelledby="ooh-alpha-root-transmission-title">
           <div class="ooh-operation-alpha__transmission-identity" data-ooh-alpha-transmission-identity hidden>
             <img class="ooh-operation-alpha__transmission-portrait" alt="" data-ooh-alpha-transmission-portrait hidden>
             <strong data-ooh-alpha-transmission-name></strong>
@@ -161,7 +170,7 @@
           </div>
           <div>
             <span class="ooh-operation-alpha__intro-card-kicker">UNSEEN HAND TRANSMISSION</span>
-            <h3 data-ooh-alpha-transmission-title>Signal acquisition complete.</h3>
+            <h3 id="ooh-alpha-root-transmission-title" data-ooh-alpha-transmission-title>Signal acquisition complete.</h3>
             <p data-ooh-alpha-transmission-summary>The route remains open. The next phase will demand more.</p>
             <p data-ooh-alpha-transmission-gain>GAIN: Operational clarity.</p>
             <p data-ooh-alpha-transmission-loss>LOSS: Signal certainty.</p>

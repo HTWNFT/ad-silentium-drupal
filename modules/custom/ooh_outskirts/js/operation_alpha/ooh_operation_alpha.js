@@ -8,6 +8,7 @@
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
+  var levelOneTimerKey = 'ooh_operation_alpha_level1_timer_remaining_seconds_v1';
   var scenarioDelayMs = 1500;
 
   function resetOAIntroRunState(keepPlaylist) {
@@ -491,7 +492,7 @@
     'Field Initialized',
     'Primary Ronin Appears',
     'Genealord Appears',
-    'Catalyst Event',
+    'Signal Breach',
     'Directive Request',
     'Field Pressure',
     'Ally Introduced',
@@ -557,7 +558,7 @@
     'Field Initialized',
     'Primary Ronin Appears',
     'Genealord Appears',
-    'Catalyst Event',
+    'Signal Breach',
     'Threat Escalation',
     'Directive Request',
     'Field Pressure',
@@ -1809,7 +1810,7 @@
       consequenceSummary.textContent = payload.consequence.summary;
     }
     if (narrativeCopy) {
-      narrativeCopy.textContent = root.oohAlphaRuntimeState && root.oohAlphaRuntimeState.scene ? 'SUBJECT: ' + root.oohAlphaRuntimeState.scene.subject + ' // OPPOSING FORCE: ' + root.oohAlphaRuntimeState.scene.opposingForce + ' // FORCE MULTIPLIER: ' + root.oohAlphaRuntimeState.scene.forceMultiplier + ' // CATALYST: ' + root.oohAlphaRuntimeState.scene.catalyst : payload.narrativeSeed;
+      narrativeCopy.textContent = root.oohAlphaRuntimeState && root.oohAlphaRuntimeState.scene ? 'SUBJECT: ' + root.oohAlphaRuntimeState.scene.subject + ' // OPPOSING FORCE: ' + root.oohAlphaRuntimeState.scene.opposingForce + ' // FORCE MULTIPLIER: ' + root.oohAlphaRuntimeState.scene.forceMultiplier + ' // SIGNAL BREACH: ' + root.oohAlphaRuntimeState.scene.catalyst : payload.narrativeSeed;
     }
     if (root.oohAlphaRuntimeState) {
       renderIntroStoryBlock(root, root.oohAlphaRuntimeState);
@@ -2520,10 +2521,15 @@
     link.setAttribute('aria-disabled', locked ? 'true' : 'false');
     link.setAttribute('tabindex', locked ? '-1' : '0');
     if (locked) {
+      link.dataset.oaNextUnlockedLogged = '0';
       link.removeAttribute('href');
     }
     else if (link.dataset.oaHref) {
       link.setAttribute('href', link.dataset.oaHref);
+      if (link.dataset.oaNextUnlockedLogged !== '1') {
+        window.console.log('Operation Alpha: Next Stage unlocked');
+        link.dataset.oaNextUnlockedLogged = '1';
+      }
     }
   }
 
@@ -2575,6 +2581,7 @@
     var choices = chainState.introChoices || [];
     var required = 3;
     var locked = choices.length >= required;
+    var dilemmaResolved = !!(runtimeState && pendingPresenceChoices(runtimeState).length);
     var beats = introBeatCards(runtimeState.storyCast || {}, runtimeState.scene || {});
 
     if (!flow || !wrap) {
@@ -2607,7 +2614,7 @@
         appendOAChainEvent(chainState, beat);
         renderIntroDecisionFlow(root, runtimeState);
         if (choices.length >= required && window.oaScrollToNextPhase) {
-          window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-next-level]'));
+          window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-presence-choice-matrix]') || root.querySelector('[data-ooh-alpha-next-level]'));
         }
       });
       wrap.appendChild(card);
@@ -2624,8 +2631,12 @@
       consequence.innerHTML = '<span class="ooh-operation-alpha__intro-card-kicker">NARRATIVE CONSEQUENCE</span><p>' + (latest ? latest.narrative : 'Awaiting Unseen Hand directive.') + '</p>';
     }
     renderIntroChainPanel(root, chainState);
-    setIntroNextLocked(next, !locked);
-    bindIntroTransmission(root, runtimeState, locked);
+    if (runtimeState) {
+      renderPresenceChoiceMatrix(root, runtimeState, updateBattlefieldReadiness(runtimeState));
+      dilemmaResolved = !!pendingPresenceChoices(runtimeState).length;
+    }
+    setIntroNextLocked(next, !(locked && dilemmaResolved));
+    bindIntroTransmission(root, runtimeState, locked && dilemmaResolved);
     if (locked) {
       flow.classList.add('is-stage-complete');
     }
@@ -2751,41 +2762,21 @@
       var chainState = readOAChainState();
       var choices = chainState.introChoices || [];
       var introReady = choices.length >= 3;
+      var dilemmaReady = !!(runtimeState && pendingPresenceChoices(runtimeState).length);
 
-      if (next.disabled || next.getAttribute('aria-disabled') === 'true' || !introReady) {
+      if (next.disabled || next.getAttribute('aria-disabled') === 'true' || !introReady || !dilemmaReady) {
         event.preventDefault();
         event.stopImmediatePropagation();
         setIntroNextLocked(next, true);
         return;
       }
       event.preventDefault();
-      var latest = choices[choices.length - 1];
-      var cast = runtimeState.storyCast || {};
-      var identity = pickTransmissionIdentity(cast, latest) || chainState.activeIdentity;
-      var portrait = identity && identity.portrait ? identity.portrait : chainState.activePortrait;
-      var transmission = narrativeEntry(chainState, 'introTransmission', 'unseenHandTransmissionTemplates', 31);
-      var summaryText = transmission ? fillNarrativeText(transmission.text, chainState.narrativeTokens) : '';
-
-      if (identity) {
-        chainState.activeIdentity = identity;
-        chainState.activePortrait = identity.portrait;
-        writeOAChainState(chainState);
+      try {
+        window.sessionStorage.setItem(levelOneTimerKey, '210');
       }
-      else if (portrait) {
-        chainState.activePortrait = portrait;
-        writeOAChainState(chainState);
-      }
-      renderTransmissionIdentity(root, identity);
-      root.querySelector('[data-ooh-alpha-transmission-title]').textContent = 'Signal acquisition complete.';
-      root.querySelector('[data-ooh-alpha-transmission-summary]').textContent = (summaryText || (latest ? latest.narrative : 'The route remains open. The next phase will demand more.')) + ' The route remains open. The cost is now moving with it.';
-      root.querySelector('[data-ooh-alpha-transmission-gain]').textContent = 'GAIN: The Unseen Hand has committed a readable opening chain.';
-      root.querySelector('[data-ooh-alpha-transmission-loss]').textContent = 'LOSS: The field now knows it is being shaped.';
-      root.querySelector('[data-ooh-alpha-transmission-danger]').textContent = 'DANGER: Field pressure will answer the first three directives.';
-      popup.hidden = false;
-      popup.setAttribute('aria-hidden', 'false');
-      if (window.oaScrollToNextPhase) {
-        window.oaScrollToNextPhase(root, popup);
-      }
+      catch (e) {}
+      window.console.log('Operation Alpha: routing to Level 1');
+      window.location.href = next.dataset.oaHref || next.getAttribute('href') || '/operation-alpha/oalevel1';
     });
   }
 
@@ -2794,6 +2785,9 @@
     var next = root.querySelector('[data-ooh-alpha-next-level]');
     var title = root.querySelector('[data-ooh-alpha-intro-story-title]');
     var copy = root.querySelector('[data-ooh-alpha-intro-story-copy]');
+    var unseenHistory = root.querySelector('[data-ooh-alpha-unseen-history]');
+    var unseenWound = root.querySelector('[data-ooh-alpha-unseen-wound]');
+    var themeSignal = root.querySelector('[data-ooh-alpha-theme-signal]');
     var catalyst = root.querySelector('[data-ooh-alpha-intro-catalyst]');
     var pressure = root.querySelector('[data-ooh-alpha-intro-pressure]');
     var debate = root.querySelector('[data-ooh-alpha-intro-debate]');
@@ -2837,18 +2831,27 @@
     if (copy) {
       copy.textContent = rivalryEntry ? fillNarrativeText(rivalryEntry.text, tokens) : antagonistName + ' considered ' + protagonistName + "'s interference an insult against " + antagonistPath + ' and swore that the Ronin would be hunted before the signal cleared.';
     }
+    if (unseenHistory) {
+      unseenHistory.textContent = 'The Unseen Hand once lost a full banner in the ash corridor beyond the old signal towers. Since then, every clean order has sounded like a funeral bell under steel.';
+    }
+    if (unseenWound) {
+      unseenWound.textContent = 'A broken oath still follows the hand through the static: save the living mark, or preserve the mission that may save many more.';
+    }
+    if (themeSignal) {
+      themeSignal.textContent = 'No command is clean when mercy and victory ask for the same blood.';
+    }
     setIntroStoryImage(root, '[data-ooh-alpha-intro-protagonist-image]', protagonist);
     setIntroStoryImage(root, '[data-ooh-alpha-intro-antagonist-image]', antagonist);
     setIntroStoryText(root, 'protagonist', protagonist);
     setIntroStoryText(root, 'antagonist', antagonist);
     if (catalyst) {
-      catalyst.textContent = catalystEntry ? fillNarrativeText(catalystEntry.text, tokens) : storyCastName(thirdForce) + ' attacks or pressures ' + antagonistName + "'s field. " + protagonistName + ' is pushed into the corridor before either side can control the signal.';
+      catalyst.textContent = catalystEntry ? fillNarrativeText(catalystEntry.text, tokens) + ' Ash wind moves through scarred relay stone, and the old towers answer with flickering signal fire.' : storyCastName(thirdForce) + ' tears through the bone-white waste and batters ' + antagonistName + "'s field. " + protagonistName + ' is pushed into the scarred relay corridor before either side can control the signal fires.';
     }
     if (pressure) {
-      pressure.textContent = 'STARTING STORYLINE PRESSURE: ' + (grudgeEntry ? fillNarrativeText(grudgeEntry.text, tokens) : (scene.fieldPressure || 'The route remains open, but only if pressure is managed.'));
+      pressure.textContent = 'STORYLINE PRESSURE: ' + (grudgeEntry ? fillNarrativeText(grudgeEntry.text, tokens) : (scene.fieldPressure || 'The route remains open, but only if pressure is managed.')) + ' Ruined fortifications carry the sound forward before the enemy can name it.';
     }
     if (debate) {
-      debate.textContent = 'DEBATE: The Unseen Hand must decide whether the mission outweighs the cost.';
+      debate.textContent = 'UNSEEN HAND DILEMMA: The mission can still succeed, but every clean route asks what living voice must be left behind. Choose what the hand is willing to carry into the next stage.';
     }
     renderIntroDecisionFlow(root, state);
   }
@@ -3138,7 +3141,7 @@
 
     title.textContent = 'FIELD TASK: ' + (scene.mission ? scene.mission.label : 'UNRESOLVED');
     source.textContent = 'SUBJECT: ' + scene.subject;
-    brief.textContent = 'PROTAGONIST: ' + scene.subject + ' // ANTAGONIST / OPPOSITION: ' + scene.opposingForce + ' // CONDITION: ' + scene.pressureCondition + ' // SIGNAL: ' + scene.interventionWindow + ' // CATALYST: ' + scene.catalyst;
+    brief.textContent = 'PROTAGONIST: ' + scene.subject + ' // ANTAGONIST / OPPOSITION: ' + scene.opposingForce + ' // CONDITION: ' + scene.pressureCondition + ' // SIGNAL: ' + scene.interventionWindow + ' // SIGNAL BREACH: ' + scene.catalyst;
 
     if (state) {
       state.currentCondition = scene.pressureCondition;
@@ -3162,13 +3165,13 @@
   }
 
   function hookForBeat(state) {
-    if (state.beatName === 'Midpoint') {
+    if (state.beatName === 'Situation Report') {
       return runtimePick(runtimeMidpointHooks);
     }
-    if (state.beatName === 'Dark Night of the Signal') {
+    if (state.beatName === 'Last Light') {
       return runtimePick(runtimeDarkNightHooks);
     }
-    if (state.beatName === 'Finale' || state.beatName === 'Final Image' || state.outcomeState !== 'PENDING') {
+    if (state.beatName === 'Final Debrief' || state.outcomeState !== 'PENDING') {
       return runtimePick(runtimeFinaleHooks);
     }
 
@@ -3452,6 +3455,7 @@
     var missionPanel = root.querySelector('[data-ooh-alpha-mission]');
     var lockButton = root.querySelector('[data-ooh-alpha-mission-cycle]');
     var matrix = root.querySelector('[data-ooh-alpha-presence-choice-matrix]');
+    var introSignalReady = true;
 
     if (!missionPanel || !lockButton) {
       return;
@@ -3464,7 +3468,10 @@
     }
 
     matrix.innerHTML = '';
-    matrix.hidden = state.outcomeState !== 'PENDING' || isCrisisPhase(state);
+    if (runtimePhaseCluster(state).key === 'intro') {
+      introSignalReady = (readOAChainState().introChoices || []).length >= 3;
+    }
+    matrix.hidden = state.outcomeState !== 'PENDING' || isCrisisPhase(state) || !introSignalReady;
     if (matrix.hidden) {
       return;
     }
@@ -3491,8 +3498,8 @@
     var phase = runtimeVisiblePhase(state);
     var lockedChoice = lastLockedPresenceChoice(state);
 
-    if (phase === 'BLOCK 1 // INTRO / CATALYST') {
-      return 'READ OUTPUT: PROTAGONIST ' + scene.subject + ' enters under ' + scene.pressureCondition + '. ANTAGONIST / OPPOSITION: ' + scene.opposingForce + '. SIGNAL: ' + scene.interventionWindow + '. CATALYST: ' + scene.catalyst + '.';
+    if (phase === 'BLOCK 1 // SIGNAL BREACH') {
+      return 'READ OUTPUT: PROTAGONIST ' + scene.subject + ' enters under ' + scene.pressureCondition + '. ANTAGONIST / OPPOSITION: ' + scene.opposingForce + '. SIGNAL: ' + scene.interventionWindow + '. SIGNAL BREACH: ' + scene.catalyst + '.';
     }
     if (phase === 'BLOCK 2 // CHARACTER ENTRY') {
       return 'READ OUTPUT: ALLY ' + storyCastName(state.storyCast.ally) + ' // RIVAL ' + storyCastName(state.storyCast.opposition) + ' // THIRD FORCE ' + storyCastName(state.storyCast.thirdForce) + '. ' + (lockedChoice ? lockedChoice.label + ' carries forward. ' + lockedChoice.narrativeEffect : 'The prior field posture carries forward.') + ' ' + (state.characterTurns.character || 'A new pressure turn enters the corridor.');
@@ -3536,7 +3543,7 @@
       directive: commandKey
     });
 
-    if (state.beatName === 'Midpoint' || state.beatName === 'Dark Night of the Signal' || state.beatName === 'Finale') {
+    if (state.beatName === 'Situation Report' || state.beatName === 'Last Light' || state.beatName === 'Final Debrief') {
       state.hookLine = hookForBeat(state);
       runtimeLog('hook generated', state.hookLine);
     }
@@ -3582,8 +3589,8 @@
     if (state.outcomeState === 'PENDING') {
       return;
     }
-    if (state.beatName !== 'Final Image') {
-      state.beatIndex = Math.max(state.beatIndex, runtimeStoryBeats.indexOf('Finale'));
+    if (state.beatName !== 'Final Debrief') {
+      state.beatIndex = Math.max(state.beatIndex, runtimeStoryBeats.indexOf('Final Debrief'));
       state.beatName = runtimeStoryBeats[state.beatIndex];
     }
     state.hookLine = hookForBeat(state);
@@ -3654,7 +3661,7 @@
       phaseLocks: [],
       totalFieldPressure: 0,
       operationTime: 0,
-      currentPhase: 'BLOCK 1 // INTRO / CATALYST',
+      currentPhase: 'BLOCK 1 // SIGNAL BREACH',
       phaseActionCount: 0,
       phaseRequiredCount: runtimePhaseSpine[0].requiredPressure,
       battlefieldPresenceReady: false,
@@ -4086,6 +4093,9 @@
       ready: runtimePhaseReady(state)
     });
     renderBattlefieldGate(root, state);
+    if (runtimePhaseCluster(state).key === 'intro') {
+      renderIntroDecisionFlow(root, state);
+    }
   }
 
   function applyPresenceChoice(state, choice) {
