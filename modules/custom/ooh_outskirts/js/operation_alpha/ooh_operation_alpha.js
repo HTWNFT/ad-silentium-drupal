@@ -4748,7 +4748,7 @@
       var version = document.createElement('p');
       version.className = 'ooh-operation-alpha__copy';
       version.setAttribute('data-ooh-alpha-runtime-version', '');
-      version.textContent = 'OA RUNTIME VERSION: OA-211 DECISION CONSEQUENCE CHECK';
+      version.textContent = 'OPERATION ALPHA';
       if (title && title.parentNode === shell) {
         shell.insertBefore(version, title.nextSibling);
       }
