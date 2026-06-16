@@ -1,10 +1,5 @@
 <section class="ooh-operation-alpha-level ooh-operation-alpha-level--finale" data-ooh-alpha-finale>
   <div class="ooh-operation-alpha-level__shell">
-    <nav class="ooh-operation-alpha-level__nav" aria-label="Operation Alpha final debrief navigation">
-      <a href="{{ path('ooh_outskirts.operation_alpha') }}" data-ooh-alpha-try-again>PLAY AGAIN</a>
-      <a href="/">OPERATION ALPHA HOME</a>
-      <a href="{{ path('ooh_outskirts.operation_alpha_credits') }}">BUY CREDITS</a>
-    </nav>
     <p class="ooh-operation-alpha-level__eyebrow">OPERATION ALPHA // FINAL DEBRIEF</p>
     <h1 class="ooh-operation-alpha-level__title">FINAL DEBRIEF</h1>
     <p class="ooh-operation-alpha-level__copy">Full consequence review for the operation the Unseen Hand shaped.</p>
@@ -69,18 +64,11 @@
         <strong class="ooh-operation-alpha-level__outcome" data-ooh-alpha-finale-popup-outcome>NO GO</strong>
         <p data-ooh-alpha-finale-popup-summary>Mission summary pending.</p>
         <p class="ooh-operation-alpha-level__account-offer">Create an account to save credits, mission history, and unlock future drops.</p>
-        <div class="ooh-operation-alpha-level__actions">
-          <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary" href="{{ path('ooh_outskirts.operation_alpha') }}" data-ooh-alpha-try-again>PLAY AGAIN</a>
-          <a class="ooh-operation-alpha-level__button" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">BUY CREDITS</a>
-          <a class="ooh-operation-alpha-level__button" href="{{ path('ooh_outskirts.operation_alpha') }}">OPERATION ALPHA HOME</a>
-        </div>
       </div>
     </section>
 
     <div class="ooh-operation-alpha-level__actions">
-      <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary" href="{{ path('ooh_outskirts.operation_alpha') }}" data-ooh-alpha-try-again>PLAY AGAIN</a>
-      <a class="ooh-operation-alpha-level__button" href="/">OPERATION ALPHA HOME</a>
-      <a class="ooh-operation-alpha-level__button" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">BUY CREDITS</a>
+      <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary" href="{{ path('ooh_outskirts.operation_alpha') }}" data-ooh-alpha-try-again data-ooh-alpha-credits-url="{{ path('ooh_outskirts.operation_alpha_credits') }}">TRY AGAIN</a>
     </div>
   </div>
 </section>

@@ -745,6 +745,74 @@ body.ooh-operation-alpha-runtime .row {
   line-height: 1.35;
 }
 
+.ooh-operation-alpha__supporting-portraits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 100%;
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+.ooh-operation-alpha__transmission-panel > .ooh-operation-alpha__supporting-portraits,
+.ooh-operation-alpha__final-aar-card > .ooh-operation-alpha__supporting-portraits {
+  grid-column: 1 / -1;
+}
+
+.ooh-operation-alpha__supporting-portrait {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-width: min(100%, 178px);
+  max-width: 240px;
+  padding: 8px;
+  border: 1px solid rgba(145, 250, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(2, 14, 18, 0.68);
+}
+
+.ooh-operation-alpha__supporting-portrait[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__supporting-portrait-image {
+  width: 48px;
+  height: 56px;
+  max-width: 100%;
+  border: 1px solid rgba(145, 250, 255, 0.24);
+  border-radius: 5px;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.08) brightness(0.88);
+}
+
+.ooh-operation-alpha__supporting-portrait-body {
+  min-width: 0;
+}
+
+.ooh-operation-alpha__supporting-portrait-body strong,
+.ooh-operation-alpha__supporting-portrait-body span {
+  display: block;
+  overflow-wrap: anywhere;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__supporting-portrait-body strong {
+  color: #ffffff;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.ooh-operation-alpha__supporting-portrait-body span {
+  margin-top: 3px;
+  color: rgba(145, 250, 255, 0.78);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+}
+
 .ooh-operation-alpha__actor-portrait {
   width: 104px;
   max-width: 100%;

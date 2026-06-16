@@ -1,0 +1,120 @@
+<?php
+
+namespace Drupal\ooh_outskirts\Plugin\Block;
+
+use Drupal\Core\Block\BlockBase;
+
+/**
+ * Provides the Outskirts of Hell landing page block.
+ *
+ * @Block(
+ *   id = "ooh_landing_block",
+ *   admin_label = @Translation("OOH Landing Block"),
+ *   category = @Translation("Outskirts of Hell")
+ * )
+ */
+class OohLandingBlock extends BlockBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function build() {
+    $template = <<<'HTML'
+
+<section class="ooh-hero ooh-hero-carousel" id="ooh-hero" data-ooh-hero>
+
+  <!-- CAROUSEL BACKGROUND -->
+  <div class="ooh-hero__carousel">
+    <div class="ooh-hero__slide is-active">
+      <video autoplay muted loop playsinline>
+        <source src="/sites/default/files/outskirts/loops/video_loops_underboard_alley_core.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="ooh-hero__slide">
+      <img src="/sites/default/files/outskirts/backgrounds/bg_underboard_alley_core.webp" />
+    </div>
+
+    <div class="ooh-hero__slide">
+      <img src="/sites/default/files/outskirts/backgrounds/bg_underboard_alley_silent_approach.webp" />
+    </div>
+  </div>
+
+  <!-- DARK OVERLAY -->
+  <div class="ooh-hero__overlay"></div>
+
+  <!-- TEXT CONTENT -->
+  <div class="ooh-hero__inner">
+    <p class="ooh-hero__eyebrow">CLASSIFIED // AD SILENTIUM</p>
+
+    <h1 class="ooh-hero__title ooh-game-title">AD SILENTIUM</h1>
+
+    <p class="ooh-hero__subtitle">
+      Enter the dead zone. Build your path. Select your signal.
+    </p>
+
+    <div class="ooh-hero__actions">
+      <a class="ooh-hero__button ooh-hero__button--primary" href="/dossier">
+        ENTER DOSSIER
+      </a>
+
+      <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue">
+        READ PROLOGUE
+      </button>
+    </div>
+  </div>
+
+</section>
+
+<section class="ooh-prologue-modal" id="ooh-prologue-modal" aria-hidden="true">
+  <div class="ooh-prologue-modal__backdrop" data-close="1"></div>
+
+  <div class="ooh-prologue-modal__panel" role="dialog" aria-modal="true" aria-labelledby="ooh-prologue-title">
+    <button class="ooh-prologue-modal__close" type="button" id="ooh-close-prologue" aria-label="Close">
+      CLOSE
+    </button>
+
+    <p class="ooh-prologue__eyebrow">TRANSMISSION // PROLOGUE</p>
+    <h2 class="ooh-prologue__title" id="ooh-prologue-title">Ad Silentium</h2>
+
+    <div class="ooh-prologue__viewport">
+      <div class="ooh-prologue__crawl" id="ooh-prologue-crawl">
+        <p>
+          In a long-distant, incalculable number of years from now, the universe will stop expanding, becoming full of matter like oxygen in an air-filled lung. Reality's "waste matter" will be filtered out at this stage, while beneficial matter remains. This "matter" will be the living; some can stay, others must leave.
+        </p>
+        <p>
+          "Ad Silentium" is the time when what is deemed harmful will exit and what is deemed worthy will coexist, a stillness replicated in the silent pause between breaths.
+        </p>
+        <p>
+          The scourge of the new reality is the Genetic Warlord Class. They are the long-descended remnants of the once-Transhumanist Elite class, fused with the Reptilian masters whom they once served in secret. Many thousands of years before Ad Silentium, they denied recognition of powers beyond themselves. Hence, the very force they denied tapped them to leave mortality. Summoning Reptilians from the bowels of the planet, they fused with them in an attempt to survive. Eons later, the plan has failed. The families of these elites are dwindling in number and fighting their inevitable expulsion from the universe as waste matter. However, many existing clans are still clinging to their fading power, still denying the reality that they are marked for removal from reality in this culling.
+        </p>
+        <p>
+          The humans chosen to continue into the next phase are "Selected." They fall into two categories: "Merged" and "Doomed." The Merged have evolved into unity with the technology they used for centuries, a rote repetition across many generations, fusing humanity with its progress. The Doomed forced their own adaptive evolution through intensive study and practice of ancient ways. The name is one of sarcastic irony; they are esoteric masters on all levels.
+        </p>
+        <p>
+          These worldwide elites engineered mutations out of spite upon discovering that they were neither "Merged" nor "Doomed." Dubbed "Creations," they are merged animal and human DNA. Millennia later, these creations have destroyed all nature and wildlife. Some are still loyal to the Genetic Warlord clans (Mutant class) while others roam free (Ronin class), and will help or harm both Evolved and Doomed.
+        </p>
+        <p>
+          You are one of The Selected and are a target of Genetic Warlords and Creations of all kinds. You may choose the path of the Merged, a character who is a fusion of human and technology, with powers that translate well into a world that has merged with you, mirroring technology in nature. Or you may choose the path of the Doomed, a character with the power to manipulate the still-existing "Old Reality" at will, having evolved in a way that was once forsaken and then reclaimed by your kind. The forces of human progress and evolution have merged, and fate is to be earned in the new cross-reality of Ad Silentium.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+HTML;
+
+    return [
+      '#type' => 'markup',
+      '#markup' => $template,
+
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts.landing',
+        ],
+      ],
+    ];
+}
+
+}
+
+

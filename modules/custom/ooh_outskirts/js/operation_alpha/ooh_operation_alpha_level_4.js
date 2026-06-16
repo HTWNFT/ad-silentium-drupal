@@ -2,7 +2,7 @@
   'use strict';
 
   var stateKey = 'ooh_operation_alpha_chain_state_v1';
-  var missionTimerStartSeconds = 210;
+  var missionTimerStartSeconds = 60;
   var juiceFactorPenaltySeconds = 10;
   var juiceFactorCooldownMs = 1200;
   var requiredChoices = 3;
@@ -343,6 +343,25 @@
     }
   }
 
+  function renderMentionedPortraits(root) {
+    if (!window.oohOperationAlphaRenderSupportingPortraitsForSelectors) {
+      if (root && !root.oohAlphaMentionedPortraitRetryQueued) {
+        root.oohAlphaMentionedPortraitRetryQueued = true;
+        window.setTimeout(function () {
+          renderMentionedPortraits(root);
+        }, 250);
+      }
+      return;
+    }
+    window.oohOperationAlphaRenderSupportingPortraitsForSelectors(root, [
+      '[data-ooh-alpha-final-summary]',
+      '[data-ooh-alpha-level-consequence]',
+      '[data-ooh-alpha-level-choices]',
+      '[data-ooh-alpha-chain-panel]',
+      '[data-ooh-alpha-final-aar]'
+    ]);
+  }
+
   function summarizeFinalDecision(choices) {
     var personnelLost = choices.reduce(function (sum, item) { return sum + (item.personnelLost || 0); }, 0);
     var signalCost = choices.reduce(function (sum, item) { return sum + Math.abs(Math.min(0, item.signal || 0)); }, 0);
@@ -392,6 +411,7 @@
     setText(root, '[data-ooh-alpha-final-aar-decisions]', 'KEY DECISIONS: ' + decisions);
     setText(root, '[data-ooh-alpha-final-aar-cost]', 'FINAL COST: ' + state.missionCost + ' / PERSONNEL LOST: ' + state.personnelLost + ' / SIGNAL STABILITY: ' + state.signalIntegrity + '%');
     setText(root, '[data-ooh-alpha-final-aar-impact]', 'IMPACT: The operation is complete. The cost will keep moving through every surviving route.');
+    renderMentionedPortraits(root);
   }
 
   function bindTryAgain(root) {
@@ -482,6 +502,7 @@
     renderChainPanel(root, state);
     renderThreeLineSummary(summary, state);
     renderMissionFramework(root, state);
+    renderMentionedPortraits(root);
     setDisabled(finalize, !locked || state.finalMissionLocked);
     if (juiceButton && !juiceButton.oohAlphaJuiceBound) {
       juiceButton.oohAlphaJuiceBound = true;
@@ -510,12 +531,7 @@
         state.missionCost = state.finalDecision.cost;
         appendChainEvent(state, state.finalDecision);
         render(root);
-        if (window.oaScrollToNextPhase) {
-          window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-final-aar]'));
-        }
-        window.setTimeout(function () {
-          window.location.href = finalize.getAttribute('data-ooh-alpha-finale-url') || '/operation-alpha/oafinale';
-        }, 650);
+        window.location.href = finalize.getAttribute('data-ooh-alpha-finale-url') || '/operation-alpha/oafinale';
       });
     }
     if (shell) {

@@ -210,7 +210,15 @@
       { id: "complication_037", title: "Debt Compartment", text: "{{ally}} hid a debt compartment in the mission file. Opening it may save {{route}} and damage trust.", tags: ["ally", "debt", "route"], intensity: "medium" },
       { id: "complication_038", title: "Extraction Door Jammed", text: "The extraction door jammed with {{ronin}} inside the timing window. Force opens it; patience may kill it.", tags: ["extraction", "ronin", "timing"], intensity: "critical" },
       { id: "complication_039", title: "Mission Cost Visible", text: "{{cost}} appeared on the board before the decision that caused it. The field is warning command, not excusing it.", tags: ["cost", "command", "field"], intensity: "high" },
-      { id: "complication_040", title: "Signal May Not", text: "{{mission}} can still succeed if {{signal}} is spent like ammunition. The route remains open. The signal may not.", tags: ["mission", "signal", "route"], intensity: "critical" }
+      { id: "complication_040", title: "Signal May Not", text: "{{mission}} can still succeed if {{signal}} is spent like ammunition. The route remains open. The signal may not.", tags: ["mission", "signal", "route"], intensity: "critical" },
+      { id: "complication_041", title: "Clean Window Lie", text: "{{signal}} reported a clean window, but {{ally}} found heat ghosts under the route data. The field is offering confidence too early.", tags: ["signal", "ally", "falseConfidence"], intensity: "high" },
+      { id: "complication_042", title: "Bait Target Pulse", text: "The target pulsed exactly where {{enemy}} wanted command to look. {{ronin}} can still reach it, but the shape feels arranged.", tags: ["enemy", "ronin", "bait"], intensity: "critical" },
+      { id: "complication_043", title: "Compromised Ally Thread", text: "{{ally}} answered the challenge phrase one word late. Trust remains possible, but the delay is now part of the threat picture.", tags: ["ally", "compromise", "trust"], intensity: "high" },
+      { id: "complication_044", title: "Rival Ronin Cut-In", text: "{{enemy}} used Ronin timing to cross the channel and redirect two friendly pings. The interference is familiar enough to hurt.", tags: ["badRonin", "enemy", "signal"], intensity: "critical" },
+      { id: "complication_045", title: "Genealord False Mercy", text: "{{genealord}} opened a mercy lane that saves time and exposes {{route}}. Mercy from that channel is pressure wearing better language.", tags: ["genealord", "route", "mercy"], intensity: "critical" },
+      { id: "complication_046", title: "Mutant Second Surge", text: "{{mutant}} withdrew from the obvious door and returned through the service dark. The first retreat was not defeat; it was repositioning.", tags: ["mutant", "reversal", "door"], intensity: "critical" },
+      { id: "complication_047", title: "Incomplete Signal Realized", text: "{{signal}} never carried the third checksum. Command has been moving with a missing piece and only now knows what it lacked.", tags: ["signal", "incomplete", "command"], intensity: "critical" },
+      { id: "complication_048", title: "Extraction Fireline", text: "The extraction lane is burning down from both ends while {{ronin}} is still inside the timing window. Delay is becoming a decision.", tags: ["extraction", "ronin", "pressure"], intensity: "critical" }
     ],
     allyIntroTemplates: [
       { id: "ally_intro_001", title: "Relay Courier", text: "{{ally}} entered {{signal}} with breathing clipped and coordinates intact. The voice did not ask for trust; it delivered value.", tags: ["ally", "signal", "coordinates"], intensity: "low" },
@@ -378,7 +386,15 @@
       { id: "unseen_hand_037", title: "Injury Changes Tempo", text: "{{injury}} has changed tempo, not purpose. Slow movement can still be decisive.", tags: ["injury", "tempo", "purpose"], intensity: "medium" },
       { id: "unseen_hand_038", title: "Debt Enters BDA", text: "The debt has entered the BDA before the mission is over. That is not failure. That is evidence.", tags: ["debt", "bda", "evidence"], intensity: "high" },
       { id: "unseen_hand_039", title: "Final Pressure Approaches", text: "Final pressure is approaching. The asset survived this phase. The operation did not get easier.", tags: ["final", "asset", "pressure"], intensity: "critical" },
-      { id: "unseen_hand_040", title: "Next Phase Demands More", text: "{{ronin}} remains operational. The next phase will demand more. The Unseen Hand will answer with decisions, not comfort.", tags: ["ronin", "phase", "decision"], intensity: "critical" }
+      { id: "unseen_hand_040", title: "Next Phase Demands More", text: "{{ronin}} remains operational. The next phase will demand more. The Unseen Hand will answer with decisions, not comfort.", tags: ["ronin", "phase", "decision"], intensity: "critical" },
+      { id: "unseen_hand_041", title: "Confidence Flagged", text: "The field looks cleaner than it should. Treat clean data as pressure until {{ally}}, {{ronin}}, and {{signal}} agree.", tags: ["confidence", "ally", "signal"], intensity: "high" },
+      { id: "unseen_hand_042", title: "Target May Be Bait", text: "The target is visible because someone allowed it to be visible. {{enemy}} may have built the rescue around command appetite.", tags: ["target", "enemy", "bait"], intensity: "critical" },
+      { id: "unseen_hand_043", title: "Ally Risk Elevated", text: "{{ally}} remains useful and possibly exposed. Protect the voice without letting the voice own the route.", tags: ["ally", "route", "risk"], intensity: "high" },
+      { id: "unseen_hand_044", title: "Enemy Anticipated Move", text: "{{genealord}} did not chase the last choice. He waited at the choice after it. The field just admitted he was ahead.", tags: ["genealord", "anticipation", "field"], intensity: "critical" },
+      { id: "unseen_hand_045", title: "Rival Ronin Pattern", text: "{{enemy}} is using Ronin doctrine without Ronin restraint. Familiar movement is now hostile evidence.", tags: ["badRonin", "enemy", "doctrine"], intensity: "critical" },
+      { id: "unseen_hand_046", title: "Mutant Escalation Logged", text: "{{mutant}} pressure has stopped behaving like weather. It is reacting to command rhythm and closing distance.", tags: ["mutant", "command", "pressure"], intensity: "critical" },
+      { id: "unseen_hand_047", title: "Extraction Burning", text: "Extraction is no longer a place. It is a countdown with fire on both ends and {{ronin}} still moving.", tags: ["extraction", "ronin", "countdown"], intensity: "critical" },
+      { id: "unseen_hand_048", title: "Choose Under Pressure", text: "The Unseen Hand has enough truth to act and not enough truth to feel clean. Choose before the field chooses instead.", tags: ["command", "pressure", "choice"], intensity: "critical" }
     ],
     consequenceHookTemplates: [
       { id: "consequence_hook_001", title: "Pressure Rose", text: "{{enemy}} reacted fast, and pressure rose along {{route}}. The gain is real; the field will collect for it.", tags: ["enemy", "pressure", "route"], intensity: "medium" },
@@ -420,7 +436,15 @@
       { id: "consequence_hook_037", title: "Command Keeps Moving", text: "Command keeps moving because stillness would waste the damage already taken. That is not comfort; it is arithmetic.", tags: ["command", "damage", "movement"], intensity: "medium" },
       { id: "consequence_hook_038", title: "Ally May Not", text: "{{ally}} kept the channel alive. The channel remains open. The ally may not.", tags: ["ally", "channel", "cost"], intensity: "critical" },
       { id: "consequence_hook_039", title: "Mission Narrows Again", text: "{{mission}} narrowed again and became more survivable by becoming less generous. The board is honest now.", tags: ["mission", "survival", "board"], intensity: "high" },
-      { id: "consequence_hook_040", title: "Next Phase Demands More", text: "{{ronin}} remains operational. {{enemy}} remains informed. The next phase will demand more.", tags: ["ronin", "enemy", "phase"], intensity: "critical" }
+      { id: "consequence_hook_040", title: "Next Phase Demands More", text: "{{ronin}} remains operational. {{enemy}} remains informed. The next phase will demand more.", tags: ["ronin", "enemy", "phase"], intensity: "critical" },
+      { id: "consequence_hook_041", title: "False Win Pressure", text: "{{gain}} arrived too easily and made the board quieter than the field. The next cost is hiding inside that quiet.", tags: ["gain", "pressure", "cost"], intensity: "high" },
+      { id: "consequence_hook_042", title: "False Loss Door", text: "{{loss}} looked final until {{ally}} found a half-open relay under the damage. Hope is available and unsafe.", tags: ["loss", "ally", "relay"], intensity: "high" },
+      { id: "consequence_hook_043", title: "Reversal Burn", text: "{{route}} closed behind {{ronin}} and opened ahead of {{enemy}}. The field reversed the chase without asking permission.", tags: ["route", "ronin", "enemy"], intensity: "critical" },
+      { id: "consequence_hook_044", title: "Manipulated Mercy", text: "{{genealord}} let one civilian thread survive so command would move predictably. Mercy has become targeting data.", tags: ["genealord", "civilian", "mercy"], intensity: "critical" },
+      { id: "consequence_hook_045", title: "Transmission Intercept", text: "{{signal}} returned a friendly phrase with hostile spacing. The message may be true; the delivery is compromised.", tags: ["signal", "intercept", "compromise"], intensity: "critical" },
+      { id: "consequence_hook_046", title: "Ally Exposure Cost", text: "{{ally}} kept the channel readable and lost cover doing it. Every clean order now carries their name in the margin.", tags: ["ally", "signal", "cost"], intensity: "high" },
+      { id: "consequence_hook_047", title: "Pack Pressure Climbs", text: "{{mutant}} ignored the decoy and followed the decision trail. The field now has a hunter that understands choice.", tags: ["mutant", "choice", "hunter"], intensity: "critical" },
+      { id: "consequence_hook_048", title: "Extraction Collapse Report", text: "Extraction collapsed in sequence: beacon, cover, then trust. {{ronin}} still has movement, but movement is not safety.", tags: ["extraction", "ronin", "trust"], intensity: "critical" }
     ],
     finalSacrificeTemplates: [
       { id: "final_sacrifice_001", title: "Relay Burn", text: "{{ronin}} burned the relay to keep {{route}} from becoming a map. {{signal}} died cleanly, and the mission lived with less light.", tags: ["relay", "route", "signal"], intensity: "critical" },
@@ -462,7 +486,15 @@
       { id: "final_sacrifice_037", title: "Third Force Left Alive", text: "{{thirdForce}} was left alive to distract {{enemy}} and poison the next field. The operation survived with contamination.", tags: ["thirdForce", "enemy", "field"], intensity: "high" },
       { id: "final_sacrifice_038", title: "Signal Goes Dark Clean", text: "{{signal}} went dark cleanly after the final confirmation. Clean darkness is still darkness.", tags: ["signal", "final", "dark"], intensity: "medium" },
       { id: "final_sacrifice_039", title: "Asset Survived Operation Hurt", text: "The asset survived. The operation did not. The Unseen Hand records both and refuses to soften either.", tags: ["asset", "operation", "record"], intensity: "critical" },
-      { id: "final_sacrifice_040", title: "Pyrrhic Route Home", text: "{{route}} carried the survivors home and left too much behind to call it clean. The Ronin remains operational. The next phase will demand more.", tags: ["route", "survivors", "pyrrhic"], intensity: "critical" }
+      { id: "final_sacrifice_040", title: "Pyrrhic Route Home", text: "{{route}} carried the survivors home and left too much behind to call it clean. The Ronin remains operational. The next phase will demand more.", tags: ["route", "survivors", "pyrrhic"], intensity: "critical" },
+      { id: "final_sacrifice_041", title: "Incomplete Signal Paid", text: "{{signal}} was incomplete from the start, and command paid for the missing piece at the door. {{ronin}} survived by treating doubt as data.", tags: ["signal", "ronin", "survival"], intensity: "critical" },
+      { id: "final_sacrifice_042", title: "Bait Target Extracted", text: "The target was bait and still worth saving. {{enemy}} won the trap; command won the person inside it.", tags: ["target", "enemy", "extraction"], intensity: "critical" },
+      { id: "final_sacrifice_043", title: "Ally Compromise Trade", text: "{{ally}} may be compromised, but their last route was real. The Unseen Hand used the route and kept the doubt alive.", tags: ["ally", "route", "compromise"], intensity: "high" },
+      { id: "final_sacrifice_044", title: "Genealord Anticipation Broken", text: "{{genealord}} anticipated the move and still lost the final second because {{ronin}} changed the cost, not the route.", tags: ["genealord", "ronin", "cost"], intensity: "critical" },
+      { id: "final_sacrifice_045", title: "Rival Ronin Denied", text: "{{enemy}} mirrored Ronin doctrine until {{ronin}} abandoned elegance and chose survival. The counter failed because the hand became ugly.", tags: ["badRonin", "ronin", "survival"], intensity: "critical" },
+      { id: "final_sacrifice_046", title: "Mutant Gate Burn", text: "{{mutant}} forced the extraction gate to burn open instead of unlock. Survivors crossed through heat and owed the field pain.", tags: ["mutant", "extraction", "survivors"], intensity: "critical" },
+      { id: "final_sacrifice_047", title: "Route Burning Down", text: "{{route}} burned down while the last asset crossed. Victory arrived with smoke in its mouth and no return clause.", tags: ["route", "victory", "cost"], intensity: "critical" },
+      { id: "final_sacrifice_048", title: "Pressure Choice Closed", text: "The Unseen Hand chose under pressure and closed the field before pressure became command. The choice saved motion and left consequence.", tags: ["command", "pressure", "consequence"], intensity: "critical" }
     ],
     aarSummaryTemplates: [
       { id: "aar_summary_001", title: "Route Preserved", text: "{{mission}} preserved {{route}} at measurable cost. {{ronin}} survived, {{signal}} degraded, and {{genealord}} remains a future pressure source.", tags: ["aar", "route", "genealord"], intensity: "medium" },
@@ -504,12 +536,23 @@
       { id: "aar_summary_037", title: "Extraction Route Spent", text: "{{route}} carried survivors and lost concealment. The route remains open in memory, not necessarily in field condition.", tags: ["aar", "route", "survivors"], intensity: "critical" },
       { id: "aar_summary_038", title: "Command Dilemma Closed", text: "The command dilemma closed with action, not cleanliness. The decision was necessary and still costly.", tags: ["aar", "command", "dilemma"], intensity: "medium" },
       { id: "aar_summary_039", title: "Operation Did Not Reset", text: "{{mission}} ended, but the board did not reset. {{ronin}}, {{genealord}}, and {{thirdForce}} all carry memory forward.", tags: ["aar", "memory", "board"], intensity: "critical" },
-      { id: "aar_summary_040", title: "Debrief Last Line", text: "Final note: {{gain}} survived, {{loss}} remains, and {{cost}} will brief the next operation before command does.", tags: ["aar", "final", "cost"], intensity: "critical" }
+      { id: "aar_summary_040", title: "Debrief Last Line", text: "Final note: {{gain}} survived, {{loss}} remains, and {{cost}} will brief the next operation before command does.", tags: ["aar", "final", "cost"], intensity: "critical" },
+      { id: "aar_summary_041", title: "Incomplete Signal Finding", text: "{{signal}} was incomplete during the late push. Recommend treating every clean report as provisional until cross-checked by {{ally}} or {{ronin}}.", tags: ["aar", "signal", "ronin"], intensity: "critical" },
+      { id: "aar_summary_042", title: "Bait Target Finding", text: "The target may have been bait. Mission value remains valid, but {{enemy}} shaped the rescue space before command entered it.", tags: ["aar", "target", "enemy"], intensity: "critical" },
+      { id: "aar_summary_043", title: "Ally Compromise Finding", text: "{{ally}} provided usable help under possible compromise. Future trust should be active, protected, and verified in motion.", tags: ["aar", "ally", "trust"], intensity: "high" },
+      { id: "aar_summary_044", title: "Enemy Anticipation Finding", text: "{{genealord}} anticipated multiple command moves. Success came from changing tempo late, not from keeping the original plan clean.", tags: ["aar", "genealord", "tempo"], intensity: "critical" },
+      { id: "aar_summary_045", title: "Rival Ronin Finding", text: "{{enemy}} used Ronin-like doctrine to interfere with routing. Counter-pattern review should include mercy calls, timing, and decoy discipline.", tags: ["aar", "badRonin", "routing"], intensity: "high" },
+      { id: "aar_summary_046", title: "Mutant Escalation Finding", text: "{{mutant}} escalation became adaptive before closure. Future operations should assume the pack can read rhythm, not only noise.", tags: ["aar", "mutant", "adaptive"], intensity: "critical" },
+      { id: "aar_summary_047", title: "Extraction Collapse Finding", text: "Extraction degraded through beacon, cover, and route integrity. The operation survived because command acted before collapse finished.", tags: ["aar", "extraction", "route"], intensity: "critical" },
+      { id: "aar_summary_048", title: "Costed Victory Finding", text: "{{mission}} achieved victory with cost attached. The file should not let the word success erase {{loss}}, {{injury}}, or signal damage.", tags: ["aar", "victory", "cost"], intensity: "critical" }
     ]
   };
 
   var operationAlphaRuntimePrefix = 'ooh_operation_alpha_';
   var operationAlphaPlaylistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
+  var operationAlphaFreeOperationStartedKey = 'ooh_operation_alpha_free_operation_started_v1';
+  var operationAlphaRecentRoninStorageKey = 'ooh_operation_alpha_recent_ronin_v1';
+  var operationAlphaRootScenarioMemoryKey = 'ooh_operation_alpha_root_scenario_memory_v1';
 
   function isOAStageTargetAvailable(target) {
     var style;
@@ -578,7 +621,10 @@
     try {
       for (index = 0; index < storage.length; index += 1) {
         key = storage.key(index);
-        if (key && key.indexOf(operationAlphaRuntimePrefix) === 0 && !(keepPlaylist && key === operationAlphaPlaylistStorageKey)) {
+        if (key &&
+          key.indexOf(operationAlphaRuntimePrefix) === 0 &&
+          key !== operationAlphaFreeOperationStartedKey &&
+          !(keepPlaylist && key === operationAlphaPlaylistStorageKey)) {
           keys.push(key);
         }
       }

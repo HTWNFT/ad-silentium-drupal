@@ -31,6 +31,7 @@
     <div class="ooh-operation-alpha__shell" data-ooh-operation-alpha-control>
     <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
       <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha') }}">RETURN TO LAUNCH</a>
+      <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha') }}" data-ooh-alpha-try-again>NEW OPERATION - 1 CREDIT</a>
       <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">PURCHASE CREDITS</a>
       <a class="ooh-operation-alpha__cta-link" href="{{ path('user.login') }}">LOGIN / ACCOUNT</a>
     </nav>
@@ -40,6 +41,7 @@
     <section class="ooh-operation-alpha__activation" aria-label="Operation Alpha runtime activation">
       <span class="ooh-operation-alpha__activation-kicker">LINK STATUS</span>
       <p class="ooh-operation-alpha__activation-line" data-ooh-alpha-activation-status>Choose signal before field initialization.</p>
+      <p class="ooh-operation-alpha__activation-line">CREDITS: <strong data-ooh-alpha-credit-balance>1</strong> / COST: <strong data-ooh-alpha-credit-cost>1</strong></p>
       <div class="ooh-operation-alpha__selected-signal" data-ooh-alpha-selected-signal hidden>
         <span class="ooh-operation-alpha__selected-signal-kicker">ACTIVE SIGNAL</span>
         <strong class="ooh-operation-alpha__selected-signal-name" data-ooh-alpha-selected-signal-title>Signal pending</strong>
@@ -175,6 +177,7 @@
             <p data-ooh-alpha-transmission-gain>GAIN: Operational clarity.</p>
             <p data-ooh-alpha-transmission-loss>LOSS: Signal certainty.</p>
             <p data-ooh-alpha-transmission-danger>DANGER: Enemy response inbound.</p>
+            <button class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--next is-oa-next-ready" type="button" data-ooh-alpha-transmission-close>CONTINUE</button>
             <a class="ooh-operation-alpha__runtime-button ooh-operation-alpha__runtime-button--next is-oa-next-ready" href="{{ path('ooh_outskirts.operation_alpha_level_1') }}" data-ooh-alpha-transmission-next>NEXT</a>
           </div>
         </div>

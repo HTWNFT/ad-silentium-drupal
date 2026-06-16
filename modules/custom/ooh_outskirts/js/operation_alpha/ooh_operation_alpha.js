@@ -9,7 +9,57 @@
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
   var levelOneTimerKey = 'ooh_operation_alpha_level1_timer_remaining_seconds_v1';
+  var freeOperationStartedKey = 'ooh_operation_alpha_free_operation_started_v1';
+  var creditBalanceKey = 'ooh_alpha_operation_credit_balance_v1';
+  var operationCreditCost = 1;
+  var recentRoninStorageKey = 'ooh_operation_alpha_recent_ronin_v1';
+  var recentSupportingPortraitsKey = 'ooh_operation_alpha_recent_supporting_portraits_v1';
+  var rootScenarioMemoryKey = 'ooh_operation_alpha_root_scenario_memory_v1';
+  var retiredRootScenarioMemoryKey = 'ooh_operation_alpha_root_scenario_memory_v0';
+  var retiredNarrativeTitleKeys = [
+    'ooh_operation_alpha_root_scenario_title_v1',
+    'ooh_operation_alpha_root_scenario_title',
+    'ooh_operation_alpha_retired_scenario_title',
+    'ooh_operation_alpha_retired_template'
+  ];
   var scenarioDelayMs = 1500;
+  var rootScenarioTemplates = [
+    {
+      id: 'relay-corridor',
+      title: 'The Ronin follows the scarred relay',
+      catalystDetail: 'Ash wind moves through scarred relay stone, and the old towers answer with flickering signal fire.',
+      pressureDetail: 'Ruined fortifications carry the sound forward before the enemy can name it.',
+      directive: 'The mission can still succeed, but every clean route asks what living voice must be left behind. Choose what the hand is willing to carry into the next stage.'
+    },
+    {
+      id: 'black-gate',
+      title: 'The Ronin reaches the black gate',
+      catalystDetail: 'Signal fires crawl along the gate teeth while old ward-stones grind under the storm.',
+      pressureDetail: 'The gate remembers every army that failed beneath it, and the enemy is listening for the same fear.',
+      directive: 'The gate can open for the mission or close around the living. Decide what risk the hand will accept before the next stage.'
+    },
+    {
+      id: 'bone-waste',
+      title: 'The Ronin crosses the bone-white waste',
+      catalystDetail: 'A pale storm drags signal sparks over buried armor and half-seen relay bones.',
+      pressureDetail: 'Every footprint becomes evidence, and every delay gives the opposing force a cleaner map.',
+      directive: 'The wasteland offers speed, cover, or mercy, but not all three. Choose the burden the hand will carry forward.'
+    },
+    {
+      id: 'signal-tower',
+      title: 'The Ronin climbs the broken signal tower',
+      catalystDetail: 'The tower rings like a struck blade while dead channels flare one by one below the clouds.',
+      pressureDetail: 'Height gives vision and exposure in equal measure; the enemy only needs one clean silhouette.',
+      directive: 'The signal can be clarified or hidden, and both choices cost someone. Set the field posture before the next stage.'
+    },
+    {
+      id: 'ash-fort',
+      title: 'The Ronin enters the ash fort',
+      catalystDetail: 'Black snow falls through the collapsed battlements and turns each transmission into a warning bell.',
+      pressureDetail: 'The fort is shelter and trap together, a place where old oaths still know the shape of blood.',
+      directive: 'The fort can protect the route or expose the hand. Choose which danger becomes the next inheritance.'
+    }
+  ];
 
   function resetOAIntroRunState(keepPlaylist) {
     if (window.clearOperationAlphaRuntimeState) {
@@ -21,6 +71,14 @@
       window.localStorage.removeItem(signalStorageKey);
       window.sessionStorage.removeItem(sessionIntroSeenKey);
       window.sessionStorage.removeItem(levelOneTimerKey);
+      window.sessionStorage.removeItem(recentRoninStorageKey);
+      window.sessionStorage.removeItem(rootScenarioMemoryKey);
+      window.localStorage.removeItem(retiredRootScenarioMemoryKey);
+      window.sessionStorage.removeItem(retiredRootScenarioMemoryKey);
+      retiredNarrativeTitleKeys.forEach(function (key) {
+        window.localStorage.removeItem(key);
+        window.sessionStorage.removeItem(key);
+      });
 
       if (!keepPlaylist) {
         window.localStorage.removeItem(playlistStorageKey);
@@ -31,6 +89,151 @@
   }
 
   window.resetOAIntroRunState = resetOAIntroRunState;
+
+  function isOperationAlphaRootPath() {
+    var path = (window.location.pathname || '').replace(/\/+$/, '');
+    return /\/operation-alpha$/.test(path);
+  }
+
+  function isOperationAlphaRoute(pathname) {
+    return /\/operation-alpha(?:\/|$)/.test(pathname || '');
+  }
+
+  function operationAlphaCreditsPath() {
+    return routePath('/operation-alpha/credits');
+  }
+
+  function isFreeOperationDevOverride() {
+    return window.OA_LOCALHOST_FREE_OPERATION_OVERRIDE === true || window.OA_LOCALHOST_UNLIMITED_CREDITS === true;
+  }
+
+  function isLocalhostOrigin() {
+    var host = window.location.hostname || '';
+
+    return host === 'localhost' || host === '127.0.0.1' || host === '::1';
+  }
+
+  function isUnlimitedCredits() {
+    if (isFreeOperationDevOverride()) {
+      return true;
+    }
+    // LOCALHOST ONLY: seed unlimited test credits so local QA can initialize fresh runs without enabling any production bypass.
+    if (isLocalhostOrigin()) {
+      return true;
+    }
+    return false;
+  }
+
+  function hasUsedFreeOperation() {
+    if (isUnlimitedCredits()) {
+      return false;
+    }
+    try {
+      return window.localStorage.getItem(freeOperationStartedKey) === '1';
+    }
+    catch (e) {
+      return false;
+    }
+  }
+
+  function markFreeOperationStarted() {
+    try {
+      window.localStorage.setItem(freeOperationStartedKey, '1');
+    }
+    catch (e) {}
+  }
+
+  function readCreditBalance() {
+    var stored;
+    var parsed;
+
+    if (isUnlimitedCredits()) {
+      return Infinity;
+    }
+    try {
+      stored = window.localStorage.getItem(creditBalanceKey);
+      if (stored === null) {
+        parsed = hasUsedFreeOperation() ? 0 : 1;
+        window.localStorage.setItem(creditBalanceKey, String(parsed));
+        return parsed;
+      }
+      parsed = parseInt(stored, 10);
+      return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+    }
+    catch (e) {
+      return 0;
+    }
+  }
+
+  function writeCreditBalance(balance) {
+    try {
+      window.localStorage.setItem(creditBalanceKey, String(Math.max(0, parseInt(balance || 0, 10))));
+    }
+    catch (e) {}
+  }
+
+  function hasOperationCredit() {
+    return isUnlimitedCredits() || readCreditBalance() >= operationCreditCost;
+  }
+
+  function consumeOperationCredit() {
+    var balance;
+
+    if (isUnlimitedCredits()) {
+      markFreeOperationStarted();
+      return true;
+    }
+    balance = readCreditBalance();
+    if (balance < operationCreditCost) {
+      return false;
+    }
+    writeCreditBalance(balance - operationCreditCost);
+    markFreeOperationStarted();
+    return true;
+  }
+
+  function formatCreditBalance(balance) {
+    return balance === Infinity ? 'UNLIMITED' : String(balance);
+  }
+
+  function renderCreditBalance(root) {
+    var balance = readCreditBalance();
+
+    root.querySelectorAll('[data-ooh-alpha-credit-balance]').forEach(function (node) {
+      node.textContent = formatCreditBalance(balance);
+    });
+    root.querySelectorAll('[data-ooh-alpha-credit-cost]').forEach(function (node) {
+      node.textContent = String(operationCreditCost);
+    });
+  }
+
+  function guideToCredits() {
+    window.location.href = operationAlphaCreditsPath();
+  }
+
+  function bindOperationAlphaExitReset() {
+    if (document.oohAlphaExitResetBound) {
+      return;
+    }
+    document.oohAlphaExitResetBound = true;
+    document.addEventListener('click', function (event) {
+      var link = event.target && event.target.closest ? event.target.closest('a[href]') : null;
+      var url;
+
+      if (!link) {
+        return;
+      }
+      try {
+        url = new URL(link.getAttribute('href'), window.location.href);
+      }
+      catch (e) {
+        return;
+      }
+      if (url.origin === window.location.origin && isOperationAlphaRoute(window.location.pathname) && !isOperationAlphaRoute(url.pathname)) {
+        resetOAIntroRunState(true);
+      }
+    }, true);
+  }
   var actorRegistryPaths = [
     '/operation_alpha/oa_actor_registry.csv',
     '/operation_alpha/generated_actor_registry/oa_actor_registry.csv'
@@ -1191,14 +1394,14 @@
 
   function containedAssetPath(path) {
     var currentPath = window.location.pathname || '';
-    var basePath = currentPath.replace(/\/(?:operation-alpha(?:\/oaplay(?:\/playlists)?)?|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
+    var basePath = currentPath.replace(/\/(?:operation-alpha(?:\/(?:oaplay(?:\/playlists)?|oalevel[1-4]|oafinale|credits))?|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
 
     return (basePath || '') + path;
   }
 
   function operationAlphaRootPath(path) {
     var currentPath = window.location.pathname || '';
-    var basePath = currentPath.replace(/\/(?:operation-alpha(?:\/oaplay(?:\/playlists)?)?|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
+    var basePath = currentPath.replace(/\/(?:operation-alpha(?:\/(?:oaplay(?:\/playlists)?|oalevel[1-4]|oafinale|credits))?|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
 
     return (basePath || '') + path;
   }
@@ -1430,6 +1633,230 @@
     return portraitUrl;
   }
 
+  function actorMentionNames(actor) {
+    var names = [];
+
+    [actorDisplayName(actor), actor && actor.name, actor && actor.portrait].forEach(function (value) {
+      var name = (value || '').trim();
+
+      if (name && !actorLooksLikeImageReference(name) && names.indexOf(name) === -1) {
+        names.push(name);
+      }
+    });
+    return names;
+  }
+
+  function mentionedTextHasName(text, name) {
+    var escaped;
+
+    if (!text || !name || name.length < 3) {
+      return false;
+    }
+    escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp('(^|[^A-Za-z0-9])' + escaped + '([^A-Za-z0-9]|$)', 'i').test(text);
+  }
+
+  function actorMentionedInText(actor, text) {
+    return actorMentionNames(actor).some(function (name) {
+      return mentionedTextHasName(text, name);
+    });
+  }
+
+  function readRecentSupportingPortraitKeys() {
+    try {
+      return JSON.parse(window.sessionStorage.getItem(recentSupportingPortraitsKey) || '[]') || [];
+    }
+    catch (e) {
+      return [];
+    }
+  }
+
+  function writeRecentSupportingPortraitKeys(keys) {
+    try {
+      window.sessionStorage.setItem(recentSupportingPortraitsKey, JSON.stringify((keys || []).slice(-8)));
+    }
+    catch (e) {}
+  }
+
+  function supportingPortraitRolePools(text, registry) {
+    var lowered = (text || '').toLowerCase();
+    var roles = [];
+
+    [
+      { token: 'genealord', faction: 'genealord' },
+      { token: 'ronin', faction: 'ronin' },
+      { token: 'ally', faction: 'ronin' },
+      { token: 'rival', faction: 'ronin' },
+      { token: 'mutant', faction: 'mutant' },
+      { token: 'third force', faction: 'mutant' },
+      { token: 'attacker', faction: 'mutant' }
+    ].forEach(function (role) {
+      if (lowered.indexOf(role.token) !== -1 && roles.indexOf(role.faction) === -1) {
+        roles.push(role.faction);
+      }
+    });
+
+    return roles.map(function (faction) {
+      return (registry || []).filter(function (actor) {
+        return (actor.faction || '').toLowerCase() === faction && actorPortraitCandidates(actor).length;
+      });
+    }).filter(function (pool) {
+      return pool.length;
+    });
+  }
+
+  function pickSupportingPortraitFromPool(pool, usedKeys) {
+    var recent = readRecentSupportingPortraitKeys();
+    var eligible = (pool || []).filter(function (actor) {
+      var key = actorStableKey(actor);
+
+      return usedKeys.indexOf(key) === -1 && recent.indexOf(key) === -1;
+    });
+
+    if (!eligible.length) {
+      eligible = (pool || []).filter(function (actor) {
+        return usedKeys.indexOf(actorStableKey(actor)) === -1;
+      });
+    }
+    return eligible.length ? runtimePick(eligible) : null;
+  }
+
+  function findMentionedPortraitRecords(text, registry, limit) {
+    var usedKeys = [];
+    var records = [];
+    var max = limit || 4;
+
+    (registry || []).forEach(function (actor) {
+      var key = actorStableKey(actor);
+
+      if (records.length >= max || usedKeys.indexOf(key) !== -1 || !actorPortraitCandidates(actor).length) {
+        return;
+      }
+      if (actorMentionedInText(actor, text)) {
+        usedKeys.push(key);
+        records.push(actor);
+      }
+    });
+
+    supportingPortraitRolePools(text, registry).forEach(function (pool) {
+      var actor;
+      var key;
+
+      if (records.length >= max) {
+        return;
+      }
+      actor = pickSupportingPortraitFromPool(pool, usedKeys);
+      if (!actor) {
+        return;
+      }
+      key = actorStableKey(actor);
+      usedKeys.push(key);
+      records.push(actor);
+    });
+
+    if (records.length) {
+      writeRecentSupportingPortraitKeys(readRecentSupportingPortraitKeys().concat(records.map(actorStableKey)));
+    }
+    return records.slice(0, max);
+  }
+
+  function renderSupportingPortraits(root, target, label) {
+    var registry = root && root.oohAlphaActorRegistry ? root.oohAlphaActorRegistry : (window.oohOperationAlphaActorRegistry || []);
+    var existing = target ? target.querySelector('[data-ooh-alpha-supporting-portraits]') : null;
+    var text;
+    var records;
+    var strip;
+
+    if (!target) {
+      return;
+    }
+    if (!registry.length && !target.oohAlphaSupportingPortraitLoadAttempted) {
+      target.oohAlphaSupportingPortraitLoadAttempted = true;
+      loadActorRegistry().then(function (loadedRegistry) {
+        window.oohOperationAlphaActorRegistry = loadedRegistry;
+        if (root) {
+          root.oohAlphaActorRegistry = loadedRegistry;
+        }
+        renderSupportingPortraits(root, target, label);
+      });
+      return;
+    }
+    if (existing) {
+      existing.remove();
+    }
+    text = target.textContent || '';
+    records = findMentionedPortraitRecords(text, registry, 4);
+    if (!records.length) {
+      return;
+    }
+
+    strip = document.createElement('div');
+    strip.className = 'ooh-operation-alpha__supporting-portraits';
+    strip.setAttribute('data-ooh-alpha-supporting-portraits', '');
+    strip.setAttribute('aria-label', label || 'Mentioned field presences');
+
+    records.forEach(function (actor) {
+      var card = document.createElement('article');
+      var image = document.createElement('img');
+      var body = document.createElement('div');
+      var name = document.createElement('strong');
+      var meta = document.createElement('span');
+      var portrait = actorPortraitPath(actor);
+
+      if (!portrait) {
+        return;
+      }
+      card.className = 'ooh-operation-alpha__supporting-portrait';
+      image.className = 'ooh-operation-alpha__supporting-portrait-image';
+      image.alt = '';
+      image.src = portrait;
+      image.onerror = function () {
+        card.hidden = true;
+      };
+      body.className = 'ooh-operation-alpha__supporting-portrait-body';
+      name.textContent = actorDisplayName(actor);
+      meta.textContent = [actor.faction, actor.role].filter(Boolean).join(' / ') || 'Field presence';
+      body.appendChild(name);
+      body.appendChild(meta);
+      card.appendChild(image);
+      card.appendChild(body);
+      strip.appendChild(card);
+    });
+
+    if (strip.children.length) {
+      target.appendChild(strip);
+    }
+  }
+
+  function renderSupportingPortraitsForSelectors(root, selectors) {
+    (selectors || []).forEach(function (selector) {
+      root.querySelectorAll(selector).forEach(function (target) {
+        renderSupportingPortraits(root, target, 'Mentioned Operation Alpha characters');
+      });
+    });
+  }
+
+  window.oohOperationAlphaRenderSupportingPortraits = renderSupportingPortraits;
+  window.oohOperationAlphaRenderSupportingPortraitsForSelectors = renderSupportingPortraitsForSelectors;
+
+  function renderLevelSupportingPortraits(root) {
+    function scanLevelPortraitTargets() {
+      renderSupportingPortraitsForSelectors(root, [
+        '[data-ooh-alpha-level-summary]',
+        '[data-ooh-alpha-final-summary]',
+        '[data-ooh-alpha-key-consequences]',
+        '[data-ooh-alpha-level-consequence]',
+        '[data-ooh-alpha-level-choices]',
+        '[data-ooh-alpha-chain-panel]',
+        '[data-ooh-alpha-transmission-popup]',
+        '[data-ooh-alpha-final-aar]'
+      ]);
+    }
+
+    window.setTimeout(scanLevelPortraitTargets, 300);
+    window.setTimeout(scanLevelPortraitTargets, 1800);
+  }
+
   function actorPortraitFallbackPath(actor) {
     var candidates = actorPortraitCandidates(actor);
 
@@ -1463,6 +1890,48 @@
     }
 
     return list[Math.floor(Math.random() * list.length)];
+  }
+
+  function actorStableKey(actor) {
+    return [actor && actor.faction, actor && actor.path, actor && (actor.portrait || actor.name || actor.originalFile)].filter(Boolean).join('|');
+  }
+
+  function findActorByStableKey(registry, key) {
+    if (!key) {
+      return null;
+    }
+    return (registry || []).filter(function (actor) {
+      return actorStableKey(actor) === key;
+    })[0] || null;
+  }
+
+  function readRootScenarioMemory() {
+    try {
+      return JSON.parse(window.sessionStorage.getItem(rootScenarioMemoryKey) || '{}') || {};
+    }
+    catch (e) {
+      return {};
+    }
+  }
+
+  function writeRootScenarioMemory(memory) {
+    try {
+      window.sessionStorage.setItem(rootScenarioMemoryKey, JSON.stringify(memory || {}));
+    }
+    catch (e) {}
+  }
+
+  function pickDifferent(list, lastId, idGetter) {
+    var pool = list || [];
+    var filtered;
+
+    if (!pool.length) {
+      return null;
+    }
+    filtered = pool.length > 1 ? pool.filter(function (item) {
+      return idGetter(item) !== lastId;
+    }) : pool;
+    return runtimePick(filtered.length ? filtered : pool);
   }
 
   function clampRuntimeLevel(value, min, max) {
@@ -1822,6 +2291,11 @@
       renderIntroStoryBlock(root, root.oohAlphaRuntimeState);
       renderBattlefieldGate(root, root.oohAlphaRuntimeState);
     }
+    renderSupportingPortraitsForSelectors(root, [
+      '[data-ooh-alpha-operational-payload]',
+      '[data-ooh-alpha-operational-consequence]',
+      '[data-ooh-alpha-narrative-seed]'
+    ]);
   }
 
   function renderActorTransmission(root, actor) {
@@ -1903,14 +2377,48 @@
       return (actor.faction || '').toLowerCase() === 'ronin';
     });
     var subjectPool = roninActors.length ? roninActors : eligibleActors;
+    var recentRonin = '';
+    var chainState = readOAChainState();
+    var storedActor = findActorByStableKey(subjectPool, chainState.rootActorKey);
+    var rootMemory = readRootScenarioMemory();
+    var filteredSubjectPool;
     var selectedActor;
 
     if (!eligibleActors.length) {
       return;
     }
 
-    selectedActor = subjectPool[Math.floor(Math.random() * subjectPool.length)];
+    if (storedActor) {
+      selectedActor = storedActor;
+      root.oohAlphaSelectedActor = selectedActor;
+      renderActorTransmission(root, selectedActor);
+      renderOperationalPayload(root, selectedActor);
+      window.console.log('Operation Alpha actor selected:', selectedActor.portrait || selectedActor.name || 'Unknown actor');
+      return;
+    }
+
+    recentRonin = rootMemory.actorKey || '';
+    if (!recentRonin) {
+      try {
+        recentRonin = window.sessionStorage.getItem(recentRoninStorageKey) || '';
+      }
+      catch (e) {}
+    }
+    filteredSubjectPool = subjectPool.length > 1 ? subjectPool.filter(function (actor) {
+      return actorStableKey(actor) !== recentRonin && (actor.portrait || actor.name || '') !== recentRonin;
+    }) : subjectPool;
+    if (!filteredSubjectPool.length) {
+      filteredSubjectPool = subjectPool;
+    }
+
+    selectedActor = filteredSubjectPool[Math.floor(Math.random() * filteredSubjectPool.length)];
     root.oohAlphaSelectedActor = selectedActor;
+    try {
+      window.sessionStorage.setItem(recentRoninStorageKey, selectedActor.portrait || selectedActor.name || '');
+    }
+    catch (e) {}
+    chainState.rootActorKey = actorStableKey(selectedActor);
+    writeOAChainState(chainState);
     renderActorTransmission(root, selectedActor);
     renderOperationalPayload(root, selectedActor);
     window.console.log('Operation Alpha actor selected:', selectedActor.portrait || selectedActor.name || 'Unknown actor');
@@ -1919,6 +2427,7 @@
   function initActorRegistry(root) {
     loadActorRegistry().then(function (actors) {
       root.oohAlphaActorRegistry = actors;
+      window.oohOperationAlphaActorRegistry = actors;
 
       if (actors.length) {
         window.console.log('Operation Alpha actor registry loaded:', actors.length + ' actors');
@@ -1928,6 +2437,7 @@
       }
     }).catch(function () {
       root.oohAlphaActorRegistry = [];
+      window.oohOperationAlphaActorRegistry = [];
     });
   }
 
@@ -2177,10 +2687,17 @@
     });
   }
 
-  function pickRegistryActor(registry, faction, exceptActor) {
+  function pickRegistryActor(registry, faction, exceptActor, avoidKey, extraAvoidKeys) {
     var matches = registryActorsByFaction(registry, faction, exceptActor);
+    var avoidKeys = (extraAvoidKeys || []).concat(avoidKey ? [avoidKey] : []).filter(Boolean);
+    var filtered = avoidKeys.length && matches.length > 1 ? matches.filter(function (actor) {
+      return avoidKeys.indexOf(actorStableKey(actor)) === -1;
+    }) : matches;
 
-    return matches.length ? runtimePick(matches) : null;
+    if (filtered.length) {
+      return runtimePick(filtered);
+    }
+    return avoidKeys.length ? null : (matches.length ? runtimePick(matches) : null);
   }
 
   function storyCastFallback(label, name, faction, role) {
@@ -2194,18 +2711,36 @@
     };
   }
 
-  function buildStoryCast(actor, registry) {
-    var protagonist = actor && (actor.faction || '').toLowerCase() === 'ronin' ? actor : pickRegistryActor(registry, 'ronin', actor);
-    var ally = protagonist || storyCastFallback('ALLY', 'Ronin courier', 'Ronin', 'route asset');
-    var opposition = pickRegistryActor(registry, 'genealord', actor) || storyCastFallback('OPPOSITION', 'Genealord command voice', 'Genealord', 'pressure authority');
-    var thirdForce = pickRegistryActor(registry, 'mutant', actor) || storyCastFallback('THIRD FORCE', 'Mutant pressure cell', 'Mutant', 'corridor disruptor');
+  function buildStoryCast(actor, registry, root) {
+    var chainState = readOAChainState();
+    var memory = readRootScenarioMemory();
+    var protagonist = findActorByStableKey(registry, chainState.rootActorKey) ||
+      (actor && (actor.faction || '').toLowerCase() === 'ronin' ? actor : pickRegistryActor(registry, 'ronin', actor, memory.actorKey));
+    var storedOpposition = findActorByStableKey(registry, chainState.rootAntagonistKey);
+    var storedThirdForce = findActorByStableKey(registry, chainState.rootThirdForceKey);
+    var storedAlly = findActorByStableKey(registry, chainState.rootAllyKey);
+    var storedRival = findActorByStableKey(registry, chainState.rootRivalKey);
+    var protagonistKey = actorStableKey(protagonist || actor);
+    var ally = storedAlly || pickRegistryActor(registry, 'ronin', protagonist || actor, memory.allyKey, [protagonistKey, chainState.rootActorKey]) || storyCastFallback('ALLY', 'Ronin courier', 'Ronin', 'route asset');
+    var allyKey = actorStableKey(ally);
+    var rival = storedRival || pickRegistryActor(registry, 'ronin', protagonist || actor, memory.rivalKey, [protagonistKey, chainState.rootActorKey, allyKey]) || storyCastFallback('RIVAL', 'Ronin rival', 'Ronin', 'contested route hunter');
+    var opposition = storedOpposition || pickRegistryActor(registry, 'genealord', protagonist || actor, memory.antagonistKey) || storyCastFallback('OPPOSITION', 'Genealord command voice', 'Genealord', 'pressure authority');
+    var thirdForce = storedThirdForce || pickRegistryActor(registry, 'mutant', protagonist || actor, memory.thirdForceKey) || storyCastFallback('THIRD FORCE', 'Mutant pressure cell', 'Mutant', 'corridor disruptor');
+
+    chainState.rootActorKey = actorStableKey(protagonist || actor || ally);
+    chainState.rootAllyKey = actorStableKey(ally);
+    chainState.rootRivalKey = actorStableKey(rival);
+    chainState.rootAntagonistKey = actorStableKey(opposition);
+    chainState.rootThirdForceKey = actorStableKey(thirdForce);
+    writeOAChainState(chainState);
 
     return {
       actor: protagonist || actor || storyCastFallback('ACTOR', 'Unknown actor', 'Unresolved', 'field subject'),
       ally: ally,
+      rival: rival,
       opposition: opposition,
       thirdForce: thirdForce,
-      cell: [ally, opposition, thirdForce]
+      cell: [ally, rival, opposition, thirdForce]
     };
   }
 
@@ -2303,6 +2838,13 @@
       level4Choices: [],
       activePortrait: '',
       activeIdentity: null,
+      rootActorKey: '',
+      rootAllyKey: '',
+      rootRivalKey: '',
+      rootAntagonistKey: '',
+      rootThirdForceKey: '',
+      castIdentities: null,
+      enemyPressureIdentity: null,
       narrativeSelections: {},
       narrativeTokens: {},
       finalDecision: null
@@ -2328,7 +2870,14 @@
   }
 
   function operationSeed(state) {
-    var source = [state && state.runId, state && state.currentCondition, state && state.mission && state.mission.label].filter(Boolean).join('|') || 'operation-alpha';
+    var source = [
+      state && state.runId,
+      state && state.rootScenario && state.rootScenario.id,
+      state && state.rootActorKey,
+      state && state.rootAntagonistKey,
+      state && state.currentCondition,
+      state && state.mission && state.mission.label
+    ].filter(Boolean).join('|') || 'operation-alpha';
     return source.split('').reduce(function (sum, character) {
       return sum + character.charCodeAt(0);
     }, 0);
@@ -2350,6 +2899,27 @@
     selected = section[(operationSeed(state) + (offset || 0)) % section.length];
     state.narrativeSelections[key] = selected.id;
     return selected;
+  }
+
+  function selectRootScenario(chainState) {
+    var memory;
+    var scenario;
+
+    if (chainState.rootScenario && chainState.rootScenario.id) {
+      return chainState.rootScenario;
+    }
+
+    memory = readRootScenarioMemory();
+    scenario = pickDifferent(rootScenarioTemplates, memory.scenarioId, function (entry) {
+      return entry.id;
+    }) || rootScenarioTemplates[0];
+    chainState.rootScenario = scenario;
+    writeRootScenarioMemory(Object.assign({}, memory, {
+      scenarioId: scenario.id,
+      scenarioTitle: scenario.title
+    }));
+
+    return scenario;
   }
 
   function narrativeTokenValue(tokens, key, fallback) {
@@ -2619,7 +3189,10 @@
         chainState.introChoices = choices;
         appendOAChainEvent(chainState, beat);
         renderIntroDecisionFlow(root, runtimeState);
-        if (choices.length >= required && window.oaScrollToNextPhase) {
+        if (choices.length >= required) {
+          showIntroTransmissionPopup(root, runtimeState, 'summary');
+        }
+        else if (window.oaScrollToNextPhase) {
           window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-presence-choice-matrix]') || root.querySelector('[data-ooh-alpha-next-level]'));
         }
       });
@@ -2690,8 +3263,14 @@
       name: storyCastName(actor),
       faction: actor.faction || 'UNRESOLVED',
       role: actor.role || actor.storyLabel || 'Field Presence',
+      path: actor.path || 'Unresolved',
+      transmissionStyle: actor.transmissionStyle || 'unresolved',
       hook: transmissionActorHook(actor, latest, fallbackHook)
     };
+  }
+
+  function compactIdentityFromActor(actor, fallbackHook) {
+    return transmissionIdentityFromActor(actor, null, fallbackHook) || null;
   }
 
   function pickTransmissionIdentity(cast, latest) {
@@ -2721,7 +3300,65 @@
     return identity || null;
   }
 
-  function showIntroTransmissionPopup(root, runtimeState) {
+  function introChoiceTitles(choices) {
+    return (choices || []).map(function (choice) {
+      return choice && choice.title ? choice.title : '';
+    }).filter(Boolean).join(' / ');
+  }
+
+  function closeIntroTransmissionPopup(root) {
+    var popup = root.querySelector('[data-ooh-alpha-transmission-popup]');
+
+    if (popup) {
+      popup.hidden = true;
+      popup.setAttribute('aria-hidden', 'true');
+      popup.removeAttribute('data-ooh-alpha-transmission-mode');
+    }
+    if (window.oaScrollToNextPhase) {
+      window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-presence-choice-matrix]') || root.querySelector('[data-ooh-alpha-next-level]'));
+    }
+  }
+
+  function setIntroTransmissionCopy(root, runtimeState, chainState, mode) {
+    var title = root.querySelector('[data-ooh-alpha-transmission-title]');
+    var summary = root.querySelector('[data-ooh-alpha-transmission-summary]');
+    var gain = root.querySelector('[data-ooh-alpha-transmission-gain]');
+    var loss = root.querySelector('[data-ooh-alpha-transmission-loss]');
+    var danger = root.querySelector('[data-ooh-alpha-transmission-danger]');
+    var close = root.querySelector('[data-ooh-alpha-transmission-close]');
+    var next = root.querySelector('[data-ooh-alpha-transmission-next]');
+    var storedSelection = getPlaylistSelection();
+    var cast = runtimeState && runtimeState.storyCast ? runtimeState.storyCast : {};
+    var protagonist = storyCastName(cast.actor || cast.ally);
+    var antagonist = storyCastName(cast.opposition);
+    var choices = chainState.introChoices || [];
+    var directiveReady = !!(runtimeState && pendingPresenceChoices(runtimeState).length);
+
+    if (title) {
+      title.textContent = mode === 'route' ? 'Directive lock confirmed.' : 'Signal acquisition complete.';
+    }
+    if (summary) {
+      summary.textContent = 'CHANNEL: ' + ((storedSelection && storedSelection.title) || 'Operation Alpha Signal') + ' / RONIN: ' + protagonist + ' / OPPOSING FORCE: ' + antagonist + '.';
+    }
+    if (gain) {
+      gain.textContent = 'SIGNAL ACQUISITION: ' + (introChoiceTitles(choices) || 'Required choices recorded.');
+    }
+    if (loss) {
+      loss.textContent = directiveReady ? 'DIRECTIVE LOCK: Confirmed.' : 'DIRECTIVE LOCK: Choose one field directive before Next Stage activates.';
+    }
+    if (danger) {
+      danger.textContent = mode === 'route' ? 'NEXT STAGE: Level 1 opens on confirmation.' : 'NEXT STAGE: Continue to the directive controls and resolve the field lock.';
+    }
+    if (close) {
+      close.hidden = mode === 'route';
+    }
+    if (next) {
+      next.hidden = mode !== 'route';
+      next.textContent = 'NEXT';
+    }
+  }
+
+  function showIntroTransmissionPopup(root, runtimeState, mode) {
     var popup = root.querySelector('[data-ooh-alpha-transmission-popup]');
     var next = root.querySelector('[data-ooh-alpha-transmission-next]');
     var chainState = readOAChainState();
@@ -2739,11 +3376,14 @@
     }
 
     renderTransmissionIdentity(root, identity);
+    setIntroTransmissionCopy(root, runtimeState, chainState, mode === 'route' ? 'route' : 'summary');
     if (next && !next.dataset.oaHref) {
       next.dataset.oaHref = next.getAttribute('href') || '/operation-alpha/oalevel1';
     }
+    popup.setAttribute('data-ooh-alpha-transmission-mode', mode === 'route' ? 'route' : 'summary');
     popup.hidden = false;
     popup.setAttribute('aria-hidden', 'false');
+    renderSupportingPortraits(root, popup.querySelector('.ooh-operation-alpha__transmission-panel') || popup, 'Mentioned transmission characters');
     if (window.oaScrollToNextPhase) {
       window.oaScrollToNextPhase(root, popup);
     }
@@ -2799,6 +3439,7 @@
     var next = root.querySelector('[data-ooh-alpha-next-level]');
     var popup = root.querySelector('[data-ooh-alpha-transmission-popup]');
     var popupNext = root.querySelector('[data-ooh-alpha-transmission-next]');
+    var popupClose = root.querySelector('[data-ooh-alpha-transmission-close]');
 
     if (!next || !popup || next.oohAlphaTransmissionBound) {
       return;
@@ -2817,9 +3458,9 @@
         return;
       }
       event.preventDefault();
-      if (!showIntroTransmissionPopup(root, runtimeState)) {
+      if (!showIntroTransmissionPopup(root, runtimeState, 'route')) {
         try {
-          window.sessionStorage.setItem(levelOneTimerKey, '210');
+          window.sessionStorage.setItem(levelOneTimerKey, '180');
         }
         catch (e) {}
         window.console.log('Operation Alpha: routing to Level 1');
@@ -2830,13 +3471,25 @@
     if (popupNext && !popupNext.oohAlphaTransmissionNextBound) {
       popupNext.oohAlphaTransmissionNextBound = true;
       popupNext.addEventListener('click', function (event) {
+        if (popup && popup.getAttribute('data-ooh-alpha-transmission-mode') !== 'route') {
+          event.preventDefault();
+          closeIntroTransmissionPopup(root);
+          return;
+        }
         event.preventDefault();
         try {
-          window.sessionStorage.setItem(levelOneTimerKey, '210');
+          window.sessionStorage.setItem(levelOneTimerKey, '180');
         }
         catch (e) {}
         window.console.log('Operation Alpha: routing to Level 1');
         window.location.href = popupNext.dataset.oaHref || popupNext.getAttribute('href') || next.dataset.oaHref || '/operation-alpha/oalevel1';
+      });
+    }
+    if (popupClose && !popupClose.oohAlphaTransmissionCloseBound) {
+      popupClose.oohAlphaTransmissionCloseBound = true;
+      popupClose.addEventListener('click', function (event) {
+        event.preventDefault();
+        closeIntroTransmissionPopup(root);
       });
     }
   }
@@ -2862,6 +3515,8 @@
     var antagonistName = storyCastName(antagonist);
     var antagonistPath = antagonist && antagonist.path ? antagonist.path : 'his path';
     var chainState = readOAChainState();
+    var rootScenario;
+    var rootMemory;
     var tokens;
     var catalystEntry;
     var rivalryEntry;
@@ -2880,16 +3535,35 @@
     }
 
     tokens = buildNarrativeTokens(state, cast, scene, storedSelection);
+    rootScenario = selectRootScenario(chainState);
     chainState.narrativeTokens = tokens;
     chainState.activeIdentity = rootPopupIdentity(state, null);
     chainState.activePortrait = chainState.activeIdentity && chainState.activeIdentity.portrait ? chainState.activeIdentity.portrait : chainState.activePortrait;
+    chainState.castIdentities = {
+      actor: compactIdentityFromActor(protagonist, protagonistName + ' remains the primary Ronin route.'),
+      ally: compactIdentityFromActor(cast.ally, storyCastName(cast.ally) + ' supports the route from a separate relay.'),
+      rival: compactIdentityFromActor(cast.rival, storyCastName(cast.rival) + ' moves against the protagonist from a rival Ronin line.'),
+      opposition: compactIdentityFromActor(antagonist, antagonistName + ' tightens Genealord pressure around the route.'),
+      thirdForce: compactIdentityFromActor(thirdForce, storyCastName(thirdForce) + ' enters as volatile corridor pressure.')
+    };
     catalystEntry = narrativeEntry(chainState, 'introCatalyst', 'catalystTemplates', 3);
     rivalryEntry = narrativeEntry(chainState, 'introRivalry', 'rivalryTemplates', 7);
     grudgeEntry = narrativeEntry(chainState, 'introGrudge', 'grudgeTemplates', 11);
+    rootMemory = readRootScenarioMemory();
+    writeRootScenarioMemory(Object.assign({}, rootMemory, {
+      scenarioId: rootScenario.id,
+      scenarioTitle: rootScenario.title,
+      actorKey: actorStableKey(protagonist),
+      actorName: protagonistName,
+      antagonistKey: actorStableKey(antagonist),
+      antagonistName: antagonistName,
+      thirdForceKey: actorStableKey(thirdForce),
+      thirdForceName: storyCastName(thirdForce)
+    }));
     writeOAChainState(chainState);
 
     if (title) {
-      title.textContent = 'The Ronin is forced into the corridor';
+      title.textContent = rootScenario.title;
     }
     if (copy) {
       copy.textContent = rivalryEntry ? fillNarrativeText(rivalryEntry.text, tokens) : antagonistName + ' considered ' + protagonistName + "'s interference an insult against " + antagonistPath + ' and swore that the Ronin would be hunted before the signal cleared.';
@@ -2908,15 +3582,16 @@
     setIntroStoryText(root, 'protagonist', protagonist);
     setIntroStoryText(root, 'antagonist', antagonist);
     if (catalyst) {
-      catalyst.textContent = catalystEntry ? fillNarrativeText(catalystEntry.text, tokens) + ' Ash wind moves through scarred relay stone, and the old towers answer with flickering signal fire.' : storyCastName(thirdForce) + ' tears through the bone-white waste and batters ' + antagonistName + "'s field. " + protagonistName + ' is pushed into the scarred relay corridor before either side can control the signal fires.';
+      catalyst.textContent = catalystEntry ? fillNarrativeText(catalystEntry.text, tokens) + ' ' + rootScenario.catalystDetail : storyCastName(thirdForce) + ' tears through the field and batters ' + antagonistName + "'s line. " + protagonistName + ' moves before either side can control the signal. ' + rootScenario.catalystDetail;
     }
     if (pressure) {
-      pressure.textContent = 'STORYLINE PRESSURE: ' + (grudgeEntry ? fillNarrativeText(grudgeEntry.text, tokens) : (scene.fieldPressure || 'The route remains open, but only if pressure is managed.')) + ' Ruined fortifications carry the sound forward before the enemy can name it.';
+      pressure.textContent = 'STORYLINE PRESSURE: ' + (grudgeEntry ? fillNarrativeText(grudgeEntry.text, tokens) : (scene.fieldPressure || 'The route remains open, but only if pressure is managed.')) + ' ' + rootScenario.pressureDetail;
     }
     if (debate) {
-      debate.textContent = 'UNSEEN HAND DILEMMA: The mission can still succeed, but every clean route asks what living voice must be left behind. Choose what the hand is willing to carry into the next stage.';
+      debate.textContent = 'UNSEEN HAND DILEMMA: ' + rootScenario.directive;
     }
     renderIntroDecisionFlow(root, state);
+    renderSupportingPortraits(root, block, 'Mentioned story characters');
   }
 
   function renderStoryEventSuite(root, state) {
@@ -3072,7 +3747,7 @@
         '<strong class="ooh-operation-alpha__final-aar-status" data-ooh-alpha-final-aar-status></strong>' +
         '<div class="ooh-operation-alpha__final-aar-lines" data-ooh-alpha-final-aar-lines></div>' +
         '<div class="ooh-operation-alpha__final-aar-actions">' +
-        '<button class="ooh-operation-alpha__final-aar-button" type="button" data-ooh-alpha-final-aar-run>RUN ANOTHER OPERATION</button>' +
+        '<button class="ooh-operation-alpha__final-aar-button" type="button" data-ooh-alpha-final-aar-run>NEW OPERATION - 1 CREDIT</button>' +
         '<a class="ooh-operation-alpha__final-aar-button" href="' + routePath('/operation-alpha/credits') + '">PURCHASE CREDITS</a>' +
         '<a class="ooh-operation-alpha__final-aar-button" href="' + routePath('/operation-alpha') + '">RETURN TO OA HOME</a>' +
         '<a class="ooh-operation-alpha__final-aar-button" href="' + routePath('/operation-alpha/oaplay/playlists') + '">SELECT SIGNAL</a>' +
@@ -3080,6 +3755,10 @@
         '</div>';
       root.appendChild(popup);
       popup.querySelector('[data-ooh-alpha-final-aar-run]').addEventListener('click', function () {
+        if (!hasOperationCredit()) {
+          guideToCredits();
+          return;
+        }
         resetOAIntroRunState(true);
         popup.hidden = true;
         popup.setAttribute('aria-hidden', 'true');
@@ -3112,6 +3791,7 @@
         action.setAttribute('href', '/operation-alpha/oaplay/playlists');
       }
     });
+    renderSupportingPortraits(root, popup.querySelector('.ooh-operation-alpha__final-aar-card') || popup, 'Mentioned final assessment characters');
 
     popup.hidden = false;
     popup.setAttribute('aria-hidden', 'false');
@@ -3496,6 +4176,10 @@
     if (consequenceSummary) {
       consequenceSummary.textContent = runtimePhaseSummary(state);
     }
+    renderSupportingPortraitsForSelectors(root, [
+      '[data-ooh-alpha-operational-consequence]',
+      '[data-ooh-alpha-battlefield]'
+    ]);
     if (lockButton) {
       lockButton.textContent = state.outcomeState !== 'PENDING' ? 'BLOCK COMPLETE' : (ready ? 'PROCEED' : phaseState + ' // PROCEED LOCKED');
       lockButton.disabled = !ready || state.outcomeState !== 'PENDING';
@@ -3690,7 +4374,7 @@
 
   function buildRuntimeState(root, actor, payload) {
     var scene = generateRuntimeScene(actor, root.oohAlphaActorRegistry || []);
-    var storyCast = buildStoryCast(actor, root.oohAlphaActorRegistry || []);
+    var storyCast = buildStoryCast(actor, root.oohAlphaActorRegistry || [], root);
 
     return {
       selectedActor: actor,
@@ -4560,6 +5244,11 @@
       popup.hidden = true;
       popup.setAttribute('aria-hidden', 'true');
     });
+    root.querySelectorAll('[data-ooh-alpha-transmission-popup]').forEach(function (popup) {
+      popup.hidden = true;
+      popup.setAttribute('aria-hidden', 'true');
+      popup.removeAttribute('data-ooh-alpha-transmission-mode');
+    });
 
     if (commandState) {
       commandState.textContent = 'DIRECTIVE CHANNEL IDLE';
@@ -4645,10 +5334,24 @@
       syncFieldInitializeGate(root);
       return;
     }
+    if (!hasOperationCredit()) {
+      if (activationStatus) {
+        activationStatus.textContent = 'NEW OPERATION REQUIRES 1 CREDIT';
+      }
+      guideToCredits();
+      return;
+    }
+    if (!consumeOperationCredit()) {
+      guideToCredits();
+      return;
+    }
+    resetOAIntroRunState(true);
+    root.oohAlphaRuntimeState = null;
+    setupNewOperationGate(root);
+    renderCreditBalance(root);
 
     root.classList.add('is-runtime-acknowledged');
     pauseOperationAlphaAmbient(root);
-    resetOAIntroRunState(true);
     resetRuntimeLoop(root);
     syncSignalGate(root);
     syncFieldInitializeGate(root);
@@ -4711,6 +5414,22 @@
     window.clearTimeout(root.oohAlphaScenarioTimer);
   }
 
+  function setupNewOperationGate(root) {
+    var hasCredit = hasOperationCredit();
+
+    root.querySelectorAll('[data-ooh-alpha-try-again]').forEach(function (link) {
+      if (!hasCredit) {
+        link.textContent = 'NEW OPERATION - 1 CREDIT';
+        link.setAttribute('href', operationAlphaCreditsPath());
+        link.setAttribute('aria-label', 'Purchase credits for a new Operation Alpha run');
+      }
+      else {
+        link.textContent = 'NEW OPERATION';
+        link.setAttribute('href', routePath('/operation-alpha'));
+      }
+    });
+  }
+
   function initOperationAlphaGate(root) {
     var intro = root.querySelector('[data-ooh-operation-alpha-intro]');
     var enter = root.querySelector('[data-ooh-operation-alpha-enter]');
@@ -4741,14 +5460,19 @@
       'authorize-extraction': 'GET THEM OUT'
     };
 
+    if (isOperationAlphaRootPath()) {
+      resetOAIntroRunState(true);
+    }
     initActorRegistry(root);
     initSignalModal(root);
+    setupNewOperationGate(root);
+    renderCreditBalance(root);
     setIntroGameplayBlocksVisible(root, false);
     if (shell && !root.querySelector('[data-ooh-alpha-runtime-version]')) {
       var version = document.createElement('p');
       version.className = 'ooh-operation-alpha__copy';
       version.setAttribute('data-ooh-alpha-runtime-version', '');
-      version.textContent = 'OPERATION ALPHA';
+      version.textContent = 'OA RUNTIME VERSION: OA-211 DECISION CONSEQUENCE CHECK';
       if (title && title.parentNode === shell) {
         shell.insertBefore(version, title.nextSibling);
       }
@@ -5148,6 +5872,7 @@
   function initCreditsShell(root) {
     var confirmation = root.querySelector('[data-ooh-alpha-credit-confirmation]');
 
+    renderCreditBalance(root);
     root.querySelectorAll('[data-ooh-alpha-credit-select]').forEach(function (button) {
       button.addEventListener('click', function () {
         var card = button.closest('[data-ooh-alpha-credit-card]');
@@ -5183,11 +5908,13 @@
       document.body.classList.add('ooh-operation-alpha-runtime');
     }
 
+    bindOperationAlphaExitReset();
     document.querySelectorAll('[data-ooh-operation-alpha]').forEach(initOperationAlphaGate);
     document.querySelectorAll('[data-ooh-operation-alpha-playlists]').forEach(initPlaylistShell);
     document.querySelectorAll('[data-ooh-operation-alpha-runtime]').forEach(initRuntimeShell);
     document.querySelectorAll('[data-ooh-operation-alpha-credits]').forEach(initCreditsShell);
     document.querySelectorAll('[data-ooh-operation-alpha-operation]').forEach(renderOperationSurface);
+    document.querySelectorAll('[data-ooh-alpha-level]').forEach(renderLevelSupportingPortraits);
   }
 
   if (document.readyState === 'loading') {

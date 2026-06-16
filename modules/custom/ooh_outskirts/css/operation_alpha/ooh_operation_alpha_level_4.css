@@ -1,0 +1,24 @@
+@import url("./ooh_operation_alpha_level_1.css");
+
+.ooh-operation-alpha-level--four .ooh-operation-alpha-level__title {
+  color: #fff1b8;
+}
+
+.ooh-operation-alpha-level--four .ooh-operation-alpha-level__choice {
+  min-height: 190px;
+  border-color: rgba(255, 212, 107, 0.3);
+}
+
+.ooh-operation-alpha-level__summary [data-ooh-alpha-mission-timer] {
+  color: #6ff7ff;
+  display: inline-block;
+  font-size: 1.65rem;
+  letter-spacing: 0;
+  margin: 0.15rem 0 0.35rem;
+}
+
+.ooh-operation-alpha-level__summary [data-ooh-alpha-juice-status] {
+  color: rgba(255, 232, 198, 0.78);
+  font-size: 0.82rem;
+  margin: 0.5rem 0 0;
+}

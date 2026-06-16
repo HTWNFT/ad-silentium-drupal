@@ -2,6 +2,9 @@
   'use strict';
 
   var stateKey = 'ooh_operation_alpha_chain_state_v1';
+  var creditBalanceKey = 'ooh_alpha_operation_credit_balance_v1';
+  var freeOperationStartedKey = 'ooh_operation_alpha_free_operation_started_v1';
+  var operationCreditCost = 1;
 
   function defaultState() {
     return { pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], narrativeSelections: {}, narrativeTokens: {}, finalDecision: null };
@@ -19,6 +22,49 @@
   function writeOAState(state) {
     calculatePressure(state);
     window.localStorage.setItem(stateKey, JSON.stringify(state));
+  }
+
+  function isLocalhostOrigin() {
+    var host = window.location.hostname || '';
+
+    return host === 'localhost' || host === '127.0.0.1' || host === '::1';
+  }
+
+  function readCreditBalance() {
+    var stored;
+    var parsed;
+
+    // LOCALHOST ONLY: local QA retries are unlimited; production domains must use the stored credit balance.
+    if (isLocalhostOrigin()) {
+      return Infinity;
+    }
+    try {
+      stored = window.localStorage.getItem(creditBalanceKey);
+      if (stored === null) {
+        parsed = window.localStorage.getItem(freeOperationStartedKey) === '1' ? 0 : 1;
+        window.localStorage.setItem(creditBalanceKey, String(parsed));
+        return parsed;
+      }
+      parsed = parseInt(stored, 10);
+      return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+    }
+    catch (e) {
+      return 0;
+    }
+  }
+
+  function routeTryAgainLinks(root) {
+    root.querySelectorAll('[data-ooh-alpha-try-again]').forEach(function (link) {
+      var creditsUrl = link.getAttribute('data-ooh-alpha-credits-url') || '/operation-alpha/credits';
+
+      if (readCreditBalance() < operationCreditCost) {
+        link.textContent = 'TRY AGAIN - 1 CREDIT';
+        link.href = creditsUrl;
+      }
+      else {
+        link.textContent = 'TRY AGAIN';
+      }
+    });
   }
 
   function appendChainEvent(state, event) {
@@ -200,8 +246,12 @@
       }
     }
 
+    routeTryAgainLinks(root);
     root.querySelectorAll('[data-ooh-alpha-try-again]').forEach(function (link) {
       link.addEventListener('click', function () {
+        if (readCreditBalance() < operationCreditCost) {
+          return;
+        }
         if (window.resetOperationAlphaRun) {
           window.resetOperationAlphaRun(true);
         }

@@ -9,7 +9,7 @@
       thresholdMs: 0,
       feed: [
         'MISSION FEED ONLINE',
-        'YOU ARE INSIDE THE FIELD',
+        'ACTIVE FIELD ONLINE',
         'SECTOR CONDITIONS SHIFTING'
       ]
     },
@@ -17,7 +17,7 @@
       id: 'contact',
       label: 'CONTACT',
       pressure: 'RISING',
-      thresholdMs: 14000,
+      thresholdMs: 9000,
       feed: [
         'MOVEMENT DETECTED BEYOND FIELD LIMIT',
         'HOSTILE PRESSURE FORMING BEYOND THE FIELD',
@@ -28,7 +28,7 @@
       id: 'instability',
       label: 'INSTABILITY',
       pressure: 'UNSTABLE',
-      thresholdMs: 32000,
+      thresholdMs: 22000,
       feed: [
         'SIGNAL STABILITY FALLING',
         'HOSTILE INTERFERENCE INCREASING',
@@ -39,7 +39,7 @@
       id: 'collapse-risk',
       label: 'COLLAPSE RISK',
       pressure: 'CRITICAL',
-      thresholdMs: 54000,
+      thresholdMs: 38000,
       feed: [
         'SECTOR BOUNDARY LOSING SHAPE',
         'FIELD PRESSURE APPROACHING BREAKPOINT',
@@ -50,7 +50,7 @@
       id: 'extraction-window',
       label: 'EXTRACTION WINDOW',
       pressure: 'EXTRACTION',
-      thresholdMs: 76000,
+      thresholdMs: 56000,
       feed: [
         'EXTRACTION WINDOW NARROWING',
         'EXTRACTION CORRIDOR DESTABILIZING',
@@ -205,11 +205,11 @@
   };
 
   const cadenceProfiles = {
-    insertion: { intervalMs: 11800, warningMs: 3200, recoveryMs: 1800, label: 'QUIET' },
-    contact: { intervalMs: 9800, warningMs: 3400, recoveryMs: 1700, label: 'WATCHING' },
-    instability: { intervalMs: 8200, warningMs: 3600, recoveryMs: 1600, label: 'UNSTABLE' },
-    'collapse-risk': { intervalMs: 6900, warningMs: 3900, recoveryMs: 1450, label: 'PRESSING' },
-    'extraction-window': { intervalMs: 7600, warningMs: 3500, recoveryMs: 1500, label: 'CLOSING' }
+    insertion: { intervalMs: 10400, warningMs: 3000, recoveryMs: 1800, label: 'ACTIVE' },
+    contact: { intervalMs: 9200, warningMs: 3200, recoveryMs: 1700, label: 'WATCHING' },
+    instability: { intervalMs: 7800, warningMs: 3400, recoveryMs: 1600, label: 'UNSTABLE' },
+    'collapse-risk': { intervalMs: 6800, warningMs: 3600, recoveryMs: 1450, label: 'PRESSING' },
+    'extraction-window': { intervalMs: 7400, warningMs: 3400, recoveryMs: 1500, label: 'CLOSING' }
   };
 
   const cadenceWarnings = [
@@ -1438,10 +1438,10 @@
     window.clearTimeout(state.forcePresenceTimer);
     window.clearTimeout(state.exchangeTimer);
     window.clearTimeout(state.manifestationPresenceTimer);
-    state.nextManifestationAt = Date.now() + 7200;
+    state.nextManifestationAt = Date.now() + 5200;
     state.warningIssued = false;
     setCadence(root, state, 'silence');
-    render(root, state, 'YOU ARE INSIDE THE FIELD');
+    render(root, state, 'ENTER FIELD // ACTIVE FIELD ONLINE');
     pulse(root, 'activate');
   }
 
@@ -1528,7 +1528,7 @@
       state.feedIndex += 1;
       const stage = escalationStages[effectiveStageIndex(root, state)];
       render(root, state, cadenceTick(root, state, stage));
-    }, 5200);
+    }, 4200);
   }
 
   Drupal.behaviors.oohRuntimeExperience = {

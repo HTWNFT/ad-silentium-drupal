@@ -3,6 +3,8 @@
 
   var stateKey = 'ooh_operation_alpha_chain_state_v1';
   var playlistKey = 'ooh_operation_alpha_playlist_selection_v1';
+  var levelOneTimerKey = 'ooh_operation_alpha_level1_timer_remaining_seconds_v1';
+  var levelOneTimerStartSeconds = 180;
   var requiredChoices = 6;
   var beats = [
     {
@@ -136,7 +138,7 @@
   ];
 
   function defaultState() {
-    return { phase: 'field-pressure', pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], introChoices: [], level1Choices: [], level2Choices: [], level4Choices: [], narrativeSelections: {}, narrativeTokens: {}, finalDecision: null };
+    return { phase: 'field-pressure', pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], introChoices: [], level1Choices: [], level2Choices: [], level4Choices: [], activeIdentity: null, activePortrait: '', castIdentities: null, narrativeSelections: {}, narrativeTokens: {}, finalDecision: null };
   }
 
   function readOAState() {
@@ -270,14 +272,66 @@
     }
   }
 
+  function formatTimer(seconds) {
+    var remaining = Math.max(0, seconds || 0);
+    var minutes = Math.floor(remaining / 60);
+    var timerSeconds = remaining % 60;
+
+    return String(minutes).padStart(2, '0') + ':' + String(timerSeconds).padStart(2, '0');
+  }
+
+  function readLevelOneTimerSeconds() {
+    try {
+      var stored = parseInt(window.sessionStorage.getItem(levelOneTimerKey), 10);
+
+      return Number.isFinite(stored) && stored >= 0 ? Math.min(stored, levelOneTimerStartSeconds) : null;
+    }
+    catch (e) {
+      return null;
+    }
+  }
+
+  function writeLevelOneTimerSeconds(seconds) {
+    try {
+      window.sessionStorage.setItem(levelOneTimerKey, String(Math.max(0, seconds || 0)));
+    }
+    catch (e) {}
+  }
+
+  function initLevelOneTimer(root) {
+    var timer = root.querySelector('[data-ooh-alpha-level1-timer]');
+    var remaining = readLevelOneTimerSeconds();
+
+    if (!timer || root.oohAlphaLevelOneTimerStarted) {
+      return;
+    }
+    root.oohAlphaLevelOneTimerStarted = true;
+    if (remaining === null) {
+      remaining = levelOneTimerStartSeconds;
+      writeLevelOneTimerSeconds(remaining);
+    }
+    timer.textContent = formatTimer(remaining);
+    window.console.log('Operation Alpha Level 1 timer initialized: 03:00');
+    root.oohAlphaLevelOneTimerInterval = window.setInterval(function () {
+      remaining = Math.max(0, remaining - 1);
+      timer.textContent = formatTimer(remaining);
+      writeLevelOneTimerSeconds(remaining);
+      if (remaining <= 0) {
+        window.clearInterval(root.oohAlphaLevelOneTimerInterval);
+      }
+    }, 1000);
+  }
+
   function renderTransmissionIdentity(root, state, latest) {
     var block = root.querySelector('[data-ooh-alpha-transmission-identity]');
     var image = root.querySelector('[data-ooh-alpha-transmission-portrait]');
     var name = root.querySelector('[data-ooh-alpha-transmission-name]');
     var faction = root.querySelector('[data-ooh-alpha-transmission-faction]');
     var role = root.querySelector('[data-ooh-alpha-transmission-role]');
+    var path = root.querySelector('[data-ooh-alpha-transmission-path]');
+    var style = root.querySelector('[data-ooh-alpha-transmission-style]');
     var hook = root.querySelector('[data-ooh-alpha-transmission-hook]');
-    var identity = Object.assign({}, state.activeIdentity || {});
+    var identity = Object.assign({}, state.castIdentities && state.castIdentities.ally ? state.castIdentities.ally : (state.activeIdentity || {}));
 
     if (!identity.portrait && state.activePortrait) {
       identity.portrait = state.activePortrait;
@@ -316,9 +370,34 @@
     if (role) {
       role.textContent = identity.role || 'Field Presence';
     }
+    if (path) {
+      path.textContent = 'PATH: ' + (identity.path || 'unresolved');
+    }
+    if (style) {
+      style.textContent = 'TRANSMISSION: ' + (identity.transmissionStyle || 'unresolved');
+    }
     if (hook) {
       hook.textContent = identity.hook || 'The field records an operational presence.';
     }
+  }
+
+  function renderMentionedPortraits(root) {
+    if (!window.oohOperationAlphaRenderSupportingPortraitsForSelectors) {
+      if (root && !root.oohAlphaMentionedPortraitRetryQueued) {
+        root.oohAlphaMentionedPortraitRetryQueued = true;
+        window.setTimeout(function () {
+          renderMentionedPortraits(root);
+        }, 250);
+      }
+      return;
+    }
+    window.oohOperationAlphaRenderSupportingPortraitsForSelectors(root, [
+      '[data-ooh-alpha-level-summary]',
+      '[data-ooh-alpha-level-consequence]',
+      '[data-ooh-alpha-level-choices]',
+      '[data-ooh-alpha-chain-panel]',
+      '[data-ooh-alpha-transmission-popup]'
+    ]);
   }
 
   function bindLockedLink(link) {
@@ -350,6 +429,7 @@
     root.querySelector('[data-ooh-alpha-transmission-gain]').textContent = 'GAIN: The first field chain is readable.';
     root.querySelector('[data-ooh-alpha-transmission-loss]').textContent = 'LOSS: Every clean route now carries a cost.';
     root.querySelector('[data-ooh-alpha-transmission-danger]').textContent = 'DANGER: Enemy adaptation is already forming.';
+    renderMentionedPortraits(root);
     writeOAState(state);
     if (next) {
       next.href = href;
@@ -413,6 +493,7 @@
     var latestSelected = selected[selected.length - 1];
 
     document.body.classList.add('ooh-operation-alpha-level-runtime');
+    initLevelOneTimer(root);
     state.phase = 'field-pressure';
     calculatePressure(state);
 
@@ -462,6 +543,7 @@
     }
     renderChainPanel(root, state);
     renderThreeLineSummary(summary, state);
+    renderMentionedPortraits(root);
     setDisabled(next, !locked);
     logLevelOneProgress(selected.length, requiredChoices, locked, next ? next.getAttribute('href') || next.dataset.oaHref : '');
     bindLockedLink(next);

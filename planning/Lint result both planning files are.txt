@@ -1,0 +1,62 @@
+Lint result: **both planning files are clean and usable.**
+
+* `OA_RUNTIME_LOOP` is clear, scoped, and does not over-expand the alpha. 
+* `OA_RUNTIME_SYSTEM_MAP` correctly separates **current assets** from **needs**, which is exactly what you need before implementation. 
+
+Next step:
+
+```text
+Create OA_IMPLEMENTATION_AUDIT.txt
+```
+
+Purpose: identify which existing file should be touched first.
+
+OA_IMPLEMENTATION_AUDIT
+
+OBJECTIVE
+Determine the smallest first implementation step needed to turn the current /play atmosphere into a real contained operational runtime loop.
+
+AUTHORITATIVE REPO
+C:\Users\natha\OneDrive\Documents\GitHub\ad-silentium-drupal
+
+PRIMARY TARGET AREA
+modules/custom/ooh_outskirts/js/ooh_play.js
+
+AUDIT QUESTIONS
+
+1. What runtime systems already exist in ooh_play.js?
+- signal integrity loop
+- HOLD behavior
+- telemetry cadence
+- mission activation
+- failure state
+- reset behavior
+
+2. What is the smallest missing gameplay mechanic?
+Likely answer:
+- player-driven objective progress
+
+3. What should NOT be touched yet?
+- payment
+- checkout
+- landing
+- dossier
+- CSS polish
+- lore
+- multiplayer
+- inventory
+- new routes
+
+4. First likely implementation phase:
+Add a minimal objective-progress loop inside the existing /play runtime, tied to player interaction and signal state.
+
+5. Validation needed:
+node --check modules/custom/ooh_outskirts/js/ooh_play.js
+git diff --check
+git status --short
+
+NEXT DECISION
+Prepare a narrow Codex prompt for the first actual gameplay implementation phase.
+```
+
+After you create that, the next move is a **Codex implementation prompt**, not more planning.

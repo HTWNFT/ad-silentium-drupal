@@ -1,0 +1,95 @@
+<section class="ooh-operation-alpha-level ooh-operation-alpha-level--three" data-ooh-alpha-level="3">
+  <div class="ooh-operation-alpha-level__shell">
+    <nav class="ooh-operation-alpha-level__nav" aria-label="Operation Alpha level navigation">
+      <a href="{{ path('ooh_outskirts.operation_alpha') }}">INTRO</a>
+      <a href="{{ path('ooh_outskirts.operation_alpha_level_2') }}">LEVEL 2</a>
+    </nav>
+    <p class="ooh-operation-alpha-level__eyebrow">OPERATION ALPHA // LEVEL 3</p>
+    <h1 class="ooh-operation-alpha-level__title">SITUATION REPORT</h1>
+    <p class="ooh-operation-alpha-level__copy">Short command update only. Read the pressure, trust, awareness, and signal status before committing to the final breach.</p>
+
+    <section class="ooh-operation-alpha-level__report" aria-label="Midpoint situation report">
+      <article>
+        <span>PRESSURE</span>
+        <p data-ooh-alpha-pressure-status>Awaiting prior level data.</p>
+      </article>
+      <article>
+        <span>TRUST</span>
+        <p data-ooh-alpha-trust-status>Trust reading pending.</p>
+      </article>
+      <article>
+        <span>ENEMY AWARENESS</span>
+        <p data-ooh-alpha-awareness-status>Awareness reading pending.</p>
+      </article>
+      <article>
+        <span>SIGNAL STATUS</span>
+        <p data-ooh-alpha-signal-status>Signal status pending.</p>
+      </article>
+      <article>
+        <span>KEY CONSEQUENCES</span>
+        <p data-ooh-alpha-key-consequences>Consequence chain pending.</p>
+      </article>
+      <article>
+        <span>CHECKPOINT</span>
+        <strong data-ooh-alpha-go-nogo>NO GO</strong>
+      </article>
+    </section>
+
+    <section class="ooh-operation-alpha-level__status" aria-label="Situation report decision status">
+      <div>
+        <span>DECISION LOCKED</span>
+        <strong data-ooh-alpha-level-count>SELECTED: 0 / REQUIRED: 1</strong>
+      </div>
+      <div>
+        <span>STAGE STATE</span>
+        <strong data-ooh-alpha-level-state>LOCKED</strong>
+      </div>
+      <div>
+        <span>NEXT ROUTE</span>
+        <strong data-ooh-alpha-level-route>UNRESOLVED</strong>
+      </div>
+    </section>
+
+    <section class="ooh-operation-alpha-level__choices" aria-label="Go no-go decision" data-ooh-alpha-level-choices></section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Narrative consequence">
+      <span>NARRATIVE CONSEQUENCE</span>
+      <p data-ooh-alpha-level-consequence>Awaiting command decision.</p>
+    </section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Chain of consequence">
+      <span>CHAIN OF CONSEQUENCE</span>
+      <div data-ooh-alpha-chain-panel>
+        <p>ACTION: Awaiting command decision.</p>
+        <p>REACTION: Command holding.</p>
+        <p>CONSEQUENCE: Route unresolved.</p>
+        <p>CARRY-FORWARD EFFECT: Final route pending.</p>
+      </div>
+    </section>
+
+    <div class="ooh-operation-alpha-level__actions">
+      <a class="ooh-operation-alpha-level__button" href="{{ path('ooh_outskirts.operation_alpha_level_2') }}">BACK</a>
+      <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary is-disabled" href="{{ path('ooh_outskirts.operation_alpha_level_4') }}" aria-disabled="true" data-ooh-alpha-level-next>NEXT STAGE</a>
+    </div>
+    <section class="ooh-operation-alpha-level__transmission" data-ooh-alpha-transmission-popup hidden aria-hidden="true">
+      <div class="ooh-operation-alpha-level__transmission-panel">
+        <div class="ooh-operation-alpha-level__transmission-identity" data-ooh-alpha-transmission-identity hidden>
+          <img class="ooh-operation-alpha-level__transmission-portrait" alt="" data-ooh-alpha-transmission-portrait hidden>
+          <strong data-ooh-alpha-transmission-name></strong>
+          <span data-ooh-alpha-transmission-faction></span>
+          <span data-ooh-alpha-transmission-role></span>
+          <p data-ooh-alpha-transmission-hook></p>
+        </div>
+        <div>
+          <span>UNSEEN HAND TRANSMISSION</span>
+          <h2 data-ooh-alpha-transmission-title>Command decision locked.</h2>
+          <p data-ooh-alpha-transmission-summary>One command has changed the shape of the ending.</p>
+          <p data-ooh-alpha-transmission-gain>GAIN: Decision clarity.</p>
+          <p data-ooh-alpha-transmission-loss>LOSS: Alternate path.</p>
+          <p data-ooh-alpha-transmission-danger>DANGER: Final cost approaching.</p>
+          <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary" href="{{ path('ooh_outskirts.operation_alpha_level_4') }}" data-ooh-alpha-transmission-next>NEXT</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>

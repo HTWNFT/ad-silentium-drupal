@@ -254,34 +254,10 @@ body:has(.ooh-landing-page) .ooh-prologue-modal.is-open {
   display: block !important;
 }
 
-@font-face {
-  font-family: "OohLandingFuturist";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/static/Exo2-Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "OohLandingFuturist";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("../fonts/static/Exo2-SemiBold.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "OohLandingFuturist";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("../fonts/static/Exo2-Bold.ttf") format("truetype");
-}
-
 body:has(.ooh-landing-page) .ooh-landing-page,
 body:has(.ooh-landing-page) .ooh-landing-page button,
 body:has(.ooh-landing-page) .ooh-landing-page a {
-  font-family: "OohLandingFuturist", "Oxanium", "Orbitron", "Rajdhani", "Segoe UI", system-ui, sans-serif;
+  font-family: "Oxanium", "Orbitron", "Rajdhani", "Segoe UI", system-ui, sans-serif;
 }
 
 body:has(.ooh-landing-page) .ooh-hero__inner {
@@ -387,7 +363,7 @@ body.ooh-modal-open:has(.ooh-landing-page) {
 }
 
 body:has(.ooh-landing-page) .ooh-prologue-modal {
-  font-family: "OohLandingFuturist", "Oxanium", "Orbitron", "Rajdhani", "Segoe UI", system-ui, sans-serif;
+  font-family: "Oxanium", "Orbitron", "Rajdhani", "Segoe UI", system-ui, sans-serif;
 }
 
 body:has(.ooh-landing-page) .ooh-prologue-modal.is-open {
@@ -599,7 +575,8 @@ body:has(.ooh-landing-page) .ooh-prologue__crawl p:nth-child(2n) {
   }
 }
 
-body:has(.ooh-landing-page) .ooh-ambient-audio {
+body:has(.ooh-landing-page) .ooh-ambient-audio,
+.ooh-hero .ooh-ambient-audio {
   display: none;
 }
 
@@ -640,6 +617,28 @@ body:has(.ooh-landing-page) .ooh-sound-toggle {
   top: var(--ooh-landing-control-top);
   left: 18px;
 }
+body:has(.ooh-landing-page) .ooh-sound-toggle.ooh-utility-button {
+  min-width: 68px;
+  min-height: 30px;
+  padding: 7px 10px;
+  border-color: rgba(89, 243, 255, 0.54);
+  background: rgba(0, 8, 16, 0.42);
+  color: #59f3ff;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.05),
+    0 0 12px rgba(89, 243, 255, 0.12);
+}
+
+body:has(.ooh-landing-page) .ooh-sound-toggle.ooh-utility-button.is-sound-on {
+  border-color: rgba(169, 255, 255, 0.84);
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 255, 255, 0.11),
+    0 0 18px rgba(89, 243, 255, 0.28);
+}
+
+
 
 body:has(.ooh-landing-page) .ooh-utility-button,
 body:has(.ooh-landing-page) .ooh-utility-button:visited {
@@ -919,6 +918,8 @@ body:has(.ooh-landing-page) .ooh-hero__actions {
 }
 
 body:has(.ooh-landing-page) .ooh-hero__button,
+
+
 body:has(.ooh-landing-page) .ooh-utility-button,
 body:has(.ooh-landing-page) .ooh-landing-dialog__button {
   border-radius: 16px;
@@ -1089,6 +1090,8 @@ body:has(.ooh-landing-page) .ooh-hero__button--operation-alpha:focus-visible {
 /* Phase 81: landing interaction feedback alignment */
 
 body:has(.ooh-landing-page) .ooh-hero__button,
+
+
 body:has(.ooh-landing-page) .ooh-utility-button,
 body:has(.ooh-landing-page) .ooh-landing-dialog__button {
   outline: 0;
@@ -1219,3 +1222,6 @@ body:has(.ooh-landing-page) .ooh-hero__button--secondary:focus-visible {
     inset 0 0 0 1px rgba(180, 255, 255, 0.05),
     0 0 14px rgba(89, 243, 255, 0.14);
 }
+
+
+

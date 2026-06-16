@@ -128,6 +128,47 @@ ooh_outskirts.operation_alpha_finale:
   requirements:
     _permission: 'access content'
 
+
+ooh_outskirts.operation_alpha_level_1_alias:
+  path: '/oalevel1'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::levelOne'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ooh_outskirts.operation_alpha_level_2_alias:
+  path: '/oalevel2'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::levelTwo'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ooh_outskirts.operation_alpha_level_3_alias:
+  path: '/oalevel3'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::levelThree'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ooh_outskirts.operation_alpha_level_4_alias:
+  path: '/oalevel4'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::levelFour'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
+ooh_outskirts.operation_alpha_finale_alias:
+  path: '/oafinale'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::finale'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+
 ooh_outskirts.operation_alpha_credits:
   path: '/operation-alpha/credits'
   defaults:

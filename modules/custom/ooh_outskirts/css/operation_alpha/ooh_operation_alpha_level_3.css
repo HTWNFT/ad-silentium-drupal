@@ -1,0 +1,10 @@
+@import url("./ooh_operation_alpha_level_1.css");
+
+.ooh-operation-alpha-level--three .ooh-operation-alpha-level__report {
+  grid-template-columns: 1.2fr 1.2fr 0.8fr;
+}
+
+.ooh-operation-alpha-level--three .ooh-operation-alpha-level__report strong {
+  display: block;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+}

@@ -57,7 +57,7 @@ play:
     - core/drupalSettings
 
 operation_alpha:
-  version: 1.0.19-oa-containment
+  version: 1.0.25-oa-local-mini-lockdown
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha.css: {}
@@ -69,55 +69,55 @@ operation_alpha:
     - core/once
 
 operation_alpha_level_1:
-  version: 1.0.5-oa-autoscroll
+  version: 1.0.8-oa-ally-identity-lock
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_1.css: {}
   js:
-    js/operation_alpha/ooh_operation_alpha_narrative_library.js: {}
     js/operation_alpha/ooh_operation_alpha_level_1.js: {}
   dependencies:
+    - ooh_outskirts/operation_alpha
     - core/drupal
     - core/once
 
 operation_alpha_level_2:
-  version: 1.0.5-oa-autoscroll
+  version: 1.0.8-oa-pressure-identity-lock
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_2.css: {}
   js:
-    js/operation_alpha/ooh_operation_alpha_narrative_library.js: {}
     js/operation_alpha/ooh_operation_alpha_level_2.js: {}
   dependencies:
+    - ooh_outskirts/operation_alpha
     - core/drupal
     - core/once
 
 operation_alpha_level_3:
-  version: 1.0.5-oa-autoscroll
+  version: 1.0.8-oa-pressure-identity-lock
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_3.css: {}
   js:
-    js/operation_alpha/ooh_operation_alpha_narrative_library.js: {}
     js/operation_alpha/ooh_operation_alpha_level_3.js: {}
   dependencies:
+    - ooh_outskirts/operation_alpha
     - core/drupal
     - core/once
 
 operation_alpha_level_4:
-  version: 1.0.6-oa-button-gate
+  version: 1.0.9-oa-finale-route-owner
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_level_4.css: {}
   js:
-    js/operation_alpha/ooh_operation_alpha_narrative_library.js: {}
     js/operation_alpha/ooh_operation_alpha_level_4.js: {}
   dependencies:
+    - ooh_outskirts/operation_alpha
     - core/drupal
     - core/once
 
 operation_alpha_finale:
-  version: 1.0.5-oa-autoscroll
+  version: 1.0.6-oa-finale-route-owner
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha_finale.css: {}

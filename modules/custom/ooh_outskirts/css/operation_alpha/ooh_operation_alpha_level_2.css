@@ -1,0 +1,10 @@
+@import url("./ooh_operation_alpha_level_1.css");
+
+.ooh-operation-alpha-level--two .ooh-operation-alpha-level__title {
+  color: #fff1b8;
+  text-shadow: 0 0 22px rgba(255, 212, 107, 0.18);
+}
+
+.ooh-operation-alpha-level--two .ooh-operation-alpha-level__choice {
+  border-color: rgba(255, 212, 107, 0.24);
+}

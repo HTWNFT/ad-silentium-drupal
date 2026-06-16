@@ -4,7 +4,7 @@
   var stateKey = 'ooh_operation_alpha_chain_state_v1';
 
   function defaultState() {
-    return { pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], level1Choices: [], level2Choices: [], narrativeSelections: {}, narrativeTokens: {}, midpointChoice: null };
+    return { pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], level1Choices: [], level2Choices: [], activeIdentity: null, activePortrait: '', castIdentities: null, enemyPressureIdentity: null, enemyPressureMode: '', narrativeSelections: {}, narrativeTokens: {}, midpointChoice: null, midpointOutcomeLast: null, midpointGoStreak: 0 };
   }
 
   function readOAState() {
@@ -73,6 +73,39 @@
     }
   }
 
+  function midpointOutcome(card) {
+    return card && card.id === 'midpoint-go' ? 'GO' : 'NO GO';
+  }
+
+  function midpointDisplayTitle(card) {
+    if (!card) {
+      return '';
+    }
+    return card.displayTitle || card.title || '';
+  }
+
+  function premonitionState(state) {
+    if (!state.midpointChoice) {
+      return 'SIGNAL UNREAD';
+    }
+    if (state.failed) {
+      return 'LAST LIGHT COMPROMISED';
+    }
+    return midpointOutcome(state.midpointChoice) === 'GO' ? 'BREACH WINDOW OPEN' : 'FIELD COLLAPSE IMMINENT';
+  }
+
+  function renderPremonition(root, state) {
+    var node = root.querySelector('[data-ooh-alpha-go-nogo]');
+    var label = node && node.parentNode ? node.parentNode.querySelector('span') : null;
+
+    if (label) {
+      label.textContent = 'PREMONITION';
+    }
+    if (node) {
+      node.textContent = premonitionState(state);
+    }
+  }
+
   function setDisabled(link, disabled) {
     if (!link) {
       return;
@@ -131,7 +164,7 @@
     var faction = root.querySelector('[data-ooh-alpha-transmission-faction]');
     var role = root.querySelector('[data-ooh-alpha-transmission-role]');
     var hook = root.querySelector('[data-ooh-alpha-transmission-hook]');
-    var identity = Object.assign({}, state.activeIdentity || {});
+    var identity = Object.assign({}, state.enemyPressureIdentity || state.activeIdentity || {});
 
     if (!identity.portrait && state.activePortrait) {
       identity.portrait = state.activePortrait;
@@ -175,6 +208,25 @@
     }
   }
 
+  function renderMentionedPortraits(root) {
+    if (!window.oohOperationAlphaRenderSupportingPortraitsForSelectors) {
+      if (root && !root.oohAlphaMentionedPortraitRetryQueued) {
+        root.oohAlphaMentionedPortraitRetryQueued = true;
+        window.setTimeout(function () {
+          renderMentionedPortraits(root);
+        }, 250);
+      }
+      return;
+    }
+    window.oohOperationAlphaRenderSupportingPortraitsForSelectors(root, [
+      '[data-ooh-alpha-key-consequences]',
+      '[data-ooh-alpha-level-consequence]',
+      '[data-ooh-alpha-level-choices]',
+      '[data-ooh-alpha-chain-panel]',
+      '[data-ooh-alpha-transmission-popup]'
+    ]);
+  }
+
   function bindLockedLink(link) {
     if (!link || link.oohAlphaLockedBound) {
       return;
@@ -199,11 +251,12 @@
       return;
     }
     renderTransmissionIdentity(root, state, selected);
-    root.querySelector('[data-ooh-alpha-transmission-title]').textContent = selected && selected.title === 'NO GO' ? 'Operation aborted.' : 'Last Light authorized.';
+    root.querySelector('[data-ooh-alpha-transmission-title]').textContent = selected && midpointOutcome(selected) === 'NO GO' ? 'Operation aborted.' : 'Last Light authorized.';
     root.querySelector('[data-ooh-alpha-transmission-summary]').textContent = (summaryText || (selected ? selected.narrative : 'One command has changed the shape of the ending.')) + ' Command is clean now. The field will charge for that clarity.';
     root.querySelector('[data-ooh-alpha-transmission-gain]').textContent = 'GAIN: Command ambiguity is gone.';
     root.querySelector('[data-ooh-alpha-transmission-loss]').textContent = 'LOSS: The alternate path is closed.';
-    root.querySelector('[data-ooh-alpha-transmission-danger]').textContent = selected && selected.title === 'NO GO' ? 'DANGER: The enemy keeps strategic space.' : 'DANGER: The final cost is approaching.';
+    root.querySelector('[data-ooh-alpha-transmission-danger]').textContent = selected && midpointOutcome(selected) === 'NO GO' ? 'DANGER: The enemy keeps strategic space.' : 'DANGER: The final cost is approaching.';
+    renderMentionedPortraits(root);
     writeOAState(state);
     if (next) {
       next.href = href;
@@ -234,11 +287,15 @@
   }
 
   function decisionCards(state) {
+    var pressureName = state.enemyPressureIdentity && state.enemyPressureIdentity.name ? state.enemyPressureIdentity.name : 'the pressure contact';
+    var pressureLine = state.enemyPressureMode === 'mutant-enforcer' ? pressureName + ' is helping Genealord pressure close around the route.' : pressureName + ' is opposing the protagonist from a rival Ronin line.';
+
     return [
       {
         id: 'midpoint-go',
         title: 'GO',
-        situation: 'The route remains viable, but the report shows pressure, trust, awareness, and signal damage all moving at once.',
+        displayTitle: 'AUTHORIZE LAST LIGHT',
+        situation: pressureLine + ' The route remains viable, but the report shows pressure, trust, awareness, and signal damage all moving at once.',
         directive: 'Commit to Last Light and accept the cost of continuing.',
         risk: 'The final breach may succeed and still leave losses behind.',
         action: 'Committed to Last Light.',
@@ -255,7 +312,8 @@
       {
         id: 'midpoint-no-go',
         title: 'NO GO',
-        situation: 'The operation can still be stopped before the final breach turns damage into losses.',
+        displayTitle: 'SEVER THE SIGNAL',
+        situation: pressureLine + ' The operation can still be stopped before the final breach turns damage into losses.',
         directive: 'Abort and preserve what remains.',
         risk: 'The mission ends without climax; the enemy keeps strategic space.',
         action: 'Aborted before Last Light.',
@@ -272,6 +330,28 @@
     ];
   }
 
+  function weightedMidpointCard(cards, state) {
+    var goCard = cards.filter(function (card) { return card.id === 'midpoint-go'; })[0];
+    var noGoCard = cards.filter(function (card) { return card.id === 'midpoint-no-go'; })[0];
+    var goStreak = Math.max(0, parseInt(state.midpointGoStreak || 0, 10));
+    var goChance = goStreak >= 2 ? 0.25 : (goStreak === 1 ? 0.45 : 0.6);
+
+    if (!goCard || !noGoCard) {
+      return cards[0];
+    }
+    return Math.random() < goChance ? goCard : noGoCard;
+  }
+
+  function recordMidpointOutcome(state, card) {
+    if (!card || card.id !== 'midpoint-go') {
+      state.midpointOutcomeLast = 'NO GO';
+      state.midpointGoStreak = 0;
+      return;
+    }
+    state.midpointOutcomeLast = 'GO';
+    state.midpointGoStreak = Math.max(0, parseInt(state.midpointGoStreak || 0, 10)) + 1;
+  }
+
   function render(root) {
     var state = readOAState();
     var wrap = root.querySelector('[data-ooh-alpha-level-choices]');
@@ -282,7 +362,7 @@
     var consequence = root.querySelector('[data-ooh-alpha-level-consequence]');
     var shell = root.querySelector('.ooh-operation-alpha-level__shell');
     var latest = (state.chain || []).slice(-3);
-    var keyLines = latest.length ? latest.map(function (item) { return item.title + ': ' + item.consequence; }) : ['No field consequence recorded.'];
+    var keyLines = latest.length ? latest.map(function (item) { return midpointDisplayTitle(item) + ': ' + item.consequence; }) : ['No field consequence recorded.'];
     var selected = state.midpointChoice;
     var locked = !!selected;
 
@@ -295,11 +375,14 @@
     setText(root, '[data-ooh-alpha-awareness-status]', 'ENEMY AWARENESS: ' + band(state.enemyAwareness, 4, 8) + ' (' + state.enemyAwareness + ')');
     setText(root, '[data-ooh-alpha-signal-status]', 'SIGNAL STABILITY: ' + state.signalIntegrity + '%');
     renderThreeLineSummary(root.querySelector('[data-ooh-alpha-key-consequences]'), keyLines);
-    setText(root, '[data-ooh-alpha-go-nogo]', selected ? selected.title : 'UNRESOLVED');
+    // Anti-drift: player-facing premonition copy is cosmetic and must not drive routing by itself.
+    renderPremonition(root, state);
 
     if (wrap) {
       wrap.innerHTML = '';
-      decisionCards(state).forEach(function (card) {
+      var cards = decisionCards(state);
+      // Anti-drift: card labels may change, but the internal GO/NO GO ids and weighted outcome logic stay stable.
+      cards.forEach(function (card) {
         var chosen = selected && selected.id === card.id;
         var button = document.createElement('button');
         button.type = 'button';
@@ -307,7 +390,7 @@
         button.classList.toggle('is-selected', chosen);
         button.classList.toggle('is-disabled', locked && !chosen);
         button.disabled = locked;
-        button.innerHTML = '<span>' + card.title + '</span><strong>SITUATION</strong><p>' + card.situation + '</p><strong>DIRECTIVE</strong><p>' + card.directive + '</p><strong>RISK</strong><p>' + card.risk + '</p><strong>CONSEQUENCE</strong><p>' + card.consequence + '</p>';
+        button.innerHTML = '<span>' + midpointDisplayTitle(card) + '</span><strong>SITUATION</strong><p>' + card.situation + '</p><strong>DIRECTIVE</strong><p>' + card.directive + '</p><strong>RISK</strong><p>' + card.risk + '</p><strong>CONSEQUENCE</strong><p>' + card.consequence + '</p>';
         button.addEventListener('click', function () {
           if (button.disabled) {
             return;
@@ -316,10 +399,13 @@
           if (state.midpointChoice) {
             return;
           }
-          state.midpointChoice = card;
-          state.midpointDecision = card.title;
-          state.failed = card.id === 'midpoint-no-go' ? true : state.failed;
-          appendChainEvent(state, card);
+          var outcomeCard = weightedMidpointCard(cards, state);
+          // Anti-drift: this selected outcome controls existing GO/NO-GO routing; display copy above does not.
+          state.midpointChoice = outcomeCard;
+          state.midpointDecision = outcomeCard.title;
+          state.failed = outcomeCard.id === 'midpoint-no-go' ? true : state.failed;
+          recordMidpointOutcome(state, outcomeCard);
+          appendChainEvent(state, outcomeCard);
           render(root);
           if (window.oaScrollToNextPhase) {
             window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-level-next]'));
@@ -342,6 +428,7 @@
       consequence.textContent = selected ? selected.narrative : 'Awaiting command decision.';
     }
     renderChainPanel(root, state);
+    renderMentionedPortraits(root);
     if (next) {
       next.href = selected && selected.route === 'finale' ? next.href.replace(/\/oalevel4$/, '/oafinale') : next.href.replace(/\/oafinale$/, '/oalevel4');
     }

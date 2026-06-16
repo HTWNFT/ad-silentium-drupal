@@ -1,0 +1,49 @@
+OA_RUNTIME_LOOP
+
+PLAYER OBJECTIVE
+Player enters a degraded operational zone, stabilizes signal integrity, completes one extraction objective, and exits before total collapse.
+
+PLAYER ACTIONS
+MOVE
+LOOK
+INTERACT
+HOLD SIGNAL
+SCAN
+EXTRACT
+EXIT
+
+FAILURE CONDITION
+Signal integrity reaches zero before extraction completes.
+
+SUCCESS CONDITION
+Player reaches extraction with the objective stabilized before signal collapse.
+
+CORE LOOP
+ENTER
+-> ORIENT
+-> STABILIZE SIGNAL
+-> LOCATE OBJECTIVE
+-> HANDLE PRESSURE
+-> EXTRACT
+-> DEBRIEF
+-> REPLAY
+
+AD SILENTIUM FEEL
+The game feels like Ad Silentium through signal degradation, operational restraint, consequence-based failure, sparse transmissions, silence pressure, and post-run debrief structure.
+
+OPERATION ALPHA EXCLUSIONS
+NO open world
+NO MMO systems
+NO multiplayer
+NO giant inventory system
+NO cinematic campaign
+NO faction economy
+NO full combat system
+NO broad lore expansion
+NO payment implementation in this file
+
+ALPHA MONETIZATION PATH
+Free operational entry first. Optional credits, cosmetics, supporter access, or paid expanded operations later after the playable loop works.
+
+CURRENT PRIORITY
+Bring the playable runtime up to the atmosphere by building the smallest repeatable operational alpha loop.

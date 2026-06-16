@@ -76,7 +76,73 @@ function ooh_outskirts_theme($existing, $type, $theme, $path) {
       'template' => 'ooh-operation-alpha-credits',
       'path' => $path . '/templates/operation_alpha',
     ],
+
+    'ooh_operation_alpha_level_1' => [
+      'variables' => [],
+      'template' => 'ooh-operation-alpha-level-1',
+      'path' => $path . '/templates/operation_alpha',
+    ],
+
+    'ooh_operation_alpha_level_2' => [
+      'variables' => [],
+      'template' => 'ooh-operation-alpha-level-2',
+      'path' => $path . '/templates/operation_alpha',
+    ],
+
+    'ooh_operation_alpha_level_3' => [
+      'variables' => [],
+      'template' => 'ooh-operation-alpha-level-3',
+      'path' => $path . '/templates/operation_alpha',
+    ],
+
+    'ooh_operation_alpha_level_4' => [
+      'variables' => [],
+      'template' => 'ooh-operation-alpha-level-4',
+      'path' => $path . '/templates/operation_alpha',
+    ],
+
+    'ooh_operation_alpha_finale' => [
+      'variables' => [],
+      'template' => 'ooh-operation-alpha-finale',
+      'path' => $path . '/templates/operation_alpha',
+    ],
   ];
+}
+
+
+/**
+ * Determines whether the current route is an Operation Alpha surface.
+ */
+function _ooh_outskirts_is_operation_alpha_route(): bool {
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  return is_string($route_name) && str_starts_with($route_name, 'ooh_outskirts.operation_alpha');
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function ooh_outskirts_preprocess_html(array &$variables): void {
+  if (!_ooh_outskirts_is_operation_alpha_route()) {
+    return;
+  }
+
+  $variables['attributes']['class'][] = 'ooh-operation-alpha-shell-lockdown';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ */
+function ooh_outskirts_preprocess_page(array &$variables): void {
+  if (!_ooh_outskirts_is_operation_alpha_route()) {
+    return;
+  }
+
+  foreach (['breadcrumb', 'highlighted', 'help'] as $region) {
+    if (isset($variables['page'][$region])) {
+      $variables['page'][$region] = [];
+    }
+  }
 }
 
 /**

@@ -1,0 +1,73 @@
+<section class="ooh-operation-alpha-level ooh-operation-alpha-level--two" data-ooh-alpha-level="2">
+  <div class="ooh-operation-alpha-level__shell">
+    <nav class="ooh-operation-alpha-level__nav" aria-label="Operation Alpha level navigation">
+      <a href="{{ path('ooh_outskirts.operation_alpha') }}">INTRO</a>
+      <a href="{{ path('ooh_outskirts.operation_alpha_level_1') }}">LEVEL 1</a>
+    </nav>
+    <p class="ooh-operation-alpha-level__eyebrow">OPERATION ALPHA // LEVEL 2</p>
+    <h1 class="ooh-operation-alpha-level__title">ESCALATION CASCADE</h1>
+    <p class="ooh-operation-alpha-level__copy">Everything begins breaking. Enemy countermoves, compromised allies, signal failure, and route loss now answer earlier decisions.</p>
+
+    <section class="ooh-operation-alpha-level__status" aria-label="Level 2 runtime state">
+      <div>
+        <span>DIRECTIVES LOCKED</span>
+        <strong data-ooh-alpha-level-count>SELECTED: 0 / REQUIRED: 4</strong>
+      </div>
+      <div>
+        <span>TIME PRESSURE</span>
+        <strong data-ooh-alpha-level-time>PLACEHOLDER 04</strong>
+      </div>
+      <div>
+        <span>DIFFICULTY</span>
+        <strong data-ooh-alpha-level-difficulty>READING LEVEL 1</strong>
+      </div>
+    </section>
+
+    <section class="ooh-operation-alpha-level__choices" aria-label="Escalation cascade narrative decisions" data-ooh-alpha-level-choices></section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Narrative consequence">
+      <span>NARRATIVE CONSEQUENCE</span>
+      <p data-ooh-alpha-level-consequence>Awaiting escalation directive.</p>
+    </section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Chain of consequence">
+      <span>CHAIN OF CONSEQUENCE</span>
+      <div data-ooh-alpha-chain-panel>
+        <p>PLAYER ACTION: Reading Level 1 chain.</p>
+        <p>REACTION: Enemy adaptation pending.</p>
+        <p>CONSEQUENCE: Pressure unresolved.</p>
+        <p>CARRY-FORWARD: Time pressure starting.</p>
+      </div>
+    </section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Level 2 pressure summary">
+      <span>PRESSURE SUMMARY</span>
+      <p data-ooh-alpha-level-summary>WARNING RECEIVED / ROUTE UNSTABLE / SITUATION REPORT PENDING</p>
+    </section>
+
+    <div class="ooh-operation-alpha-level__actions">
+      <a class="ooh-operation-alpha-level__button" href="{{ path('ooh_outskirts.operation_alpha_level_1') }}">BACK</a>
+      <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary is-disabled" href="{{ path('ooh_outskirts.operation_alpha_level_3') }}" aria-disabled="true" data-ooh-alpha-level-next>NEXT STAGE</a>
+    </div>
+    <section class="ooh-operation-alpha-level__transmission" data-ooh-alpha-transmission-popup hidden aria-hidden="true">
+      <div class="ooh-operation-alpha-level__transmission-panel">
+        <div class="ooh-operation-alpha-level__transmission-identity" data-ooh-alpha-transmission-identity hidden>
+          <img class="ooh-operation-alpha-level__transmission-portrait" alt="" data-ooh-alpha-transmission-portrait hidden>
+          <strong data-ooh-alpha-transmission-name></strong>
+          <span data-ooh-alpha-transmission-faction></span>
+          <span data-ooh-alpha-transmission-role></span>
+          <p data-ooh-alpha-transmission-hook></p>
+        </div>
+        <div>
+          <span>UNSEEN HAND TRANSMISSION</span>
+          <h2 data-ooh-alpha-transmission-title>Escalation cascade complete.</h2>
+          <p data-ooh-alpha-transmission-summary>The field is deteriorating, but the route still answers.</p>
+          <p data-ooh-alpha-transmission-gain>GAIN: Enemy pattern exposed.</p>
+          <p data-ooh-alpha-transmission-loss>LOSS: Stability.</p>
+          <p data-ooh-alpha-transmission-danger>DANGER: Final review required.</p>
+          <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary" href="{{ path('ooh_outskirts.operation_alpha_level_3') }}" data-ooh-alpha-transmission-next>NEXT</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>

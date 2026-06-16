@@ -1,0 +1,81 @@
+<section class="ooh-operation-alpha-level ooh-operation-alpha-level--one" data-ooh-alpha-level="1">
+  <div class="ooh-operation-alpha-level__shell">
+    <nav class="ooh-operation-alpha-level__nav" aria-label="Operation Alpha level navigation">
+      <a href="{{ path('ooh_outskirts.operation_alpha') }}">INTRO</a>
+      <a href="{{ path('ooh_outskirts.operation_alpha_nested_playlists') }}">SELECT SIGNAL</a>
+    </nav>
+    <p class="ooh-operation-alpha-level__eyebrow">OPERATION ALPHA // LEVEL 1</p>
+    <h1 class="ooh-operation-alpha-level__title">FIELD PRESSURE</h1>
+    <p class="ooh-operation-alpha-level__copy">Allies enter the field, routes shift, and the first six major decisions create the mission's consequence chain.</p>
+
+    <section class="ooh-operation-alpha-level__status" aria-label="Level 1 runtime state">
+      <div>
+        <span>DIRECTIVES LOCKED</span>
+        <strong data-ooh-alpha-level-count>SELECTED: 0 / REQUIRED: 6</strong>
+      </div>
+      <div>
+        <span>FIELD STATE</span>
+        <strong data-ooh-alpha-level-state>STABLE</strong>
+      </div>
+      <div>
+        <span>SIGNAL</span>
+        <strong data-ooh-alpha-level-signal>UNSELECTED</strong>
+      </div>
+      <div>
+        <span>FIELD TIMER</span>
+        <strong data-ooh-alpha-level1-timer>03:00</strong>
+      </div>
+    </section>
+
+    <section class="ooh-operation-alpha-level__choices" aria-label="Field pressure narrative decisions" data-ooh-alpha-level-choices></section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Narrative consequence">
+      <span>NARRATIVE CONSEQUENCE</span>
+      <p data-ooh-alpha-level-consequence>Awaiting Unseen Hand directive.</p>
+    </section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Chain of consequence">
+      <span>CHAIN OF CONSEQUENCE</span>
+      <div data-ooh-alpha-chain-panel>
+        <p>PLAYER ACTION: Awaiting decision.</p>
+        <p>REACTION: Field quiet.</p>
+        <p>CONSEQUENCE: No change recorded.</p>
+        <p>CARRY-FORWARD: Risk unresolved.</p>
+      </div>
+    </section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Level 1 summary">
+      <span>THREE-LINE SUMMARY</span>
+      <p data-ooh-alpha-level-summary>RONIN ENTERS / COST UNSET / PRESSURE WAITS</p>
+    </section>
+
+    <div class="ooh-operation-alpha-level__actions" data-ooh-alpha-level-actions>
+      <a class="ooh-operation-alpha-level__button" href="{{ path('ooh_outskirts.operation_alpha') }}">BACK</a>
+      <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary is-disabled" href="{{ path('ooh_outskirts.operation_alpha_level_2') }}" aria-disabled="true" data-ooh-alpha-level-next>NEXT STAGE</a>
+      <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--danger" href="{{ path('ooh_outskirts.operation_alpha_level_3') }}" data-ooh-alpha-level-fail hidden>EMERGENCY REPORT</a>
+    </div>
+    <section class="ooh-operation-alpha-level__transmission" data-ooh-alpha-transmission-popup hidden aria-hidden="true">
+      <div class="ooh-operation-alpha-level__transmission-panel">
+        <div class="ooh-operation-alpha-level__transmission-identity" data-ooh-alpha-transmission-identity hidden>
+          <img class="ooh-operation-alpha-level__transmission-portrait" alt="" data-ooh-alpha-transmission-portrait hidden>
+          <strong data-ooh-alpha-transmission-name></strong>
+          <span data-ooh-alpha-transmission-faction></span>
+          <span data-ooh-alpha-transmission-role></span>
+          <span data-ooh-alpha-transmission-path></span>
+          <span data-ooh-alpha-transmission-style></span>
+          <p data-ooh-alpha-transmission-hook></p>
+        </div>
+        <div>
+          <span>UNSEEN HAND TRANSMISSION</span>
+          <h2 data-ooh-alpha-transmission-title>Field pressure complete.</h2>
+          <p data-ooh-alpha-transmission-summary>The chain has teeth now.</p>
+          <p data-ooh-alpha-transmission-gain>GAIN: Route knowledge.</p>
+          <p data-ooh-alpha-transmission-loss>LOSS: Clean signal.</p>
+          <p data-ooh-alpha-transmission-danger>DANGER: Enemy adaptation.</p>
+          <a class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary" href="{{ path('ooh_outskirts.operation_alpha_level_2') }}" data-ooh-alpha-transmission-next>NEXT</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+

@@ -5,7 +5,7 @@
   var requiredChoices = 4;
 
   function defaultState() {
-    return { pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], introChoices: [], level1Choices: [], level2Choices: [], level4Choices: [], narrativeSelections: {}, narrativeTokens: {} };
+    return { pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], introChoices: [], level1Choices: [], level2Choices: [], level4Choices: [], activeIdentity: null, activePortrait: '', castIdentities: null, enemyPressureIdentity: null, enemyPressureMode: '', narrativeSelections: {}, narrativeTokens: {} };
   }
 
   function readOAState() {
@@ -79,6 +79,9 @@
 
   function levelTwoBeats(state) {
     var sections = ['enemyIntroTemplates', 'mutantEncounterTemplates', 'betrayalTemplates'];
+    var pressureIdentity = ensureEnemyPressureIdentity(state);
+    var pressureName = pressureIdentity && pressureIdentity.name ? pressureIdentity.name : 'the pressure contact';
+    var pressureMode = state.enemyPressureMode === 'mutant-enforcer' ? 'mutant enforcer' : 'rival Ronin';
 
     return responseBeats(state).map(function (beat, index) {
       var sectionName = sections[index % sections.length];
@@ -86,15 +89,48 @@
       var hookEntry = narrativeEntry(state, 'level2_hook_' + beat.id, 'consequenceHookTemplates', index + 8);
 
       if (!entry) {
-        return beat;
+        return index === 0 ? Object.assign({}, beat, {
+          situation: pressureName + ' enters as a ' + pressureMode + ' and changes the pressure pattern. ' + beat.situation
+        }) : beat;
       }
 
       return Object.assign({}, beat, {
-        situation: fillNarrativeText(entry.text, state.narrativeTokens),
+        situation: (index === 0 ? pressureName + ' enters as a ' + pressureMode + ' and changes the pressure pattern. ' : '') + fillNarrativeText(entry.text, state.narrativeTokens),
         consequence: hookEntry ? fillNarrativeText(hookEntry.text, state.narrativeTokens) : beat.consequence,
         narrative: fillNarrativeText(entry.text, state.narrativeTokens)
       });
     });
+  }
+
+  function wantsMutantPressure(state) {
+    var choices = state.level1Choices || [];
+
+    return state.enemyAwareness >= state.trust || choices.some(function (choice) {
+      return choice && (choice.id === 'mutant-activity' || choice.id === 'enemy-movement' || choice.id === 'signal-distortion');
+    });
+  }
+
+  function ensureEnemyPressureIdentity(state) {
+    var identities = state.castIdentities || {};
+    var identity;
+
+    if (state.enemyPressureIdentity && state.enemyPressureIdentity.name) {
+      return state.enemyPressureIdentity;
+    }
+    if (wantsMutantPressure(state)) {
+      identity = identities.thirdForce || identities.opposition || null;
+      state.enemyPressureMode = 'mutant-enforcer';
+    }
+    else {
+      identity = identities.rival || identities.opposition || null;
+      state.enemyPressureMode = 'rival-ronin';
+    }
+    if (identity) {
+      state.enemyPressureIdentity = Object.assign({}, identity, {
+        hook: state.enemyPressureMode === 'mutant-enforcer' ? identity.name + ' reinforces Genealord pressure from the corridor edge.' : identity.name + ' contests the protagonist from a rival Ronin line.'
+      });
+    }
+    return state.enemyPressureIdentity || null;
   }
 
   function renderChainPanel(root, state) {
@@ -227,7 +263,7 @@
     var faction = root.querySelector('[data-ooh-alpha-transmission-faction]');
     var role = root.querySelector('[data-ooh-alpha-transmission-role]');
     var hook = root.querySelector('[data-ooh-alpha-transmission-hook]');
-    var identity = Object.assign({}, state.activeIdentity || {});
+    var identity = Object.assign({}, ensureEnemyPressureIdentity(state) || state.activeIdentity || {});
 
     if (!identity.portrait && state.activePortrait) {
       identity.portrait = state.activePortrait;
@@ -271,6 +307,25 @@
     }
   }
 
+  function renderMentionedPortraits(root) {
+    if (!window.oohOperationAlphaRenderSupportingPortraitsForSelectors) {
+      if (root && !root.oohAlphaMentionedPortraitRetryQueued) {
+        root.oohAlphaMentionedPortraitRetryQueued = true;
+        window.setTimeout(function () {
+          renderMentionedPortraits(root);
+        }, 250);
+      }
+      return;
+    }
+    window.oohOperationAlphaRenderSupportingPortraitsForSelectors(root, [
+      '[data-ooh-alpha-level-summary]',
+      '[data-ooh-alpha-level-consequence]',
+      '[data-ooh-alpha-level-choices]',
+      '[data-ooh-alpha-chain-panel]',
+      '[data-ooh-alpha-transmission-popup]'
+    ]);
+  }
+
   function bindLockedLink(link) {
     if (!link || link.oohAlphaLockedBound) {
       return;
@@ -300,6 +355,7 @@
     root.querySelector('[data-ooh-alpha-transmission-gain]').textContent = 'GAIN: Enemy pressure has revealed its pattern.';
     root.querySelector('[data-ooh-alpha-transmission-loss]').textContent = 'LOSS: Signal stability and trust have been tested.';
     root.querySelector('[data-ooh-alpha-transmission-danger]').textContent = 'DANGER: Command must decide whether Last Light is worth the cost.';
+    renderMentionedPortraits(root);
     writeOAState(state);
     if (next) {
       next.href = href;
@@ -394,6 +450,7 @@
     }
     renderChainPanel(root, state);
     renderThreeLineSummary(summary, state);
+    renderMentionedPortraits(root);
     setDisabled(next, !locked);
     bindLockedLink(next);
     bindTransmissionLink(root, next);

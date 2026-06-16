@@ -18,6 +18,10 @@
     <source src="{{ ooh_wind_src }}" type="audio/mpeg">
   </audio>
 
+  <button class="ooh-utility-button ooh-sound-toggle" type="button" aria-pressed="false" data-ooh-sound-toggle>
+    SOUND
+  </button>
+
    <div class="ooh-account-cluster" aria-label="Account and credits">
     {% if ooh_logged_in %}
       <a class="ooh-utility-button ooh-account-status" href="{{ path('user.page') }}" data-ooh-action="login">
@@ -47,7 +51,7 @@
       {% if loops is not empty %}
         {% for loop in loops %}
           <div class="ooh-hero__slide{% if loop.active %} is-active{% endif %}" aria-hidden="{{ loop.active ? 'false' : 'true' }}">
-            <video class="ooh-hero__video" muted playsinline preload="metadata" data-ooh-homepage-video-disabled="true" aria-hidden="true">
+            <video class="ooh-hero__video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
               <source src="{{ loop.url }}" type="video/mp4">
             </video>
           </div>
@@ -174,6 +178,8 @@
     </div>
   </section>
   <div class="ooh-signature">
-    © 2026 Nathan Ritzo
+    ? 2026 Nathan Ritzo
   </div>
 </section>
+
+

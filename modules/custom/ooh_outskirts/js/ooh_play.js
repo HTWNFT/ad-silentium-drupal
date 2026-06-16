@@ -894,9 +894,9 @@
       }
       const cadenceLines = runtimeCadenceLines(root);
       pulseRuntimeCadence(root, 'cadence', 1100);
-      nudgeLocalTelemetryPulse(root, cadenceLines[1] || 'CADENCE STABLE', 1, 1900);
+      nudgeLocalTelemetryPulse(root, cadenceLines[1] || 'FIELD PRESSURE ACTIVE', 1, 1900);
       root.oohRuntimeCadenceNudgeTimer = null;
-    }, 5600);
+    }, 3200);
   }
 
   function pulseRuntimeCadence(root, state, holdMs) {
@@ -2254,7 +2254,7 @@
         resetMissionRuntime(root);
         const activateButton = root.querySelector('[data-ooh-activate-mission]');
         if (activateButton && missionEntryReady(root)) {
-          activateButton.textContent = 'ACTIVATE MISSION';
+          activateButton.textContent = 'ENTER FIELD';
           activateButton.disabled = false;
           activateButton.setAttribute('aria-disabled', 'false');
           setActivationReadyState(root, root.querySelector('[data-ooh-scene-shell]'), activateButton);
@@ -2999,7 +2999,7 @@
       encounter.removeAttribute('data-encounter-state');
     }
     if (sceneStatus && missionEntryReady(root)) {
-      sceneStatus.textContent = 'MISSION STAGED // ACTIVATE MISSION TO ENTER FIELD';
+      sceneStatus.textContent = 'FIELD STAGED // ENTER FIELD // SCAN / HOLD / SIGNAL';
     }
   }
 
@@ -4147,15 +4147,15 @@
 
   function buildActiveSceneStatus(routeId, pathKey, missionLabel) {
     const routeStates = {
-      aer: 'MISSION ACTIVE. Sky corridor live. Maintain altitude discipline.',
-      mare: 'MISSION ACTIVE. Pressure zone live. Maintain oxygen discipline.',
-      terra: 'MISSION ACTIVE. Ground route live. Maintain signal discipline.'
+      aer: 'FIELD ACTIVE. Sky corridor live. Scan, hold, or check signal.',
+      mare: 'FIELD ACTIVE. Pressure zone live. Scan, hold, or check signal.',
+      terra: 'FIELD ACTIVE. Ground route live. Scan, hold, or check signal.'
     };
     const pathTone = pathKey === 'DOOMED' ?
-      ' DOOMED presentation channel unstable.' :
-      (pathKey === 'MERGED' ? ' MERGED presentation channel synchronized.' : '');
+      ' DOOMED channel unstable.' :
+      (pathKey === 'MERGED' ? ' MERGED channel synchronized.' : '');
 
-    return (routeStates[routeId] || routeStates.terra) + pathTone + ' Mission type: ' + missionLabel + '.';
+    return (routeStates[routeId] || routeStates.terra) + pathTone + ' Objective: ' + missionLabel + '.';
   }
 
   function buildCombatShellSceneStatus(routeId, pathKey, missionLabel) {
@@ -4714,7 +4714,7 @@
     }
     return 'hippo_ronin';
   }
-  
+
 function applyGeneratedContact(routeId, pathKey, missionLabel) {
   setActiveEnemyContactArchetypeId(generatedContactArchetypeId(routeId, pathKey, missionLabel));
   const archetype = activeEnemyContactArchetype();
@@ -5128,7 +5128,7 @@ function passiveBehaviorPreviewLabel() {
   presence.textContent = generatedContactPresenceText;
   presence.hidden = !generatedContactPresenceText;
  }
-  
+
   function ensureArchetypeSelector(encounter) {
     if (!encounter) {
       return null;
@@ -6280,7 +6280,7 @@ function passiveBehaviorPreviewLabel() {
         ['EXFIL SYNCHRONIZING', 'EXTRACTION WINDOW ACTIVE', cadenceFlavor(root, 'extraction_sync', 'HOLD THE CHANNEL')] :
         ['RELAY ALIGNMENT IN PROGRESS', 'CHANNEL NOT READY']);
     const pressure = interferenceBand(runtime ? runtime.interferencePressure : 0);
-    const lines = ['PAYLOAD ECHO STABLE', 'LOCAL CHANNEL NORMAL', 'PASSIVE SCAN CYCLING', 'DISPLAY CHANNEL HOLDING']
+    const lines = ['FIELD ACCESS STABLE', 'LOCAL CHANNEL ACTIVE', 'PASSIVE SCAN CYCLING', 'DISPLAY CHANNEL HOLDING']
       .concat(runtimeCadenceLines(root))
       .concat(contactPresenceTelemetryLines(root))
       .concat(pressureCurveTelemetryLines(root))
@@ -6744,7 +6744,7 @@ function passiveBehaviorPreviewLabel() {
       });
       const readout = hud.querySelector('[data-ooh-action-readout]');
       if (readout) {
-        showLocalCadenceBeat(root, 'PAYLOAD ECHO STABLE', 'Passive inputs online. Awaiting SCAN, HOLD POSITION, or CHECK SIGNAL.', 220);
+        showLocalCadenceBeat(root, 'FIELD ENTRY CONFIRMED', 'Runtime unstable. Use SCAN, HOLD POSITION, or CHECK SIGNAL.', 120);
       }
       renderMediaAttachmentLayer(root, hud, root.oohMediaAttachment);
       if (root.oohMediaAttachment && root.oohMediaAttachment.attached) {
@@ -6754,7 +6754,7 @@ function passiveBehaviorPreviewLabel() {
       if (operationCondition) {
         showLocalCadenceBeat(root, operationCondition.fieldLabel || operationCondition.label, operationCondition.cadenceFlavor, 320);
       }
-      showLocalCadenceBeat(root, 'CADENCE STABLE', (runtimeCadenceLines(root)[3] || 'FIELD DISTORTION MINOR'), 340, { holdMs: 1900, settleHoldMs: 1900 });
+      showLocalCadenceBeat(root, 'FIELD PRESSURE ACTIVE', (runtimeCadenceLines(root)[3] || 'FIELD DISTORTION MINOR'), 180, { holdMs: 1700, settleHoldMs: 1700 });
       scheduleMovementHint(root);
       startLocalTelemetryPulse(root, routeId, pathKey, 'mission');
       scheduleRuntimeCadenceNudge(root);
@@ -6930,11 +6930,11 @@ function passiveBehaviorPreviewLabel() {
     const promptLabel = selectedPrompt ? (selectedPrompt.title || selectedPrompt.id || 'Sealed source') : 'Sealed source';
 
     return [
-      'Route ' + routeLabel(routeId) + ' accepts the dossier.',
-      missionLabel + ' is assigned under ' + pathLabel + ' supervision.',
-      recruiterName + ' confirms the selected evolution path and locks the mission channel.',
-      'Playlist theme: ' + playlistLabel + '.',
-      'Mission source: ' + promptLabel + '. Runtime prompt text is sealed from field display.'
+      'OPERATION ALPHA MODE // HOSTILE RUNTIME ACCESS',
+      'Enter field: ' + routeLabel(routeId) + ' // ' + missionLabel + ' // ' + pathLabel + '.',
+      'Active loop: SCAN / HOLD / SIGNAL under rising interference.',
+      'Human trace: ' + recruiterName + ' remains intermittent. Playlist pressure: ' + playlistLabel + '.',
+      'Full narrative source preserved: ' + promptLabel + '. Sealed from fast runtime display.'
     ].join('\n');
   }
 
@@ -7001,7 +7001,7 @@ function passiveBehaviorPreviewLabel() {
     }
 
     if (sceneStatus) {
-      sceneStatus.textContent = 'MISSION STAGED // ACTIVATE MISSION TO ENTER FIELD' + (payloadAudit.routeFallbackUsed ? ' // ROUTE FALLBACK: TERRA' : '');
+      sceneStatus.textContent = 'FIELD STAGED // ENTER FIELD // SCAN / HOLD / SIGNAL' + (payloadAudit.routeFallbackUsed ? ' // ROUTE FALLBACK: TERRA' : '');
     }
 
     if (activateButton) {

@@ -22,7 +22,9 @@ class OohLandingBlock extends BlockBase {
    */
   public function build() {
     $base_path = rtrim(\Drupal::request()->getBasePath(), '/');
+    $module_path = \Drupal::service('extension.list.module')->getPath('ooh_outskirts');
     $dossier_url = Html::escape(Url::fromRoute('ooh_outskirts.dossier')->toString());
+    $audio_src = Html::escape($base_path . '/' . $module_path . '/audio/wind-ambient.mp3');
 
     $loops_dir = \Drupal::service('file_system')->realpath('public://adsilentium/loops');
     $loops_web_path = $base_path . '/sites/default/files/adsilentium/loops';
@@ -63,7 +65,7 @@ class OohLandingBlock extends BlockBase {
 
         $slides_markup .= <<<HTML
 <div class="ooh-hero__slide ooh-hero__slide--video{$is_active}" aria-hidden="{$aria_hidden}">
-  <video class="ooh-hero__video" autoplay muted loop playsinline preload="auto">
+  <video class="ooh-hero__video" muted playsinline preload="metadata" data-ooh-homepage-video-disabled="true" aria-hidden="true">
     <source src="{$file_url_escaped}" type="video/mp4">
   </video>
 
@@ -96,6 +98,9 @@ HTML;
 
     $template = <<<HTML
 <section class="ooh-hero ooh-hero-carousel ooh-hero--random-loops ooh-hero--cinematic" id="ooh-hero" data-ooh-hero>
+  <audio class="ooh-ambient-audio" data-ooh-ambient-audio preload="auto" loop playsinline>
+    <source src="{$audio_src}" type="audio/mpeg">
+  </audio>
 
   <div class="ooh-hero__carousel">
     {$slides_markup}
@@ -119,49 +124,6 @@ HTML;
       </button>
     </div>
   </div>
-
-  <script>
-    (function () {
-      var storageKey = 'adSilentiumPrologueSeen';
-
-      function openPrologueOnce() {
-        var hasSeen = false;
-
-        try {
-          hasSeen = window.localStorage.getItem(storageKey) === '1';
-        }
-        catch (e) {
-          hasSeen = false;
-        }
-
-        if (hasSeen) {
-          return;
-        }
-
-        var opener = document.querySelector('[data-ooh-prologue-open]');
-
-        if (!opener) {
-          return;
-        }
-
-        try {
-          window.localStorage.setItem(storageKey, '1');
-        }
-        catch (e) {}
-
-        window.setTimeout(function () {
-          opener.click();
-        }, 700);
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', openPrologueOnce, { once: true });
-      }
-      else {
-        openPrologueOnce();
-      }
-    })();
-  </script>
 
 </section>
 HTML;

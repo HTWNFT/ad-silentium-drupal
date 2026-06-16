@@ -1,0 +1,3734 @@
+html:has(body.path-operation-alpha),
+html:has(body.path-operation-alpha-credits),
+html:has(body.path-operation-alpha-oaplay-playlists),
+html:has(body.path-operation-alpha-oaplay),
+html:has(body.path-operation-alpha-operation),
+html:has(body.path-oaplaylists),
+html:has(body.path-oaplay-playlists),
+html:has(body.path-oaplay),
+body.path-operation-alpha,
+body.path-operation-alpha-credits,
+body.path-operation-alpha-oaplay-playlists,
+body.path-operation-alpha-oaplay,
+body.path-operation-alpha-operation,
+body.path-oaplaylists,
+body.path-oaplay-playlists,
+body.path-oaplay {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  background: #020507 !important;
+}
+
+body.path-operation-alpha .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-credits .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-oaplay-playlists .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-oaplay .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-operation .dialog-off-canvas-main-canvas,
+body.path-oaplaylists .dialog-off-canvas-main-canvas,
+body.path-oaplay-playlists .dialog-off-canvas-main-canvas,
+body.path-oaplay .dialog-off-canvas-main-canvas,
+body.path-operation-alpha #page-wrapper,
+body.path-operation-alpha-credits #page-wrapper,
+body.path-operation-alpha-oaplay-playlists #page-wrapper,
+body.path-operation-alpha-oaplay #page-wrapper,
+body.path-operation-alpha-operation #page-wrapper,
+body.path-oaplaylists #page-wrapper,
+body.path-oaplay-playlists #page-wrapper,
+body.path-oaplay #page-wrapper,
+body.path-operation-alpha #page,
+body.path-operation-alpha-credits #page,
+body.path-operation-alpha-oaplay-playlists #page,
+body.path-operation-alpha-oaplay #page,
+body.path-operation-alpha-operation #page,
+body.path-oaplaylists #page,
+body.path-oaplay-playlists #page,
+body.path-oaplay #page,
+body.path-operation-alpha #main-wrapper,
+body.path-operation-alpha-credits #main-wrapper,
+body.path-operation-alpha-oaplay-playlists #main-wrapper,
+body.path-operation-alpha-oaplay #main-wrapper,
+body.path-operation-alpha-operation #main-wrapper,
+body.path-oaplaylists #main-wrapper,
+body.path-oaplay-playlists #main-wrapper,
+body.path-oaplay #main-wrapper,
+body.path-operation-alpha main,
+body.path-operation-alpha-credits main,
+body.path-operation-alpha-oaplay-playlists main,
+body.path-operation-alpha-oaplay main,
+body.path-operation-alpha-operation main,
+body.path-oaplaylists main,
+body.path-oaplay-playlists main,
+body.path-oaplay main,
+body.path-operation-alpha #main,
+body.path-operation-alpha-credits #main,
+body.path-operation-alpha-oaplay-playlists #main,
+body.path-operation-alpha-oaplay #main,
+body.path-operation-alpha-operation #main,
+body.path-oaplaylists #main,
+body.path-oaplay-playlists #main,
+body.path-oaplay #main,
+body.path-operation-alpha .main-content,
+body.path-operation-alpha-credits .main-content,
+body.path-operation-alpha-oaplay-playlists .main-content,
+body.path-operation-alpha-oaplay .main-content,
+body.path-operation-alpha-operation .main-content,
+body.path-oaplaylists .main-content,
+body.path-oaplay-playlists .main-content,
+body.path-oaplay .main-content,
+body.path-operation-alpha .container,
+body.path-operation-alpha-credits .container,
+body.path-operation-alpha-oaplay-playlists .container,
+body.path-operation-alpha-oaplay .container,
+body.path-operation-alpha-operation .container,
+body.path-oaplaylists .container,
+body.path-oaplay-playlists .container,
+body.path-oaplay .container,
+body.path-operation-alpha .container-fluid,
+body.path-operation-alpha-credits .container-fluid,
+body.path-operation-alpha-oaplay-playlists .container-fluid,
+body.path-operation-alpha-oaplay .container-fluid,
+body.path-operation-alpha-operation .container-fluid,
+body.path-oaplaylists .container-fluid,
+body.path-oaplay-playlists .container-fluid,
+body.path-oaplay .container-fluid,
+body.path-operation-alpha .region-content,
+body.path-operation-alpha-credits .region-content,
+body.path-operation-alpha-oaplay-playlists .region-content,
+body.path-operation-alpha-oaplay .region-content,
+body.path-operation-alpha-operation .region-content,
+body.path-oaplaylists .region-content,
+body.path-oaplay-playlists .region-content,
+body.path-oaplay .region-content,
+body.path-operation-alpha .row,
+body.path-operation-alpha-credits .row,
+body.path-operation-alpha-oaplay-playlists .row,
+body.path-operation-alpha-oaplay .row,
+body.path-operation-alpha-operation .row,
+body.path-oaplaylists .row,
+body.path-oaplay-playlists .row,
+body.path-oaplay .row,
+body.path-operation-alpha .section,
+body.path-operation-alpha-credits .section,
+body.path-operation-alpha-oaplay-playlists .section,
+body.path-operation-alpha-oaplay .section,
+body.path-operation-alpha-operation .section,
+body.path-oaplaylists .section,
+body.path-oaplay-playlists .section,
+body.path-oaplay .section {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: #020507 !important;
+  box-shadow: none !important;
+}
+
+body.path-operation-alpha #header,
+body.path-operation-alpha-credits #header,
+body.path-operation-alpha-oaplay-playlists #header,
+body.path-operation-alpha-oaplay #header,
+body.path-operation-alpha-operation #header,
+body.path-oaplaylists #header,
+body.path-oaplay-playlists #header,
+body.path-oaplay #header,
+body.path-operation-alpha .breadcrumb,
+body.path-operation-alpha-credits .breadcrumb,
+body.path-operation-alpha-oaplay-playlists .breadcrumb,
+body.path-operation-alpha-oaplay .breadcrumb,
+body.path-operation-alpha-operation .breadcrumb,
+body.path-oaplaylists .breadcrumb,
+body.path-oaplay-playlists .breadcrumb,
+body.path-oaplay .breadcrumb,
+body.path-operation-alpha .block-system-breadcrumb-block,
+body.path-operation-alpha-credits .block-system-breadcrumb-block,
+body.path-operation-alpha-oaplay-playlists .block-system-breadcrumb-block,
+body.path-operation-alpha-oaplay .block-system-breadcrumb-block,
+body.path-operation-alpha-operation .block-system-breadcrumb-block,
+body.path-oaplaylists .block-system-breadcrumb-block,
+body.path-oaplay-playlists .block-system-breadcrumb-block,
+body.path-oaplay .block-system-breadcrumb-block,
+body.path-operation-alpha #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-credits #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-oaplay-playlists #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-operation #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-oaplaylists #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-oaplay-playlists #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha .block-page-title-block,
+body.path-operation-alpha-credits .block-page-title-block,
+body.path-operation-alpha-oaplay-playlists .block-page-title-block,
+body.path-operation-alpha-oaplay .block-page-title-block,
+body.path-operation-alpha-operation .block-page-title-block,
+body.path-oaplaylists .block-page-title-block,
+body.path-oaplay-playlists .block-page-title-block,
+body.path-oaplay .block-page-title-block,
+body.path-operation-alpha .tabs,
+body.path-operation-alpha-credits .tabs,
+body.path-operation-alpha-oaplay-playlists .tabs,
+body.path-operation-alpha-oaplay .tabs,
+body.path-operation-alpha-operation .tabs,
+body.path-oaplaylists .tabs,
+body.path-oaplay-playlists .tabs,
+body.path-oaplay .tabs,
+body.path-operation-alpha .messages,
+body.path-operation-alpha-credits .messages,
+body.path-operation-alpha-oaplay-playlists .messages,
+body.path-operation-alpha-oaplay .messages,
+body.path-operation-alpha-operation .messages,
+body.path-oaplaylists .messages,
+body.path-oaplay-playlists .messages,
+body.path-oaplay .messages,
+body.path-operation-alpha .site-footer,
+body.path-operation-alpha-credits .site-footer,
+body.path-operation-alpha-oaplay-playlists .site-footer,
+body.path-operation-alpha-oaplay .site-footer,
+body.path-operation-alpha-operation .site-footer,
+body.path-oaplaylists .site-footer,
+body.path-oaplay-playlists .site-footer,
+body.path-oaplay .site-footer {
+  display: none !important;
+}
+
+body.path-operation-alpha .ooh-operation-alpha,
+body.path-operation-alpha-credits .ooh-operation-alpha,
+body.path-operation-alpha-oaplay-playlists .ooh-operation-alpha,
+body.path-operation-alpha-oaplay .ooh-operation-alpha,
+body.path-operation-alpha-operation .ooh-operation-alpha,
+body.path-oaplaylists .ooh-operation-alpha,
+body.path-oaplay-playlists .ooh-operation-alpha,
+body.path-oaplay .ooh-operation-alpha {
+  width: 100vw !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  padding-inline: clamp(16px, 4vw, 32px) !important;
+}
+body.ooh-operation-alpha-shell-lockdown,
+body.ooh-operation-alpha-shell-lockdown .dialog-off-canvas-main-canvas,
+body.ooh-operation-alpha-shell-lockdown #page-wrapper,
+body.ooh-operation-alpha-shell-lockdown #page,
+body.ooh-operation-alpha-shell-lockdown #main-wrapper,
+body.ooh-operation-alpha-shell-lockdown #main,
+body.ooh-operation-alpha-shell-lockdown #content,
+body.ooh-operation-alpha-shell-lockdown .container,
+body.ooh-operation-alpha-shell-lockdown .container-fluid,
+body.ooh-operation-alpha-shell-lockdown .row,
+body.ooh-operation-alpha-shell-lockdown .main-content,
+body.ooh-operation-alpha-shell-lockdown .section,
+body.ooh-operation-alpha-shell-lockdown .region,
+body.ooh-operation-alpha-shell-lockdown .region-content,
+body.ooh-operation-alpha-shell-lockdown .block,
+body.ooh-operation-alpha-shell-lockdown .block-system-main-block {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: #020507 !important;
+  box-shadow: none !important;
+}
+
+body.ooh-operation-alpha-shell-lockdown {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  color: #dffcff;
+}
+
+body.ooh-operation-alpha-shell-lockdown #header,
+body.ooh-operation-alpha-shell-lockdown .highlighted,
+body.ooh-operation-alpha-shell-lockdown .region-highlighted,
+body.ooh-operation-alpha-shell-lockdown .breadcrumb,
+body.ooh-operation-alpha-shell-lockdown .block-system-breadcrumb-block,
+body.ooh-operation-alpha-shell-lockdown #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.ooh-operation-alpha-shell-lockdown .block-page-title-block,
+body.ooh-operation-alpha-shell-lockdown #block-bootstrap-barrio-subtheme-page-title,
+body.ooh-operation-alpha-shell-lockdown .tabs,
+body.ooh-operation-alpha-shell-lockdown .block-local-tasks-block,
+body.ooh-operation-alpha-shell-lockdown #block-bootstrap-barrio-subtheme-local-tasks,
+body.ooh-operation-alpha-shell-lockdown .messages,
+body.ooh-operation-alpha-shell-lockdown .alert,
+body.ooh-operation-alpha-shell-lockdown .site-footer {
+  display: none !important;
+}
+
+body.ooh-operation-alpha-shell-lockdown .ooh-operation-alpha,
+body.ooh-operation-alpha-shell-lockdown .ooh-operation-alpha-level {
+  margin: 0 !important;
+  margin-inline: calc(50% - 50vw) !important;
+}
+
+body.path-operation-alpha,
+body.path-operation-alpha .dialog-off-canvas-main-canvas,
+body.path-operation-alpha #page-wrapper,
+body.path-operation-alpha #page,
+body.path-operation-alpha #main-wrapper,
+body.path-operation-alpha #main,
+body.path-operation-alpha main,
+body.path-operation-alpha .main-content,
+body.path-operation-alpha .region-content,
+body.path-operation-alpha .block-system-main-block,
+body.path-operation-alpha #content,
+body.path-operation-alpha .container,
+body.path-operation-alpha .container-fluid {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: #020507 !important;
+  box-shadow: none !important;
+}
+
+body.path-operation-alpha .container,
+body.path-operation-alpha .container-fluid {
+  --bs-gutter-x: 0;
+  --bs-gutter-y: 0;
+}
+
+body.path-operation-alpha .row {
+  --bs-gutter-x: 0;
+  --bs-gutter-y: 0;
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+body.path-operation-alpha .row > * {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+body.path-operation-alpha .region-breadcrumb,
+body.path-operation-alpha .breadcrumb,
+body.path-operation-alpha nav.breadcrumb,
+body.path-operation-alpha .block-system-breadcrumb-block,
+body.path-operation-alpha [id*="breadcrumb"],
+body.path-operation-alpha [class*="breadcrumb"] {
+  display: none !important;
+}
+
+body.path-operation-alpha .region-breadcrumb a[href="/"],
+body.path-operation-alpha .breadcrumb a[href="/"],
+body.path-operation-alpha nav.breadcrumb a[href="/"],
+body.path-operation-alpha .block-system-breadcrumb-block a[href="/"],
+body.path-operation-alpha [id*="breadcrumb"] a[href="/"],
+body.path-operation-alpha [class*="breadcrumb"] a[href="/"] {
+  display: none !important;
+}
+
+body.path-operation-alpha .ooh-operation-alpha {
+  width: 100vw !important;
+  max-width: none !important;
+  min-height: 100vh !important;
+  min-height: 100dvh !important;
+  margin: 0 !important;
+  margin-inline: calc(50% - 50vw) !important;
+  box-sizing: border-box !important;
+}
+
+body.path-operation-alpha .ooh-operation-alpha button,
+body.path-operation-alpha .ooh-operation-alpha a.btn,
+body.path-operation-alpha .ooh-operation-alpha a[class*="button"],
+body.path-operation-alpha .ooh-operation-alpha a[class*="btn"],
+body.path-operation-alpha .ooh-operation-alpha [role="button"],
+body.path-operation-alpha .ooh-operation-alpha input[type="button"],
+body.path-operation-alpha .ooh-operation-alpha input[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  border: 1px solid rgba(130, 245, 255, 0.34) !important;
+  border-radius: 4px !important;
+  color: rgba(223, 252, 255, 0.92) !important;
+  background: rgba(1, 8, 11, 0.58) !important;
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.04);
+  cursor: pointer;
+  font-family: Oxanium, "Segoe UI Semibold", system-ui, sans-serif !important;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none !important;
+  text-transform: uppercase;
+}
+
+body.path-operation-alpha .ooh-operation-alpha button:hover,
+body.path-operation-alpha .ooh-operation-alpha button:focus-visible,
+body.path-operation-alpha .ooh-operation-alpha a.btn:hover,
+body.path-operation-alpha .ooh-operation-alpha a.btn:focus-visible,
+body.path-operation-alpha .ooh-operation-alpha a[class*="button"]:hover,
+body.path-operation-alpha .ooh-operation-alpha a[class*="button"]:focus-visible,
+body.path-operation-alpha .ooh-operation-alpha a[class*="btn"]:hover,
+body.path-operation-alpha .ooh-operation-alpha a[class*="btn"]:focus-visible,
+body.path-operation-alpha .ooh-operation-alpha [role="button"]:hover,
+body.path-operation-alpha .ooh-operation-alpha [role="button"]:focus-visible,
+body.path-operation-alpha .ooh-operation-alpha input[type="button"]:hover,
+body.path-operation-alpha .ooh-operation-alpha input[type="button"]:focus-visible,
+body.path-operation-alpha .ooh-operation-alpha input[type="submit"]:hover,
+body.path-operation-alpha .ooh-operation-alpha input[type="submit"]:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68) !important;
+  color: #dffcff !important;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.06),
+    0 0 16px rgba(89, 243, 255, 0.14);
+}
+html:has(.ooh-operation-alpha),
+body:has(.ooh-operation-alpha),
+body.path-operation-alpha,
+body.path-operation-alpha-credits,
+body.path-operation-alpha-oaplay-playlists,
+body.path-operation-alpha-oaplay,
+body.path-operation-alpha-operation,
+body.path-oaplay-playlists,
+body.path-oaplay,
+body.ooh-operation-alpha-runtime {
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  background: #020507 !important;
+}
+
+body.path-operation-alpha #header,
+body.path-operation-alpha-credits #header,
+body.path-operation-alpha-oaplay-playlists #header,
+body.path-operation-alpha-oaplay #header,
+body.path-operation-alpha-operation #header,
+body.path-oaplay-playlists #header,
+body.path-oaplaylists #header,
+body.path-oaplay #header,
+body.path-operation-alpha .highlighted,
+body.path-operation-alpha-credits .highlighted,
+body.path-operation-alpha-oaplay-playlists .highlighted,
+body.path-operation-alpha-oaplay .highlighted,
+body.path-operation-alpha-operation .highlighted,
+body.path-oaplay-playlists .highlighted,
+body.path-oaplaylists .highlighted,
+body.path-oaplay .highlighted,
+body.path-operation-alpha #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-credits #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-oaplay-playlists #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha-operation #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-oaplay-playlists #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-oaplaylists #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-oaplay #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.path-operation-alpha .site-footer,
+body.path-operation-alpha-credits .site-footer,
+body.path-operation-alpha-oaplay-playlists .site-footer,
+body.path-operation-alpha-oaplay .site-footer,
+body.path-operation-alpha-operation .site-footer,
+body.path-oaplay-playlists .site-footer,
+body.path-oaplaylists .site-footer,
+body.path-oaplay .site-footer,
+body.ooh-operation-alpha-runtime #header,
+body.ooh-operation-alpha-runtime .highlighted,
+body.ooh-operation-alpha-runtime #block-bootstrap-barrio-subtheme-breadcrumbs,
+body.ooh-operation-alpha-runtime .site-footer {
+  display: none !important;
+}
+
+body.path-operation-alpha .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-credits .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-oaplay-playlists .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-oaplay .dialog-off-canvas-main-canvas,
+body.path-operation-alpha-operation .dialog-off-canvas-main-canvas,
+body.path-oaplay-playlists .dialog-off-canvas-main-canvas,
+body.path-oaplaylists .dialog-off-canvas-main-canvas,
+body.path-oaplay .dialog-off-canvas-main-canvas,
+body.path-operation-alpha #page-wrapper,
+body.path-operation-alpha-credits #page-wrapper,
+body.path-operation-alpha-oaplay-playlists #page-wrapper,
+body.path-operation-alpha-oaplay #page-wrapper,
+body.path-operation-alpha-operation #page-wrapper,
+body.path-oaplay-playlists #page-wrapper,
+body.path-oaplaylists #page-wrapper,
+body.path-oaplay #page-wrapper,
+body.path-operation-alpha #page,
+body.path-operation-alpha-credits #page,
+body.path-operation-alpha-oaplay-playlists #page,
+body.path-operation-alpha-oaplay #page,
+body.path-operation-alpha-operation #page,
+body.path-oaplay-playlists #page,
+body.path-oaplaylists #page,
+body.path-oaplay #page,
+body.path-operation-alpha #main-wrapper,
+body.path-operation-alpha-credits #main-wrapper,
+body.path-operation-alpha-oaplay-playlists #main-wrapper,
+body.path-operation-alpha-oaplay #main-wrapper,
+body.path-operation-alpha-operation #main-wrapper,
+body.path-oaplay-playlists #main-wrapper,
+body.path-oaplaylists #main-wrapper,
+body.path-oaplay #main-wrapper,
+body.path-operation-alpha #main,
+body.path-operation-alpha-credits #main,
+body.path-operation-alpha-oaplay-playlists #main,
+body.path-operation-alpha-oaplay #main,
+body.path-operation-alpha-operation #main,
+body.path-oaplay-playlists #main,
+body.path-oaplaylists #main,
+body.path-oaplay #main,
+body.path-operation-alpha .row,
+body.path-operation-alpha-credits .row,
+body.path-operation-alpha-oaplay-playlists .row,
+body.path-operation-alpha-oaplay .row,
+body.path-operation-alpha-operation .row,
+body.path-oaplay-playlists .row,
+body.path-oaplaylists .row,
+body.path-oaplay .row,
+body.path-operation-alpha .main-content,
+body.path-operation-alpha-credits .main-content,
+body.path-operation-alpha-oaplay-playlists .main-content,
+body.path-operation-alpha-oaplay .main-content,
+body.path-operation-alpha-operation .main-content,
+body.path-oaplay-playlists .main-content,
+body.path-oaplaylists .main-content,
+body.path-oaplay .main-content,
+body.path-operation-alpha .section,
+body.path-operation-alpha-credits .section,
+body.path-operation-alpha-oaplay-playlists .section,
+body.path-operation-alpha-oaplay .section,
+body.path-operation-alpha-operation .section,
+body.path-oaplay-playlists .section,
+body.path-oaplaylists .section,
+body.path-oaplay .section,
+body.ooh-operation-alpha-runtime .dialog-off-canvas-main-canvas,
+body.ooh-operation-alpha-runtime #page-wrapper,
+body.ooh-operation-alpha-runtime #page,
+body.ooh-operation-alpha-runtime #main-wrapper,
+body.ooh-operation-alpha-runtime #main,
+body.ooh-operation-alpha-runtime .row,
+body.ooh-operation-alpha-runtime .main-content,
+body.ooh-operation-alpha-runtime .section {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+body:has(.ooh-operation-alpha) .container,
+body:has(.ooh-operation-alpha) .container-fluid,
+body:has(.ooh-operation-alpha) .layout-container,
+body:has(.ooh-operation-alpha) .layout-main-wrapper,
+body:has(.ooh-operation-alpha) .region,
+body:has(.ooh-operation-alpha) .region-content,
+body:has(.ooh-operation-alpha) #content,
+body:has(.ooh-operation-alpha) .block,
+body:has(.ooh-operation-alpha) .block-system-main-block {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+body.path-operation-alpha .row,
+body.path-operation-alpha-credits .row,
+body.path-operation-alpha-oaplay-playlists .row,
+body.path-operation-alpha-oaplay .row,
+body.path-operation-alpha-operation .row,
+body.path-oaplay-playlists .row,
+body.path-oaplaylists .row,
+body.path-oaplay .row,
+body.ooh-operation-alpha-runtime .row {
+  display: block !important;
+}
+
+.ooh-operation-alpha {
+  font-family: Oxanium, "Segoe UI", system-ui, sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100vw;
+  max-width: none;
+  margin-inline: calc(50% - 50vw);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 32px;
+  overflow-x: clip;
+  color: #dffcff;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(89, 243, 255, 0.1), transparent 34%),
+    linear-gradient(180deg, #03080b 0%, #061014 54%, #020507 100%);
+}
+
+.ooh-operation-alpha__shell,
+.ooh-operation-alpha__intro-card {
+  width: min(760px, 100%);
+  padding: 32px;
+  border: 1px solid rgba(130, 245, 255, 0.26);
+  border-radius: 8px;
+  background: rgba(3, 12, 16, 0.78);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+    0 0 34px rgba(89, 243, 255, 0.12);
+  text-align: center;
+}
+
+.ooh-operation-alpha__shell {
+  order: 1;
+}
+
+.ooh-operation-alpha__intro {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(1, 6, 9, 0.92);
+}
+
+.ooh-operation-alpha__intro[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__signal-modal {
+  order: 2;
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  display: block;
+  padding: 0;
+  background: transparent;
+}
+
+.ooh-operation-alpha__signal-modal[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__signal-card {
+  width: 100%;
+  padding: 18px 20px;
+  border: 1px solid rgba(130, 245, 255, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.05), rgba(89, 243, 255, 0.018)),
+    rgba(2, 12, 16, 0.94);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025),
+    0 0 24px rgba(89, 243, 255, 0.08);
+  text-align: center;
+}
+
+.ooh-operation-alpha__eyebrow {
+  margin: 0 0 14px;
+  color: rgba(145, 250, 255, 0.86);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-title,
+.ooh-operation-alpha__title,
+.ooh-operation-alpha__signal-title {
+  margin: 0 0 18px;
+  color: #59f3ff;
+  font-size: clamp(2rem, 7vw, 4.2rem);
+  line-height: 0.98;
+  text-transform: uppercase;
+  text-shadow: 0 0 22px rgba(89, 243, 255, 0.28);
+}
+
+.ooh-operation-alpha__signal-title {
+  font-size: clamp(1.5rem, 5vw, 2.45rem);
+  line-height: 1.04;
+}
+
+.ooh-operation-alpha__intro-copy {
+  margin: 0 auto 26px;
+  color: rgba(223, 252, 255, 0.84);
+  font-size: clamp(0.95rem, 2.5vw, 1.12rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-copy p,
+.ooh-operation-alpha__copy {
+  margin: 8px 0 0;
+}
+
+.ooh-operation-alpha__copy {
+  color: rgba(223, 252, 255, 0.82);
+  font-size: clamp(1rem, 2.8vw, 1.18rem);
+  line-height: 1.5;
+}
+
+.ooh-operation-alpha__signal-copy {
+  margin: 0 0 18px;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__signal-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid rgba(130, 245, 255, 0.28);
+  border-radius: 4px;
+  color: #dffcff;
+  background: rgba(1, 8, 11, 0.76);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.035);
+  font: inherit;
+  text-align: center;
+}
+
+.ooh-operation-alpha__signal-input::placeholder {
+  color: rgba(223, 252, 255, 0.44);
+  text-transform: lowercase;
+}
+
+.ooh-operation-alpha__signal-input:focus {
+  border-color: rgba(223, 252, 255, 0.68);
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.045),
+    0 0 16px rgba(89, 243, 255, 0.12);
+}
+
+.ooh-operation-alpha__signal-status {
+  min-height: 1.4rem;
+  margin: 12px 0 0;
+  color: rgba(145, 250, 255, 0.82);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.ooh-operation-alpha__cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  margin: 0 0 18px;
+}
+
+.ooh-operation-alpha__cta-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0.52rem 0.72rem;
+  border: 1px solid rgba(130, 245, 255, 0.28);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.86);
+  background: rgba(1, 8, 11, 0.46);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__cta-link:hover,
+.ooh-operation-alpha__cta-link:focus-visible {
+  border-color: rgba(223, 252, 255, 0.62);
+  color: #dffcff;
+  outline: none;
+  box-shadow: 0 0 14px rgba(89, 243, 255, 0.12);
+  text-decoration: none;
+}
+
+.ooh-operation-alpha__signal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.ooh-operation-alpha__activation {
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.035), rgba(89, 243, 255, 0.012)),
+    rgba(1, 8, 11, 0.48);
+  text-align: center;
+}
+
+.ooh-operation-alpha__activation-kicker,
+.ooh-operation-alpha__contact-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__activation-line {
+  margin: 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha,
+.ooh-operation-alpha * {
+  font-family: Oxanium, "Segoe UI", system-ui, sans-serif;
+}
+
+.ooh-operation-alpha__selected-signal {
+  width: min(680px, 100%);
+  margin: 14px auto 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(89, 243, 255, 0.28);
+  border-radius: 6px;
+  background: rgba(5, 31, 39, 0.54);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.04);
+  text-align: left;
+}
+
+.ooh-operation-alpha__selected-signal-kicker {
+  display: block;
+  color: rgba(145, 250, 255, 0.74);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__selected-signal-name {
+  display: block;
+  margin-top: 6px;
+  color: #ffffff;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__selected-signal-copy {
+  margin: 6px 0 0;
+  color: rgba(223, 252, 255, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.ooh-operation-alpha__activation-button {
+  min-height: 42px;
+  min-width: min(100%, 220px);
+  margin-top: 14px;
+  padding: 0.72rem 0.95rem;
+  border: 1px solid rgba(130, 245, 255, 0.48);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.94);
+  background: rgba(5, 31, 39, 0.72);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.045);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__activation-button:hover,
+.ooh-operation-alpha__activation-button:focus-visible {
+  border-color: rgba(223, 252, 255, 0.74);
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.06),
+    0 0 18px rgba(89, 243, 255, 0.16);
+}
+
+.ooh-operation-alpha__activation-button:disabled {
+  cursor: default;
+  opacity: 0.74;
+}
+
+.ooh-operation-alpha h1,
+.ooh-operation-alpha h2,
+.ooh-operation-alpha h3,
+.ooh-operation-alpha button,
+.ooh-operation-alpha a,
+.ooh-operation-alpha__title,
+.ooh-operation-alpha__runtime-button,
+.ooh-operation-alpha__transmission-panel,
+.ooh-operation-alpha__final-aar-card {
+  font-family: Oxanium, "Segoe UI Semibold", system-ui, sans-serif;
+  font-weight: 600;
+}
+
+.ooh-operation-alpha__activation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.ooh-operation-alpha__activation-actions .ooh-operation-alpha__activation-button {
+  margin-top: 0;
+}
+
+.ooh-operation-alpha__signal-gate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  min-width: min(100%, 220px);
+  padding: 0.72rem 0.95rem;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.42);
+  background: rgba(1, 8, 11, 0.56);
+  box-shadow: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__signal-gate:hover,
+.ooh-operation-alpha__signal-gate:focus-visible {
+  text-decoration: none;
+}
+
+.ooh-operation-alpha__signal-gate.is-signal-gate-locked,
+.ooh-operation-alpha__signal-gate[aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__signal-gate.is-signal-gate-ready,
+.ooh-operation-alpha__signal-gate[aria-disabled="false"] {
+  border-color: rgba(89, 243, 255, 0.72);
+  color: #dffcff;
+  background: rgba(8, 48, 58, 0.82);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.08),
+    0 0 18px rgba(89, 243, 255, 0.16);
+  cursor: pointer;
+}
+
+.ooh-operation-alpha__command-console {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.038), rgba(89, 243, 255, 0.014)),
+    rgba(1, 8, 11, 0.5);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.03);
+  text-align: left;
+}
+
+.ooh-operation-alpha__command-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.ooh-operation-alpha__command-kicker,
+.ooh-operation-alpha__command-state {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__command-kicker {
+  color: rgba(145, 250, 255, 0.72);
+}
+
+.ooh-operation-alpha__command-state {
+  color: rgba(223, 252, 255, 0.94);
+}
+
+.ooh-operation-alpha__command-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.ooh-operation-alpha__command-button {
+  appearance: none;
+  flex: 1 1 142px;
+  max-width: 210px;
+  min-height: 42px;
+  padding: 0.7rem 0.78rem;
+  border: 1px solid rgba(130, 245, 255, 0.34) !important;
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.9) !important;
+  background: rgba(4, 22, 28, 0.58) !important;
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__command-button:hover,
+.ooh-operation-alpha__command-button:focus-visible,
+.ooh-operation-alpha__command-button.is-command-active {
+  border-color: rgba(223, 252, 255, 0.68);
+  color: #dffcff;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.055),
+    0 0 16px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__command-button.is-command-active {
+  background: rgba(8, 35, 43, 0.76) !important;
+}
+
+.ooh-operation-alpha__command-ack {
+  min-height: 1.5rem;
+  margin: 14px 0 0;
+  color: rgba(145, 250, 255, 0.88);
+  font-size: 0.94rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__actor-transmission {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  gap: 14px;
+  overflow: hidden;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid rgba(145, 250, 255, 0.22);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 5px),
+    rgba(2, 14, 18, 0.58);
+  color: rgba(223, 252, 255, 0.8);
+  text-align: left;
+}
+
+.ooh-operation-alpha__actor-transmission[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__actor-portrait {
+  width: 104px;
+  max-width: 100%;
+  min-height: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid rgba(145, 250, 255, 0.18);
+  border-radius: 6px;
+  background:
+    radial-gradient(circle at 50% 32%, rgba(223, 252, 255, 0.2), transparent 18%),
+    linear-gradient(135deg, rgba(89, 243, 255, 0.08), rgba(1, 8, 11, 0.9));
+  box-shadow: inset 0 0 22px rgba(89, 243, 255, 0.045);
+}
+
+.ooh-operation-alpha__actor-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  min-height: 0;
+  max-height: 150px;
+  object-fit: cover;
+  opacity: 0.8;
+  filter: saturate(0.78) contrast(1.08) brightness(0.84);
+}
+
+.ooh-operation-alpha__actor-image[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__actor-body {
+  min-width: 0;
+}
+
+.ooh-operation-alpha__actor-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__actor-name {
+  display: block;
+  color: #dffcff;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__actor-meta {
+  display: block;
+  margin-top: 5px;
+  color: rgba(145, 250, 255, 0.68);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__actor-copy {
+  margin: 10px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__payload {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid rgba(130, 245, 255, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.045), transparent 46%, rgba(255, 212, 107, 0.022)),
+    rgba(1, 8, 11, 0.52);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: left;
+}
+
+.ooh-operation-alpha__payload[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__payload.is-payload-updated {
+  border-color: rgba(145, 250, 255, 0.4);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.055),
+    0 0 18px rgba(89, 243, 255, 0.1);
+}
+
+.ooh-operation-alpha__payload-kicker {
+  display: block;
+  margin-bottom: 12px;
+  color: rgba(145, 250, 255, 0.78);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__payload-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ooh-operation-alpha__payload-cell {
+  min-height: 82px;
+  padding: 12px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.44);
+}
+
+.ooh-operation-alpha__payload-label {
+  display: block;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__payload-value {
+  display: block;
+  margin-top: 9px;
+  color: #dffcff;
+  font-size: 0.92rem;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__payload-value--path {
+  overflow-wrap: anywhere;
+  text-transform: none;
+}
+
+.ooh-operation-alpha__payload-summary {
+  margin: 12px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__active-channel {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.38);
+}
+
+.ooh-operation-alpha__active-channel-kicker,
+.ooh-operation-alpha__active-channel-mood,
+.ooh-operation-alpha__active-channel-status {
+  display: block;
+  color: rgba(145, 250, 255, 0.7);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__active-channel-name {
+  display: block;
+  margin-top: 8px;
+  color: #dffcff;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__active-channel-mood {
+  margin-top: 8px;
+  color: rgba(223, 252, 255, 0.78);
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+.ooh-operation-alpha__active-channel-status {
+  margin-top: 8px;
+}
+
+.ooh-operation-alpha__channel-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  margin-top: 12px;
+  padding: 0.62rem 0.9rem;
+  border: 1px solid rgba(130, 245, 255, 0.34);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.58);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__channel-link[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__channel-link:hover,
+.ooh-operation-alpha__channel-link:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  color: #dffcff;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.055),
+    0 0 16px rgba(89, 243, 255, 0.14);
+  text-decoration: none;
+}
+
+.ooh-operation-alpha__channel-link[aria-disabled="true"] {
+  border-color: rgba(130, 245, 255, 0.16);
+  color: rgba(223, 252, 255, 0.48);
+  background: rgba(1, 8, 11, 0.42);
+  box-shadow: none;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__consequence {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.38);
+}
+
+.ooh-operation-alpha__consequence-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__consequence-grid {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.6fr) minmax(0, 1.4fr);
+  gap: 10px;
+}
+
+.ooh-operation-alpha__consequence-cell {
+  min-height: 56px;
+  padding: 10px;
+  border: 1px solid rgba(130, 245, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(1, 8, 11, 0.36);
+}
+
+.ooh-operation-alpha__consequence-label {
+  display: block;
+  color: rgba(145, 250, 255, 0.68);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__consequence-value {
+  display: block;
+  margin-top: 7px;
+  color: #dffcff;
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__consequence-summary {
+  margin: 7px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__narrative {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.035), transparent 56%),
+    rgba(1, 8, 11, 0.34);
+}
+
+.ooh-operation-alpha__narrative-kicker {
+  display: block;
+  margin-bottom: 9px;
+  color: rgba(145, 250, 255, 0.7);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__narrative-copy {
+  margin: 0;
+  color: rgba(223, 252, 255, 0.8);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.ooh-operation-alpha__director {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.035), transparent 54%, rgba(255, 212, 107, 0.018)),
+    rgba(1, 8, 11, 0.36);
+}
+
+.ooh-operation-alpha__director-kicker,
+.ooh-operation-alpha__director-label {
+  display: block;
+  color: rgba(145, 250, 255, 0.7);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__director-actions {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.ooh-operation-alpha__director-button {
+  appearance: none;
+  min-height: 40px;
+  padding: 0.62rem 0.58rem;
+  border: 1px solid rgba(130, 245, 255, 0.28) !important;
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.9) !important;
+  background: rgba(4, 22, 28, 0.52) !important;
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__director-button:hover,
+.ooh-operation-alpha__director-button:focus-visible,
+.ooh-operation-alpha__director-button.is-director-active {
+  border-color: rgba(223, 252, 255, 0.68) !important;
+  color: #dffcff !important;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.055),
+    0 0 16px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__director-report {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(130, 245, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(1, 8, 11, 0.38);
+}
+
+.ooh-operation-alpha__director-report[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__director-choice {
+  display: block;
+  margin: 8px 0 12px;
+  color: #dffcff;
+  font-size: 0.92rem;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__director-reaction {
+  margin: 8px 0 0;
+  color: rgba(223, 252, 255, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.ooh-operation-alpha__battlefield {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.04), transparent 42%, rgba(255, 212, 107, 0.025)),
+    rgba(1, 8, 11, 0.5);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.03);
+  text-align: left;
+}
+
+.ooh-operation-alpha__battlefield.is-battlefield-updated {
+  border-color: rgba(145, 250, 255, 0.38);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.05),
+    0 0 18px rgba(89, 243, 255, 0.1);
+}
+
+.ooh-operation-alpha__battlefield.is-movement-updated .ooh-operation-alpha__movement-feed {
+  border-color: rgba(255, 212, 107, 0.34);
+}
+
+.ooh-operation-alpha__battlefield-kicker {
+  display: block;
+  margin-bottom: 9px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__battlefield-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ooh-operation-alpha__battlefield-cell {
+  min-height: 74px;
+  padding: 10px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.42);
+}
+
+.ooh-operation-alpha__battlefield-label {
+  display: block;
+  color: rgba(145, 250, 255, 0.78);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__battlefield-line {
+  margin: 8px 0 0;
+  color: rgba(223, 252, 255, 0.8);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__movement-feed {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.032), transparent 56%, rgba(255, 212, 107, 0.026)),
+    rgba(1, 8, 11, 0.42);
+}
+
+.ooh-operation-alpha__movement-kicker {
+  display: block;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__movement-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 9px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ooh-operation-alpha__movement-item {
+  position: relative;
+  min-height: 30px;
+  padding: 0.48rem 0.62rem 0.48rem 1.45rem;
+  border: 1px solid rgba(130, 245, 255, 0.14);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.84);
+  background: rgba(4, 22, 28, 0.42);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__movement-item::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0.62rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(145, 250, 255, 0.72);
+  box-shadow: 0 0 10px rgba(89, 243, 255, 0.22);
+  transform: translateY(-50%);
+}
+
+.ooh-operation-alpha__signal-button {
+  min-height: 42px;
+  min-width: min(100%, 160px);
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(130, 245, 255, 0.36);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.62);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__signal-button--ghost {
+  border-color: rgba(130, 245, 255, 0.2);
+  background: rgba(1, 8, 11, 0.44);
+}
+
+.ooh-operation-alpha__signal-button:hover,
+.ooh-operation-alpha__signal-button:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  outline: none;
+  box-shadow: 0 0 16px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__scenario {
+  margin: 18px 0 16px;
+  padding: 16px;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.045), rgba(89, 243, 255, 0.018)),
+    rgba(1, 8, 11, 0.46);
+  text-align: left;
+}
+
+.ooh-operation-alpha:not(.is-field-active) .ooh-operation-alpha__interventions {
+  display: none;
+}
+
+.ooh-operation-alpha__shell.is-runtime-acknowledged,
+.ooh-operation-alpha.is-runtime-acknowledged .ooh-operation-alpha__shell {
+  border-color: rgba(145, 250, 255, 0.46);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    0 0 42px rgba(89, 243, 255, 0.18);
+}
+
+.ooh-operation-alpha__scenario-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+
+.ooh-operation-alpha__pressure-label,
+.ooh-operation-alpha__pressure-value,
+.ooh-operation-alpha__atmosphere-label,
+.ooh-operation-alpha__atmosphere-value,
+.ooh-operation-alpha__atmosphere-meter {
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__pressure-label,
+.ooh-operation-alpha__atmosphere-label {
+  color: rgba(145, 250, 255, 0.68);
+}
+
+.ooh-operation-alpha__pressure-value,
+.ooh-operation-alpha__atmosphere-value {
+  color: rgba(223, 252, 255, 0.94);
+}
+
+.ooh-operation-alpha__atmosphere {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(1, 8, 11, 0.38);
+  box-shadow: inset 0 0 16px rgba(89, 243, 255, 0.025);
+}
+
+.ooh-operation-alpha__atmosphere-meter {
+  color: rgba(145, 250, 255, 0.72);
+}
+
+.ooh-operation-alpha.is-atmosphere-static .ooh-operation-alpha__atmosphere,
+.ooh-operation-alpha.is-atmosphere-pressure .ooh-operation-alpha__atmosphere,
+.ooh-operation-alpha.is-atmosphere-bleed .ooh-operation-alpha__atmosphere {
+  border-color: rgba(145, 250, 255, 0.28);
+}
+
+.ooh-operation-alpha.is-atmosphere-pressure .ooh-operation-alpha__contact-frame,
+.ooh-operation-alpha.is-atmosphere-bleed .ooh-operation-alpha__contact-frame {
+  box-shadow:
+    inset 0 0 20px rgba(89, 243, 255, 0.065),
+    0 0 20px rgba(89, 243, 255, 0.12);
+}
+
+.ooh-operation-alpha.is-atmosphere-bleed .ooh-operation-alpha__contact-frame::after {
+  opacity: 0.28;
+  animation-duration: 1.1s;
+}
+
+.ooh-operation-alpha__scenario-title {
+  margin: 0 0 9px;
+  color: #dffcff;
+  font-size: clamp(1.1rem, 4vw, 1.55rem);
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__situation {
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.ooh-operation-alpha__situation p {
+  margin: 0 0 6px;
+}
+
+.ooh-operation-alpha__interventions {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ooh-operation-alpha__intervention {
+  min-height: 42px;
+  padding: 0.72rem 0.95rem;
+  border: 1px solid rgba(130, 245, 255, 0.36);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.62);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intervention:hover,
+.ooh-operation-alpha__intervention:focus-visible {
+  border-color: rgba(223, 252, 255, 0.7);
+  outline: none;
+  box-shadow: 0 0 18px rgba(89, 243, 255, 0.16);
+}
+
+.ooh-operation-alpha__intervention:disabled {
+  cursor: default;
+  opacity: 0.58;
+}
+
+.ooh-operation-alpha__reaction {
+  min-height: 2.2rem;
+  margin: 12px 0 0;
+  color: rgba(145, 250, 255, 0.86);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__contact-frame {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(88px, 112px) minmax(0, 1fr);
+  gap: 14px;
+  overflow: hidden;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(145, 250, 255, 0.22);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 5px),
+    rgba(2, 14, 18, 0.64);
+  color: rgba(223, 252, 255, 0.8);
+  text-align: left;
+  animation: ooh-alpha-contact-fade 420ms ease-out both;
+}
+
+.ooh-operation-alpha__contact-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent, rgba(89, 243, 255, 0.08), transparent),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 4px);
+  mix-blend-mode: screen;
+  opacity: 0.18;
+  pointer-events: none;
+  animation: ooh-alpha-scanline 1.7s linear infinite;
+}
+
+.ooh-operation-alpha__contact-frame.is-contact-responding {
+  border-color: rgba(145, 250, 255, 0.42);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.05),
+    0 0 18px rgba(89, 243, 255, 0.1);
+}
+
+.ooh-operation-alpha__contact-frame.is-contact-locking {
+  animation:
+    ooh-alpha-contact-fade 420ms ease-out both,
+    ooh-alpha-contact-lock 1.35s ease-out 1;
+}
+
+.ooh-operation-alpha__contact-frame[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__contact-portrait {
+  position: relative;
+  width: 112px;
+  max-width: 100%;
+  min-height: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid rgba(145, 250, 255, 0.18);
+  border-radius: 6px;
+  background:
+    radial-gradient(circle at 50% 32%, rgba(223, 252, 255, 0.26), transparent 18%),
+    linear-gradient(180deg, transparent 34%, rgba(89, 243, 255, 0.14) 35% 64%, transparent 65%),
+    linear-gradient(135deg, rgba(89, 243, 255, 0.08), rgba(1, 8, 11, 0.9));
+  box-shadow: inset 0 0 24px rgba(89, 243, 255, 0.045);
+  animation: ooh-alpha-portrait-pulse 2.8s ease-in-out infinite;
+}
+
+.ooh-operation-alpha__contact-portrait::before,
+.ooh-operation-alpha__contact-portrait::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid rgba(223, 252, 255, 0.18);
+  background: rgba(1, 8, 11, 0.7);
+}
+
+.ooh-operation-alpha__contact-portrait::before {
+  top: 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.ooh-operation-alpha__contact-portrait::after {
+  bottom: 18px;
+  width: 48px;
+  height: 42px;
+  border-radius: 50% 50% 10px 10px;
+}
+
+.ooh-operation-alpha__contact-frame.is-contact-imaged .ooh-operation-alpha__contact-portrait::before,
+.ooh-operation-alpha__contact-frame.is-contact-imaged .ooh-operation-alpha__contact-portrait::after {
+  display: none;
+}
+
+.ooh-operation-alpha__contact-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  min-height: 0;
+  max-height: 160px;
+  object-fit: cover;
+  opacity: 0.78;
+  filter: saturate(0.75) contrast(1.08) brightness(0.82);
+}
+
+.ooh-operation-alpha__contact-image[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__contact-portrait::after {
+  z-index: 2;
+}
+
+.ooh-operation-alpha__contact-frame[data-contact-type="mutant"] .ooh-operation-alpha__contact-portrait {
+  background:
+    radial-gradient(circle at 50% 32%, rgba(198, 255, 145, 0.22), transparent 18%),
+    linear-gradient(180deg, transparent 34%, rgba(198, 255, 145, 0.12) 35% 64%, transparent 65%),
+    linear-gradient(135deg, rgba(89, 243, 255, 0.07), rgba(8, 18, 10, 0.92));
+}
+
+.ooh-operation-alpha__contact-frame[data-contact-type="warlord"] .ooh-operation-alpha__contact-portrait {
+  background:
+    radial-gradient(circle at 50% 32%, rgba(255, 118, 118, 0.22), transparent 18%),
+    linear-gradient(180deg, transparent 34%, rgba(255, 118, 118, 0.12) 35% 64%, transparent 65%),
+    linear-gradient(135deg, rgba(89, 243, 255, 0.06), rgba(24, 8, 8, 0.92));
+}
+
+.ooh-operation-alpha__contact-body {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.ooh-operation-alpha__contact-name {
+  display: block;
+  color: #dffcff;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__contact-faction {
+  display: block;
+  margin-top: 5px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__contact-source {
+  display: block;
+  margin-top: 6px;
+  color: rgba(223, 252, 255, 0.54);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__contact-frame p {
+  margin: 8px 0 0;
+}
+
+.ooh-operation-alpha__contact-status {
+  color: rgba(223, 252, 255, 0.76);
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.ooh-operation-alpha__contact-transmission {
+  color: rgba(145, 250, 255, 0.9);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__mission {
+  position: relative;
+  overflow: hidden;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(130, 245, 255, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.045), transparent 42%, rgba(89, 243, 255, 0.025)),
+    rgba(1, 8, 11, 0.52);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: left;
+}
+
+.ooh-operation-alpha__mission[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__mission::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-left: 3px solid rgba(145, 250, 255, 0.36);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__mission.is-mission-updated {
+  border-color: rgba(145, 250, 255, 0.38);
+}
+
+.ooh-operation-alpha__mission-kicker,
+.ooh-operation-alpha__mission-source {
+  display: block;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__mission-title {
+  display: block;
+  margin-top: 6px;
+  color: #dffcff;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__mission-source {
+  margin-top: 6px;
+}
+
+.ooh-operation-alpha__mission-brief {
+  margin: 7px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__mission-cycle {
+  min-height: 38px;
+  margin-top: 9px;
+  padding: 0.62rem 0.82rem;
+  border: 1px solid rgba(130, 245, 255, 0.3);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.9);
+  background: rgba(4, 22, 28, 0.58);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__mission-cycle:hover,
+.ooh-operation-alpha__mission-cycle:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  outline: none;
+  box-shadow: 0 0 14px rgba(89, 243, 255, 0.12);
+}
+
+.ooh-operation-alpha__presence-choice-matrix {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.ooh-operation-alpha__presence-choice-matrix[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__presence-choice {
+  appearance: none;
+  flex: 1 1 150px;
+  max-width: 220px;
+  min-height: 36px;
+  padding: 0.56rem 0.68rem;
+  border: 1px solid rgba(130, 245, 255, 0.28);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.88);
+  background: rgba(4, 22, 28, 0.5);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__presence-choice:hover,
+.ooh-operation-alpha__presence-choice:focus-visible,
+.ooh-operation-alpha__presence-choice.is-presence-choice-selected {
+  border-color: rgba(255, 212, 107, 0.56);
+  color: #fff1b8;
+  outline: none;
+  box-shadow: 0 0 14px rgba(255, 212, 107, 0.12);
+}
+
+.ooh-operation-alpha__mission-cycle:disabled {
+  border-color: rgba(130, 245, 255, 0.16);
+  color: rgba(223, 252, 255, 0.48);
+  cursor: default;
+  opacity: 0.72;
+}
+
+.ooh-operation-alpha__mission-cycle.is-presence-ready {
+  border-color: rgba(255, 212, 107, 0.56);
+  color: #fff1b8;
+  box-shadow: 0 0 16px rgba(255, 212, 107, 0.14);
+}
+
+.ooh-operation-alpha__mission-cycle.is-presence-locked {
+  border-color: rgba(145, 250, 255, 0.28);
+  color: rgba(223, 252, 255, 0.64);
+}
+
+.ooh-operation-alpha__result {
+  position: relative;
+  overflow: hidden;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(130, 245, 255, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.055), transparent 42%, rgba(255, 212, 107, 0.035)),
+    rgba(1, 8, 11, 0.56);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.04);
+  text-align: left;
+}
+
+.ooh-operation-alpha__result[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__result::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-left: 3px solid rgba(255, 212, 107, 0.42);
+  opacity: 0.74;
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__result.is-result-updated {
+  border-color: rgba(255, 212, 107, 0.46);
+  box-shadow:
+    inset 0 0 20px rgba(89, 243, 255, 0.045),
+    0 0 18px rgba(255, 212, 107, 0.08);
+}
+
+.ooh-operation-alpha__result[data-result-field="field-stable"],
+.ooh-operation-alpha__result[data-result-field="channel-integrity-rising"] {
+  border-color: rgba(145, 250, 255, 0.4);
+}
+
+.ooh-operation-alpha__result[data-result-field="field-unstable"] {
+  border-color: rgba(255, 212, 107, 0.52);
+}
+
+.ooh-operation-alpha__result-kicker,
+.ooh-operation-alpha__result-field {
+  display: block;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__result-title {
+  display: block;
+  margin-top: 6px;
+  color: #dffcff;
+  font-size: clamp(1rem, 3vw, 1.18rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__result-field {
+  margin-top: 6px;
+}
+
+.ooh-operation-alpha__result-mark {
+  margin: 7px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+@keyframes ooh-alpha-contact-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ooh-alpha-contact-lock {
+  0%,
+  28%,
+  52% {
+    filter: brightness(1.5);
+  }
+
+  14%,
+  42%,
+  100% {
+    filter: brightness(1);
+  }
+}
+
+@keyframes ooh-alpha-portrait-pulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 24px rgba(89, 243, 255, 0.045);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 28px rgba(89, 243, 255, 0.08),
+      0 0 16px rgba(89, 243, 255, 0.08);
+  }
+}
+
+@keyframes ooh-alpha-scanline {
+  from {
+    background-position: 0 0, 0 0;
+  }
+
+  to {
+    background-position: 120px 0, 0 16px;
+  }
+}
+
+.ooh-operation-alpha__access-panel {
+  margin-top: 22px;
+  padding: 16px 18px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.04), transparent 28%, transparent 72%, rgba(89, 243, 255, 0.028)),
+    rgba(1, 8, 11, 0.5);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: center;
+}
+
+.ooh-operation-alpha__access-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__access-line {
+  margin: 5px 0 0;
+  color: rgba(223, 252, 255, 0.78);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__access-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.ooh-operation-alpha__access-button {
+  min-width: min(100%, 210px);
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(130, 245, 255, 0.34);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.58);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__access-button:hover,
+.ooh-operation-alpha__access-button:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  color: #dffcff;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.045),
+    0 0 16px rgba(89, 243, 255, 0.14);
+  text-decoration: none;
+}
+
+.ooh-operation-alpha__shell--playlists {
+  width: min(1120px, 100%);
+}
+
+.ooh-operation-alpha__shell--runtime {
+  width: min(860px, 100%);
+}
+
+.ooh-operation-alpha__shell--operation {
+  width: min(920px, 100%);
+}
+
+.ooh-operation-alpha__shell--credits {
+  width: min(1100px, 100%);
+  padding: clamp(30px, 5vw, 48px);
+  border-color: rgba(0, 220, 255, 0.28);
+  border-radius: 14px;
+  background:
+    linear-gradient(175deg, rgba(5, 10, 22, 0.94), rgba(1, 6, 15, 0.96));
+  box-shadow:
+    inset 0 0 0 1px rgba(158, 248, 255, 0.07),
+    0 18px 52px rgba(0, 0, 0, 0.58),
+    0 0 34px rgba(0, 220, 255, 0.14);
+}
+
+.ooh-operation-alpha__credits-copy {
+  display: grid;
+  gap: 6px;
+  max-width: 760px;
+  margin: 0 auto 28px;
+}
+
+.ooh-operation-alpha__credits-copy p {
+  margin: 0;
+}
+
+.ooh-operation-alpha__credit-status {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.ooh-operation-alpha__credit-status-card,
+.ooh-operation-alpha__credit-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.ooh-operation-alpha__credit-status-card {
+  padding: 18px 20px;
+  border: 1px solid rgba(0, 220, 255, 0.3);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(4, 16, 34, 0.9), rgba(2, 9, 22, 0.92));
+  box-shadow: inset 0 0 0 1px rgba(140, 245, 255, 0.05);
+}
+
+.ooh-operation-alpha__credit-status-label,
+.ooh-operation-alpha__credit-kicker {
+  display: block;
+  color: #68f0ff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__credit-status-label {
+  margin-bottom: 8px;
+}
+
+.ooh-operation-alpha__credit-status-card strong {
+  display: block;
+  color: #f4fdff;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.ooh-operation-alpha__credit-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 0;
+}
+
+.ooh-operation-alpha__credit-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 276px;
+  padding: 20px;
+  border: 1px solid rgba(0, 220, 255, 0.3);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(4, 16, 34, 0.9), rgba(2, 9, 22, 0.92));
+  box-shadow: inset 0 0 0 1px rgba(140, 245, 255, 0.05);
+  text-align: center;
+}
+
+.ooh-operation-alpha__credit-card.is-selected {
+  border-color: rgba(145, 250, 255, 0.58);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.06),
+    0 0 20px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__credit-title {
+  margin: 10px 0 0;
+  color: #dffcff;
+  font-size: clamp(1.55rem, 4vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.18;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__credit-amount {
+  display: block;
+  color: #f4fdff;
+  font-size: clamp(1rem, 2.8vw, 1.28rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__credit-select {
+  align-self: end;
+  justify-self: center;
+  min-height: 44px;
+  margin-top: 10px;
+  padding: 0.72rem 1.2rem;
+  border: 1px solid rgba(92, 246, 255, 0.78);
+  border-radius: 999px;
+  color: #dbf8ff;
+  background: linear-gradient(145deg, rgba(2, 48, 67, 0.95), rgba(3, 20, 40, 0.98));
+  box-shadow: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__credit-select:hover,
+.ooh-operation-alpha__credit-select:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(182, 252, 255, 0.76);
+  color: #dffcff;
+  outline: none;
+  box-shadow: 0 0 14px rgba(0, 223, 255, 0.22);
+}
+
+.ooh-operation-alpha__credit-card.is-selected .ooh-operation-alpha__credit-select {
+  border-color: rgba(145, 250, 255, 0.62);
+  background: rgba(8, 35, 43, 0.76);
+}
+
+.ooh-operation-alpha__credit-confirmation {
+  min-height: 1.5rem;
+  margin: 22px 0 0;
+  color: rgba(145, 250, 255, 0.86);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__operation-panel {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid rgba(130, 245, 255, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.04), rgba(89, 243, 255, 0.014)),
+    rgba(1, 8, 11, 0.52);
+  box-shadow: inset 0 0 20px rgba(89, 243, 255, 0.035);
+  text-align: left;
+}
+
+.ooh-operation-alpha__operation-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.ooh-operation-alpha__operation-field {
+  color: rgba(223, 252, 255, 0.94);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__operation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ooh-operation-alpha__playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.ooh-operation-alpha__playlist-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.04), rgba(89, 243, 255, 0.016)),
+    rgba(1, 8, 11, 0.48);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.025);
+  text-align: left;
+}
+
+.ooh-operation-alpha__playlist-card.is-selected {
+  border-color: rgba(145, 250, 255, 0.58);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.055),
+    0 0 20px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__playlist-card--outbound {
+  border-color: rgba(223, 252, 255, 0.26);
+}
+
+.ooh-operation-alpha__playlist-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(89, 243, 255, 0.08), rgba(1, 8, 11, 0.9)),
+    rgba(1, 8, 11, 0.74);
+}
+
+.ooh-operation-alpha__playlist-frame {
+  position: relative;
+  z-index: 1;
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  border: 1px solid rgba(145, 250, 255, 0.2);
+  color: rgba(145, 250, 255, 0.48);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 24px rgba(89, 243, 255, 0.035),
+    0 0 18px rgba(89, 243, 255, 0.04);
+}
+
+.ooh-operation-alpha__playlist-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 58%, rgba(1, 8, 11, 0.78)),
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 4px);
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__playlist-visual img {
+  position: relative;
+  z-index: 1;
+  grid-area: 1 / 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.82;
+  filter: saturate(0.82) contrast(1.08);
+}
+
+.ooh-operation-alpha__playlist-visual img:not([hidden]) + .ooh-operation-alpha__playlist-frame {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.ooh-operation-alpha__playlist-body {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 18px;
+}
+
+.ooh-operation-alpha__playlist-kicker {
+  display: block;
+  color: rgba(145, 250, 255, 0.68);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__playlist-title {
+  margin: 0;
+  color: #dffcff;
+  font-size: clamp(1rem, 3.2vw, 1.38rem);
+  letter-spacing: 0.08em;
+  line-height: 1.12;
+}
+
+.ooh-operation-alpha__playlist-copy,
+.ooh-operation-alpha__playlist-confirmation,
+.ooh-operation-alpha__playlist-note {
+  margin: 0;
+  color: rgba(223, 252, 255, 0.76);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__playlist-select {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 8px;
+  padding: 0.72rem 0.9rem;
+  border: 1px solid rgba(130, 245, 255, 0.34);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.62);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.03);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+a.ooh-operation-alpha__playlist-select {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.ooh-operation-alpha__playlist-select:hover,
+.ooh-operation-alpha__playlist-select:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.045),
+    0 0 16px rgba(89, 243, 255, 0.14);
+}
+
+.ooh-operation-alpha__playlist-card.is-selected .ooh-operation-alpha__playlist-select {
+  border-color: rgba(145, 250, 255, 0.62);
+  color: #dffcff;
+  background: rgba(8, 35, 43, 0.76);
+}
+
+.ooh-operation-alpha__playlist-confirmation {
+  min-height: 1.4rem;
+  margin-top: 18px;
+  color: rgba(145, 250, 255, 0.86);
+  text-align: center;
+}
+
+.ooh-operation-alpha__playlist-note {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.ooh-operation-alpha__runtime-handoff {
+  width: min(520px, 100%);
+  margin: 18px auto 0;
+  padding: 16px 18px;
+  border: 1px solid rgba(130, 245, 255, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.045), rgba(89, 243, 255, 0.014)),
+    rgba(1, 8, 11, 0.58);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: center;
+}
+
+.ooh-operation-alpha__runtime-status {
+  width: min(560px, 100%);
+  margin: 24px auto 0;
+  padding: 18px;
+  border: 1px solid rgba(130, 245, 255, 0.24);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.045), rgba(89, 243, 255, 0.014)),
+    rgba(1, 8, 11, 0.58);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: center;
+}
+
+.ooh-operation-alpha__runtime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.ooh-operation-alpha__runtime-cell {
+  min-height: 132px;
+  padding: 16px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(89, 243, 255, 0.032), rgba(89, 243, 255, 0.012)),
+    rgba(1, 8, 11, 0.48);
+  text-align: left;
+}
+
+.ooh-operation-alpha__runtime-handoff[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__runtime-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.ooh-operation-alpha__runtime-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(145, 250, 255, 0.78);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__runtime-title {
+  margin: 0;
+  color: #dffcff;
+  font-size: clamp(1rem, 3vw, 1.24rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__runtime-copy {
+  min-height: 1.4rem;
+  margin: 8px 0 0;
+  color: rgba(223, 252, 255, 0.76);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__runtime-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  min-width: min(100%, 220px);
+  padding: 0.72rem 0.95rem;
+  border: 1px solid rgba(130, 245, 255, 0.4);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(4, 22, 28, 0.66);
+  box-shadow: inset 0 0 14px rgba(89, 243, 255, 0.04);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__runtime-button:hover,
+.ooh-operation-alpha__runtime-button:focus-visible {
+  border-color: rgba(223, 252, 255, 0.7);
+  color: #dffcff;
+  outline: none;
+  box-shadow:
+    inset 0 0 14px rgba(89, 243, 255, 0.055),
+    0 0 16px rgba(89, 243, 255, 0.16);
+  text-decoration: none;
+}
+
+.ooh-operation-alpha__runtime-button--home {
+  border-color: rgba(130, 245, 255, 0.26);
+  background: rgba(1, 8, 11, 0.48);
+}
+
+.ooh-operation-alpha.has-intro-storyblock .ooh-operation-alpha__actor-transmission,
+.ooh-operation-alpha.has-intro-storyblock .ooh-operation-alpha__payload {
+  display: none;
+}
+
+.ooh-operation-alpha--intro-stage .ooh-operation-alpha__command-console,
+.ooh-operation-alpha--intro-stage .ooh-operation-alpha__actor-transmission,
+.ooh-operation-alpha--intro-stage .ooh-operation-alpha__payload,
+.ooh-operation-alpha--intro-stage .ooh-operation-alpha__battlefield,
+.ooh-operation-alpha--intro-stage .ooh-operation-alpha__scenario,
+.ooh-operation-alpha--intro-stage .ooh-operation-alpha__access-panel {
+  display: none;
+}
+
+.ooh-operation-alpha__intro-storyblock {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(130, 245, 255, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(89, 243, 255, 0.04), transparent 52%, rgba(255, 212, 107, 0.024)),
+    rgba(1, 8, 11, 0.52);
+  box-shadow: inset 0 0 18px rgba(89, 243, 255, 0.035);
+  text-align: left;
+}
+
+.ooh-operation-alpha__intro-storyblock[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__intro-storyhead {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.ooh-operation-alpha__intro-story-kicker,
+.ooh-operation-alpha__intro-card-kicker {
+  display: block;
+  color: rgba(145, 250, 255, 0.76);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-story-title {
+  margin: 0;
+  color: #dffcff;
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  letter-spacing: 0.08em;
+  line-height: 1.18;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-story-copy {
+  margin: 0;
+  color: rgba(223, 252, 255, 0.8);
+  font-size: 0.94rem;
+  line-height: 1.48;
+}
+
+.ooh-operation-alpha__intro-duel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ooh-operation-alpha__intro-card {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 5px),
+    rgba(1, 8, 11, 0.44);
+}
+
+.ooh-operation-alpha__intro-card--protagonist {
+  border-color: rgba(89, 243, 255, 0.3);
+}
+
+.ooh-operation-alpha__intro-card--antagonist {
+  border-color: rgba(255, 212, 107, 0.28);
+}
+
+.ooh-operation-alpha__intro-card-body {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  margin-top: 10px;
+}
+
+.ooh-operation-alpha__intro-card-image {
+  display: block;
+  width: 104px;
+  height: 124px;
+  border: 1px solid rgba(145, 250, 255, 0.2);
+  border-radius: 6px;
+  object-fit: cover;
+  background: rgba(4, 22, 28, 0.62);
+  filter: saturate(0.82) contrast(1.08) brightness(0.86);
+}
+
+.ooh-operation-alpha__intro-card-name {
+  display: block;
+  color: #dffcff;
+  font-size: clamp(1rem, 2vw, 1.24rem);
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-card-meta {
+  display: block;
+  margin-top: 6px;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-catalyst {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(1, 8, 11, 0.42);
+}
+
+.ooh-operation-alpha__intro-summary {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(1, 8, 11, 0.42);
+}
+
+.ooh-operation-alpha__intro-summary p {
+  margin: 0;
+  color: rgba(223, 252, 255, 0.82);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-next-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.ooh-operation-alpha__runtime-button--next.is-oa-next-locked,
+.ooh-operation-alpha__runtime-button--next[aria-disabled="true"] {
+  border-color: rgba(255, 174, 66, 0.28);
+  color: rgba(223, 252, 255, 0.36);
+  background: rgba(63, 36, 8, 0.38);
+  box-shadow: none;
+  cursor: default;
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__runtime-button--next.is-oa-next-ready,
+.ooh-operation-alpha__runtime-button--next[aria-disabled="false"] {
+  border-color: rgba(89, 243, 255, 0.76);
+  color: #dffcff;
+  background: rgba(8, 48, 58, 0.82);
+  box-shadow: 0 0 18px rgba(89, 243, 255, 0.18);
+}
+
+.ooh-operation-alpha__intro-decision-flow {
+  margin-top: 18px;
+}
+
+.ooh-operation-alpha__intro-flow-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(1, 8, 11, 0.5);
+}
+
+.ooh-operation-alpha__intro-flow-head strong,
+.ooh-operation-alpha__intro-flow-head span:last-child {
+  color: #dffcff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-beats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.ooh-operation-alpha__intro-beat-card,
+.ooh-operation-alpha__intro-consequence {
+  padding: 14px;
+  border: 1px solid rgba(130, 245, 255, 0.18);
+  border-radius: 8px;
+  color: #dffcff;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0 1px, transparent 1px 5px), rgba(1, 8, 11, 0.44);
+}
+
+.ooh-operation-alpha__intro-beat-card {
+  min-height: 190px;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.ooh-operation-alpha__intro-beat-card span,
+.ooh-operation-alpha__intro-beat-card strong {
+  display: block;
+  margin-bottom: 7px;
+  color: rgba(145, 250, 255, 0.78);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-beat-card p,
+.ooh-operation-alpha__intro-consequence p {
+  margin: 0 0 8px;
+  color: rgba(223, 252, 255, 0.82);
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__intro-beat-card.is-selected {
+  border-color: rgba(71, 255, 151, 0.72);
+  background: rgba(6, 48, 31, 0.72);
+  box-shadow: 0 0 18px rgba(71, 255, 151, 0.18);
+}
+
+.ooh-operation-alpha__intro-beat-card.is-disabled,
+.ooh-operation-alpha__intro-beat-card:disabled:not(.is-selected) {
+  cursor: default;
+  opacity: 0.42;
+}
+
+.ooh-operation-alpha__intro-consequence {
+  margin-top: 12px;
+}
+
+.ooh-operation-alpha__intro-decision-flow.is-stage-complete .ooh-operation-alpha__intro-flow-head {
+  border-color: rgba(89, 243, 255, 0.48);
+  box-shadow: 0 0 18px rgba(89, 243, 255, 0.12);
+}
+
+.ooh-operation-alpha__transmission-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 5, 8, 0.82);
+}
+
+.ooh-operation-alpha__transmission-popup[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__transmission-panel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  width: min(760px, calc(100vw - 40px));
+  padding: 22px;
+  border: 1px solid rgba(89, 243, 255, 0.38);
+  border-radius: 8px;
+  background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 5px), rgba(1, 11, 15, 0.96);
+  box-shadow: 0 0 42px rgba(89, 243, 255, 0.18);
+}
+
+.ooh-operation-alpha__transmission-panel h3 {
+  margin: 6px 0 12px;
+  color: #59f3ff;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__transmission-panel p {
+  margin: 0 0 9px;
+  color: rgba(223, 252, 255, 0.86);
+  line-height: 1.45;
+}
+
+.ooh-operation-alpha__transmission-portrait {
+  width: 116px;
+  height: 136px;
+  border: 1px solid rgba(145, 250, 255, 0.28);
+  border-radius: 6px;
+  object-fit: cover;
+  filter: saturate(0.84) contrast(1.08) brightness(0.88);
+}
+
+.ooh-operation-alpha__transmission-identity {
+  width: 154px;
+  color: rgba(223, 252, 255, 0.86);
+}
+
+.ooh-operation-alpha__transmission-identity[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__transmission-identity strong,
+.ooh-operation-alpha__transmission-identity span {
+  display: block;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__transmission-identity strong {
+  margin-top: 10px;
+  color: #ffffff;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.ooh-operation-alpha__transmission-identity span {
+  margin-top: 4px;
+  color: #59f3ff;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.ooh-operation-alpha__transmission-identity p {
+  margin-top: 10px;
+  color: rgba(223, 252, 255, 0.72);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.ooh-operation-alpha__enter {
+  min-height: 44px;
+  padding: 0.8rem 1.35rem;
+  border: 1px solid rgba(130, 245, 255, 0.55);
+  border-radius: 4px;
+  color: #dffcff;
+  background: rgba(4, 22, 28, 0.72);
+  box-shadow: 0 0 18px rgba(89, 243, 255, 0.14);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__enter:hover,
+.ooh-operation-alpha__enter:focus-visible {
+  border-color: rgba(223, 252, 255, 0.78);
+  outline: none;
+  box-shadow: 0 0 24px rgba(89, 243, 255, 0.22);
+}
+
+/* OA-208 - true widescreen shell and locked proceed flow */
+.ooh-operation-alpha__shell {
+  width: min(1800px, calc(100vw - 40px));
+  max-width: none;
+}
+
+.ooh-operation-alpha__command-console,
+.ooh-operation-alpha__actor-transmission,
+.ooh-operation-alpha__payload,
+.ooh-operation-alpha__battlefield,
+.ooh-operation-alpha__scenario,
+.ooh-operation-alpha__access-panel,
+.ooh-operation-alpha__mission,
+.ooh-operation-alpha__result {
+  max-width: none;
+}
+
+.ooh-operation-alpha__command-grid,
+.ooh-operation-alpha__director-actions,
+.ooh-operation-alpha__interventions,
+.ooh-operation-alpha__presence-choice-matrix,
+.ooh-operation-alpha__battlefield-grid,
+.ooh-operation-alpha__payload-grid,
+.ooh-operation-alpha__story-events {
+  width: 100%;
+}
+
+.ooh-operation-alpha__command-button,
+.ooh-operation-alpha__director-button,
+.ooh-operation-alpha__intervention,
+.ooh-operation-alpha__presence-choice {
+  max-width: none;
+}
+
+.ooh-operation-alpha[data-ooh-alpha-phase-state="LOCKED"] .ooh-operation-alpha__command-console,
+.ooh-operation-alpha[data-ooh-alpha-phase-key="startup"] .ooh-operation-alpha__command-console,
+.ooh-operation-alpha[data-ooh-alpha-phase-key="startup"] .ooh-operation-alpha__payload,
+.ooh-operation-alpha[data-ooh-alpha-phase-key="startup"] .ooh-operation-alpha__battlefield,
+.ooh-operation-alpha[data-ooh-alpha-phase-key="startup"] .ooh-operation-alpha__scenario,
+.ooh-operation-alpha[data-ooh-alpha-phase-key="intro"] .ooh-operation-alpha__director,
+.ooh-operation-alpha[data-ooh-alpha-phase-key="intro"] .ooh-operation-alpha__battlefield,
+.ooh-operation-alpha[data-ooh-alpha-phase-key="intro"] .ooh-operation-alpha__scenario,
+.ooh-operation-alpha[data-ooh-alpha-phase-key="character"] .ooh-operation-alpha__director,
+.ooh-operation-alpha[data-ooh-alpha-phase-key="character"] .ooh-operation-alpha__scenario {
+  opacity: 0.42;
+  filter: saturate(0.58);
+}
+
+.ooh-operation-alpha__command-button:disabled,
+.ooh-operation-alpha__director-button:disabled,
+.ooh-operation-alpha__intervention:disabled,
+.ooh-operation-alpha__presence-choice:disabled,
+.ooh-operation-alpha__mission-cycle:disabled,
+.ooh-operation-alpha__command-button.is-oa-control-disabled,
+.ooh-operation-alpha__director-button.is-oa-control-disabled,
+.ooh-operation-alpha__intervention.is-oa-control-disabled {
+  border-color: rgba(130, 245, 255, 0.12) !important;
+  color: rgba(223, 252, 255, 0.36) !important;
+  background: rgba(1, 8, 11, 0.48) !important;
+  box-shadow: none !important;
+  cursor: default !important;
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__mission-cycle {
+  width: min(100%, 420px);
+  margin-top: 12px;
+}
+
+.ooh-operation-alpha__mission-cycle[data-ooh-alpha-proceed-state="LOCKED"],
+.ooh-operation-alpha__mission-cycle[data-ooh-alpha-proceed-state="ACTIVE"] {
+  border-color: rgba(130, 245, 255, 0.14);
+  color: rgba(223, 252, 255, 0.42);
+  background: rgba(1, 8, 11, 0.56);
+  box-shadow: none;
+}
+
+.ooh-operation-alpha__mission-cycle[data-ooh-alpha-proceed-state="READY TO PROCEED"],
+.ooh-operation-alpha__mission-cycle.is-presence-ready:not(:disabled) {
+  border-color: rgba(89, 243, 255, 0.82);
+  color: #dffcff;
+  background: rgba(8, 48, 58, 0.82);
+  box-shadow:
+    inset 0 0 18px rgba(89, 243, 255, 0.08),
+    0 0 22px rgba(89, 243, 255, 0.22);
+  cursor: pointer;
+}
+
+.ooh-operation-alpha__mission-cycle[data-ooh-alpha-proceed-state="COMPLETE"],
+.ooh-operation-alpha__mission-cycle.is-presence-locked {
+  border-color: rgba(145, 250, 255, 0.24);
+  color: rgba(223, 252, 255, 0.58);
+  background: rgba(2, 14, 18, 0.72);
+  box-shadow: none;
+  cursor: default;
+}
+
+@media (max-width: 560px) {
+  .ooh-operation-alpha {
+    padding: 18px;
+  }
+
+  .ooh-operation-alpha__shell,
+  .ooh-operation-alpha__intro-card {
+    padding: 24px 18px;
+  }
+
+  .ooh-operation-alpha__scenario {
+    padding: 18px;
+  }
+
+  .ooh-operation-alpha__atmosphere {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__activation {
+    padding: 14px;
+  }
+
+  .ooh-operation-alpha__activation-button {
+    width: 100%;
+  }
+
+  .ooh-operation-alpha__activation-actions {
+    align-items: stretch;
+  }
+
+  .ooh-operation-alpha__signal-gate {
+    width: 100%;
+  }
+
+  .ooh-operation-alpha__command-console {
+    padding: 14px;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__command-head {
+    justify-content: center;
+  }
+
+  .ooh-operation-alpha__actor-transmission {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__actor-portrait {
+    width: min(140px, 100%);
+    min-height: 140px;
+    margin: 0 auto;
+  }
+
+  .ooh-operation-alpha__actor-image {
+    min-height: 140px;
+  }
+
+  .ooh-operation-alpha__intro-storyblock {
+    padding: 14px;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__intro-duel,
+  .ooh-operation-alpha__intro-card-body {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__intro-card-image {
+    width: min(150px, 100%);
+    height: 150px;
+    margin: 0 auto;
+  }
+
+  .ooh-operation-alpha__payload {
+    padding: 14px;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__payload-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__consequence-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__director-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__battlefield {
+    padding: 14px;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__battlefield-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__movement-list {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__movement-item {
+    padding-right: 0.58rem;
+    text-align: left;
+  }
+
+  .ooh-operation-alpha__contact-frame {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__contact-portrait {
+    width: min(150px, 100%);
+    min-height: 150px;
+    margin: 0 auto;
+  }
+
+  .ooh-operation-alpha__contact-image {
+    min-height: 150px;
+  }
+
+  .ooh-operation-alpha__mission {
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__result {
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__mission-cycle {
+    width: 100%;
+  }
+
+  .ooh-operation-alpha__signal-card {
+    padding: 22px 18px;
+  }
+
+  .ooh-operation-alpha__signal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ooh-operation-alpha__cta-row {
+    justify-content: stretch;
+  }
+
+  .ooh-operation-alpha__cta-link {
+    flex: 1 1 100%;
+  }
+
+  .ooh-operation-alpha__access-panel {
+    padding: 14px;
+  }
+
+  .ooh-operation-alpha__access-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ooh-operation-alpha__access-button,
+  .ooh-operation-alpha__final-aar-button {
+    width: 100%;
+  }
+
+  .ooh-operation-alpha__playlist-body {
+    padding: 16px;
+  }
+
+  .ooh-operation-alpha__playlist-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__credit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__credit-status {
+    grid-template-columns: 1fr;
+  }
+
+  .ooh-operation-alpha__credit-card {
+    min-height: 0;
+  }
+
+  .ooh-operation-alpha__runtime-handoff {
+    padding: 14px;
+  }
+
+  .ooh-operation-alpha__runtime-button {
+    width: 100%;
+  }
+
+  .ooh-operation-alpha__operation-panel {
+    padding: 16px;
+    text-align: center;
+  }
+
+  .ooh-operation-alpha__operation-head,
+  .ooh-operation-alpha__operation-grid {
+    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+}
+
+/* OA-207 — Character Story Arc + Final AAR Popup */
+.ooh-operation-alpha__story-events {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ooh-operation-alpha__story-event {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 10px;
+  min-height: 126px;
+  padding: 10px;
+  border: 1px solid rgba(130, 245, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(1, 8, 11, 0.44);
+  text-align: left;
+}
+
+.ooh-operation-alpha__story-event.is-story-event-current {
+  border-color: rgba(255, 212, 107, 0.34);
+}
+
+.ooh-operation-alpha__story-event-image {
+  width: 58px;
+  height: 72px;
+  border: 1px solid rgba(130, 245, 255, 0.2);
+  border-radius: 4px;
+  object-fit: cover;
+  background: rgba(4, 22, 28, 0.62);
+}
+
+.ooh-operation-alpha__story-event-kicker,
+.ooh-operation-alpha__final-aar-kicker {
+  display: block;
+  color: rgba(145, 250, 255, 0.72);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__story-event-name {
+  display: block;
+  margin-top: 4px;
+  color: #dffcff;
+  font-size: 0.84rem;
+  line-height: 1.25;
+}
+
+.ooh-operation-alpha__story-event-role {
+  display: block;
+  margin-top: 4px;
+  color: rgba(223, 252, 255, 0.66);
+  font-size: 0.7rem;
+  line-height: 1.3;
+}
+
+.ooh-operation-alpha__story-event-copy {
+  margin: 7px 0 0;
+  color: rgba(223, 252, 255, 0.82);
+  font-size: 0.76rem;
+  line-height: 1.42;
+}
+
+.ooh-operation-alpha__final-aar {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(1, 8, 11, 0.78);
+}
+
+.ooh-operation-alpha__final-aar[hidden] {
+  display: none;
+}
+
+.ooh-operation-alpha__final-aar-card {
+  width: min(720px, 100%);
+  padding: 22px;
+  border: 1px solid rgba(145, 250, 255, 0.42);
+  border-radius: 8px;
+  background: rgba(4, 22, 28, 0.96);
+  box-shadow: 0 0 42px rgba(89, 243, 255, 0.18);
+  text-align: left;
+}
+
+.ooh-operation-alpha__final-aar-title {
+  margin: 8px 0 10px;
+  color: #dffcff;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__final-aar-status {
+  display: block;
+  color: rgba(255, 212, 107, 0.92);
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__final-aar-lines {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.ooh-operation-alpha__final-aar-lines p {
+  margin: 0;
+  color: rgba(223, 252, 255, 0.84);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.ooh-operation-alpha__final-aar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.ooh-operation-alpha__final-aar-button {
+  min-height: 40px;
+  padding: 0.66rem 0.8rem;
+  border: 1px solid rgba(130, 245, 255, 0.28);
+  border-radius: 4px;
+  color: rgba(223, 252, 255, 0.92);
+  background: rgba(1, 8, 11, 0.58);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__final-aar-button:hover,
+.ooh-operation-alpha__final-aar-button:focus-visible {
+  border-color: rgba(223, 252, 255, 0.68);
+  color: #dffcff;
+  outline: none;
+  box-shadow: 0 0 16px rgba(89, 243, 255, 0.14);
+}
+
+@media (max-width: 900px) {
+  .ooh-operation-alpha__story-events {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.ooh-operation-alpha__intro-storyblock,
+.ooh-operation-alpha__payload,
+.ooh-operation-alpha__mission,
+.ooh-operation-alpha__consequence,
+.ooh-operation-alpha__battlefield,
+.ooh-operation-alpha__story-event {
+  position: relative;
+}
+
+.ooh-operation-alpha__referenced-portraits {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  display: grid;
+  gap: 8px;
+  width: min(34%, 190px);
+  pointer-events: none;
+}
+
+.ooh-operation-alpha__referenced-portrait {
+  min-width: 0;
+  margin: 0;
+  border: 1px solid rgba(130, 245, 255, 0.28);
+  border-radius: 8px;
+  background: rgba(2, 10, 13, 0.82);
+  box-shadow: 0 0 18px rgba(89, 243, 255, 0.1);
+  overflow: hidden;
+}
+
+.ooh-operation-alpha__referenced-portrait--primary {
+  justify-self: end;
+  width: min(100%, 172px);
+}
+
+.ooh-operation-alpha__referenced-secondary-list {
+  display: grid;
+  gap: 6px;
+  justify-items: end;
+}
+
+.ooh-operation-alpha__referenced-portrait--secondary {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  width: min(100%, 160px);
+}
+
+.ooh-operation-alpha__referenced-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: rgba(130, 245, 255, 0.08);
+}
+
+.ooh-operation-alpha__referenced-portrait--secondary .ooh-operation-alpha__referenced-image {
+  width: 42px;
+  height: 42px;
+}
+
+.ooh-operation-alpha__referenced-portrait figcaption {
+  padding: 6px;
+  color: #dffcff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.ooh-operation-alpha__intro-storyblock > :not(.ooh-operation-alpha__referenced-portraits),
+.ooh-operation-alpha__payload > :not(.ooh-operation-alpha__referenced-portraits),
+.ooh-operation-alpha__mission > :not(.ooh-operation-alpha__referenced-portraits),
+.ooh-operation-alpha__consequence > :not(.ooh-operation-alpha__referenced-portraits),
+.ooh-operation-alpha__battlefield > :not(.ooh-operation-alpha__referenced-portraits) {
+  max-width: calc(100% - min(38%, 210px));
+}
+
+@media (max-width: 760px) {
+  .ooh-operation-alpha__referenced-portraits {
+    position: static;
+    width: 100%;
+    margin: 12px 0 0;
+  }
+
+  .ooh-operation-alpha__referenced-portrait--primary {
+    width: min(180px, 100%);
+  }
+
+  .ooh-operation-alpha__intro-storyblock > :not(.ooh-operation-alpha__referenced-portraits),
+  .ooh-operation-alpha__payload > :not(.ooh-operation-alpha__referenced-portraits),
+  .ooh-operation-alpha__mission > :not(.ooh-operation-alpha__referenced-portraits),
+  .ooh-operation-alpha__consequence > :not(.ooh-operation-alpha__referenced-portraits),
+  .ooh-operation-alpha__battlefield > :not(.ooh-operation-alpha__referenced-portraits) {
+    max-width: none;
+  }
+}

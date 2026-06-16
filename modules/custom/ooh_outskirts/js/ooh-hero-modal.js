@@ -184,85 +184,11 @@
             dialogs.forEach(closeDialog);
           });
 
-          const audioIsAudible = () => {
-            return !!audio && !audio.paused && !audio.muted && audio.volume > 0;
-          };
-
-          const prepareAmbientAudio = () => {
-            if (!audio) {
-              return false;
-            }
-
-            const windSrc = landing.getAttribute('data-ooh-wind-src');
-            const source = audio.querySelector('source');
-
-            if (windSrc) {
-              if (audio.getAttribute('src') !== windSrc) {
-                audio.setAttribute('src', windSrc);
-              }
-              if (source && source.getAttribute('src') !== windSrc) {
-                source.setAttribute('src', windSrc);
-              }
-            }
-
-            audio.loop = true;
-            audio.preload = 'auto';
-            return true;
-          };
-
-          const playAmbient = () => {
-            if (!prepareAmbientAudio()) {
-              return Promise.resolve(false);
-            }
-            audio.muted = false;
-            audio.volume = 0.18;
-
-            if (audio.readyState === 0) {
-              audio.load();
-            }
-
-            const playPromise = audio.play();
-            if (!playPromise || typeof playPromise.then !== 'function') {
-              return Promise.resolve(audioIsAudible());
-            }
-
-            return playPromise
-              .then(() => audioIsAudible())
-              .catch(() => false);
-          };
-
-          prepareAmbientAudio();
-
-          if (audio) {
-            const removeAmbientUnlockListeners = () => {
-              window.removeEventListener('pointerdown', unlockAmbient);
-              window.removeEventListener('click', unlockAmbient);
-              window.removeEventListener('keydown', unlockAmbient);
-              window.removeEventListener('touchstart', unlockAmbient);
-            };
-
-            const unlockAmbient = () => {
-              playAmbient().then((audible) => {
-                if (!audible) {
-                  return;
-                }
-                removeAmbientUnlockListeners();
-              });
-            };
-
-            window.addEventListener('pointerdown', unlockAmbient, { once: true });
-            window.addEventListener('click', unlockAmbient, { once: true });
-            window.addEventListener('keydown', unlockAmbient, { once: true });
-            window.addEventListener('touchstart', unlockAmbient, { once: true });
-
-            playAmbient().then((audible) => {
-              if (audible) {
-                removeAmbientUnlockListeners();
-              }
-            });
+          if (audio && window.oohLandingAmbientWind) {
+            console.log('[OA wind] duplicate initializer skipped');
           }
 
-          creditStatuses.forEach((creditStatus) => {
+creditStatuses.forEach((creditStatus) => {
             creditStatus.textContent = creditCount !== null && creditCount !== undefined && creditCount !== '' ?
               `CREDITS: ${creditCount}` :
               'CREDITS // ACCESS READY';
@@ -468,3 +394,4 @@
     }
   };
 })(Drupal, once);
+

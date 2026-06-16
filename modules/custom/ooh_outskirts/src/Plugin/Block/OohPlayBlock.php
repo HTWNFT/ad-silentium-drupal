@@ -58,8 +58,8 @@ final class OohPlayBlock extends BlockBase {
    */
   public function defaultConfiguration(): array {
     return [
-      'title' => 'Mission Briefing',
-      'subtitle' => 'Dossier accepted. Operation staged for field entry.',
+      'title' => 'Operation Alpha Runtime Access',
+      'subtitle' => 'Dossier accepted. Hostile-field insertion staged.',
       'require_login' => FALSE,
       'playlist_options' => "rap|War Bangaz\nrock|War Rock",
       'recruiter_options' => "merged|Merged\ndoomed|Doomed",
@@ -170,7 +170,7 @@ final class OohPlayBlock extends BlockBase {
       ];
     }
 
-    $title = htmlspecialchars((string) ($config['title'] ?? 'Mission Briefing'), ENT_QUOTES, 'UTF-8');
+    $title = htmlspecialchars((string) ($config['title'] ?? 'Operation Alpha Runtime Access'), ENT_QUOTES, 'UTF-8');
     $subtitle = nl2br(htmlspecialchars((string) ($config['subtitle'] ?? ''), ENT_QUOTES, 'UTF-8'));
     $dossier_target = Url::fromRoute('ooh_outskirts.dossier')->toString();
     $dossier_target_escaped = htmlspecialchars($dossier_target, ENT_QUOTES, 'UTF-8');
@@ -202,8 +202,8 @@ final class OohPlayBlock extends BlockBase {
         <div class="ooh-play-scene__marker ooh-play-scene__marker--beta"></div>
         <div class="ooh-play-scene__mission-label" data-ooh-scene-mission-label>MISSION TYPE // PENDING</div>
         <div class="ooh-play-scene__staging-card">
-          <span class="ooh-play-scene__staging-kicker">MISSION STATUS</span>
-          <span class="ooh-play-scene__staging-copy" data-ooh-scene-status>MISSION STAGED // ACTIVATE MISSION TO ENTER FIELD</span>
+          <span class="ooh-play-scene__staging-kicker">RUNTIME STATUS</span>
+          <span class="ooh-play-scene__staging-copy" data-ooh-scene-status>FIELD STAGED // ENTER FIELD TO BEGIN SIGNAL HOLD</span>
         </div>
         <aside class="ooh-play__hud" data-ooh-active-hud aria-label="Active mission HUD" aria-hidden="true">
           <div class="ooh-play__hud-panel ooh-play__hud-panel--command">
@@ -277,7 +277,7 @@ final class OohPlayBlock extends BlockBase {
         <section class="ooh-generator__panel ooh-play-scene__briefing-panel" data-ooh-mission-briefing>
           <div class="ooh-generator__panel-head">
             <div class="ooh-generator__panel-kicker" data-ooh-briefing-field="route">---</div>
-            <h3 class="ooh-generator__panel-title">Mission Briefing</h3>
+            <h3 class="ooh-generator__panel-title">Operational Runtime</h3>
           </div>
           <pre class="ooh-play-mission__briefing ooh-play-mission__briefing--generated" data-ooh-generated-briefing>Awaiting dossier payload.</pre>
           <div class="ooh-play-combat-gate" data-ooh-combat-gate hidden>
@@ -356,8 +356,8 @@ final class OohPlayBlock extends BlockBase {
 
       <section class="ooh-generator__panel ooh-play-scene__assembly" aria-label="Personalized mission assembly">
         <div class="ooh-generator__panel-head">
-          <div class="ooh-generator__panel-kicker">ASM</div>
-          <h3 class="ooh-generator__panel-title">Personalized Mission Assembly</h3>
+          <div class="ooh-generator__panel-kicker">OA</div>
+          <h3 class="ooh-generator__panel-title">Field Access Payload</h3>
         </div>
         <div class="ooh-play-assembly__grid" data-ooh-mission-assembly>
           <div class="ooh-play-assembly__field">
@@ -408,7 +408,7 @@ final class OohPlayBlock extends BlockBase {
       </section>
 
       <div class="ooh-play-scene__actions">
-        <button class="ooh-generator__overlay-btn ooh-play-scene__activate" type="button" data-ooh-activate-mission>ACTIVATE MISSION</button>
+        <button class="ooh-generator__overlay-btn ooh-play-scene__activate" type="button" data-ooh-activate-mission>ENTER FIELD</button>
         <a class="ooh-generator__overlay-btn" href="{$dossier_target_escaped}">Return to Dossier</a>
       </div>
     </div>

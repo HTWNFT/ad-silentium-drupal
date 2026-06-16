@@ -1,0 +1,64 @@
+<section class="ooh-operation-alpha-level ooh-operation-alpha-level--four" data-ooh-alpha-level="4">
+  <div class="ooh-operation-alpha-level__shell">
+    <nav class="ooh-operation-alpha-level__nav" aria-label="Operation Alpha level navigation">
+      <a href="{{ path('ooh_outskirts.operation_alpha') }}">INTRO</a>
+      <a href="{{ path('ooh_outskirts.operation_alpha_level_3') }}">REPORT</a>
+    </nav>
+    <p class="ooh-operation-alpha-level__eyebrow">OPERATION ALPHA // LEVEL 4</p>
+    <h1 class="ooh-operation-alpha-level__title">LAST LIGHT</h1>
+    <p class="ooh-operation-alpha-level__copy">The final breach asks one question: what are you willing to lose?</p>
+
+    <section class="ooh-operation-alpha-level__status" aria-label="Level 4 runtime state">
+      <div>
+        <span>SURVIVAL PRESSURE</span>
+        <strong data-ooh-alpha-final-pressure>MAXIMUM</strong>
+      </div>
+      <div>
+        <span>TIME PRESSURE</span>
+        <strong data-ooh-alpha-final-time>COUNTDOWN 1:00</strong>
+      </div>
+      <div>
+        <span>FINAL STATE</span>
+        <strong data-ooh-alpha-final-state>UNRESOLVED</strong>
+      </div>
+      <div>
+        <span>DIRECTIVES LOCKED</span>
+        <strong data-ooh-alpha-level-count>SELECTED: 0 / REQUIRED: 3</strong>
+      </div>
+    </section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Mission timer framework">
+      <span>MISSION TIMER</span>
+      <p><strong data-ooh-alpha-mission-timer>1:00</strong></p>
+      <button class="ooh-operation-alpha-level__button" type="button" data-ooh-alpha-juice-factor>JUICE FACTOR</button>
+      <p data-ooh-alpha-juice-status>JUICE FACTOR USES: 0 / COST: -10 SECONDS EACH</p>
+    </section>
+
+    <section class="ooh-operation-alpha-level__choices" aria-label="Final survival choices" data-ooh-alpha-level-choices></section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Narrative consequence">
+      <span>NARRATIVE CONSEQUENCE</span>
+      <p data-ooh-alpha-level-consequence>Awaiting final directive.</p>
+    </section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Chain of consequence">
+      <span>CHAIN OF CONSEQUENCE</span>
+      <div data-ooh-alpha-chain-panel>
+        <p>ACTION: Awaiting final directive.</p>
+        <p>REACTION: Last Light holding.</p>
+        <p>CONSEQUENCE: Final cost unresolved.</p>
+        <p>CARRY-FORWARD EFFECT: Mission not finalized.</p>
+      </div>
+    </section>
+
+    <section class="ooh-operation-alpha-level__summary" aria-label="Final survival outcome">
+      <span>FINAL OUTCOME</span>
+      <p data-ooh-alpha-final-summary>THE CORRIDOR WAITS / THE COST IS UNKNOWN / SURVIVAL UNRESOLVED</p>
+    </section>
+
+    <div class="ooh-operation-alpha-level__actions">
+      <a class="ooh-operation-alpha-level__button" href="{{ path('ooh_outskirts.operation_alpha_level_3') }}">BACK TO REPORT</a>
+      <button class="ooh-operation-alpha-level__button ooh-operation-alpha-level__button--primary is-disabled" type="button" disabled aria-disabled="true" data-ooh-alpha-finale-url="{{ path('ooh_outskirts.operation_alpha_finale') }}" data-ooh-alpha-finalize>FINALIZE MISSION</button>
+    </div>
+  </div>
+</section>

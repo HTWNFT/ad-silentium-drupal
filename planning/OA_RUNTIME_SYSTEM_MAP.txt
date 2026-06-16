@@ -1,0 +1,101 @@
+OA_RUNTIME_SYSTEM_MAP
+
+ENTER
+Player enters operational zone.
+Current assets:
+- landing atmosphere
+- route identity
+- operational shell
+
+Needs:
+- actual runtime entry transition
+- mission initialization
+- signal start state
+
+ORIENT
+Player understands immediate surroundings and objective pressure.
+
+Current assets:
+- telemetry atmosphere
+- operational HUD
+- signal language
+
+Needs:
+- directional guidance
+- playable area logic
+- objective visibility
+
+STABILIZE SIGNAL
+Player actively prevents signal degradation.
+
+Current assets:
+- signal integrity runtime loop
+- HOLD behavior
+- telemetry cadence
+
+Needs:
+- actual player-driven stabilization mechanics
+- risk/reward pressure
+- interaction timing
+
+LOCATE OBJECTIVE
+Player searches for operational target.
+
+Current assets:
+- route atmosphere
+- dossier identity
+
+Needs:
+- searchable objective system
+- mission target placement
+- runtime navigation logic
+
+HANDLE PRESSURE
+Player survives degradation pressure while moving toward extraction.
+
+Current assets:
+- signal collapse atmosphere
+- degraded telemetry feeling
+
+Needs:
+- environmental pressure systems
+- runtime hazards
+- decision pressure
+
+EXTRACT
+Player reaches extraction point before total collapse.
+
+Current assets:
+- operational language
+- extraction terminology
+
+Needs:
+- extraction trigger system
+- success/failure validation
+- extraction countdown logic
+
+DEBRIEF
+Player receives operational consequence summary.
+
+Current assets:
+- summary language
+- atmospheric aftermath identity
+
+Needs:
+- actual run statistics
+- mission result generation
+- replay transition
+
+REPLAY
+Player immediately re-enters another operational run.
+
+Current assets:
+- operational continuity atmosphere
+
+Needs:
+- replay loop flow
+- fast restart structure
+- runtime persistence decisions
+
+CURRENT DEVELOPMENT TARGET
+Convert existing operational atmosphere into a fully playable contained runtime loop without expanding scope.
