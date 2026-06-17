@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  console.log('OA-211 Operation Alpha decision consequence runtime loaded');
+  console.log('OA-224 Operation Alpha validated deployment loaded');
 
   var storageKey = 'ooh_operation_alpha_intro_seen_v1';
   var sessionIntroSeenKey = 'ooh_operation_alpha_intro_seen_session_v1';
@@ -9,6 +9,9 @@
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
   var levelOneTimerKey = 'ooh_operation_alpha_level1_timer_remaining_seconds_v1';
+  var level23TimerKey = 'ooh_operation_alpha_level23_timer_remaining_seconds_v1';
+  var retiredLevel23TimerKey = 'ooh_operation_alpha_timer_remaining_v1';
+  var goNoGoHistoryKey = 'ooh_operation_alpha_go_nogo_recent_history_v1';
   var freeOperationStartedKey = 'ooh_operation_alpha_free_operation_started_v1';
   var creditBalanceKey = 'ooh_alpha_operation_credit_balance_v1';
   var operationCreditCost = 1;
@@ -61,16 +64,16 @@
     }
   ];
 
-  function resetOAIntroRunState(keepPlaylist) {
-    if (window.clearOperationAlphaRuntimeState) {
-      return window.clearOperationAlphaRuntimeState(keepPlaylist);
-    }
+  function removeKnownOperationAlphaRunState(keepPlaylist) {
     try {
       window.localStorage.removeItem(oaChainStateKey);
       window.localStorage.removeItem(storageKey);
       window.localStorage.removeItem(signalStorageKey);
       window.sessionStorage.removeItem(sessionIntroSeenKey);
       window.sessionStorage.removeItem(levelOneTimerKey);
+      window.sessionStorage.removeItem(level23TimerKey);
+      window.sessionStorage.removeItem(retiredLevel23TimerKey);
+      window.sessionStorage.removeItem(goNoGoHistoryKey);
       window.sessionStorage.removeItem(recentRoninStorageKey);
       window.sessionStorage.removeItem(rootScenarioMemoryKey);
       window.localStorage.removeItem(retiredRootScenarioMemoryKey);
@@ -85,6 +88,17 @@
       }
     }
     catch (e) {}
+  }
+
+  function resetOAIntroRunState(keepPlaylist) {
+    var result = null;
+
+    if (window.clearOperationAlphaRuntimeState) {
+      result = window.clearOperationAlphaRuntimeState(keepPlaylist);
+      removeKnownOperationAlphaRunState(keepPlaylist !== false);
+      return result;
+    }
+    removeKnownOperationAlphaRunState(keepPlaylist !== false);
     return null;
   }
 
@@ -5472,7 +5486,7 @@
       var version = document.createElement('p');
       version.className = 'ooh-operation-alpha__copy';
       version.setAttribute('data-ooh-alpha-runtime-version', '');
-      version.textContent = 'OA RUNTIME VERSION: OA-211 DECISION CONSEQUENCE CHECK';
+      version.textContent = 'OA RUNTIME VERSION: OA-224 VALIDATED DEPLOYMENT';
       if (title && title.parentNode === shell) {
         shell.insertBefore(version, title.nextSibling);
       }

@@ -2,9 +2,15 @@
   'use strict';
 
   var stateKey = 'ooh_operation_alpha_chain_state_v1';
+  var level23TimerKey = 'ooh_operation_alpha_level23_timer_remaining_seconds_v1';
+  var retiredLevel23TimerKey = 'ooh_operation_alpha_timer_remaining_v1';
+  var goNoGoHistoryKey = 'ooh_operation_alpha_go_nogo_recent_history_v1';
+  var level23InitialSeconds = 180;
+  var defaultChoicePenaltySeconds = 5;
+  var juiceBonusSeconds = 5;
 
   function defaultState() {
-    return { pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], level1Choices: [], level2Choices: [], activeIdentity: null, activePortrait: '', castIdentities: null, enemyPressureIdentity: null, enemyPressureMode: '', narrativeSelections: {}, narrativeTokens: {}, midpointChoice: null, midpointOutcomeLast: null, midpointGoStreak: 0 };
+    return { pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], level1Choices: [], level2Choices: [], activeIdentity: null, activePortrait: '', castIdentities: null, enemyPressureIdentity: null, enemyPressureMode: '', narrativeSelections: {}, narrativeTokens: {}, midpointChoice: null, midpointOutcomeLast: null, midpointGoStreak: 0, midpointOutcomeHistory: [], level23TimerRemainingSeconds: level23InitialSeconds, level23TimerKey: level23TimerKey, level23TimerExpired: false };
   }
 
   function readOAState() {
@@ -33,12 +39,166 @@
     state.trust = chain.reduce(function (sum, item) { return sum + (item.trust || 0); }, 0);
     state.enemyAwareness = chain.reduce(function (sum, item) { return sum + (item.awareness || 0); }, 0);
     state.signalIntegrity = Math.max(0, Math.min(100, 100 + chain.reduce(function (sum, item) { return sum + (item.signal || 0); }, 0)));
-    state.failed = state.signalIntegrity <= 15 || state.pressure >= 12 || state.enemyAwareness >= 12;
+    state.failed = !!state.level23TimerExpired || state.signalIntegrity <= 15 || state.pressure >= 12 || state.enemyAwareness >= 12;
     return state;
+  }
+
+  function clampTimerSeconds(value) {
+    value = parseInt(value, 10);
+    if (!Number.isFinite(value)) {
+      return level23InitialSeconds;
+    }
+    return Math.max(0, value);
+  }
+
+  function readTimerRemaining(state) {
+    var stored;
+    try {
+      stored = window.sessionStorage.getItem(level23TimerKey);
+      if (stored === null || stored === '') {
+        return 0;
+      }
+      return clampTimerSeconds(stored);
+    }
+    catch (e) {
+      return clampTimerSeconds(state && state.level23TimerRemainingSeconds);
+    }
+  }
+
+  function writeTimerRemaining(state, seconds) {
+    var remaining = clampTimerSeconds(seconds);
+
+    if (state) {
+      state.level23TimerRemainingSeconds = remaining;
+      state.level23TimerKey = level23TimerKey;
+      state.level23TimerExpired = remaining <= 0 || !!state.level23TimerExpired;
+    }
+    try {
+      window.sessionStorage.setItem(level23TimerKey, String(remaining));
+    }
+    catch (e) {}
+    return remaining;
+  }
+
+  function formatTimer(seconds) {
+    seconds = clampTimerSeconds(seconds);
+    return 'CLOSURE ' + String(Math.floor(seconds / 60)) + ':' + String(seconds % 60).padStart(2, '0');
+  }
+
+  function updateTimerDisplay(root, state) {
+    var time = root.querySelector('[data-ooh-alpha-level-time]');
+    var remaining = readTimerRemaining(state);
+
+    if (time) {
+      time.textContent = formatTimer(remaining);
+    }
+    return remaining;
+  }
+
+  function markTimerExpired(root) {
+    var state = readOAState();
+    var stageState = root.querySelector('[data-ooh-alpha-level-state]');
+    var wrap = root.querySelector('[data-ooh-alpha-level-choices]');
+
+    state.level23TimerExpired = true;
+    state.level23TimerRemainingSeconds = 0;
+    writeTimerRemaining(state, 0);
+    calculatePressure(state);
+    writeOAState(state);
+    if (stageState && !state.midpointChoice) {
+      stageState.textContent = 'TIME EXPIRED';
+    }
+    if (wrap) {
+      wrap.querySelectorAll('button:not(.is-selected)').forEach(function (button) {
+        button.disabled = true;
+        button.classList.add('is-disabled');
+      });
+    }
+  }
+
+  function startTimer(root) {
+    if (!root || root.oohAlphaLevel23TimerInterval) {
+      return;
+    }
+    root.oohAlphaLevel23TimerInterval = window.setInterval(function () {
+      var state = readOAState();
+      var remaining = readTimerRemaining(state);
+
+      if (remaining <= 0) {
+        window.clearInterval(root.oohAlphaLevel23TimerInterval);
+        root.oohAlphaLevel23TimerInterval = null;
+        markTimerExpired(root);
+        updateTimerDisplay(root, state);
+        return;
+      }
+      remaining = writeTimerRemaining(state, remaining - 1);
+      calculatePressure(state);
+      writeOAState(state);
+      updateTimerDisplay(root, state);
+      if (remaining <= 0) {
+        markTimerExpired(root);
+      }
+    }, 1000);
   }
 
   function calculateOutcome(state) {
     return state.midpointChoice ? 'READY' : 'LOCKED';
+  }
+
+  function applyChoiceTimePenalty(state, card) {
+    var penalty = Math.max(0, parseInt(card.timePenalty || defaultChoicePenaltySeconds, 10) || 0);
+
+    return writeTimerRemaining(state, readTimerRemaining(state) - penalty);
+  }
+
+  function useJuice(root, state) {
+    var remaining;
+
+    state.level23JuiceUsed = state.level23JuiceUsed || {};
+    if (state.level23JuiceUsed.level3 || readTimerRemaining(state) <= 0) {
+      return false;
+    }
+    state.level23JuiceUsed.level3 = true;
+    remaining = writeTimerRemaining(state, readTimerRemaining(state) + juiceBonusSeconds);
+    state.level23TimerExpired = remaining <= 0;
+    writeOAState(state);
+    updateTimerDisplay(root, state);
+    updateJuiceDisplay(root, state);
+    return true;
+  }
+
+  function ensureJuiceControl(root) {
+    var button = root.querySelector('[data-ooh-alpha-juice-factor]');
+    var status = root.querySelector('[data-ooh-alpha-juice-status]');
+    var time = root.querySelector('[data-ooh-alpha-level-time]');
+    var host;
+
+    if (button && status) {
+      return;
+    }
+    host = document.createElement('div');
+    host.innerHTML = '<span>JUICE</span><button class="ooh-operation-alpha-level__button" type="button" data-ooh-alpha-juice-factor>JUICE</button><strong data-ooh-alpha-juice-status>JUICE AVAILABLE: +5 SECONDS</strong>';
+    if (time && time.parentNode && time.parentNode.parentNode) {
+      time.parentNode.parentNode.insertBefore(host, time.parentNode.nextSibling);
+    }
+  }
+
+  function updateJuiceDisplay(root, state) {
+    ensureJuiceControl(root);
+
+    var button = root.querySelector('[data-ooh-alpha-juice-factor]');
+    var status = root.querySelector('[data-ooh-alpha-juice-status]');
+    var used = !!(state.level23JuiceUsed && state.level23JuiceUsed.level3);
+    var expired = readTimerRemaining(state) <= 0;
+
+    if (button) {
+      button.disabled = used || expired;
+      button.classList.toggle('is-disabled', button.disabled);
+      button.setAttribute('aria-disabled', button.disabled ? 'true' : 'false');
+    }
+    if (status) {
+      status.textContent = expired && !used ? 'JUICE LOCKED: TIMER EXPIRED' : (used ? 'JUICE USED: +5 SECONDS APPLIED' : 'JUICE AVAILABLE: +5 SECONDS');
+    }
   }
 
   function renderChainPanel(root, state) {
@@ -75,6 +235,56 @@
 
   function midpointOutcome(card) {
     return card && card.id === 'midpoint-go' ? 'GO' : 'NO GO';
+  }
+
+  function readGoNoGoHistory(state) {
+    var history = [];
+
+    try {
+      history = JSON.parse(window.sessionStorage.getItem(goNoGoHistoryKey) || '[]') || [];
+    }
+    catch (e) {
+      history = [];
+    }
+    if (!history.length && Array.isArray(state.midpointOutcomeHistory)) {
+      history = state.midpointOutcomeHistory;
+    }
+    return history.filter(function (item) {
+      return item === 'GO' || item === 'NO GO';
+    }).slice(-6);
+  }
+
+  function writeGoNoGoHistory(state, history) {
+    history = (history || []).filter(function (item) {
+      return item === 'GO' || item === 'NO GO';
+    }).slice(-6);
+    state.midpointOutcomeHistory = history;
+    state.midpointGoStreak = consecutiveGoCount(history);
+    try {
+      window.sessionStorage.setItem(goNoGoHistoryKey, JSON.stringify(history));
+    }
+    catch (e) {}
+  }
+
+  function consecutiveGoCount(history) {
+    var count = 0;
+    var index;
+
+    for (index = (history || []).length - 1; index >= 0; index -= 1) {
+      if (history[index] !== 'GO') {
+        break;
+      }
+      count += 1;
+    }
+    return count;
+  }
+
+  function goNoGoScore(state) {
+    return (state.trust || 0) + Math.floor((state.signalIntegrity || 0) / 20) - (state.pressure || 0) - (state.enemyAwareness || 0);
+  }
+
+  function clampChance(value, min, max) {
+    return Math.max(min, Math.min(max, value));
   }
 
   function midpointDisplayTitle(card) {
@@ -330,26 +540,46 @@
     ];
   }
 
-  function weightedMidpointCard(cards, state) {
+  function weightedMidpointCard(cards, state, requestedCard) {
     var goCard = cards.filter(function (card) { return card.id === 'midpoint-go'; })[0];
     var noGoCard = cards.filter(function (card) { return card.id === 'midpoint-no-go'; })[0];
-    var goStreak = Math.max(0, parseInt(state.midpointGoStreak || 0, 10));
-    var goChance = goStreak >= 2 ? 0.25 : (goStreak === 1 ? 0.45 : 0.6);
+    var history = readGoNoGoHistory(state);
+    var goStreak = consecutiveGoCount(history);
+    var score = goNoGoScore(state);
+    var goChance = clampChance(0.55 + ((state.trust || 0) * 0.04) + ((state.signalIntegrity || 0) * 0.003) - ((state.pressure || 0) * 0.05) - ((state.enemyAwareness || 0) * 0.04) - (goStreak * 0.2), 0.12, 0.86);
 
     if (!goCard || !noGoCard) {
       return cards[0];
+    }
+    if (requestedCard && requestedCard.id === 'midpoint-no-go') {
+      return noGoCard;
+    }
+    if (goStreak >= 2) {
+      state.midpointAntiStreakApplied = true;
+      return noGoCard;
+    }
+    if (state.failed || state.level23TimerExpired || state.signalIntegrity <= 20 || state.pressure >= 10 || state.enemyAwareness >= 10) {
+      return noGoCard;
+    }
+    if (score >= 6 && state.signalIntegrity >= 70) {
+      return goCard;
     }
     return Math.random() < goChance ? goCard : noGoCard;
   }
 
   function recordMidpointOutcome(state, card) {
+    var outcome = card && card.id === 'midpoint-go' ? 'GO' : 'NO GO';
+    var history = readGoNoGoHistory(state);
+
+    history.push(outcome);
+    writeGoNoGoHistory(state, history);
     if (!card || card.id !== 'midpoint-go') {
       state.midpointOutcomeLast = 'NO GO';
       state.midpointGoStreak = 0;
       return;
     }
     state.midpointOutcomeLast = 'GO';
-    state.midpointGoStreak = Math.max(0, parseInt(state.midpointGoStreak || 0, 10)) + 1;
+    state.midpointGoStreak = consecutiveGoCount(history);
   }
 
   function render(root) {
@@ -358,6 +588,7 @@
     var count = root.querySelector('[data-ooh-alpha-level-count]');
     var stageState = root.querySelector('[data-ooh-alpha-level-state]');
     var routeLabel = root.querySelector('[data-ooh-alpha-level-route]');
+    var time = root.querySelector('[data-ooh-alpha-level-time]');
     var next = root.querySelector('[data-ooh-alpha-level-next]');
     var consequence = root.querySelector('[data-ooh-alpha-level-consequence]');
     var shell = root.querySelector('.ooh-operation-alpha-level__shell');
@@ -365,10 +596,13 @@
     var keyLines = latest.length ? latest.map(function (item) { return midpointDisplayTitle(item) + ': ' + item.consequence; }) : ['No field consequence recorded.'];
     var selected = state.midpointChoice;
     var locked = !!selected;
+    var timerExpired;
 
     document.body.classList.add('ooh-operation-alpha-level-runtime');
     state.phase = 'situation-report';
     calculatePressure(state);
+    writeTimerRemaining(state, readTimerRemaining(state));
+    timerExpired = readTimerRemaining(state) <= 0;
 
     setText(root, '[data-ooh-alpha-pressure-status]', 'PRESSURE: ' + band(state.pressure, 4, 8) + ' (' + state.pressure + ')');
     setText(root, '[data-ooh-alpha-trust-status]', 'TRUST: ' + band(state.trust, 3, 7) + ' (' + state.trust + ')');
@@ -388,22 +622,23 @@
         button.type = 'button';
         button.className = 'ooh-operation-alpha-level__choice';
         button.classList.toggle('is-selected', chosen);
-        button.classList.toggle('is-disabled', locked && !chosen);
-        button.disabled = locked;
+        button.classList.toggle('is-disabled', (locked || timerExpired) && !chosen);
+        button.disabled = locked || timerExpired;
         button.innerHTML = '<span>' + midpointDisplayTitle(card) + '</span><strong>SITUATION</strong><p>' + card.situation + '</p><strong>DIRECTIVE</strong><p>' + card.directive + '</p><strong>RISK</strong><p>' + card.risk + '</p><strong>CONSEQUENCE</strong><p>' + card.consequence + '</p>';
         button.addEventListener('click', function () {
           if (button.disabled) {
             return;
           }
           state = readOAState();
-          if (state.midpointChoice) {
+          if (state.midpointChoice || readTimerRemaining(state) <= 0) {
             return;
           }
-          var outcomeCard = weightedMidpointCard(cards, state);
+          var outcomeCard = weightedMidpointCard(cards, state, card);
           // Anti-drift: this selected outcome controls existing GO/NO-GO routing; display copy above does not.
           state.midpointChoice = outcomeCard;
           state.midpointDecision = outcomeCard.title;
           state.failed = outcomeCard.id === 'midpoint-no-go' ? true : state.failed;
+          applyChoiceTimePenalty(state, outcomeCard);
           recordMidpointOutcome(state, outcomeCard);
           appendChainEvent(state, outcomeCard);
           render(root);
@@ -420,6 +655,9 @@
     }
     if (stageState) {
       stageState.textContent = calculateOutcome(state);
+    }
+    if (time) {
+      updateTimerDisplay(root, state);
     }
     if (routeLabel) {
       routeLabel.textContent = selected ? (selected.route === 'finale' ? 'FINAL DEBRIEF' : 'LAST LIGHT') : 'UNRESOLVED';
@@ -438,7 +676,23 @@
     if (shell) {
       shell.classList.toggle('is-stage-complete', locked);
     }
+    updateJuiceDisplay(root, state);
+    root.querySelectorAll('[data-ooh-alpha-juice-factor]').forEach(function (button) {
+      if (button.oohAlphaJuiceBound) {
+        return;
+      }
+      button.oohAlphaJuiceBound = true;
+      button.addEventListener('click', function () {
+        state = readOAState();
+        useJuice(root, state);
+      });
+    });
+    try {
+      window.sessionStorage.removeItem(retiredLevel23TimerKey);
+    }
+    catch (e) {}
     writeOAState(state);
+    startTimer(root);
   }
 
   document.addEventListener('DOMContentLoaded', function () {

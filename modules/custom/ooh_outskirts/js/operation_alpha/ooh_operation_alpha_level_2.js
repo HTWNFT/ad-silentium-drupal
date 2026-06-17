@@ -2,7 +2,12 @@
   'use strict';
 
   var stateKey = 'ooh_operation_alpha_chain_state_v1';
+  var level23TimerKey = 'ooh_operation_alpha_level23_timer_remaining_seconds_v1';
+  var retiredLevel23TimerKey = 'ooh_operation_alpha_timer_remaining_v1';
+  var level23InitialSeconds = 180;
   var requiredChoices = 4;
+  var defaultChoicePenaltySeconds = 5;
+  var juiceBonusSeconds = 5;
 
   function defaultState() {
     return { pressure: 0, trust: 0, enemyAwareness: 0, signalIntegrity: 100, chain: [], introChoices: [], level1Choices: [], level2Choices: [], level4Choices: [], activeIdentity: null, activePortrait: '', castIdentities: null, enemyPressureIdentity: null, enemyPressureMode: '', narrativeSelections: {}, narrativeTokens: {} };
@@ -22,6 +27,161 @@
     window.localStorage.setItem(stateKey, JSON.stringify(state));
   }
 
+  function clampTimerSeconds(value) {
+    value = parseInt(value, 10);
+    if (!Number.isFinite(value)) {
+      return level23InitialSeconds;
+    }
+    return Math.max(0, value);
+  }
+
+  function readTimerRemaining(state) {
+    var stored;
+    try {
+      stored = window.sessionStorage.getItem(level23TimerKey);
+      if (stored === null || stored === '') {
+        stored = level23InitialSeconds;
+        window.sessionStorage.setItem(level23TimerKey, String(clampTimerSeconds(stored)));
+      }
+      return clampTimerSeconds(stored);
+    }
+    catch (e) {
+      return clampTimerSeconds(state && state.level23TimerRemainingSeconds);
+    }
+  }
+
+  function writeTimerRemaining(state, seconds) {
+    var remaining = clampTimerSeconds(seconds);
+
+    if (state) {
+      state.level23TimerRemainingSeconds = remaining;
+      state.level23TimerKey = level23TimerKey;
+      state.level23TimerExpired = remaining <= 0 || !!state.level23TimerExpired;
+    }
+    try {
+      window.sessionStorage.setItem(level23TimerKey, String(remaining));
+    }
+    catch (e) {}
+    return remaining;
+  }
+
+  function formatTimer(seconds) {
+    seconds = clampTimerSeconds(seconds);
+    return 'CLOSURE ' + String(Math.floor(seconds / 60)) + ':' + String(seconds % 60).padStart(2, '0');
+  }
+
+  function updateTimerDisplay(root, state) {
+    var time = root.querySelector('[data-ooh-alpha-level-time]');
+    var remaining = readTimerRemaining(state);
+
+    if (time) {
+      time.textContent = formatTimer(remaining);
+    }
+    return remaining;
+  }
+
+  function markTimerExpired(root) {
+    var state = readOAState();
+    var difficulty = root.querySelector('[data-ooh-alpha-level-difficulty]');
+    var wrap = root.querySelector('[data-ooh-alpha-level-choices]');
+
+    state.failed = true;
+    state.level23TimerExpired = true;
+    state.level23TimerRemainingSeconds = 0;
+    writeTimerRemaining(state, 0);
+    writeOAState(state);
+    if (difficulty) {
+      difficulty.textContent = 'TIME EXPIRED / FAILURE RISK';
+    }
+    if (wrap) {
+      wrap.querySelectorAll('button:not(.is-selected)').forEach(function (button) {
+        button.disabled = true;
+        button.classList.add('is-disabled');
+      });
+    }
+  }
+
+  function startTimer(root) {
+    if (!root || root.oohAlphaLevel23TimerInterval) {
+      return;
+    }
+    root.oohAlphaLevel23TimerInterval = window.setInterval(function () {
+      var state = readOAState();
+      var remaining = readTimerRemaining(state);
+
+      if (remaining <= 0) {
+        window.clearInterval(root.oohAlphaLevel23TimerInterval);
+        root.oohAlphaLevel23TimerInterval = null;
+        markTimerExpired(root);
+        updateTimerDisplay(root, state);
+        return;
+      }
+      remaining = writeTimerRemaining(state, remaining - 1);
+      writeOAState(state);
+      updateTimerDisplay(root, state);
+      if (remaining <= 0) {
+        markTimerExpired(root);
+      }
+    }, 1000);
+  }
+
+  function applyChoiceTimePenalty(state, beat) {
+    var penalty = Math.max(0, parseInt(beat.timePenalty || defaultChoicePenaltySeconds, 10) || 0);
+    var remaining = readTimerRemaining(state);
+
+    return writeTimerRemaining(state, remaining - penalty);
+  }
+
+  function useJuice(root, state) {
+    var remaining;
+
+    state.level23JuiceUsed = state.level23JuiceUsed || {};
+    if (state.level23JuiceUsed.level2 || readTimerRemaining(state) <= 0) {
+      return false;
+    }
+    state.level23JuiceUsed.level2 = true;
+    remaining = writeTimerRemaining(state, readTimerRemaining(state) + juiceBonusSeconds);
+    state.level23TimerExpired = remaining <= 0;
+    writeOAState(state);
+    updateTimerDisplay(root, state);
+    updateJuiceDisplay(root, state);
+    return true;
+  }
+
+  function ensureJuiceControl(root) {
+    var button = root.querySelector('[data-ooh-alpha-juice-factor]');
+    var status = root.querySelector('[data-ooh-alpha-juice-status]');
+    var time = root.querySelector('[data-ooh-alpha-level-time]');
+    var host;
+
+    if (button && status) {
+      return;
+    }
+    host = document.createElement('div');
+    host.innerHTML = '<span>JUICE</span><button class="ooh-operation-alpha-level__button" type="button" data-ooh-alpha-juice-factor>JUICE</button><strong data-ooh-alpha-juice-status>JUICE AVAILABLE: +5 SECONDS</strong>';
+    if (time && time.parentNode && time.parentNode.parentNode) {
+      time.parentNode.parentNode.insertBefore(host, time.parentNode.nextSibling);
+    }
+  }
+
+  function updateJuiceDisplay(root, state) {
+    ensureJuiceControl(root);
+
+    var button = root.querySelector('[data-ooh-alpha-juice-factor]');
+    var status = root.querySelector('[data-ooh-alpha-juice-status]');
+    var used = !!(state.level23JuiceUsed && state.level23JuiceUsed.level2);
+    var expired = readTimerRemaining(state) <= 0;
+
+    if (button) {
+      button.disabled = used || expired;
+      button.classList.toggle('is-disabled', button.disabled);
+      button.setAttribute('aria-disabled', button.disabled ? 'true' : 'false');
+    }
+    if (status) {
+      status.textContent = expired && !used ? 'JUICE LOCKED: TIMER EXPIRED' : (used ? 'JUICE USED: +5 SECONDS APPLIED' : 'JUICE AVAILABLE: +5 SECONDS');
+    }
+  }
+
   function appendChainEvent(state, event) {
     state.chain = (state.chain || []).filter(function (item) { return item.id !== event.id; });
     state.chain.push(event);
@@ -34,7 +194,7 @@
     state.trust = chain.reduce(function (sum, item) { return sum + (item.trust || 0); }, 0);
     state.enemyAwareness = chain.reduce(function (sum, item) { return sum + (item.awareness || 0); }, 0);
     state.signalIntegrity = Math.max(0, Math.min(100, 100 + chain.reduce(function (sum, item) { return sum + (item.signal || 0); }, 0)));
-    state.failed = state.signalIntegrity <= 15 || state.pressure >= 12 || state.enemyAwareness >= 12;
+    state.failed = !!state.level23TimerExpired || state.signalIntegrity <= 15 || state.pressure >= 12 || state.enemyAwareness >= 12;
     return state;
   }
 
@@ -399,10 +559,13 @@
     var next = root.querySelector('[data-ooh-alpha-level-next]');
     var shell = root.querySelector('.ooh-operation-alpha-level__shell');
     var latestChoice = choices[choices.length - 1];
+    var timerExpired;
 
     document.body.classList.add('ooh-operation-alpha-level-runtime');
     state.phase = 'escalation-cascade';
     calculatePressure(state);
+    writeTimerRemaining(state, readTimerRemaining(state));
+    timerExpired = readTimerRemaining(state) <= 0;
 
     if (wrap) {
       wrap.innerHTML = '';
@@ -412,8 +575,8 @@
         button.type = 'button';
         button.className = 'ooh-operation-alpha-level__choice is-danger';
         button.classList.toggle('is-selected', chosen);
-        button.classList.toggle('is-disabled', locked && !chosen);
-        button.disabled = chosen || locked;
+        button.classList.toggle('is-disabled', (locked || timerExpired) && !chosen);
+        button.disabled = chosen || locked || timerExpired;
         button.innerHTML = '<span>' + beat.title + '</span><strong>SITUATION</strong><p>' + beat.situation + '</p><strong>DIRECTIVE</strong><p>' + beat.directive + '</p><strong>RISK</strong><p>' + beat.risk + '</p><strong>CONSEQUENCE</strong><p>' + beat.consequence + '</p>';
         button.addEventListener('click', function () {
           if (button.disabled) {
@@ -421,11 +584,12 @@
           }
           state = readOAState();
           choices = state.level2Choices || [];
-          if (choices.length >= requiredChoices || choices.some(function (item) { return item.id === beat.id; })) {
+          if (readTimerRemaining(state) <= 0 || choices.length >= requiredChoices || choices.some(function (item) { return item.id === beat.id; })) {
             return;
           }
           choices.push(beat);
           state.level2Choices = choices;
+          applyChoiceTimePenalty(state, beat);
           appendChainEvent(state, beat);
           render(root);
           if (choices.length >= requiredChoices && window.oaScrollToNextPhase) {
@@ -440,7 +604,7 @@
       count.textContent = 'SELECTED: ' + choices.length + ' / REQUIRED: ' + requiredChoices;
     }
     if (time) {
-      time.textContent = 'CLOSURE 04:' + String(Math.max(0, 59 - (choices.length * 11))).padStart(2, '0');
+      updateTimerDisplay(root, state);
     }
     if (difficulty) {
       difficulty.textContent = calculateOutcome(state);
@@ -457,7 +621,23 @@
     if (shell) {
       shell.classList.toggle('is-stage-complete', locked);
     }
+    updateJuiceDisplay(root, state);
+    root.querySelectorAll('[data-ooh-alpha-juice-factor]').forEach(function (button) {
+      if (button.oohAlphaJuiceBound) {
+        return;
+      }
+      button.oohAlphaJuiceBound = true;
+      button.addEventListener('click', function () {
+        state = readOAState();
+        useJuice(root, state);
+      });
+    });
+    try {
+      window.sessionStorage.removeItem(retiredLevel23TimerKey);
+    }
+    catch (e) {}
     writeOAState(state);
+    startTimer(root);
   }
 
   document.addEventListener('DOMContentLoaded', function () {
