@@ -64,7 +64,40 @@
     }
   ];
 
+  function shouldClearOperationAlphaStorageKey(key, keepPlaylist) {
+    if (!key) {
+      return false;
+    }
+    if (keepPlaylist && key === playlistStorageKey) {
+      return false;
+    }
+    return key.indexOf('ooh_operation_alpha_') === 0 || key.indexOf('ooh_alpha_') === 0;
+  }
+
+  function removeOperationAlphaStorageByPrefix(storage, keepPlaylist) {
+    var keys = [];
+    var index;
+
+    if (!storage) {
+      return keys;
+    }
+    try {
+      for (index = 0; index < storage.length; index += 1) {
+        if (shouldClearOperationAlphaStorageKey(storage.key(index), keepPlaylist)) {
+          keys.push(storage.key(index));
+        }
+      }
+      keys.forEach(function (key) {
+        storage.removeItem(key);
+      });
+    }
+    catch (e) {}
+    return keys;
+  }
+
   function removeKnownOperationAlphaRunState(keepPlaylist) {
+    removeOperationAlphaStorageByPrefix(window.localStorage, keepPlaylist);
+    removeOperationAlphaStorageByPrefix(window.sessionStorage, keepPlaylist);
     try {
       window.localStorage.removeItem(oaChainStateKey);
       window.localStorage.removeItem(storageKey);
@@ -103,6 +136,7 @@
   }
 
   window.resetOAIntroRunState = resetOAIntroRunState;
+  window.resetOperationAlphaRun = resetOAIntroRunState;
 
   function isOperationAlphaRootPath() {
     var path = (window.location.pathname || '').replace(/\/+$/, '');
@@ -1640,7 +1674,7 @@
     var candidates = actorPortraitCandidates(actor);
     var portraitUrl = candidates[0] || '';
 
-    if (window.console && window.console.log) {
+    if (window.oohOperationAlphaDebug && window.console && window.console.log) {
       window.console.log('Operation Alpha final portrait URL:', portraitUrl || 'none');
     }
 
@@ -5486,7 +5520,7 @@
       var version = document.createElement('p');
       version.className = 'ooh-operation-alpha__copy';
       version.setAttribute('data-ooh-alpha-runtime-version', '');
-      version.textContent = 'OA RUNTIME VERSION: OA-224 VALIDATED DEPLOYMENT';
+      version.textContent = 'The Unseen Hand Cannot Control Time';
       if (title && title.parentNode === shell) {
         shell.insertBefore(version, title.nextSibling);
       }
