@@ -177,6 +177,32 @@ ooh_outskirts.operation_alpha_credits:
   requirements:
     _permission: 'access content'
 
+ooh_outskirts.operation_alpha_credit_balance:
+  path: '/operation-alpha/credits/balance'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::creditBalance'
+  requirements:
+    _permission: 'access content'
+
+ooh_outskirts.operation_alpha_credit_purchase:
+  path: '/operation-alpha/credits/purchase'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::purchaseCredits'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _csrf_request_header_token: 'TRUE'
+
+ooh_outskirts.operation_alpha_credit_consume:
+  path: '/operation-alpha/credits/consume'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::consumeCredit'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _csrf_request_header_token: 'TRUE'
+
 ooh_outskirts.operation_alpha_playlists:
   path: '/oaplaylists'
   defaults:

@@ -172,6 +172,42 @@ function ooh_outskirts_schema() {
     ],
   ];
 
+  $schema['ooh_outskirts_oa_credit_balance'] = [
+    'description' => 'Stores account-backed Operation Alpha credit balances.',
+    'fields' => [
+      'uid' => [
+        'description' => 'Drupal user ID that owns this Operation Alpha credit balance.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'balance' => [
+        'description' => 'Current Operation Alpha credit balance.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'created' => [
+        'description' => 'Unix timestamp when this balance row was created.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'updated' => [
+        'description' => 'Unix timestamp when this balance row was last updated.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['uid'],
+    'indexes' => [
+      'balance' => ['balance'],
+      'updated' => ['updated'],
+    ],
+  ];
+
   return $schema;
 }
 /**
@@ -216,5 +252,18 @@ function ooh_outskirts_update_9303() {
       $schema->createTable($table, $module_schema[$table]);
     }
   }
+}
+
+/**
+ * Creates the account-backed Operation Alpha credit balance table.
+ */
+function ooh_outskirts_update_9304() {
+  $schema = \Drupal::database()->schema();
+  if ($schema->tableExists('ooh_outskirts_oa_credit_balance')) {
+    return;
+  }
+
+  $module_schema = ooh_outskirts_schema();
+  $schema->createTable('ooh_outskirts_oa_credit_balance', $module_schema['ooh_outskirts_oa_credit_balance']);
 }
 

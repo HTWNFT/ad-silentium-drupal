@@ -14,6 +14,7 @@
   var goNoGoHistoryKey = 'ooh_operation_alpha_go_nogo_recent_history_v1';
   var freeOperationStartedKey = 'ooh_operation_alpha_free_operation_started_v1';
   var creditBalanceKey = 'ooh_alpha_operation_credit_balance_v1';
+  var activeOperationCreditKey = 'oa_operation_alpha_active_credit_paid_v1';
   var operationCreditCost = 1;
   var recentRoninStorageKey = 'ooh_operation_alpha_recent_ronin_v1';
   var recentSupportingPortraitsKey = 'ooh_operation_alpha_recent_supporting_portraits_v1';
@@ -63,12 +64,86 @@
       directive: 'The fort can protect the route or expose the hand. Choose which danger becomes the next inheritance.'
     }
   ];
+  var featuredCharacterQuotes = {
+    'veyra null': 'If the signal survives, I will find the road inside it.',
+    'grain-9': 'The corridor breathes before the machines admit it.',
+    'marshal korr': 'Every open channel becomes a target when command is awake.',
+    ronin: 'I move where the field forgets to look.',
+    genealord: 'Blood remembers the route long after steel goes quiet.',
+    mutant: 'Pressure is a language the body learned first.',
+    warlord: 'Authority is only real when the field obeys.'
+  };
+
+  function characterQuoteKey(value) {
+    return (value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+
+  function featuredCharacterQuote(identity) {
+    var displayName = actorDisplayName(identity || {});
+    var nameKey = characterQuoteKey(displayName || identity && (identity.name || identity.actorName || identity.portrait));
+    var factionKey = characterQuoteKey(identity && identity.faction);
+
+    if (nameKey && featuredCharacterQuotes[nameKey]) {
+      return featuredCharacterQuotes[nameKey];
+    }
+    if (!displayName || displayName === 'Unknown actor') {
+      return '';
+    }
+    if (factionKey.indexOf('ronin') !== -1) {
+      return displayName + ' moves where the field forgets to look.';
+    }
+    if (factionKey.indexOf('genealord') !== -1) {
+      return displayName + ' remembers the route long after steel goes quiet.';
+    }
+    if (factionKey.indexOf('mutant') !== -1) {
+      return displayName + ' speaks the pressure the body learned first.';
+    }
+    if (factionKey.indexOf('warlord') !== -1) {
+      return displayName + ' turns every open channel into command.';
+    }
+    return '';
+  }
+
+  function renderCharacterQuote(host, identity, className) {
+    var quote = featuredCharacterQuote(identity);
+    var node;
+
+    if (!host) {
+      return;
+    }
+    node = host.querySelector('[data-ooh-alpha-character-quote]');
+    if (quote && Array.prototype.some.call(document.querySelectorAll('[data-ooh-alpha-character-quote]'), function (existingNode) {
+      return existingNode !== node && existingNode.getAttribute('data-ooh-alpha-character-quote-text') === quote;
+    })) {
+      if (node) {
+        node.remove();
+      }
+      return;
+    }
+    if (!quote) {
+      if (node) {
+        node.remove();
+      }
+      return;
+    }
+    if (!node) {
+      node = document.createElement('p');
+      node.className = className || 'ooh-operation-alpha__character-quote';
+      node.setAttribute('data-ooh-alpha-character-quote', '');
+      host.appendChild(node);
+    }
+    node.textContent = quote;
+    node.setAttribute('data-ooh-alpha-character-quote-text', quote);
+  }
 
   function shouldClearOperationAlphaStorageKey(key, keepPlaylist) {
     if (!key) {
       return false;
     }
     if (keepPlaylist && key === playlistStorageKey) {
+      return false;
+    }
+    if (key === creditBalanceKey) {
       return false;
     }
     return key.indexOf('ooh_operation_alpha_') === 0 || key.indexOf('ooh_alpha_') === 0;
@@ -165,10 +240,6 @@
     if (isFreeOperationDevOverride()) {
       return true;
     }
-    // LOCALHOST ONLY: seed unlimited test credits so local QA can initialize fresh runs without enabling any production bypass.
-    if (isLocalhostOrigin()) {
-      return true;
-    }
     return false;
   }
 
@@ -200,11 +271,6 @@
     }
     try {
       stored = window.localStorage.getItem(creditBalanceKey);
-      if (stored === null) {
-        parsed = hasUsedFreeOperation() ? 0 : 1;
-        window.localStorage.setItem(creditBalanceKey, String(parsed));
-        return parsed;
-      }
       parsed = parseInt(stored, 10);
       return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
     }
@@ -224,20 +290,100 @@
     return isUnlimitedCredits() || readCreditBalance() >= operationCreditCost;
   }
 
-  function consumeOperationCredit() {
-    var balance;
+  function csrfToken() {
+    if (!window.oohAlphaCsrfTokenPromise) {
+      window.oohAlphaCsrfTokenPromise = window.fetch(routePath('/session/token'), {
+        credentials: 'same-origin'
+      }).then(function (response) {
+        return response.text();
+      });
+    }
+    return window.oohAlphaCsrfTokenPromise;
+  }
 
+  function creditApi(path, options) {
+    options = options || {};
+    options.credentials = 'same-origin';
+    options.headers = Object.assign({
+      Accept: 'application/json'
+    }, options.headers || {});
+
+    if (options.method && options.method.toUpperCase() !== 'GET') {
+      options.headers['Content-Type'] = 'application/json';
+      return csrfToken().then(function (token) {
+        options.headers['X-CSRF-Token'] = token;
+        return window.fetch(routePath(path), options);
+      }).then(function (response) {
+        return response.json().then(function (json) {
+          json.httpStatus = response.status;
+          return json;
+        });
+      });
+    }
+
+    return window.fetch(routePath(path), options).then(function (response) {
+      return response.json().then(function (json) {
+        json.httpStatus = response.status;
+        return json;
+      });
+    });
+  }
+
+  function syncServerCreditBalance(root) {
+    return creditApi('/operation-alpha/credits/balance').then(function (json) {
+      if (Number.isFinite(parseInt(json.balance, 10))) {
+        writeCreditBalance(json.balance);
+      }
+      if (root) {
+        root.querySelectorAll('[data-ooh-alpha-credit-balance]').forEach(function (node) {
+          node.textContent = json.loginRequired ? 'LOGIN REQUIRED' : formatCreditBalance(parseInt(json.balance || 0, 10));
+        });
+        root.querySelectorAll('[data-ooh-alpha-credit-cost]').forEach(function (node) {
+          node.textContent = String(json.cost || operationCreditCost);
+        });
+        setupNewOperationGate(root);
+      }
+      return json;
+    }).catch(function () {
+      return { success: false, balance: readCreditBalance(), offline: true };
+    });
+  }
+
+  function consumeOperationCredit(purpose) {
     if (isUnlimitedCredits()) {
       markFreeOperationStarted();
-      return true;
+      return Promise.resolve({ success: true, balance: readCreditBalance() });
     }
-    balance = readCreditBalance();
-    if (balance < operationCreditCost) {
+    return creditApi('/operation-alpha/credits/consume', {
+      method: 'POST',
+      body: JSON.stringify({ cost: operationCreditCost, purpose: purpose || 'launch' })
+    }).then(function (json) {
+      if (Number.isFinite(parseInt(json.balance, 10))) {
+        writeCreditBalance(json.balance);
+      }
+      if (json.success) {
+        markFreeOperationStarted();
+      }
+      return json;
+    }).catch(function () {
+      return { success: false, balance: readCreditBalance(), offline: true };
+    });
+  }
+
+  function hasActiveOperationCredit() {
+    try {
+      return window.sessionStorage.getItem(activeOperationCreditKey) === '1';
+    }
+    catch (e) {
       return false;
     }
-    writeCreditBalance(balance - operationCreditCost);
-    markFreeOperationStarted();
-    return true;
+  }
+
+  function markActiveOperationCredit() {
+    try {
+      window.sessionStorage.setItem(activeOperationCreditKey, '1');
+    }
+    catch (e) {}
   }
 
   function formatCreditBalance(balance) {
@@ -253,10 +399,24 @@
     root.querySelectorAll('[data-ooh-alpha-credit-cost]').forEach(function (node) {
       node.textContent = String(operationCreditCost);
     });
+    syncServerCreditBalance(root);
   }
 
   function guideToCredits() {
     window.location.href = operationAlphaCreditsPath();
+  }
+
+  function startPaidOperation(keepPlaylist) {
+    return consumeOperationCredit('launch').then(function (json) {
+      if (!json.success) {
+        guideToCredits();
+        return false;
+      }
+      resetOAIntroRunState(keepPlaylist !== false);
+      markActiveOperationCredit();
+      window.location.href = routePath('/operation-alpha');
+      return true;
+    });
   }
 
   function bindOperationAlphaExitReset() {
@@ -1866,6 +2026,7 @@
       meta.textContent = [actor.faction, actor.role].filter(Boolean).join(' / ') || 'Field presence';
       body.appendChild(name);
       body.appendChild(meta);
+      renderCharacterQuote(body, actor, 'ooh-operation-alpha__supporting-portrait-quote');
       card.appendChild(image);
       card.appendChild(body);
       strip.appendChild(card);
@@ -2409,6 +2570,7 @@
     if (copy) {
       copy.textContent = actorTransmissionCopy(actor);
     }
+    renderCharacterQuote(frame, actor, 'ooh-operation-alpha__actor-quote');
   }
 
   function selectOperationAlphaActor(root) {
@@ -2855,6 +3017,7 @@
     var faction = root.querySelector('[data-ooh-alpha-intro-' + prefix + '-faction]');
     var role = root.querySelector('[data-ooh-alpha-intro-' + prefix + '-role]');
     var style = root.querySelector('[data-ooh-alpha-intro-' + prefix + '-style]');
+    var card = name ? name.closest('.ooh-operation-alpha__intro-card-body') || name.parentNode : null;
 
     if (name) {
       name.textContent = storyCastName(actor);
@@ -2871,6 +3034,7 @@
     if (style) {
       style.textContent = 'TRANSMISSION: ' + (actor && actor.transmissionStyle ? actor.transmissionStyle : 'unresolved');
     }
+    renderCharacterQuote(card, actor, 'ooh-operation-alpha__intro-card-quote');
   }
 
   function defaultOAChainState() {
@@ -3481,6 +3645,7 @@
     if (hook) {
       hook.textContent = identity.hook || 'The field records an operational presence.';
     }
+    renderCharacterQuote(block, identity, 'ooh-operation-alpha__transmission-quote');
   }
 
   function bindIntroTransmission(root, runtimeState, ready) {
@@ -3803,14 +3968,17 @@
         '</div>';
       root.appendChild(popup);
       popup.querySelector('[data-ooh-alpha-final-aar-run]').addEventListener('click', function () {
-        if (!hasOperationCredit()) {
-          guideToCredits();
-          return;
-        }
-        resetOAIntroRunState(true);
-        popup.hidden = true;
-        popup.setAttribute('aria-hidden', 'true');
-        activateOperationAlphaRuntime(root);
+        consumeOperationCredit('launch').then(function (json) {
+          if (!json.success) {
+            guideToCredits();
+            return;
+          }
+          resetOAIntroRunState(true);
+          markActiveOperationCredit();
+          popup.hidden = true;
+          popup.setAttribute('aria-hidden', 'true');
+          activateOperationAlphaRuntime(root);
+        });
       });
     }
 
@@ -5259,6 +5427,7 @@
     source.textContent = contact.source;
     status.textContent = mode === 'response' ? 'Field response acknowledged' : contact.status;
     transmission.textContent = selectContactLine(contact, mode, root.oohAlphaTransmissionIndex);
+    renderCharacterQuote(frame, contact, 'ooh-operation-alpha__contact-quote');
 
     if (mode === 'response') {
       frame.classList.add('is-contact-responding');
@@ -5376,59 +5545,68 @@
     var reaction = root.querySelector('[data-ooh-alpha-reaction]');
     var contact = root.querySelector('[data-ooh-alpha-contact]');
     var storedSelection = getPlaylistSelection();
+    var finishActivation = function () {
+      resetOAIntroRunState(true);
+      markActiveOperationCredit();
+      root.oohAlphaRuntimeState = null;
+      setupNewOperationGate(root);
+      renderCreditBalance(root);
+
+      root.classList.add('is-runtime-acknowledged');
+      pauseOperationAlphaAmbient(root);
+      resetRuntimeLoop(root);
+      syncSignalGate(root);
+      syncFieldInitializeGate(root);
+
+      if (runtimeCopy) {
+        runtimeCopy.textContent = 'Runtime shell active.';
+      }
+      if (activationStatus) {
+        activationStatus.textContent = 'Acknowledgment received. Field pressure entering first mark.';
+      }
+      if (activationButton) {
+        activationButton.disabled = true;
+        activationButton.textContent = 'FIELD INITIALIZED';
+      }
+      if (reaction) {
+        reaction.textContent = 'Unseen hand recognized. Choose a staged field influence.';
+      }
+      if (contact) {
+        contact.hidden = false;
+      }
+      renderScenario(root, 0);
+      renderContact(root, 0, 'activation');
+      setAtmosphere(root, 0);
+      selectOperationAlphaActor(root);
+      setIntroGameplayBlocksVisible(root, false);
+      if (window.oaScrollToNextPhase) {
+        window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-actor-transmission]') || root.querySelector('[data-ooh-alpha-intro-storyblock]'));
+      }
+    };
 
     if (!storedSelection || !storedSelection.title) {
       syncSignalGate(root);
       syncFieldInitializeGate(root);
       return;
     }
-    if (!hasOperationCredit()) {
-      if (activationStatus) {
-        activationStatus.textContent = 'NEW OPERATION REQUIRES 1 CREDIT';
-      }
-      guideToCredits();
+    if (hasActiveOperationCredit()) {
+      finishActivation();
       return;
-    }
-    if (!consumeOperationCredit()) {
-      guideToCredits();
-      return;
-    }
-    resetOAIntroRunState(true);
-    root.oohAlphaRuntimeState = null;
-    setupNewOperationGate(root);
-    renderCreditBalance(root);
-
-    root.classList.add('is-runtime-acknowledged');
-    pauseOperationAlphaAmbient(root);
-    resetRuntimeLoop(root);
-    syncSignalGate(root);
-    syncFieldInitializeGate(root);
-
-    if (runtimeCopy) {
-      runtimeCopy.textContent = 'Runtime shell active.';
-    }
-    if (activationStatus) {
-      activationStatus.textContent = 'Acknowledgment received. Field pressure entering first mark.';
     }
     if (activationButton) {
       activationButton.disabled = true;
-      activationButton.textContent = 'FIELD INITIALIZED';
+      activationButton.textContent = 'CHECKING CREDITS';
     }
-    if (reaction) {
-      reaction.textContent = 'Unseen hand recognized. Choose a staged field influence.';
-    }
-    if (contact) {
-      contact.hidden = false;
-    }
-
-    renderScenario(root, 0);
-    renderContact(root, 0, 'activation');
-    setAtmosphere(root, 0);
-    selectOperationAlphaActor(root);
-    setIntroGameplayBlocksVisible(root, false);
-    if (window.oaScrollToNextPhase) {
-      window.oaScrollToNextPhase(root, root.querySelector('[data-ooh-alpha-actor-transmission]') || root.querySelector('[data-ooh-alpha-intro-storyblock]'));
-    }
+    consumeOperationCredit('activation').then(function (json) {
+      if (!json.success) {
+        if (activationStatus) {
+          activationStatus.textContent = 'NEW OPERATION REQUIRES 1 CREDIT';
+        }
+        guideToCredits();
+        return;
+      }
+      finishActivation();
+    });
   }
 
   function setInterventionsDisabled(root, disabled) {
@@ -5472,9 +5650,18 @@
         link.setAttribute('aria-label', 'Purchase credits for a new Operation Alpha run');
       }
       else {
-        link.textContent = 'NEW OPERATION';
+        link.textContent = 'NEW OPERATION - 1 CREDIT';
         link.setAttribute('href', routePath('/operation-alpha'));
+        link.setAttribute('aria-label', 'Start a clean Operation Alpha run for 1 credit');
       }
+      if (link.oohAlphaCreditGateBound) {
+        return;
+      }
+      link.oohAlphaCreditGateBound = true;
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        startPaidOperation(true);
+      });
     });
   }
 
@@ -5658,7 +5845,7 @@
     }
 
     var currentPath = window.location.pathname || '';
-    var basePath = currentPath.replace(/\/(?:operation-alpha(?:\/oaplay(?:\/playlists)?)?|oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
+    var basePath = currentPath.replace(/\/operation-alpha(?:\/.*)?\/?$/, '').replace(/\/(?:oaplaylists|oaplay(?:\/playlists)?)\/?$/, '');
 
     return (basePath || '') + path;
   }
@@ -5927,13 +6114,14 @@
         var packageLabel = button.getAttribute('data-credit-package') || 'credit package';
         var packagePrice = button.getAttribute('data-credit-price') || '';
         var creditAmount = button.getAttribute('data-credit-amount') || '';
+        var creditCount = parseInt(button.getAttribute('data-credit-count') || creditAmount, 10) || 0;
 
         root.querySelectorAll('[data-ooh-alpha-credit-card]').forEach(function (creditCard) {
           creditCard.classList.remove('is-selected');
         });
 
         root.querySelectorAll('[data-ooh-alpha-credit-select]').forEach(function (selectButton) {
-          selectButton.textContent = 'SELECT';
+          selectButton.textContent = 'PURCHASE CREDITS';
           selectButton.removeAttribute('aria-pressed');
         });
 
@@ -5941,12 +6129,38 @@
           card.classList.add('is-selected');
         }
 
-        button.textContent = 'STAGED';
+        button.textContent = 'PURCHASED';
         button.setAttribute('aria-pressed', 'true');
+        button.disabled = true;
 
         if (confirmation) {
-          confirmation.textContent = 'CREDIT PACKAGE STAGED: ' + packageLabel.toUpperCase() + ' // ' + packagePrice + ' // ' + creditAmount.toUpperCase();
+          confirmation.textContent = 'PROCESSING LOCAL ACCOUNT CREDIT: ' + packageLabel.toUpperCase() + ' // ' + packagePrice;
         }
+        creditApi('/operation-alpha/credits/purchase', {
+          method: 'POST',
+          body: JSON.stringify({ credits: creditCount })
+        }).then(function (json) {
+          button.disabled = false;
+          if (!json.success) {
+            if (confirmation) {
+              confirmation.textContent = json.loginRequired ? 'LOGIN REQUIRED TO PURCHASE OPERATION ALPHA CREDITS.' : 'LOCAL CREDIT PURCHASE FAILED.';
+            }
+            if (json.loginRequired) {
+              window.location.href = routePath('/user/login');
+            }
+            return;
+          }
+          writeCreditBalance(json.balance);
+          renderCreditBalance(root);
+          if (confirmation) {
+            confirmation.textContent = 'LOCAL ACCOUNT CREDIT COMPLETE: ' + packageLabel.toUpperCase() + ' // ' + packagePrice + ' // +' + creditCount + ' CREDIT(S) // BALANCE ' + formatCreditBalance(json.balance);
+          }
+        }).catch(function () {
+          button.disabled = false;
+          if (confirmation) {
+            confirmation.textContent = 'LOCAL CREDIT PURCHASE FAILED.';
+          }
+        });
       });
     });
   }

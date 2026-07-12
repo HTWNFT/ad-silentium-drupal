@@ -4,6 +4,8 @@ namespace Drupal\ooh_outskirts\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides the Operation Alpha control page.
@@ -94,6 +96,173 @@ final class OohOperationAlphaController extends ControllerBase {
   }
 
   /**
+   * Returns the account-backed Operation Alpha credit balance.
+   */
+  public function creditBalance(): JsonResponse {
+    if ($this->currentUser()->isAnonymous()) {
+      return new JsonResponse([
+        'authenticated' => FALSE,
+        'balance' => 0,
+        'cost' => 1,
+        'loginRequired' => TRUE,
+      ]);
+    }
+
+    $uid = (int) $this->currentUser()->id();
+    $this->ensureCreditTable();
+    $this->ensureCreditBalanceRow($uid);
+
+    return new JsonResponse([
+      'authenticated' => TRUE,
+      'balance' => $this->readCreditBalance($uid),
+      'cost' => 1,
+      'loginRequired' => FALSE,
+    ]);
+  }
+
+  /**
+   * Adds credits to the current account from the local/stubbed purchase flow.
+   */
+  public function purchaseCredits(Request $request): JsonResponse {
+    if ($this->currentUser()->isAnonymous()) {
+      return new JsonResponse([
+        'success' => FALSE,
+        'authenticated' => FALSE,
+        'balance' => 0,
+        'loginRequired' => TRUE,
+        'message' => 'Login required to purchase Operation Alpha credits.',
+      ], 403);
+    }
+
+    $payload = json_decode($request->getContent() ?: '{}', TRUE);
+    $credit_amount = (int) ($payload['credits'] ?? 0);
+    $allowed_amounts = [1, 30, 100];
+
+    if (!in_array($credit_amount, $allowed_amounts, TRUE)) {
+      return new JsonResponse([
+        'success' => FALSE,
+        'message' => 'Invalid Operation Alpha credit package.',
+      ], 400);
+    }
+
+    $uid = (int) $this->currentUser()->id();
+    $this->ensureCreditTable();
+    $this->ensureCreditBalanceRow($uid);
+
+    $database = \Drupal::database();
+    $transaction = $database->startTransaction();
+
+    try {
+      $current_balance = $this->readCreditBalance($uid, TRUE);
+      $new_balance = $current_balance + $credit_amount;
+      $database->update('ooh_outskirts_oa_credit_balance')
+        ->fields([
+          'balance' => $new_balance,
+          'updated' => \Drupal::time()->getRequestTime(),
+        ])
+        ->condition('uid', $uid)
+        ->execute();
+      unset($transaction);
+    }
+    catch (\Exception $exception) {
+      if (isset($transaction)) {
+        $transaction->rollBack();
+      }
+      \Drupal::logger('ooh_outskirts')->error('Operation Alpha credit purchase failed: @message', ['@message' => $exception->getMessage()]);
+      return new JsonResponse([
+        'success' => FALSE,
+        'message' => 'Operation Alpha credit purchase failed.',
+      ], 500);
+    }
+
+    return new JsonResponse([
+      'success' => TRUE,
+      'authenticated' => TRUE,
+      'balance' => $new_balance,
+      'creditsAdded' => $credit_amount,
+    ]);
+  }
+
+  /**
+   * Deducts one Operation Alpha credit from the current account.
+   */
+  public function consumeCredit(Request $request): JsonResponse {
+    if ($this->currentUser()->isAnonymous()) {
+      return new JsonResponse([
+        'success' => FALSE,
+        'authenticated' => FALSE,
+        'balance' => 0,
+        'loginRequired' => TRUE,
+        'message' => 'Login required to launch Operation Alpha.',
+      ], 403);
+    }
+
+    $uid = (int) $this->currentUser()->id();
+    $cost = 1;
+    $payload = json_decode($request->getContent() ?: '{}', TRUE);
+    $purpose = (string) ($payload['purpose'] ?? 'launch');
+    $server_paid_key = 'ooh_operation_alpha_active_credit_paid_v1';
+    $this->ensureCreditTable();
+    $this->ensureCreditBalanceRow($uid);
+
+    if ($purpose === 'activation' && !empty($_SESSION[$server_paid_key])) {
+      unset($_SESSION[$server_paid_key]);
+      return new JsonResponse([
+        'success' => TRUE,
+        'authenticated' => TRUE,
+        'balance' => $this->readCreditBalance($uid),
+        'cost' => $cost,
+        'alreadyPaid' => TRUE,
+      ]);
+    }
+
+    $database = \Drupal::database();
+    $transaction = $database->startTransaction();
+
+    try {
+      $balance = $this->readCreditBalance($uid, TRUE);
+      if ($balance < $cost) {
+        unset($transaction);
+        return new JsonResponse([
+          'success' => FALSE,
+          'authenticated' => TRUE,
+          'balance' => $balance,
+          'cost' => $cost,
+          'insufficientCredits' => TRUE,
+        ], 402);
+      }
+
+      $new_balance = $balance - $cost;
+      $database->update('ooh_outskirts_oa_credit_balance')
+        ->fields([
+          'balance' => $new_balance,
+          'updated' => \Drupal::time()->getRequestTime(),
+        ])
+        ->condition('uid', $uid)
+        ->execute();
+      $_SESSION[$server_paid_key] = TRUE;
+      unset($transaction);
+    }
+    catch (\Exception $exception) {
+      if (isset($transaction)) {
+        $transaction->rollBack();
+      }
+      \Drupal::logger('ooh_outskirts')->error('Operation Alpha credit consume failed: @message', ['@message' => $exception->getMessage()]);
+      return new JsonResponse([
+        'success' => FALSE,
+        'message' => 'Operation Alpha credit consume failed.',
+      ], 500);
+    }
+
+    return new JsonResponse([
+      'success' => TRUE,
+      'authenticated' => TRUE,
+      'balance' => $new_balance,
+      'cost' => $cost,
+    ]);
+  }
+
+  /**
    * Builds the Operation Alpha playlist-selection shell.
    */
   public function playlists(): array {
@@ -131,7 +300,7 @@ final class OohOperationAlphaController extends ControllerBase {
             <div class="ooh-operation-alpha__playlist-grid" aria-label="Operation Alpha playlist shell">
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $war_bangaz_avatar . '" alt="War Bangaz signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar onerror="this.hidden = true;">
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $war_bangaz_avatar . '" alt="War Bangaz signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="war-bangaz" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -143,7 +312,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $signal_blitz_avatar . '" alt="Signal Blitz signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar onerror="this.hidden = true;">
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $signal_blitz_avatar . '" alt="Signal Blitz signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="signal-blitz" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -155,7 +324,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $dust_march_avatar . '" alt="Dust March signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar onerror="this.hidden = true;">
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $dust_march_avatar . '" alt="Dust March signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="dust-march" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -167,7 +336,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $black_banner_avatar . '" alt="Black Banner signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar onerror="this.hidden = true;">
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $black_banner_avatar . '" alt="Black Banner signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="black-banner" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -179,7 +348,7 @@ final class OohOperationAlphaController extends ControllerBase {
               </article>
               <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $steel_wreckoning_avatar . '" alt="Steel Wreckoning signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar onerror="this.hidden = true;">
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $steel_wreckoning_avatar . '" alt="Steel Wreckoning signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="steel-wreckoning" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -189,9 +358,9 @@ final class OohOperationAlphaController extends ControllerBase {
                   <button class="ooh-operation-alpha__playlist-select" type="button" data-ooh-alpha-playlist-select data-playlist-slug="steel-wreckoning" data-playlist-title="Steel Wreckoning" data-playlist-url="' . $steel_wreckoning_url . '" data-playlist-cadence="Industrial impact cadence">SELECT SIGNAL</button>
                 </div>
               </article>
-              <article class="ooh-operation-alpha__playlist-card" data-ooh-alpha-playlist-card>
+              <article class="ooh-operation-alpha__playlist-card ooh-operation-alpha__playlist-card--outbound" data-ooh-alpha-playlist-card>
                 <div class="ooh-operation-alpha__playlist-visual">
-                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $system_reset_avatar . '" alt="System Reset signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar onerror="this.hidden = true;">
+                  <img class="ooh-operation-alpha__playlist-avatar" src="' . $system_reset_avatar . '" alt="System Reset signal avatar" loading="lazy" data-ooh-alpha-playlist-avatar data-playlist-slug="system-reset" onerror="this.hidden = true;">
                   <span class="ooh-operation-alpha__playlist-frame" aria-hidden="true"></span>
                 </div>
                 <div class="ooh-operation-alpha__playlist-body">
@@ -210,6 +379,7 @@ final class OohOperationAlphaController extends ControllerBase {
               <a class="ooh-operation-alpha__channel-link" href="#" target="_blank" rel="noopener noreferrer" data-ooh-alpha-playlist-channel-link hidden>OPEN CHANNEL</a>
               <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '" data-ooh-alpha-runtime-proceed>RETURN TO INTRO</a>
             </div>
+            <p class="ooh-operation-alpha__playlist-note">No playback, account link, or runtime launch is active in this shell.</p>
           </div>
         </section>',
       '#attached' => [
@@ -345,6 +515,100 @@ final class OohOperationAlphaController extends ControllerBase {
         'max-age' => 0,
       ],
     ];
+  }
+
+  /**
+   * Ensures the Operation Alpha credit table exists on local installs.
+   */
+  private function ensureCreditTable(): void {
+    $schema = \Drupal::database()->schema();
+    if ($schema->tableExists('ooh_outskirts_oa_credit_balance')) {
+      return;
+    }
+
+    $schema->createTable('ooh_outskirts_oa_credit_balance', [
+      'description' => 'Stores account-backed Operation Alpha credit balances.',
+      'fields' => [
+        'uid' => [
+          'description' => 'Drupal user ID that owns this Operation Alpha credit balance.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'balance' => [
+          'description' => 'Current Operation Alpha credit balance.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'default' => 0,
+        ],
+        'created' => [
+          'description' => 'Unix timestamp when this balance row was created.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+        'updated' => [
+          'description' => 'Unix timestamp when this balance row was last updated.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['uid'],
+      'indexes' => [
+        'balance' => ['balance'],
+        'updated' => ['updated'],
+      ],
+    ]);
+  }
+
+  /**
+   * Ensures the current account has a credit balance row.
+   */
+  private function ensureCreditBalanceRow(int $uid): void {
+    if ($uid <= 0) {
+      return;
+    }
+
+    $database = \Drupal::database();
+    $exists = (bool) $database->select('ooh_outskirts_oa_credit_balance', 'b')
+      ->fields('b', ['uid'])
+      ->condition('uid', $uid)
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+
+    if ($exists) {
+      return;
+    }
+
+    $now = \Drupal::time()->getRequestTime();
+    $database->insert('ooh_outskirts_oa_credit_balance')
+      ->fields([
+        'uid' => $uid,
+        'balance' => 0,
+        'created' => $now,
+        'updated' => $now,
+      ])
+      ->execute();
+  }
+
+  /**
+   * Reads a user's Operation Alpha credit balance.
+   */
+  private function readCreditBalance(int $uid, bool $lock = FALSE): int {
+    $query = \Drupal::database()->select('ooh_outskirts_oa_credit_balance', 'b')
+      ->fields('b', ['balance'])
+      ->condition('uid', $uid)
+      ->range(0, 1);
+
+    if ($lock && method_exists($query, 'forUpdate')) {
+      $query->forUpdate();
+    }
+
+    $balance = $query->execute()->fetchField();
+    return max(0, (int) $balance);
   }
 
 }

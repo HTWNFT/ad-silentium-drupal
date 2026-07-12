@@ -4,6 +4,7 @@
   var stateKey = 'ooh_operation_alpha_chain_state_v1';
   var creditBalanceKey = 'ooh_alpha_operation_credit_balance_v1';
   var freeOperationStartedKey = 'ooh_operation_alpha_free_operation_started_v1';
+  var activeOperationCreditKey = 'oa_operation_alpha_active_credit_paid_v1';
   var operationCreditCost = 1;
 
   function defaultState() {
@@ -24,27 +25,12 @@
     window.localStorage.setItem(stateKey, JSON.stringify(state));
   }
 
-  function isLocalhostOrigin() {
-    var host = window.location.hostname || '';
-
-    return host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  }
-
   function readCreditBalance() {
     var stored;
     var parsed;
 
-    // LOCALHOST ONLY: local QA retries are unlimited; production domains must use the stored credit balance.
-    if (isLocalhostOrigin()) {
-      return Infinity;
-    }
     try {
       stored = window.localStorage.getItem(creditBalanceKey);
-      if (stored === null) {
-        parsed = window.localStorage.getItem(freeOperationStartedKey) === '1' ? 0 : 1;
-        window.localStorage.setItem(creditBalanceKey, String(parsed));
-        return parsed;
-      }
       parsed = parseInt(stored, 10);
       return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
     }
@@ -53,16 +39,110 @@
     }
   }
 
-  function routeTryAgainLinks(root) {
+  function writeCreditBalance(balance) {
+    try {
+      window.localStorage.setItem(creditBalanceKey, String(Math.max(0, parseInt(balance || 0, 10))));
+    }
+    catch (e) {}
+  }
+
+  function consumeOperationCredit(purpose) {
+    return creditApi('/operation-alpha/credits/consume', {
+      method: 'POST',
+      body: JSON.stringify({ cost: operationCreditCost, purpose: purpose || 'launch' })
+    }).then(function (json) {
+      if (Number.isFinite(parseInt(json.balance, 10))) {
+        writeCreditBalance(json.balance);
+      }
+      if (json.success) {
+        try {
+          window.localStorage.setItem(freeOperationStartedKey, '1');
+        }
+        catch (e) {}
+      }
+      return json;
+    }).catch(function () {
+      return { success: false, balance: readCreditBalance(), offline: true };
+    });
+  }
+
+  function markActiveOperationCredit() {
+    try {
+      window.sessionStorage.setItem(activeOperationCreditKey, '1');
+    }
+    catch (e) {}
+  }
+
+  function routePath(path) {
+    var currentPath = window.location.pathname || '';
+    var basePath = currentPath.replace(/\/operation-alpha(?:\/.*)?\/?$/, '');
+
+    return (basePath || '') + path;
+  }
+
+  function csrfToken() {
+    if (!window.oohAlphaCsrfTokenPromise) {
+      window.oohAlphaCsrfTokenPromise = window.fetch(routePath('/session/token'), {
+        credentials: 'same-origin'
+      }).then(function (response) {
+        return response.text();
+      });
+    }
+    return window.oohAlphaCsrfTokenPromise;
+  }
+
+  function creditApi(path, options) {
+    options = options || {};
+    options.credentials = 'same-origin';
+    options.headers = Object.assign({
+      Accept: 'application/json'
+    }, options.headers || {});
+
+    if (options.method && options.method.toUpperCase() !== 'GET') {
+      options.headers['Content-Type'] = 'application/json';
+      return csrfToken().then(function (token) {
+        options.headers['X-CSRF-Token'] = token;
+        return window.fetch(routePath(path), options);
+      }).then(function (response) {
+        return response.json().then(function (json) {
+          json.httpStatus = response.status;
+          return json;
+        });
+      });
+    }
+
+    return window.fetch(routePath(path), options).then(function (response) {
+      return response.json().then(function (json) {
+        json.httpStatus = response.status;
+        return json;
+      });
+    });
+  }
+
+  function syncServerCreditBalance(root) {
+    return creditApi('/operation-alpha/credits/balance').then(function (json) {
+      if (Number.isFinite(parseInt(json.balance, 10))) {
+        writeCreditBalance(json.balance);
+      }
+      routeTryAgainLinks(root, json);
+      return json;
+    }).catch(function () {
+      routeTryAgainLinks(root);
+      return { success: false, balance: readCreditBalance(), offline: true };
+    });
+  }
+
+  function routeTryAgainLinks(root, serverBalance) {
     root.querySelectorAll('[data-ooh-alpha-try-again]').forEach(function (link) {
       var creditsUrl = link.getAttribute('data-ooh-alpha-credits-url') || '/operation-alpha/credits';
+      var balance = serverBalance && Number.isFinite(parseInt(serverBalance.balance, 10)) ? parseInt(serverBalance.balance, 10) : readCreditBalance();
 
-      if (readCreditBalance() < operationCreditCost) {
+      if (balance < operationCreditCost || serverBalance && serverBalance.loginRequired) {
         link.textContent = 'TRY AGAIN - 1 CREDIT';
         link.href = creditsUrl;
       }
       else {
-        link.textContent = 'TRY AGAIN';
+        link.textContent = 'TRY AGAIN - 1 CREDIT';
       }
     });
   }
@@ -83,11 +163,14 @@
   }
 
   function calculateOutcome(state) {
+    if (state.timeFailure || state.level23TimerExpired || state.level23TimerRemainingSeconds <= 0) {
+      return 'NO GO (Time Failure)';
+    }
     if (!state.finalDecision) {
-      return 'NO GO';
+      return 'NO GO (Strategic Failure)';
     }
     if (state.signalIntegrity <= 10 || state.missionTimerSeconds <= 0 || state.enemyAwareness > state.trust + 8) {
-      return 'NO GO';
+      return state.missionTimerSeconds <= 0 ? 'NO GO (Time Failure)' : 'NO GO (Strategic Failure)';
     }
     return 'GO';
   }
@@ -119,6 +202,10 @@
 
   function renderThreeLineSummary(target, state) {
     if (!target) {
+      return;
+    }
+    if (state.timeFailure || state.level23TimerExpired) {
+      target.textContent = 'NO GO (Time Failure) / Operation failed due to time expiration / TIMER 0:00';
       return;
     }
     target.textContent = calculateOutcome(state) + ' / ' + (state.missionCost || 'Cost unresolved') + ' / SIGNAL ' + state.signalIntegrity + '%';
@@ -220,21 +307,32 @@
     var signalStatus = narrativeEntry(state, 'finaleSignalStatus', 'aarSummaryTemplates', 14);
     var finalConsequence = narrativeEntry(state, 'finaleFinalConsequence', 'aarSummaryTemplates', 19);
     var outcome = calculateOutcome(state);
+    var timeFailure = !!(state.timeFailure || state.level23TimerExpired || state.level23TimerRemainingSeconds <= 0);
+    var timeFailureSummary = 'Operation failed due to time expiration. Timer reached 0:00.';
 
     document.body.classList.add('ooh-operation-alpha-level-runtime');
     calculatePressure(state);
+    if (timeFailure) {
+      state.timeFailure = true;
+      state.timeFailureReason = 'Timer reached 0:00.';
+      state.level23TimerExpired = true;
+      state.level23TimerRemainingSeconds = 0;
+      state.missionTimerSeconds = 0;
+      outcome = 'NO GO (Time Failure)';
+      writeOAState(state);
+    }
 
     setOutcomeLabel(root, outcome);
-    setText(root, '[data-ooh-alpha-finale-aar]', missionSummary ? fillNarrativeText(missionSummary.text, state.narrativeTokens) : 'Mission status: ' + calculateOutcome(state) + '. Key decision: ' + (state.finalDecision ? state.finalDecision.title : 'unresolved') + '.');
-    setText(root, '[data-ooh-alpha-finale-bda]', finalConsequence ? fillNarrativeText(finalConsequence.text, state.narrativeTokens) : 'Pressure ' + state.pressure + ' / Trust ' + state.trust + ' / Enemy Awareness ' + state.enemyAwareness + '.');
-    setText(root, '[data-ooh-alpha-finale-cost]', operationalCost ? fillNarrativeText(operationalCost.text, state.narrativeTokens) : (state.missionCost || 'No final cost recorded.'));
+    setText(root, '[data-ooh-alpha-finale-aar]', timeFailure ? 'NO GO (Time Failure). ' + timeFailureSummary : (missionSummary ? fillNarrativeText(missionSummary.text, state.narrativeTokens) : 'Mission status: ' + calculateOutcome(state) + '. Key decision: ' + (state.finalDecision ? state.finalDecision.title : 'unresolved') + '.'));
+    setText(root, '[data-ooh-alpha-finale-bda]', timeFailure ? 'Timer reached 0:00. The operation window closed before a full GO result could resolve.' : (finalConsequence ? fillNarrativeText(finalConsequence.text, state.narrativeTokens) : 'Pressure ' + state.pressure + ' / Trust ' + state.trust + ' / Enemy Awareness ' + state.enemyAwareness + '.'));
+    setText(root, '[data-ooh-alpha-finale-cost]', timeFailure ? 'NO GO (Time Failure). ' + timeFailureSummary : (operationalCost ? fillNarrativeText(operationalCost.text, state.narrativeTokens) : (state.missionCost || 'No final cost recorded.')));
     setText(root, '[data-ooh-alpha-finale-personnel]', String(state.personnelLost || 0));
     setText(root, '[data-ooh-alpha-finale-enemy]', state.enemyImpact || 'Enemy impact unresolved.');
-    setText(root, '[data-ooh-alpha-finale-signal]', signalStatus ? fillNarrativeText(signalStatus.text, state.narrativeTokens) : 'SIGNAL STABILITY: ' + state.signalIntegrity + '%');
+    setText(root, '[data-ooh-alpha-finale-signal]', timeFailure ? 'SIGNAL STATUS: TIMER 0:00 / TIME FAILURE RECORDED.' : (signalStatus ? fillNarrativeText(signalStatus.text, state.narrativeTokens) : 'SIGNAL STABILITY: ' + state.signalIntegrity + '%'));
     renderChainPanel(root, '[data-ooh-alpha-finale-timeline]', chain);
     renderChainPanel(root, '[data-ooh-alpha-finale-chain]', chain);
     renderThreeLineSummary(root.querySelector('[data-ooh-alpha-finale-outcome]'), state);
-    setText(root, '[data-ooh-alpha-finale-popup-summary]', 'Mission summary: ' + outcome + '. ' + (state.missionCost || 'Cost unresolved.') + ' Signal stability ' + state.signalIntegrity + '%.');
+    setText(root, '[data-ooh-alpha-finale-popup-summary]', timeFailure ? 'Mission summary: NO GO (Time Failure). Operation failed due to time expiration. Timer reached 0:00.' : 'Mission summary: ' + outcome + '. ' + (state.missionCost || 'Cost unresolved.') + ' Signal stability ' + state.signalIntegrity + '%.');
     renderFinalePopupIdentity(root, state);
     var popup = root.querySelector('[data-ooh-alpha-finale-popup]');
     if (popup) {
@@ -246,18 +344,30 @@
       }
     }
 
-    routeTryAgainLinks(root);
+    syncServerCreditBalance(root);
     root.querySelectorAll('[data-ooh-alpha-try-again]').forEach(function (link) {
-      link.addEventListener('click', function () {
-        if (readCreditBalance() < operationCreditCost) {
-          return;
-        }
-        if (window.resetOperationAlphaRun) {
-          window.resetOperationAlphaRun(true);
-        }
-        else {
-          window.localStorage.removeItem(stateKey);
-        }
+      if (link.oohAlphaTryAgainCreditBound) {
+        return;
+      }
+      link.oohAlphaTryAgainCreditBound = true;
+      link.addEventListener('click', function (event) {
+        var creditsUrl = link.getAttribute('data-ooh-alpha-credits-url') || '/operation-alpha/credits';
+
+        event.preventDefault();
+        consumeOperationCredit('launch').then(function (json) {
+          if (!json.success) {
+            window.location.href = creditsUrl;
+            return;
+          }
+          if (window.resetOperationAlphaRun) {
+            window.resetOperationAlphaRun(true);
+          }
+          else {
+            window.localStorage.removeItem(stateKey);
+          }
+          markActiveOperationCredit();
+          window.location.href = link.getAttribute('href') || '/operation-alpha';
+        });
       });
     });
     writeOAState(state);
