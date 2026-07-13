@@ -5960,7 +5960,7 @@
     var handoffCopy = root.querySelector('[data-ooh-alpha-runtime-copy]');
     var channelLink = root.querySelector('[data-ooh-alpha-playlist-channel-link]');
     var channel = channelBySlug(slug) || channelByLabel(title);
-    var resolvedUrl = spotifyUrl || (channel ? channel.spotifyUrl : '');
+    var resolvedUrl = channel && channel.spotifyUrl ? channel.spotifyUrl : spotifyUrl;
     var resolvedMood = moodTags || (channel ? channel.moodTags : '');
     var selectedButton = null;
 
@@ -6008,7 +6008,20 @@
       channelLink.setAttribute('rel', 'noopener noreferrer');
       channelLink.removeAttribute('aria-disabled');
       channelLink.hidden = false;
-      channelLink.setAttribute('aria-label', 'Open selected Operation Alpha signal');
+      channelLink.setAttribute('aria-label', 'Open ' + title + ' on Spotify');
+      channelLink.onclick = function (event) {
+        var openedWindow;
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        openedWindow = window.open(resolvedUrl, '_blank');
+        if (openedWindow) {
+          openedWindow.opener = null;
+        }
+        else {
+          window.location.assign(resolvedUrl);
+        }
+      };
     }
     else if (channelLink) {
       channelLink.removeAttribute('href');
