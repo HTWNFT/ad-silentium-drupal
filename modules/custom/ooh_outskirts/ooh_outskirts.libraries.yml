@@ -57,7 +57,7 @@ play:
     - core/drupalSettings
 
 operation_alpha:
-  version: 1.0.25-oa-local-mini-lockdown
+  version: 1.0.27-oa232-credit-gate
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha.css: {}

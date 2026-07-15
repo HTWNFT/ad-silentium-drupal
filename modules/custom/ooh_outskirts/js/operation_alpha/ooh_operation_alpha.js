@@ -227,7 +227,7 @@
   }
 
   function isFreeOperationDevOverride() {
-    return window.OA_LOCALHOST_FREE_OPERATION_OVERRIDE === true || window.OA_LOCALHOST_UNLIMITED_CREDITS === true;
+    return isLocalhostOrigin() && (window.OA_LOCALHOST_FREE_OPERATION_OVERRIDE === true || window.OA_LOCALHOST_UNLIMITED_CREDITS === true);
   }
 
   function isLocalhostOrigin() {
@@ -6142,42 +6142,40 @@
           card.classList.add('is-selected');
         }
 
-        button.textContent = 'PURCHASED';
+        button.textContent = 'CHECKOUT';
         button.setAttribute('aria-pressed', 'true');
         button.disabled = true;
 
         if (confirmation) {
-          confirmation.textContent = 'PROCESSING LOCAL ACCOUNT CREDIT: ' + packageLabel.toUpperCase() + ' // ' + packagePrice;
+          confirmation.textContent = 'OPENING STRIPE TEST CHECKOUT: ' + packageLabel.toUpperCase() + ' // ' + packagePrice;
         }
         creditApi('/operation-alpha/credits/purchase', {
           method: 'POST',
           body: JSON.stringify({ credits: creditCount })
         }).then(function (json) {
-          button.disabled = false;
-          if (!json.success) {
+          if (!json.success || !json.checkoutUrl) {
+            button.disabled = false;
             if (confirmation) {
-              confirmation.textContent = json.loginRequired ? 'LOGIN REQUIRED TO PURCHASE OPERATION ALPHA CREDITS.' : 'LOCAL CREDIT PURCHASE FAILED.';
+              confirmation.textContent = json.loginRequired ? 'LOGIN REQUIRED TO PURCHASE OPERATION ALPHA CREDITS.' : 'STRIPE TEST CHECKOUT COULD NOT BE CREATED.';
             }
             if (json.loginRequired) {
               window.location.href = routePath('/user/login');
             }
             return;
           }
-          writeCreditBalance(json.balance);
-          renderCreditBalance(root);
           if (confirmation) {
-            confirmation.textContent = 'LOCAL ACCOUNT CREDIT COMPLETE: ' + packageLabel.toUpperCase() + ' // ' + packagePrice + ' // +' + creditCount + ' CREDIT(S) // BALANCE ' + formatCreditBalance(json.balance);
+            confirmation.textContent = 'REDIRECTING TO STRIPE TEST CHECKOUT: ' + packageLabel.toUpperCase() + ' // ' + packagePrice + ' // ' + creditCount + ' CREDIT(S).';
           }
+          window.location.href = json.checkoutUrl;
         }).catch(function () {
           button.disabled = false;
           if (confirmation) {
-            confirmation.textContent = 'LOCAL CREDIT PURCHASE FAILED.';
+            confirmation.textContent = 'STRIPE TEST CHECKOUT COULD NOT BE CREATED.';
           }
         });
       });
     });
   }
-
   function init() {
     if (document.body) {
       document.body.classList.add('ooh-operation-alpha-runtime');

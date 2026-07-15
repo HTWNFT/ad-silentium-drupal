@@ -208,6 +208,50 @@ function ooh_outskirts_schema() {
     ],
   ];
 
+  $schema['ooh_outskirts_oa_credit_purchase'] = [
+    'description' => 'Stores Operation Alpha Stripe Checkout purchase records and credit grant status.',
+    'fields' => [
+      'id' => ['description' => 'Primary purchase record ID.', 'type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE],
+      'uid' => ['description' => 'Drupal user ID that created the Stripe Checkout session.', 'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+      'stripe_session_id' => ['description' => 'Stripe Checkout Session ID.', 'type' => 'varchar', 'length' => 255, 'not null' => TRUE],
+      'stripe_payment_intent_id' => ['description' => 'Stripe PaymentIntent ID, when available.', 'type' => 'varchar', 'length' => 255, 'not null' => FALSE],
+      'stripe_event_id' => ['description' => 'Stripe webhook event ID that granted credits.', 'type' => 'varchar', 'length' => 255, 'not null' => FALSE],
+      'package_id' => ['description' => 'Operation Alpha credit package machine ID.', 'type' => 'varchar', 'length' => 32, 'not null' => TRUE],
+      'credits' => ['description' => 'Credits to grant after confirmed payment.', 'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+      'amount_cents' => ['description' => 'Expected Stripe amount in cents.', 'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+      'currency' => ['description' => 'Expected Stripe currency code.', 'type' => 'varchar', 'length' => 8, 'not null' => TRUE, 'default' => 'usd'],
+      'status' => ['description' => 'Current Stripe purchase status.', 'type' => 'varchar', 'length' => 32, 'not null' => TRUE],
+      'credited' => ['description' => 'Whether credits have already been granted for this session.', 'type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0],
+      'created' => ['description' => 'Unix timestamp when this purchase was created.', 'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+      'updated' => ['description' => 'Unix timestamp when this purchase was last updated.', 'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+      'credited_at' => ['description' => 'Unix timestamp when credits were granted.', 'type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => ['stripe_session_id' => ['stripe_session_id']],
+    'indexes' => [
+      'uid_created' => ['uid', 'created'],
+      'payment_intent' => ['stripe_payment_intent_id'],
+      'event' => ['stripe_event_id'],
+      'credited' => ['credited'],
+    ],
+  ];
+
+  $schema['ooh_outskirts_oa_stripe_event'] = [
+    'description' => 'Stores processed Operation Alpha Stripe webhook event IDs for dedupe.',
+    'fields' => [
+      'id' => ['description' => 'Primary webhook event record ID.', 'type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE],
+      'event_id' => ['description' => 'Stripe webhook event ID.', 'type' => 'varchar', 'length' => 255, 'not null' => TRUE],
+      'event_type' => ['description' => 'Stripe webhook event type.', 'type' => 'varchar', 'length' => 128, 'not null' => TRUE],
+      'processed' => ['description' => 'Whether the webhook event was processed successfully.', 'type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0],
+      'created' => ['description' => 'Unix timestamp when this webhook event was received.', 'type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => ['event_id' => ['event_id']],
+    'indexes' => [
+      'event_type' => ['event_type'],
+      'processed' => ['processed'],
+    ],
+  ];
   return $schema;
 }
 /**
@@ -267,3 +311,20 @@ function ooh_outskirts_update_9304() {
   $schema->createTable('ooh_outskirts_oa_credit_balance', $module_schema['ooh_outskirts_oa_credit_balance']);
 }
 
+/**
+ * Creates Operation Alpha Stripe purchase and webhook dedupe tables.
+ */
+function ooh_outskirts_update_9305() {
+  $schema = \Drupal::database()->schema();
+  $module_schema = ooh_outskirts_schema();
+  $tables = [
+    'ooh_outskirts_oa_credit_purchase',
+    'ooh_outskirts_oa_stripe_event',
+  ];
+
+  foreach ($tables as $table) {
+    if (!$schema->tableExists($table)) {
+      $schema->createTable($table, $module_schema[$table]);
+    }
+  }
+}

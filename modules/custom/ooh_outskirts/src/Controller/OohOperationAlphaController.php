@@ -121,7 +121,7 @@ final class OohOperationAlphaController extends ControllerBase {
   }
 
   /**
-   * Adds credits to the current account from the local/stubbed purchase flow.
+   * Creates a Stripe Checkout session for an Operation Alpha credit package.
    */
   public function purchaseCredits(Request $request): JsonResponse {
     if ($this->currentUser()->isAnonymous()) {
@@ -135,51 +135,165 @@ final class OohOperationAlphaController extends ControllerBase {
     }
 
     $payload = json_decode($request->getContent() ?: '{}', TRUE);
-    $credit_amount = (int) ($payload['credits'] ?? 0);
-    $allowed_amounts = [1, 30, 100];
+    $package = $this->resolveCreditPackage($payload);
 
-    if (!in_array($credit_amount, $allowed_amounts, TRUE)) {
+    if ($package === NULL) {
       return new JsonResponse([
         'success' => FALSE,
         'message' => 'Invalid Operation Alpha credit package.',
       ], 400);
     }
 
+    $secret_key = $this->stripeSecretKey();
+    if ($secret_key === '') {
+      return new JsonResponse([
+        'success' => FALSE,
+        'message' => 'Stripe test mode is not configured for Operation Alpha.',
+      ], 503);
+    }
+
     $uid = (int) $this->currentUser()->id();
     $this->ensureCreditTable();
     $this->ensureCreditBalanceRow($uid);
-
-    $database = \Drupal::database();
-    $transaction = $database->startTransaction();
+    $this->ensureStripeTables();
 
     try {
-      $current_balance = $this->readCreditBalance($uid, TRUE);
-      $new_balance = $current_balance + $credit_amount;
-      $database->update('ooh_outskirts_oa_credit_balance')
-        ->fields([
-          'balance' => $new_balance,
-          'updated' => \Drupal::time()->getRequestTime(),
-        ])
-        ->condition('uid', $uid)
-        ->execute();
-      unset($transaction);
+      $session = $this->createStripeCheckoutSession($secret_key, $uid, $package, $request);
+      $this->recordStripeCheckoutSession($uid, $package, $session);
     }
     catch (\Exception $exception) {
-      if (isset($transaction)) {
-        $transaction->rollBack();
-      }
-      \Drupal::logger('ooh_outskirts')->error('Operation Alpha credit purchase failed: @message', ['@message' => $exception->getMessage()]);
+      \Drupal::logger('ooh_outskirts')->error('Operation Alpha Stripe Checkout session failed: @message', ['@message' => $exception->getMessage()]);
       return new JsonResponse([
         'success' => FALSE,
-        'message' => 'Operation Alpha credit purchase failed.',
+        'message' => 'Stripe Checkout session could not be created.',
       ], 500);
     }
 
     return new JsonResponse([
       'success' => TRUE,
       'authenticated' => TRUE,
-      'balance' => $new_balance,
-      'creditsAdded' => $credit_amount,
+      'checkoutUrl' => $session['url'] ?? '',
+      'sessionId' => $session['id'] ?? '',
+      'creditsPending' => $package['credits'],
+    ]);
+  }
+
+  /**
+   * Builds the Stripe Checkout return page.
+   */
+  public function creditSuccess(Request $request): array {
+    $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
+    $operation_url = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
+
+    return [
+      '#type' => 'inline_template',
+      '#template' => '
+        <section class="ooh-operation-alpha ooh-operation-alpha--credits" data-ooh-operation-alpha-credits>
+          <div class="ooh-operation-alpha__shell ooh-operation-alpha__shell--credits">
+            <p class="ooh-operation-alpha__eyebrow">STRIPE TEST CHECKOUT</p>
+            <h1 class="ooh-operation-alpha__title">PAYMENT RECEIVED</h1>
+            <div class="ooh-operation-alpha__copy ooh-operation-alpha__credits-copy">
+              <p>Stripe is confirming this test payment by webhook.</p>
+              <p>Current balance: <strong><span data-ooh-alpha-credit-balance>SYNCING</span> CREDIT(S)</strong></p>
+            </div>
+            <p class="ooh-operation-alpha__credit-confirmation" data-ooh-alpha-credit-confirmation aria-live="polite">Refreshing account-backed balance.</p>
+            <div class="ooh-operation-alpha__runtime-actions">
+              <a class="ooh-operation-alpha__runtime-button" href="' . $credits_url . '">RETURN TO CREDITS</a>
+              <a class="ooh-operation-alpha__runtime-button" href="' . $operation_url . '">RETURN TO OPERATION ALPHA</a>
+            </div>
+          </div>
+        </section>',
+      '#attached' => [
+        'library' => [
+          'ooh_outskirts/operation_alpha',
+        ],
+      ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
+    ];
+  }
+
+  /**
+   * Processes signed Stripe webhooks and grants paid Operation Alpha credits.
+   */
+  public function stripeWebhook(Request $request): JsonResponse {
+    $checkpoint = 'controller_entered';
+    $this->logStripeWebhookCheckpoint($checkpoint);
+
+    $this->ensureCreditTable();
+    $this->ensureStripeTables();
+
+    $webhook_secret = $this->stripeWebhookSecret();
+    if ($webhook_secret === '') {
+      \Drupal::logger('ooh_outskirts')->error('Operation Alpha Stripe webhook rejected because no webhook signing secret is configured.');
+      return new JsonResponse(['success' => FALSE, 'message' => 'Webhook not configured.'], 503);
+    }
+
+    $payload = $request->getContent();
+    $signature = (string) $request->headers->get('Stripe-Signature', '');
+    if (!$this->verifyStripeWebhookSignature($payload, $signature, $webhook_secret)) {
+      \Drupal::logger('ooh_outskirts')->warning('Operation Alpha Stripe webhook rejected because signature verification failed.');
+      return new JsonResponse(['success' => FALSE, 'message' => 'Invalid signature.'], 400);
+    }
+    $checkpoint = 'signature_verified';
+    $this->logStripeWebhookCheckpoint($checkpoint);
+
+    $event = json_decode($payload, TRUE);
+    if (!is_array($event) || empty($event['id']) || empty($event['type'])) {
+      \Drupal::logger('ooh_outskirts')->warning('Operation Alpha Stripe webhook rejected because payload was invalid JSON.');
+      return new JsonResponse(['success' => FALSE, 'message' => 'Invalid payload.'], 400);
+    }
+
+    $event_id = (string) $event['id'];
+    $event_type = (string) $event['type'];
+    if ($this->stripeEventAlreadyProcessed($event_id)) {
+      return new JsonResponse(['success' => TRUE, 'duplicate' => TRUE]);
+    }
+
+    $credited = 0;
+
+    try {
+      $checkpoint = 'event_type_accepted';
+      $this->logStripeWebhookCheckpoint($checkpoint, ['@event_type' => $event_type]);
+
+      $this->recordStripeEvent($event_id, $event_type);
+      $checkpoint = 'event_row_recorded';
+      $this->logStripeWebhookCheckpoint($checkpoint, ['@event_type' => $event_type]);
+
+      if ($event_type === 'checkout.session.completed') {
+        $session = $event['data']['object'] ?? [];
+        if (is_array($session)) {
+          $credited = $this->grantStripeCheckoutCredits($session, $event_id, $checkpoint);
+        }
+      }
+      elseif (in_array($event_type, ['checkout.session.async_payment_failed', 'payment_intent.payment_failed'], TRUE)) {
+        $this->markStripePaymentFailed($event);
+      }
+
+      $this->markStripeEventProcessed($event_id);
+      $checkpoint = 'event_marked_processed';
+      $this->logStripeWebhookCheckpoint($checkpoint, ['@event_type' => $event_type]);
+    }
+    catch (\Throwable $exception) {
+      $message = preg_replace('/\b(?:cs|evt|pi|ch)_(?:test|live)?_[A-Za-z0-9_]+\b/', 'stripe_id_REDACTED', $exception->getMessage());
+      \Drupal::logger('ooh_outskirts')->error('Operation Alpha Stripe webhook failed at @checkpoint for @event: @class: @message in @file:@line', [
+        '@checkpoint' => $checkpoint,
+        '@event' => preg_replace('/\bevt_[A-Za-z0-9_]+\b/', 'evt_REDACTED', $event_id),
+        '@class' => get_class($exception),
+        '@message' => $message,
+        '@file' => $exception->getFile(),
+        '@line' => $exception->getLine(),
+      ]);
+      return new JsonResponse(['success' => FALSE, 'message' => 'Webhook processing failed.'], 500);
+    }
+    $checkpoint = 'successful_response_returned';
+    $this->logStripeWebhookCheckpoint($checkpoint, ['@event_type' => $event_type]);
+
+    return new JsonResponse([
+      'success' => TRUE,
+      'eventType' => $event_type,
+      'creditsGranted' => $credited,
     ]);
   }
 
@@ -376,10 +490,10 @@ final class OohOperationAlphaController extends ControllerBase {
               <span class="ooh-operation-alpha__runtime-kicker">ACTIVE SIGNAL</span>
               <p class="ooh-operation-alpha__runtime-title" data-ooh-alpha-runtime-title>Signal pending.</p>
               <p class="ooh-operation-alpha__runtime-copy" data-ooh-alpha-runtime-copy>Signal selected. Runtime handoff pending.</p>
-              <a class="ooh-operation-alpha__channel-link" href="#" target="_blank" rel="noopener noreferrer" data-ooh-alpha-playlist-channel-link hidden>OPEN CHANNEL</a>
-              <a class="ooh-operation-alpha__runtime-button" href="' . $runtime_url . '" data-ooh-alpha-runtime-proceed>RETURN TO INTRO</a>
+              <a class="ooh-operation-alpha__channel-link" href="' . $runtime_url . '" data-ooh-alpha-playlist-channel-link>OPEN CHANNEL</a>
+              <a class="ooh-operation-alpha__runtime-button" href="' . $home_url . '" data-ooh-alpha-runtime-proceed>RETURN TO INTRO</a>
             </div>
-            <p class="ooh-operation-alpha__playlist-note">No playback, account link, or runtime launch is active in this shell.</p>
+            <p class="ooh-operation-alpha__playlist-note">Select a signal, then return to intro.</p>
           </div>
         </section>',
       '#attached' => [
@@ -518,6 +632,463 @@ final class OohOperationAlphaController extends ControllerBase {
   }
 
   /**
+   * Returns the supported Operation Alpha Stripe credit packages.
+   */
+  private function creditPackages(): array {
+    return [
+      'single' => [
+        'id' => 'single',
+        'credits' => 1,
+        'amount_cents' => 100,
+        'currency' => 'usd',
+        'label' => 'Operation Alpha Credit',
+      ],
+      'field_pack' => [
+        'id' => 'field_pack',
+        'credits' => 30,
+        'amount_cents' => 2500,
+        'currency' => 'usd',
+        'label' => 'Operation Alpha Field Pack',
+      ],
+      'deep_runtime' => [
+        'id' => 'deep_runtime',
+        'credits' => 100,
+        'amount_cents' => 7500,
+        'currency' => 'usd',
+        'label' => 'Operation Alpha Deep Runtime',
+      ],
+    ];
+  }
+
+  /**
+   * Resolves an incoming purchase payload to an approved package.
+   */
+  private function resolveCreditPackage(array $payload): ?array {
+    $packages = $this->creditPackages();
+    $package_id = (string) ($payload['package'] ?? $payload['packageId'] ?? '');
+    if ($package_id !== '' && isset($packages[$package_id])) {
+      return $packages[$package_id];
+    }
+
+    $credits = (int) ($payload['credits'] ?? 0);
+    foreach ($packages as $package) {
+      if ($credits === (int) $package['credits']) {
+        return $package;
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Reads a Stripe secret from environment/settings and refuses live keys.
+   */
+  private function stripeSecretKey(): string {
+    $secret = $this->stripeConfigValue('OOH_STRIPE_SECRET_KEY', 'ooh_stripe_secret_key');
+    if ($secret === '' || strpos($secret, 'sk_live_') === 0 || strpos($secret, 'sk_test_') !== 0) {
+      if ($secret !== '') {
+        \Drupal::logger('ooh_outskirts')->error('Operation Alpha Stripe secret key is not a test-mode key.');
+      }
+      return '';
+    }
+    return $secret;
+  }
+
+  /**
+   * Reads the Stripe webhook signing secret from environment/settings.
+   */
+  private function stripeWebhookSecret(): string {
+    $secret = $this->stripeConfigValue('OOH_STRIPE_WEBHOOK_SECRET', 'ooh_stripe_webhook_secret');
+    return strpos($secret, 'whsec_') === 0 ? $secret : '';
+  }
+
+  /**
+   * Reads a local secret value without storing it in module code.
+   */
+  private function stripeConfigValue(string $env_name, string $settings_name): string {
+    $value = getenv($env_name);
+    if ($value === FALSE || trim((string) $value) === '') {
+      $value = \Drupal::service('settings')->get($settings_name, '');
+    }
+    return trim((string) $value);
+  }
+
+  /**
+   * Creates a Stripe Checkout Session through Drupal's HTTP client.
+   */
+  private function createStripeCheckoutSession(string $secret_key, int $uid, array $package, Request $request): array {
+    $success_url = $this->absoluteRouteUrlFromRequest($request, 'ooh_outskirts.operation_alpha_credit_success') . '?session_id={CHECKOUT_SESSION_ID}';
+    $cancel_url = $this->absoluteRouteUrlFromRequest($request, 'ooh_outskirts.operation_alpha_credits');
+    $response = \Drupal::httpClient()->request('POST', 'https://api.stripe.com/v1/checkout/sessions', [
+      'auth' => [$secret_key, ''],
+      'form_params' => [
+        'mode' => 'payment',
+        'success_url' => $success_url,
+        'cancel_url' => $cancel_url,
+        'client_reference_id' => (string) $uid,
+        'metadata[uid]' => (string) $uid,
+        'metadata[package_id]' => $package['id'],
+        'metadata[credits]' => (string) $package['credits'],
+        'metadata[amount_cents]' => (string) $package['amount_cents'],
+        'line_items[0][price_data][currency]' => $package['currency'],
+        'line_items[0][price_data][product_data][name]' => $package['label'],
+        'line_items[0][price_data][unit_amount]' => (string) $package['amount_cents'],
+        'line_items[0][quantity]' => '1',
+      ],
+      'timeout' => 20,
+    ]);
+
+    $session = json_decode((string) $response->getBody(), TRUE);
+    if (!is_array($session) || empty($session['id']) || empty($session['url'])) {
+      throw new \RuntimeException('Stripe returned an invalid Checkout Session response.');
+    }
+
+    return $session;
+  }
+
+  /**
+   * Builds an absolute route URL from the active browser request origin.
+   */
+  private function absoluteRouteUrlFromRequest(Request $request, string $route_name): string {
+    $path = Url::fromRoute($route_name, [], ['absolute' => FALSE])->toString();
+    if (strpos($path, '/') !== 0) {
+      $path = '/' . $path;
+    }
+    return rtrim($request->getSchemeAndHttpHost(), '/') . $path;
+  }
+  /**
+   * Records the created Checkout Session before Stripe redirects the browser.
+   */
+  private function recordStripeCheckoutSession(int $uid, array $package, array $session): void {
+    $now = \Drupal::time()->getRequestTime();
+    \Drupal::database()->merge('ooh_outskirts_oa_credit_purchase')
+      ->key(['stripe_session_id' => (string) $session['id']])
+      ->fields([
+        'uid' => $uid,
+        'stripe_payment_intent_id' => $session['payment_intent'] ?? NULL,
+        'package_id' => $package['id'],
+        'credits' => $package['credits'],
+        'amount_cents' => $package['amount_cents'],
+        'currency' => $package['currency'],
+        'status' => 'checkout_created',
+        'credited' => 0,
+        'created' => $now,
+        'updated' => $now,
+      ])
+      ->execute();
+  }
+
+  /**
+   * Verifies a Stripe-Signature header for the raw webhook body.
+   */
+  private function verifyStripeWebhookSignature(string $payload, string $signature_header, string $secret): bool {
+    $timestamp = '';
+    $signatures = [];
+    foreach (explode(',', $signature_header) as $part) {
+      [$key, $value] = array_pad(explode('=', trim($part), 2), 2, '');
+      if ($key === 't') {
+        $timestamp = $value;
+      }
+      elseif ($key === 'v1') {
+        $signatures[] = $value;
+      }
+    }
+
+    if ($timestamp === '' || empty($signatures)) {
+      return FALSE;
+    }
+
+    if (abs(\Drupal::time()->getRequestTime() - (int) $timestamp) > 300) {
+      return FALSE;
+    }
+
+    $expected = hash_hmac('sha256', $timestamp . '.' . $payload, $secret);
+    foreach ($signatures as $signature) {
+      if (hash_equals($expected, $signature)) {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Checks whether a Stripe webhook event ID has already been processed.
+   */
+  private function stripeEventAlreadyProcessed(string $event_id): bool {
+    return (bool) \Drupal::database()->select('ooh_outskirts_oa_stripe_event', 'e')
+      ->fields('e', ['id'])
+      ->condition('event_id', $event_id)
+      ->condition('processed', 1)
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+  }
+  /**
+   * Records a Stripe webhook event ID before processing side effects.
+   */
+  private function recordStripeEvent(string $event_id, string $event_type): void {
+    $existing_processed = \Drupal::database()->select('ooh_outskirts_oa_stripe_event', 'e')
+      ->fields('e', ['processed'])
+      ->condition('event_id', $event_id)
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+
+    if ((int) $existing_processed === 1) {
+      return;
+    }
+
+    \Drupal::database()->merge('ooh_outskirts_oa_stripe_event')
+      ->key(['event_id' => $event_id])
+      ->fields([
+        'event_type' => $event_type,
+        'processed' => 0,
+        'created' => \Drupal::time()->getRequestTime(),
+      ])
+      ->execute();
+  }
+  /**
+   * Marks a Stripe webhook event as processed.
+   */
+  private function markStripeEventProcessed(string $event_id): void {
+    \Drupal::database()->update('ooh_outskirts_oa_stripe_event')
+      ->fields(['processed' => 1])
+      ->condition('event_id', $event_id)
+      ->execute();
+  }
+
+  /**
+   * Logs redacted webhook processing checkpoints for local validation.
+   */
+  private function logStripeWebhookCheckpoint(string $checkpoint, array $context = []): void {
+    \Drupal::logger('ooh_outskirts')->notice('Operation Alpha Stripe webhook checkpoint: @checkpoint @event_type', [
+      '@checkpoint' => $checkpoint,
+      '@event_type' => $context['@event_type'] ?? '',
+    ]);
+  }
+
+  /**
+   * Grants paid Checkout credits once, from a verified Stripe webhook only.
+   */
+  private function grantStripeCheckoutCredits(array $session, string $event_id, ?string &$checkpoint = NULL): int {
+    if (($session['payment_status'] ?? '') !== 'paid') {
+      return 0;
+    }
+
+    if (!$this->isOperationAlphaCheckoutSession($session)) {
+      $checkpoint = 'non_operation_alpha_checkout_ignored';
+      $this->logStripeWebhookCheckpoint($checkpoint);
+      return 0;
+    }
+
+    $session_id = (string) ($session['id'] ?? '');
+    if ($session_id === '') {
+      throw new \RuntimeException('Stripe Checkout Session webhook omitted the session ID.');
+    }
+
+    $database = \Drupal::database();
+    $transaction = $database->startTransaction();
+    $checkpoint = 'credit_transaction_started';
+    $this->logStripeWebhookCheckpoint($checkpoint);
+
+    try {
+      $query = $database->select('ooh_outskirts_oa_credit_purchase', 'p')
+        ->fields('p')
+        ->condition('stripe_session_id', $session_id)
+        ->range(0, 1);
+      if (method_exists($query, 'forUpdate')) {
+        $query->forUpdate();
+      }
+      $purchase = $query->execute()->fetchAssoc();
+
+      if (!$purchase) {
+        throw new \RuntimeException('No Operation Alpha purchase record matched Stripe session ' . $session_id . '.');
+      }
+      $checkpoint = 'matching_purchase_found';
+      $this->logStripeWebhookCheckpoint($checkpoint);
+
+      if ((int) $purchase['credited'] === 1) {
+        unset($transaction);
+        return 0;
+      }
+
+      $amount_total = (int) ($session['amount_total'] ?? 0);
+      $currency = strtolower((string) ($session['currency'] ?? ''));
+      if ($amount_total !== (int) $purchase['amount_cents'] || $currency !== strtolower((string) $purchase['currency'])) {
+        throw new \RuntimeException('Stripe Checkout Session amount or currency did not match the recorded package.');
+      }
+      $metadata = $session['metadata'] ?? [];
+      $metadata_credits = (int) ($metadata['credits'] ?? 0);
+      $metadata_amount = (int) ($metadata['amount_cents'] ?? 0);
+      $metadata_package = (string) ($metadata['package_id'] ?? '');
+      if ($metadata_credits !== (int) $purchase['credits'] || $metadata_amount !== (int) $purchase['amount_cents'] || $metadata_package !== (string) $purchase['package_id']) {
+        throw new \RuntimeException('Stripe Checkout Session metadata did not match the recorded Operation Alpha package.');
+      }
+      $checkpoint = 'paid_amount_currency_credit_validation_passed';
+      $this->logStripeWebhookCheckpoint($checkpoint);
+
+      $uid = (int) $purchase['uid'];
+      $credits = (int) $purchase['credits'];
+      $payment_intent = (string) ($session['payment_intent'] ?? '');
+      $this->ensureCreditBalanceRow($uid);
+      $balance = $this->readCreditBalance($uid, TRUE);
+      $new_balance = $balance + $credits;
+      $now = \Drupal::time()->getRequestTime();
+
+      $database->update('ooh_outskirts_oa_credit_balance')
+        ->fields([
+          'balance' => $new_balance,
+          'updated' => $now,
+        ])
+        ->condition('uid', $uid)
+        ->execute();
+
+      $database->update('ooh_outskirts_oa_credit_purchase')
+        ->fields([
+          'stripe_payment_intent_id' => $payment_intent !== '' ? $payment_intent : NULL,
+          'stripe_event_id' => $event_id,
+          'status' => 'credited',
+          'credited' => 1,
+          'updated' => $now,
+          'credited_at' => $now,
+        ])
+        ->condition('stripe_session_id', $session_id)
+        ->execute();
+      $checkpoint = 'purchase_marked_credited';
+      $this->logStripeWebhookCheckpoint($checkpoint);
+
+      unset($transaction);
+      return $credits;
+    }
+    catch (\Throwable $exception) {
+      if (isset($transaction)) {
+        $transaction->rollBack();
+      }
+      throw $exception;
+    }
+  }
+
+  /**
+   * Checks whether a paid Checkout Session belongs to Operation Alpha credits.
+   */
+  private function isOperationAlphaCheckoutSession(array $session): bool {
+    $metadata = $session['metadata'] ?? [];
+    if (!is_array($metadata)) {
+      return FALSE;
+    }
+
+    foreach (['package_id', 'credits', 'amount_cents'] as $key) {
+      if (!array_key_exists($key, $metadata) || trim((string) $metadata[$key]) === '') {
+        return FALSE;
+      }
+    }
+
+    $package = $this->resolveCreditPackage([
+      'package' => (string) $metadata['package_id'],
+    ]);
+    if ($package === NULL) {
+      return FALSE;
+    }
+
+    return (int) $metadata['credits'] === (int) $package['credits']
+      && (int) $metadata['amount_cents'] === (int) $package['amount_cents'];
+  }
+  /**
+   * Marks a failed Stripe payment object without granting credits.
+   */
+  private function markStripePaymentFailed(array $event): void {
+    $object = $event['data']['object'] ?? [];
+    if (!is_array($object)) {
+      return;
+    }
+
+    $session_id = (string) ($object['id'] ?? '');
+    $payment_intent = (string) ($object['payment_intent'] ?? $object['id'] ?? '');
+    $database = \Drupal::database();
+    $fields = [
+      'status' => 'failed',
+      'updated' => \Drupal::time()->getRequestTime(),
+    ];
+
+    if ($session_id !== '' && strpos($session_id, 'cs_') === 0) {
+      $database->update('ooh_outskirts_oa_credit_purchase')
+        ->fields($fields)
+        ->condition('stripe_session_id', $session_id)
+        ->execute();
+    }
+    elseif ($payment_intent !== '') {
+      $database->update('ooh_outskirts_oa_credit_purchase')
+        ->fields($fields)
+        ->condition('stripe_payment_intent_id', $payment_intent)
+        ->execute();
+    }
+  }
+
+  /**
+   * Ensures the Operation Alpha Stripe purchase tables exist locally.
+   */
+  private function ensureStripeTables(): void {
+    $schema = \Drupal::database()->schema();
+    $tables = $this->stripeTableSchemas();
+    foreach ($tables as $table => $definition) {
+      if (!$schema->tableExists($table)) {
+        $schema->createTable($table, $definition);
+      }
+    }
+  }
+
+  /**
+   * Returns local table definitions for Stripe purchase tracking.
+   */
+  private function stripeTableSchemas(): array {
+    return [
+      'ooh_outskirts_oa_credit_purchase' => [
+        'description' => 'Stores Operation Alpha Stripe Checkout purchase records and credit grant status.',
+        'fields' => [
+          'id' => ['type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE],
+          'uid' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+          'stripe_session_id' => ['type' => 'varchar', 'length' => 255, 'not null' => TRUE],
+          'stripe_payment_intent_id' => ['type' => 'varchar', 'length' => 255, 'not null' => FALSE],
+          'stripe_event_id' => ['type' => 'varchar', 'length' => 255, 'not null' => FALSE],
+          'package_id' => ['type' => 'varchar', 'length' => 32, 'not null' => TRUE],
+          'credits' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+          'amount_cents' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+          'currency' => ['type' => 'varchar', 'length' => 8, 'not null' => TRUE, 'default' => 'usd'],
+          'status' => ['type' => 'varchar', 'length' => 32, 'not null' => TRUE],
+          'credited' => ['type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0],
+          'created' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+          'updated' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+          'credited_at' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => FALSE],
+        ],
+        'primary key' => ['id'],
+        'unique keys' => ['stripe_session_id' => ['stripe_session_id']],
+        'indexes' => [
+          'uid_created' => ['uid', 'created'],
+          'payment_intent' => ['stripe_payment_intent_id'],
+          'event' => ['stripe_event_id'],
+          'credited' => ['credited'],
+        ],
+      ],
+      'ooh_outskirts_oa_stripe_event' => [
+        'description' => 'Stores processed Operation Alpha Stripe webhook event IDs for dedupe.',
+        'fields' => [
+          'id' => ['type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE],
+          'event_id' => ['type' => 'varchar', 'length' => 255, 'not null' => TRUE],
+          'event_type' => ['type' => 'varchar', 'length' => 128, 'not null' => TRUE],
+          'processed' => ['type' => 'int', 'size' => 'tiny', 'unsigned' => TRUE, 'not null' => TRUE, 'default' => 0],
+          'created' => ['type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE],
+        ],
+        'primary key' => ['id'],
+        'unique keys' => ['event_id' => ['event_id']],
+        'indexes' => [
+          'event_type' => ['event_type'],
+          'processed' => ['processed'],
+        ],
+      ],
+    ];
+  }
+  /**
    * Ensures the Operation Alpha credit table exists on local installs.
    */
   private function ensureCreditTable(): void {
@@ -612,6 +1183,8 @@ final class OohOperationAlphaController extends ControllerBase {
   }
 
 }
+
+
 
 
 

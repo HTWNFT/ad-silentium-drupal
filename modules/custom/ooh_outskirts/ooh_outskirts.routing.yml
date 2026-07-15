@@ -194,6 +194,27 @@ ooh_outskirts.operation_alpha_credit_purchase:
     _user_is_logged_in: 'TRUE'
     _csrf_request_header_token: 'TRUE'
 
+ooh_outskirts.operation_alpha_credit_success:
+  path: '/operation-alpha/credits/success'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::creditSuccess'
+    _title: 'OPERATION ALPHA PAYMENT RECEIVED'
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
+ooh_outskirts.operation_alpha_credit_webhook:
+  path: '/operation-alpha/credits/webhook'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohOperationAlphaController::stripeWebhook'
+  requirements:
+    _access: 'TRUE'
+  options:
+    no_cache: TRUE
+
 ooh_outskirts.operation_alpha_credit_consume:
   path: '/operation-alpha/credits/consume'
   methods: [POST]
