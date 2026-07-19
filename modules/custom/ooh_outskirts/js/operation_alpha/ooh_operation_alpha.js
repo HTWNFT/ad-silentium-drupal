@@ -419,29 +419,6 @@
     });
   }
 
-  function bindOperationAlphaExitReset() {
-    if (document.oohAlphaExitResetBound) {
-      return;
-    }
-    document.oohAlphaExitResetBound = true;
-    document.addEventListener('click', function (event) {
-      var link = event.target && event.target.closest ? event.target.closest('a[href]') : null;
-      var url;
-
-      if (!link) {
-        return;
-      }
-      try {
-        url = new URL(link.getAttribute('href'), window.location.href);
-      }
-      catch (e) {
-        return;
-      }
-      if (url.origin === window.location.origin && isOperationAlphaRoute(window.location.pathname) && !isOperationAlphaRoute(url.pathname)) {
-        resetOAIntroRunState(true);
-      }
-    }, true);
-  }
   var actorRegistryPaths = [
     '/operation_alpha/oa_actor_registry.csv',
     '/operation_alpha/generated_actor_registry/oa_actor_registry.csv'
@@ -5695,9 +5672,6 @@
       'authorize-extraction': 'GET THEM OUT'
     };
 
-    if (isOperationAlphaRootPath()) {
-      resetOAIntroRunState(true);
-    }
     initActorRegistry(root);
     initSignalModal(root);
     setupNewOperationGate(root);
@@ -6159,7 +6133,7 @@
               confirmation.textContent = json.loginRequired ? 'LOGIN REQUIRED TO PURCHASE OPERATION ALPHA CREDITS.' : 'STRIPE TEST CHECKOUT COULD NOT BE CREATED.';
             }
             if (json.loginRequired) {
-              window.location.href = routePath('/user/login');
+              window.location.href = routePath('/user/login') + '?destination=' + encodeURIComponent(operationAlphaCreditsPath());
             }
             return;
           }
@@ -6181,7 +6155,6 @@
       document.body.classList.add('ooh-operation-alpha-runtime');
     }
 
-    bindOperationAlphaExitReset();
     document.querySelectorAll('[data-ooh-operation-alpha]').forEach(initOperationAlphaGate);
     document.querySelectorAll('[data-ooh-operation-alpha-playlists]').forEach(initPlaylistShell);
     document.querySelectorAll('[data-ooh-operation-alpha-runtime]').forEach(initRuntimeShell);

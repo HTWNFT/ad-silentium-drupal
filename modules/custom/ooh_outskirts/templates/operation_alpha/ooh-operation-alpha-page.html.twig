@@ -33,7 +33,7 @@
       <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha') }}">RETURN TO LAUNCH</a>
       <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha') }}" data-ooh-alpha-try-again>NEW OPERATION - 1 CREDIT</a>
       <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">PURCHASE CREDITS</a>
-      <a class="ooh-operation-alpha__cta-link" href="{{ path('user.login') }}">LOGIN / ACCOUNT</a>
+      <a class="ooh-operation-alpha__cta-link" href="{{ path('user.login', {}, {'query': {'destination': path('ooh_outskirts.operation_alpha')}}) }}">LOGIN / ACCOUNT</a>
     </nav>
     <h2 class="ooh-operation-alpha__title">SIGNAL ACQUISITION</h2>
     <p class="ooh-operation-alpha__copy" data-ooh-alpha-runtime-copy>Operation Alpha runtime pending.</p>
@@ -335,7 +335,7 @@
       <div class="ooh-operation-alpha__access-actions">
         <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.operation_alpha_nested_playlists') }}">SELECT SIGNAL</a>
         <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">PURCHASE CREDITS</a>
-        <a class="ooh-operation-alpha__access-button" href="{{ path('user.login') }}">LOGIN / ACCOUNT</a>
+        <a class="ooh-operation-alpha__access-button" href="{{ path('user.login', {}, {'query': {'destination': path('ooh_outskirts.operation_alpha')}}) }}">LOGIN / ACCOUNT</a>
       </div>
     </section>
   </div>

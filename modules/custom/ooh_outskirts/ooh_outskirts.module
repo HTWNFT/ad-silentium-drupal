@@ -72,7 +72,10 @@ function ooh_outskirts_theme($existing, $type, $theme, $path) {
     ],
 
     'ooh_operation_alpha_credits' => [
-      'variables' => [],
+      'variables' => [
+        'account_button_label' => 'LOGIN / ACCOUNT',
+        'account_button_url' => '',
+      ],
       'template' => 'ooh-operation-alpha-credits',
       'path' => $path . '/templates/operation_alpha',
     ],

@@ -82,8 +82,19 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the Operation Alpha credit purchase staging page.
    */
   public function credits(): array {
+    $account = $this->currentUser();
+    $is_authenticated = $account->isAuthenticated();
+
     return [
       '#theme' => 'ooh_operation_alpha_credits',
+      '#account_button_label' => $is_authenticated ? ($account->getDisplayName() ?: 'ACCOUNT') : 'LOGIN / ACCOUNT',
+      '#account_button_url' => $is_authenticated
+        ? Url::fromRoute('user.page')->toString()
+        : Url::fromRoute('user.login', [], [
+          'query' => [
+            'destination' => Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString(),
+          ],
+        ])->toString(),
       '#attached' => [
         'library' => [
           'ooh_outskirts/operation_alpha',
@@ -383,7 +394,11 @@ final class OohOperationAlphaController extends ControllerBase {
     $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
     $home_url = $runtime_url;
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
-    $login_url = Url::fromRoute('user.login')->toString();
+    $login_url = Url::fromRoute('user.login', [], [
+      'query' => [
+        'destination' => $home_url,
+      ],
+    ])->toString();
     $war_bangaz_url = 'https://open.spotify.com/playlist/6CaO0WNPwOyB4ZBIwgJF3O?si=46f8eacb11d34816';
     $signal_blitz_url = 'https://open.spotify.com/playlist/5yXFPozHV4eW9Aal5Ys7Mn?si=19228e24361844a7';
     $dust_march_url = 'https://open.spotify.com/playlist/76AhLGUeJhcZbgQYt8oqo8?si=d4de23f690ee433e';
@@ -515,7 +530,11 @@ final class OohOperationAlphaController extends ControllerBase {
     $playlists_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_playlists')->toString();
     $operation_url = Url::fromRoute('ooh_outskirts.operation_alpha_level_1')->toString();
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
-    $login_url = Url::fromRoute('user.login')->toString();
+    $login_url = Url::fromRoute('user.login', [], [
+      'query' => [
+        'destination' => $home_url,
+      ],
+    ])->toString();
 
     return [
       '#type' => 'inline_template',
@@ -575,7 +594,11 @@ final class OohOperationAlphaController extends ControllerBase {
     $home_url = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
     $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_runtime')->toString();
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
-    $login_url = Url::fromRoute('user.login')->toString();
+    $login_url = Url::fromRoute('user.login', [], [
+      'query' => [
+        'destination' => $home_url,
+      ],
+    ])->toString();
 
     return [
       '#type' => 'inline_template',
