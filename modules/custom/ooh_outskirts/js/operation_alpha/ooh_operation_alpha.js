@@ -5,6 +5,7 @@
 
   var storageKey = 'ooh_operation_alpha_intro_seen_v1';
   var sessionIntroSeenKey = 'ooh_operation_alpha_intro_seen_session_v1';
+  var introBannerStoragePrefix = 'ooh_operation_alpha_banner_seen_v1:';
   var signalStorageKey = 'ooh_operation_alpha_signal_dismissed_v1';
   var playlistStorageKey = 'ooh_operation_alpha_playlist_selection_v1';
   var oaChainStateKey = 'ooh_operation_alpha_chain_state_v1';
@@ -146,6 +147,9 @@
     if (key === creditBalanceKey) {
       return false;
     }
+    if (key.indexOf(introBannerStoragePrefix) === 0) {
+      return false;
+    }
     return key.indexOf('ooh_operation_alpha_') === 0 || key.indexOf('ooh_alpha_') === 0;
   }
 
@@ -224,6 +228,20 @@
 
   function operationAlphaCreditsPath() {
     return routePath('/operation-alpha/credits');
+  }
+
+  function normalizedOperationAlphaBannerPath() {
+    var path = window.location.pathname || '/operation-alpha';
+    var match;
+
+    path = path.replace(/\/+$/, '') || '/';
+    match = path.match(/\/operation-alpha(?:\/.*)?$/);
+
+    return match ? match[0] : path;
+  }
+
+  function introBannerStorageKey() {
+    return introBannerStoragePrefix + normalizedOperationAlphaBannerPath();
   }
 
   function isFreeOperationDevOverride() {
@@ -1446,7 +1464,7 @@
 
   function storageFlagSeen() {
     try {
-      return window.localStorage.getItem(storageKey) === '1' || window.sessionStorage.getItem(sessionIntroSeenKey) === '1';
+      return window.sessionStorage.getItem(introBannerStorageKey()) === '1';
     }
     catch (e) {
       return false;
@@ -1455,8 +1473,7 @@
 
   function storeSeenFlag() {
     try {
-      window.localStorage.setItem(storageKey, '1');
-      window.sessionStorage.setItem(sessionIntroSeenKey, '1');
+      window.sessionStorage.setItem(introBannerStorageKey(), '1');
     }
     catch (e) {}
   }
@@ -5716,7 +5733,6 @@
 
     if (intro && enter) {
       if (shouldSuppressIntroOverlay()) {
-        storeSeenFlag();
         hideIntro(intro);
         showSignalModal(root);
       }
