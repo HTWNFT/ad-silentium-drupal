@@ -3954,26 +3954,12 @@
         '<strong class="ooh-operation-alpha__final-aar-status" data-ooh-alpha-final-aar-status></strong>' +
         '<div class="ooh-operation-alpha__final-aar-lines" data-ooh-alpha-final-aar-lines></div>' +
         '<div class="ooh-operation-alpha__final-aar-actions">' +
-        '<button class="ooh-operation-alpha__final-aar-button" type="button" data-ooh-alpha-final-aar-run>NEW OPERATION - 1 CREDIT</button>' +
         '<a class="ooh-operation-alpha__final-aar-button" href="' + routePath('/operation-alpha/credits') + '">PURCHASE CREDITS</a>' +
         '<a class="ooh-operation-alpha__final-aar-button" href="' + routePath('/operation-alpha') + '">RETURN TO OA HOME</a>' +
         '<a class="ooh-operation-alpha__final-aar-button" href="' + routePath('/operation-alpha/oaplay/playlists') + '">SELECT SIGNAL</a>' +
         '</div>' +
         '</div>';
       root.appendChild(popup);
-      popup.querySelector('[data-ooh-alpha-final-aar-run]').addEventListener('click', function () {
-        consumeOperationCredit('launch').then(function (json) {
-          if (!json.success) {
-            guideToCredits();
-            return;
-          }
-          resetOAIntroRunState(true);
-          markActiveOperationCredit();
-          popup.hidden = true;
-          popup.setAttribute('aria-hidden', 'true');
-          activateOperationAlphaRuntime(root);
-        });
-      });
     }
 
     title = popup.querySelector('.ooh-operation-alpha__final-aar-title');
@@ -5635,27 +5621,8 @@
   }
 
   function setupNewOperationGate(root) {
-    var hasCredit = hasOperationCredit();
-
     root.querySelectorAll('[data-ooh-alpha-try-again]').forEach(function (link) {
-      if (!hasCredit) {
-        link.textContent = 'NEW OPERATION - 1 CREDIT';
-        link.setAttribute('href', operationAlphaCreditsPath());
-        link.setAttribute('aria-label', 'Purchase credits for a new Operation Alpha run');
-      }
-      else {
-        link.textContent = 'NEW OPERATION - 1 CREDIT';
-        link.setAttribute('href', routePath('/operation-alpha'));
-        link.setAttribute('aria-label', 'Start a clean Operation Alpha run for 1 credit');
-      }
-      if (link.oohAlphaCreditGateBound) {
-        return;
-      }
-      link.oohAlphaCreditGateBound = true;
-      link.addEventListener('click', function (event) {
-        event.preventDefault();
-        startPaidOperation(true);
-      });
+      link.remove();
     });
   }
 

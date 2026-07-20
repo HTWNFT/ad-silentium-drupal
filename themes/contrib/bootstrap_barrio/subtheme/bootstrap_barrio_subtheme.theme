@@ -44,7 +44,35 @@ function bootstrap_barrio_subtheme_preprocess_user(array &$variables) {
   $variables['ooh_profile_display_name'] = $account->getDisplayName();
   $variables['ooh_profile_email'] = $can_view_email ? $account->getEmail() : '';
   $variables['ooh_profile_member_for'] = \Drupal::service('date.formatter')->formatTimeDiffSince($account->getCreatedTime());
-  $variables['ooh_profile_credits_url'] = \Drupal::urlGenerator()->generateFromRoute('ooh_outskirts.credits');
   $variables['ooh_profile_home_url'] = \Drupal::urlGenerator()->generateFromRoute('<front>');
-  $variables['ooh_profile_placeholder_credits'] = 60;
+  $variables['ooh_profile_operation_alpha_url'] = \Drupal::urlGenerator()->generateFromRoute('ooh_outskirts.operation_alpha');
+  $variables['ooh_profile_operation_alpha_balance'] = bootstrap_barrio_subtheme_operation_alpha_balance((int) $account->id());
+}
+
+/**
+ * Reads the authoritative Operation Alpha balance for a user profile.
+ */
+function bootstrap_barrio_subtheme_operation_alpha_balance(int $uid): int {
+  if ($uid <= 0) {
+    return 0;
+  }
+
+  try {
+    $balance = \Drupal::database()
+      ->select('ooh_outskirts_oa_credit_balance', 'balance')
+      ->fields('balance', ['balance'])
+      ->condition('uid', $uid)
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('bootstrap_barrio_subtheme')->warning('Operation Alpha profile balance lookup failed for uid @uid: @message', [
+      '@uid' => $uid,
+      '@message' => $e->getMessage(),
+    ]);
+    return 0;
+  }
+
+  return $balance === FALSE ? 0 : max(0, (int) $balance);
 }

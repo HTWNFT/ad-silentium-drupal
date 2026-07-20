@@ -291,12 +291,14 @@ class OohGameGeneratorBlock extends BlockBase {
 
     $paywall_url = Url::fromRoute('ooh_outskirts.clearance')->toString();
     $enter_target = Url::fromRoute('ooh_outskirts.play')->toString();
-    $credits_target = Url::fromRoute('ooh_outskirts.credits')->toString();
+    $credits_target = '';
+    $operation_alpha_target = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
     $home_target = Url::fromRoute('<front>')->toString();
     $account = \Drupal::currentUser();
     $is_logged_in = $account->isAuthenticated();
+    $credit_balance = $is_logged_in ? $this->readOperationAlphaCreditBalance((int) $account->id()) : 0;
     $member_target = Url::fromRoute($is_logged_in ? 'user.page' : 'user.login')->toString();
-    $member_label = $is_logged_in ? ($account->getDisplayName() ?: 'MEMBER') : 'LOGIN';
+    $member_label = $is_logged_in ? ($account->getDisplayName() ?: 'MEMBER') : 'LOGIN / ACCOUNT';
     $mission_prompts = $this->loadMissionPromptSnapshot();
 
     $build = [];
@@ -349,7 +351,8 @@ class OohGameGeneratorBlock extends BlockBase {
     <nav class="ooh-generator__nav" aria-label="Dossier navigation">
       <a class="ooh-generator__nav-button ooh-generator__nav-button--home" href="' . $home_target . '">HOME</a>
       <div class="ooh-generator__nav-cluster">
-        <a class="ooh-generator__nav-button" href="' . $credits_target . '" data-ooh-credits-link>CREDITS: 60</a>
+        <button class="ooh-generator__nav-button ooh-generator__nav-button--disabled" type="button" disabled aria-disabled="true">CREDITS: ' . $credit_balance . '</button>
+        <a class="ooh-generator__nav-button" href="' . $operation_alpha_target . '">OPERATION ALPHA RETURN</a>
         <a class="ooh-generator__nav-button" href="' . $member_target . '">' . htmlspecialchars($member_label, ENT_QUOTES, 'UTF-8') . '</a>
       </div>
     </nav>
@@ -510,4 +513,26 @@ class OohGameGeneratorBlock extends BlockBase {
     return '';
   }
 
+  /**
+   * Reads the server-authoritative Operation Alpha balance for account status.
+   */
+  private function readOperationAlphaCreditBalance(int $uid): int {
+    if ($uid <= 0) {
+      return 0;
+    }
+
+    $database = \Drupal::database();
+    if (!$database->schema()->tableExists('ooh_outskirts_oa_credit_balance')) {
+      return 0;
+    }
+
+    $balance = $database->select('ooh_outskirts_oa_credit_balance', 'b')
+      ->fields('b', ['balance'])
+      ->condition('uid', $uid)
+      ->range(0, 1)
+      ->execute()
+      ->fetchField();
+
+    return max(0, (int) $balance);
+  }
 }

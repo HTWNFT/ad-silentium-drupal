@@ -251,6 +251,17 @@ body.page-play .content {
   outline: none;
 }
 
+.ooh-generator__nav-button:disabled,
+.ooh-generator__nav-button[aria-disabled="true"] {
+  transform: none;
+  border-color: rgba(118, 248, 255, 0.16);
+  background: rgba(0, 8, 16, 0.24);
+  color: rgba(190, 225, 228, 0.42);
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+}
+
 .ooh-generator__header {
   margin: 0 auto 26px;
   max-width: 860px;

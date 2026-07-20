@@ -719,7 +719,7 @@
             summaryCredits.textContent = getCredits();
           }
 
-          if (creditsLink) {
+          if (creditsLink && creditsLink.tagName === 'A') {
             creditsLink.textContent = 'CREDITS: ' + getCredits();
           }
         }
