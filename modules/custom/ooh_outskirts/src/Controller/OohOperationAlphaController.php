@@ -16,16 +16,42 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the isolated Operation Alpha page.
    */
   public function page(): array {
+    $account = $this->currentUser();
+    $is_authenticated = $account->isAuthenticated();
+    $uid = $is_authenticated ? (int) $account->id() : 0;
+    $credit_balance = $is_authenticated ? $this->readCreditBalance($uid) : 0;
+
     return [
       '#theme' => 'ooh_operation_alpha_page',
+      '#account_label' => $is_authenticated ? ($account->getDisplayName() ?: 'ACCOUNT') : 'LOGIN / ACCOUNT',
+      '#account_url' => $is_authenticated
+        ? Url::fromRoute('entity.user.canonical', ['user' => $uid], [
+          'query' => [
+            'ooh_operation_alpha' => '1',
+          ],
+        ])->toString()
+        : Url::fromRoute('user.login', [], [
+          'query' => [
+            'destination' => Url::fromRoute('ooh_outskirts.operation_alpha')->toString(),
+          ],
+        ])->toString(),
+      '#is_authenticated' => $is_authenticated,
+      '#credit_balance' => $credit_balance,
+      '#credit_status_label' => 'CREDITS: ' . $credit_balance,
+      '#credits_url' => Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString(),
       '#attached' => [
         'library' => [
           'ooh_outskirts/operation_alpha',
         ],
       ],
+      '#cache' => [
+        'contexts' => [
+          'user',
+        ],
+        'max-age' => 0,
+      ],
     ];
   }
-
   /**
    * Builds Operation Alpha level 1: Fun and Games.
    */
@@ -89,7 +115,11 @@ final class OohOperationAlphaController extends ControllerBase {
       '#theme' => 'ooh_operation_alpha_credits',
       '#account_button_label' => $is_authenticated ? ($account->getDisplayName() ?: 'ACCOUNT') : 'LOGIN / ACCOUNT',
       '#account_button_url' => $is_authenticated
-        ? Url::fromRoute('user.page')->toString()
+        ? Url::fromRoute('user.page', [], [
+          'query' => [
+            'ooh_operation_alpha' => '1',
+          ],
+        ])->toString()
         : Url::fromRoute('user.login', [], [
           'query' => [
             'destination' => Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString(),

@@ -31,9 +31,12 @@
     <div class="ooh-operation-alpha__shell" data-ooh-operation-alpha-control>
     <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
       <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha') }}">RETURN TO LAUNCH</a>
-      <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha') }}" data-ooh-alpha-try-again>NEW OPERATION - 1 CREDIT</a>
-      <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">PURCHASE CREDITS</a>
-      <a class="ooh-operation-alpha__cta-link" href="{{ path('user.login', {}, {'query': {'destination': path('ooh_outskirts.operation_alpha')}}) }}">LOGIN / ACCOUNT</a>
+      {% if credit_balance > 0 %}
+        <button class="ooh-operation-alpha__cta-link ooh-operation-alpha__cta-link--disabled" type="button" disabled aria-disabled="true">{{ credit_status_label }}</button>
+      {% else %}
+        <a class="ooh-operation-alpha__cta-link" href="{{ credits_url }}">BUY CREDITS</a>
+      {% endif %}
+      <a class="ooh-operation-alpha__cta-link" href="{{ account_url }}">{{ account_label }}</a>
     </nav>
     <h2 class="ooh-operation-alpha__title">SIGNAL ACQUISITION</h2>
     <p class="ooh-operation-alpha__copy" data-ooh-alpha-runtime-copy>Operation Alpha runtime pending.</p>
@@ -326,16 +329,6 @@
         <strong class="ooh-operation-alpha__result-title" data-ooh-alpha-result-title>Outcome pending</strong>
         <span class="ooh-operation-alpha__result-field" data-ooh-alpha-result-field>FIELD STATUS: unresolved</span>
         <p class="ooh-operation-alpha__result-mark" data-ooh-alpha-result-mark>MARK RESPONSE: awaiting action.</p>
-      </div>
-    </section>
-
-    <section class="ooh-operation-alpha__access-panel" aria-label="Operation Alpha access status">
-      <span class="ooh-operation-alpha__access-kicker">ACCESS STATUS</span>
-      <p class="ooh-operation-alpha__access-line">Runtime and credit access are staged for the next shell.</p>
-      <div class="ooh-operation-alpha__access-actions">
-        <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.operation_alpha_nested_playlists') }}">SELECT SIGNAL</a>
-        <a class="ooh-operation-alpha__access-button" href="{{ path('ooh_outskirts.operation_alpha_credits') }}">PURCHASE CREDITS</a>
-        <a class="ooh-operation-alpha__access-button" href="{{ path('user.login', {}, {'query': {'destination': path('ooh_outskirts.operation_alpha')}}) }}">LOGIN / ACCOUNT</a>
       </div>
     </section>
   </div>

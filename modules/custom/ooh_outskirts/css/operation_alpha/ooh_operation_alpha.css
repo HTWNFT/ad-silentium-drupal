@@ -416,6 +416,14 @@ body.ooh-operation-alpha-runtime .row {
   text-decoration: none;
 }
 
+.ooh-operation-alpha__cta-link--disabled,
+.ooh-operation-alpha__cta-link--disabled:hover,
+.ooh-operation-alpha__cta-link--disabled:focus-visible {
+  cursor: default;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
 .ooh-operation-alpha__signal-actions {
   display: flex;
   flex-wrap: wrap;
