@@ -2,6 +2,7 @@
 
 namespace Drupal\ooh_outskirts\Controller;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,25 +17,15 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the isolated Operation Alpha page.
    */
   public function page(): array {
-    $account = $this->currentUser();
-    $is_authenticated = $account->isAuthenticated();
-    $uid = $is_authenticated ? (int) $account->id() : 0;
+    $account_control = $this->operationAlphaAccountControl('ooh_outskirts.operation_alpha');
+    $is_authenticated = $account_control['is_authenticated'];
+    $uid = $is_authenticated ? (int) $this->currentUser()->id() : 0;
     $credit_balance = $is_authenticated ? $this->readCreditBalance($uid) : 0;
 
     return [
       '#theme' => 'ooh_operation_alpha_page',
-      '#account_label' => $is_authenticated ? ($account->getDisplayName() ?: 'ACCOUNT') : 'LOGIN / ACCOUNT',
-      '#account_url' => $is_authenticated
-        ? Url::fromRoute('entity.user.canonical', ['user' => $uid], [
-          'query' => [
-            'ooh_operation_alpha' => '1',
-          ],
-        ])->toString()
-        : Url::fromRoute('user.login', [], [
-          'query' => [
-            'destination' => Url::fromRoute('ooh_outskirts.operation_alpha')->toString(),
-          ],
-        ])->toString(),
+      '#account_label' => $account_control['label'],
+      '#account_url' => $account_control['url'],
       '#is_authenticated' => $is_authenticated,
       '#credit_balance' => $credit_balance,
       '#credit_status_label' => 'CREDITS: ' . $credit_balance,
@@ -108,29 +99,21 @@ final class OohOperationAlphaController extends ControllerBase {
    * Builds the Operation Alpha credit purchase staging page.
    */
   public function credits(): array {
-    $account = $this->currentUser();
-    $is_authenticated = $account->isAuthenticated();
+    $account_control = $this->operationAlphaAccountControl('ooh_outskirts.operation_alpha_credits');
 
     return [
       '#theme' => 'ooh_operation_alpha_credits',
-      '#account_button_label' => $is_authenticated ? ($account->getDisplayName() ?: 'ACCOUNT') : 'LOGIN / ACCOUNT',
-      '#account_button_url' => $is_authenticated
-        ? Url::fromRoute('user.page', [], [
-          'query' => [
-            'ooh_operation_alpha' => '1',
-          ],
-        ])->toString()
-        : Url::fromRoute('user.login', [], [
-          'query' => [
-            'destination' => Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString(),
-          ],
-        ])->toString(),
+      '#account_button_label' => $account_control['label'],
+      '#account_button_url' => $account_control['url'],
       '#attached' => [
         'library' => [
           'ooh_outskirts/operation_alpha',
         ],
       ],
       '#cache' => [
+        'contexts' => [
+          'user',
+        ],
         'max-age' => 0,
       ],
     ];
@@ -424,11 +407,9 @@ final class OohOperationAlphaController extends ControllerBase {
     $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
     $home_url = $runtime_url;
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
-    $login_url = Url::fromRoute('user.login', [], [
-      'query' => [
-        'destination' => $home_url,
-      ],
-    ])->toString();
+    $account_control = $this->operationAlphaAccountControl('ooh_outskirts.operation_alpha_nested_playlists');
+    $account_label = Html::escape($account_control['label']);
+    $account_url = Html::escape($account_control['url']);
     $war_bangaz_url = 'https://open.spotify.com/playlist/6CaO0WNPwOyB4ZBIwgJF3O?si=46f8eacb11d34816';
     $signal_blitz_url = 'https://open.spotify.com/playlist/5yXFPozHV4eW9Aal5Ys7Mn?si=19228e24361844a7';
     $dust_march_url = 'https://open.spotify.com/playlist/76AhLGUeJhcZbgQYt8oqo8?si=d4de23f690ee433e';
@@ -451,7 +432,7 @@ final class OohOperationAlphaController extends ControllerBase {
             <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
               <a class="ooh-operation-alpha__cta-link" href="' . $home_url . '">RETURN TO LAUNCH</a>
               <a class="ooh-operation-alpha__cta-link" href="' . $credits_url . '">PURCHASE CREDITS</a>
-              <a class="ooh-operation-alpha__cta-link" href="' . $login_url . '">LOGIN / ACCOUNT</a>
+              <a class="ooh-operation-alpha__cta-link" href="' . $account_url . '">' . $account_label . '</a>
             </nav>
             <p class="ooh-operation-alpha__eyebrow">PLAYLIST SIGNAL</p>
             <h1 class="ooh-operation-alpha__title">OPERATION ALPHA PLAYLISTS</h1>
@@ -547,6 +528,9 @@ final class OohOperationAlphaController extends ControllerBase {
         ],
       ],
       '#cache' => [
+        'contexts' => [
+          'user',
+        ],
         'max-age' => 0,
       ],
     ];
@@ -560,11 +544,9 @@ final class OohOperationAlphaController extends ControllerBase {
     $playlists_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_playlists')->toString();
     $operation_url = Url::fromRoute('ooh_outskirts.operation_alpha_level_1')->toString();
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
-    $login_url = Url::fromRoute('user.login', [], [
-      'query' => [
-        'destination' => $home_url,
-      ],
-    ])->toString();
+    $account_control = $this->operationAlphaAccountControl('ooh_outskirts.operation_alpha_nested_runtime');
+    $account_label = Html::escape($account_control['label']);
+    $account_url = Html::escape($account_control['url']);
 
     return [
       '#type' => 'inline_template',
@@ -574,7 +556,7 @@ final class OohOperationAlphaController extends ControllerBase {
             <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
               <a class="ooh-operation-alpha__cta-link" href="' . $home_url . '">RETURN TO LAUNCH</a>
               <a class="ooh-operation-alpha__cta-link" href="' . $credits_url . '">PURCHASE CREDITS</a>
-              <a class="ooh-operation-alpha__cta-link" href="' . $login_url . '">LOGIN / ACCOUNT</a>
+              <a class="ooh-operation-alpha__cta-link" href="' . $account_url . '">' . $account_label . '</a>
             </nav>
             <p class="ooh-operation-alpha__eyebrow">RUNTIME ACCESS</p>
             <h1 class="ooh-operation-alpha__title">OPERATION ALPHA RUNTIME</h1>
@@ -612,6 +594,9 @@ final class OohOperationAlphaController extends ControllerBase {
         ],
       ],
       '#cache' => [
+        'contexts' => [
+          'user',
+        ],
         'max-age' => 0,
       ],
     ];
@@ -624,11 +609,9 @@ final class OohOperationAlphaController extends ControllerBase {
     $home_url = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
     $runtime_url = Url::fromRoute('ooh_outskirts.operation_alpha_nested_runtime')->toString();
     $credits_url = Url::fromRoute('ooh_outskirts.operation_alpha_credits')->toString();
-    $login_url = Url::fromRoute('user.login', [], [
-      'query' => [
-        'destination' => $home_url,
-      ],
-    ])->toString();
+    $account_control = $this->operationAlphaAccountControl('ooh_outskirts.operation_alpha_operation');
+    $account_label = Html::escape($account_control['label']);
+    $account_url = Html::escape($account_control['url']);
 
     return [
       '#type' => 'inline_template',
@@ -638,7 +621,7 @@ final class OohOperationAlphaController extends ControllerBase {
             <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
               <a class="ooh-operation-alpha__cta-link" href="' . $home_url . '">RETURN TO LAUNCH</a>
               <a class="ooh-operation-alpha__cta-link" href="' . $credits_url . '">PURCHASE CREDITS</a>
-              <a class="ooh-operation-alpha__cta-link" href="' . $login_url . '">LOGIN / ACCOUNT</a>
+              <a class="ooh-operation-alpha__cta-link" href="' . $account_url . '">' . $account_label . '</a>
             </nav>
             <p class="ooh-operation-alpha__eyebrow">ACTIVE OPERATION</p>
             <h1 class="ooh-operation-alpha__title">OPERATION ACTIVE</h1>
@@ -679,8 +662,40 @@ final class OohOperationAlphaController extends ControllerBase {
         ],
       ],
       '#cache' => [
+        'contexts' => [
+          'user',
+        ],
         'max-age' => 0,
       ],
+    ];
+  }
+
+  /**
+   * Builds the server-authoritative Operation Alpha account control.
+   */
+  private function operationAlphaAccountControl(string $destination_route): array {
+    $account = $this->currentUser();
+
+    if ($account->isAuthenticated()) {
+      return [
+        'is_authenticated' => TRUE,
+        'label' => $account->getDisplayName() ?: 'ACCOUNT',
+        'url' => Url::fromRoute('entity.user.canonical', ['user' => (int) $account->id()], [
+          'query' => [
+            'ooh_operation_alpha' => '1',
+          ],
+        ])->toString(),
+      ];
+    }
+
+    return [
+      'is_authenticated' => FALSE,
+      'label' => 'LOGIN / ACCOUNT',
+      'url' => Url::fromRoute('user.login', [], [
+        'query' => [
+          'destination' => Url::fromRoute($destination_route)->toString(),
+        ],
+      ])->toString(),
     ];
   }
 
