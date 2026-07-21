@@ -5704,6 +5704,7 @@
         showSignalModal(root);
       }
       else {
+        storeSeenFlag();
         enter.addEventListener('click', function () {
           storeSeenFlag();
           hideIntro(intro);
