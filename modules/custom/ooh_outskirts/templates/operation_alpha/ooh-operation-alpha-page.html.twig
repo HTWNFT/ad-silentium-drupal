@@ -30,7 +30,7 @@
 
     <div class="ooh-operation-alpha__shell" data-ooh-operation-alpha-control>
     <nav class="ooh-operation-alpha__cta-row" aria-label="Operation Alpha account and credits">
-      <a class="ooh-operation-alpha__cta-link" href="{{ path('ooh_outskirts.operation_alpha') }}">RETURN TO LAUNCH</a>
+      <button class="ooh-operation-alpha__cta-link ooh-operation-alpha__cta-link--disabled" type="button" disabled aria-disabled="true">RETURN TO LAUNCH</button>
       {% if credit_balance > 0 %}
         <button class="ooh-operation-alpha__cta-link ooh-operation-alpha__cta-link--disabled" type="button" disabled aria-disabled="true">{{ credit_status_label }}</button>
       {% else %}
