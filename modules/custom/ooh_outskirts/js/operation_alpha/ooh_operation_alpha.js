@@ -186,6 +186,7 @@
       window.sessionStorage.removeItem(level23TimerKey);
       window.sessionStorage.removeItem(retiredLevel23TimerKey);
       window.sessionStorage.removeItem(goNoGoHistoryKey);
+      window.sessionStorage.removeItem(activeOperationCreditKey);
       window.sessionStorage.removeItem(recentRoninStorageKey);
       window.sessionStorage.removeItem(rootScenarioMemoryKey);
       window.localStorage.removeItem(retiredRootScenarioMemoryKey);
@@ -388,18 +389,16 @@
     });
   }
 
-  function hasActiveOperationCredit() {
-    try {
-      return window.sessionStorage.getItem(activeOperationCreditKey) === '1';
-    }
-    catch (e) {
-      return false;
-    }
-  }
-
   function markActiveOperationCredit() {
     try {
       window.sessionStorage.setItem(activeOperationCreditKey, '1');
+    }
+    catch (e) {}
+  }
+
+  function clearActiveOperationCredit() {
+    try {
+      window.sessionStorage.removeItem(activeOperationCreditKey);
     }
     catch (e) {}
   }
@@ -5569,20 +5568,20 @@
       syncFieldInitializeGate(root);
       return;
     }
-    if (hasActiveOperationCredit()) {
-      finishActivation();
-      return;
-    }
     if (activationButton) {
       activationButton.disabled = true;
       activationButton.textContent = 'CHECKING CREDITS';
     }
     consumeOperationCredit('activation').then(function (json) {
       if (!json.success) {
+        clearActiveOperationCredit();
         if (activationStatus) {
-          activationStatus.textContent = 'NEW OPERATION REQUIRES 1 CREDIT';
+          activationStatus.textContent = json.loginRequired ? 'LOGIN REQUIRED TO INITIALIZE FIELD' : 'NEW OPERATION REQUIRES 1 CREDIT';
         }
-        guideToCredits();
+        if (activationButton) {
+          activationButton.textContent = 'INITIALIZE FIELD';
+        }
+        syncFieldInitializeGate(root);
         return;
       }
       finishActivation();

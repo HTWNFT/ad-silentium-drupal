@@ -57,7 +57,7 @@ play:
     - core/drupalSettings
 
 operation_alpha:
-  version: 1.0.28-oa-banner-seen
+  version: 1.0.29-oa-consume-server-gate
   css:
     theme:
       css/operation_alpha/ooh_operation_alpha.css: {}
