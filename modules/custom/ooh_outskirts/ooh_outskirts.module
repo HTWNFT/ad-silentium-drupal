@@ -165,3 +165,65 @@ function ooh_outskirts_form_user_login_form_alter(array &$form, \Drupal\Core\For
   $form['#suffix'] = '</div></div>';
   $form['#attached']['library'][] = 'ooh_outskirts/login';
 }
+
+/**
+ * Implements hook_mail().
+ */
+
+function ooh_outskirts_mail($key, &$message, $params): void {
+  if (!in_array($key, [
+    'operation_alpha_signal_operator',
+    'operation_alpha_signal_confirmation',
+  ], TRUE)) {
+    return;
+  }
+
+  $visitor_email = trim((string) ($params['visitor_email'] ?? ''));
+  $visitor_name = trim((string) ($params['visitor_name'] ?? ''));
+  $source_path = (string) ($params['source_path'] ?? '/operation-alpha');
+  $submitted = (string) ($params['submitted'] ?? '');
+
+  // Always send through the authenticated Hostinger mailbox.
+  $from_address = 'operation-alpha@adsilentium-game.com';
+  $from_name = 'Operation Alpha';
+
+  $message['from'] = $from_address;
+  $message['headers']['From'] =
+    $from_name . ' <' . $from_address . '>';
+  $message['headers']['Sender'] = $from_address;
+  $message['headers']['Return-Path'] = $from_address;
+  $message['headers']['Content-Type'] =
+    'text/plain; charset=UTF-8; format=flowed; delsp=yes';
+  if ($key === 'operation_alpha_signal_operator') {
+    // The visitor is a reply target, never the authenticated sender.
+    if (
+      $visitor_email !== ''
+      && filter_var($visitor_email, FILTER_VALIDATE_EMAIL)
+    ) {
+      $message['headers']['Reply-To'] = $visitor_email;
+    }
+
+    $message['subject'] = t('Operation Alpha Signal request');
+    $message['body'][] =
+      'A visitor joined the Operation Alpha Signal.';
+    $message['body'][] = '';
+    $message['body'][] = 'Email: ' . $visitor_email;
+
+    if ($visitor_name !== '') {
+      $message['body'][] = 'Name: ' . $visitor_name;
+    }
+
+    $message['body'][] = 'Source: ' . $source_path;
+    $message['body'][] = 'Submitted: ' . $submitted;
+    return;
+  }
+
+  $message['subject'] = t('Operation Alpha Signal received');
+  $message['body'][] =
+    'Your Operation Alpha Signal request has been received.';
+  $message['body'][] = '';
+  $message['body'][] =
+    'You will receive launch notices, credit updates, and field drops when they are available.';
+  $message['body'][] = '';
+  $message['body'][] = 'Ad Silentium: Operation Alpha';
+}
