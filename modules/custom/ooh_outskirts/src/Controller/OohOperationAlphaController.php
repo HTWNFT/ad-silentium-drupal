@@ -416,7 +416,7 @@ final class OohOperationAlphaController extends ControllerBase {
     $black_banner_url = 'https://open.spotify.com/playlist/6aLCJNyLO0zN6qsb3LTZoy?si=f7005bed79194ef0';
     $steel_wreckoning_url = 'https://open.spotify.com/playlist/3wVMs0gb2svMUITiu0PJY4?si=f070819920d640a1';
     $system_reset_url = 'https://open.spotify.com/playlist/0cZlbYVRnkxwViBJPw8oDR?si=d10eef44e3f54078';
-    $avatar_base = base_path() . 'modules/custom/ooh_outskirts/operation_alpha/spotify_avatars/';
+    $avatar_base = base_path() . \Drupal::service('extension.list.module')->getPath('ooh_outskirts') . '/operation_alpha/spotify_avatars/';
     $war_bangaz_avatar = $avatar_base . 'warbangaz.png';
     $signal_blitz_avatar = $avatar_base . 'signalblitz.png';
     $dust_march_avatar = $avatar_base . 'dustmarch.png';
