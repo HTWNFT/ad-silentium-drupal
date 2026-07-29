@@ -753,9 +753,9 @@ final class OohOperationAlphaController extends ControllerBase {
    */
   private function stripeSecretKey(): string {
     $secret = $this->stripeConfigValue('OOH_STRIPE_SECRET_KEY', 'ooh_stripe_secret_key');
-    if ($secret === '' || strpos($secret, 'sk_live_') === 0 || strpos($secret, 'sk_test_') !== 0) {
+    if ($secret === '' || (strpos($secret, 'sk_live_') !== 0 && strpos($secret, 'sk_test_') !== 0)) {
       if ($secret !== '') {
-        \Drupal::logger('ooh_outskirts')->error('Operation Alpha Stripe secret key is not a test-mode key.');
+        \Drupal::logger('ooh_outskirts')->error('Operation Alpha Stripe secret key has an invalid prefix.');
       }
       return '';
     }
