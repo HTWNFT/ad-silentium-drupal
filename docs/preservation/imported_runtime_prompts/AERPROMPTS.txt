@@ -1,0 +1,434 @@
+====================================================================
+GLOBAL IMAGE STYLE (apply to EVERY PROMPT)
+====================================================================
+- 16:9 cinematic game environment BACKGROUND image (still image), ultra-readable silhouettes
+- No characters, no creatures, no vehicles in the foreground
+- Cold rim light, steel/ash/obsidian palette, high contrast realism
+- Controlled glow only (minimal + purposeful), subtle teal accents allowed (not neon)
+- Atmospheric depth: fog/haze/particles kept clean (no muddy soup)
+- Composition stays consistent across variants (same camera angle + layout)
+
+GLOBAL AVOID (paste into every AVOID):
+text, letters, numbers, logos, watermarks, UI/HUD, menus, captions, subtitles,
+people, characters, faces, crowds, animals, vehicles, weapons dominating frame,
+cartoon/anime, neon rainbow palettes, oversaturation, heavy bloom everywhere,
+extreme lens flare blobs, shaky/warped geometry, low-res blur, clutter, gore
+
+
+####################################################################
+AER (SKY) — CORE 01: ESTABLISHING CLOUD TRENCH
+####################################################################
+
+File: bg_aer_01_core_establishing_cloud_trench_v01.png
+PROMPT:
+16:9 cinematic game background, hostile sky-world establishing shot: a massive cloud trench splitting the atmosphere, distant floating monolith platforms and cable-bridge silhouettes spanning open air. Cold rim light, steel/ash/obsidian palette, high-contrast realism, controlled glow only, subtle teal conduits far away (very minimal). Volumetric haze for depth, wet-metal specular hints on distant structures, no characters.
+AVOID:
+(GLOBAL AVOID) + bright sunny skies, pastel clouds, birds, cute fantasy
+
+File: bg_aer_01A_silent_approach_v01.png
+PROMPT:
+Same composition as bg_aer_01_core_establishing_cloud_trench_v01.png. “Silent Approach” mood: darker exposure, fewer highlights, more negative space, platforms barely visible through thin haze, quieter atmosphere, no motion blur, controlled glow reduced.
+AVOID:
+(GLOBAL AVOID) + heavy glitch artifacts, neon static, bright spotlights
+
+File: bg_aer_01B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: soft interference haze in the air, faint light drift like gentle atmospheric shimmer (not a graphic overlay), thin distant vertical light pillars barely visible, teal glow slightly diffused through mist, still realistic.
+AVOID:
+(GLOBAL AVOID) + obvious HUD overlays, readable scanlines, sharp glitch shapes
+
+File: bg_aer_01C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: teal conduits emit uneven segmented glow (subtle), distant beacon lights partially obscured by thicker fog, faint scanline-like atmosphere (VERY subtle, not readable), high contrast realism.
+AVOID:
+(GLOBAL AVOID) + extreme glitch distortion, heavy scanlines, neon overload, warped terrain
+
+File: bg_aer_01D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: lingering haze and settling dust in the cloud trench, a few teal conduits dimmed and partially exposed, tiny non-descript debris specks, calmer and somber lighting, controlled glow minimal.
+AVOID:
+(GLOBAL AVOID) + explosions, heavy sparks, chaos clutter, bodies, gore
+
+File: bg_aer_01E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: teal conduits brighter with crisp reflections, a far-off teal beacon lamp flaring through fog with restrained volumetric rays, wet-metal glints on distant platform edges, high contrast realism, no characters.
+AVOID:
+(GLOBAL AVOID) + neon bloom everywhere, extreme lens flare blobs, oversaturation
+
+
+####################################################################
+AER (SKY) — CORE 02: TRAVERSAL JETSTREAM RUN
+####################################################################
+
+File: bg_aer_02_core_traversal_jetstream_run_v01.png
+PROMPT:
+16:9 cinematic game background, sky traversal lane: angled pylons and suspended catwalk fragments forming a readable path over open air, jetstream streaks as subtle elongated haze bands (not motion blur), cold rim light, steel/ash/obsidian palette, high contrast silhouettes, controlled glow only, no characters.
+AVOID:
+(GLOBAL AVOID) + extreme motion blur, tunnel claustrophobia, bright “sci-fi highway” neon
+
+File: bg_aer_02A_silent_approach_v01.png
+PROMPT:
+Same composition as CORE. “Silent Approach” mood: darker exposure, reduced jetstream streak visibility, quieter air, fewer particles, stealth traversal vibe, controlled glow reduced.
+AVOID:
+(GLOBAL AVOID) + visible soldiers, drones close-up, flashy lights
+
+File: bg_aer_02B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: soft light drift shimmer along the jetstream bands, thin distant vertical light pillars barely visible, glow diffused through mist, still realistic and restrained.
+AVOID:
+(GLOBAL AVOID) + graphic overlays, obvious scanlines, neon beams
+
+File: bg_aer_02C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: intermittent segmented glow along one distant conduit line (subtle), thicker fog pockets cutting visibility in bands, faint interference haze (not a UI effect), high contrast silhouettes.
+AVOID:
+(GLOBAL AVOID) + strong glitch blocks, warped geometry, heavy distortion
+
+File: bg_aer_02D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: a few broken cable lines hanging, reduced atmospheric turbulence, settling dust specks, somber calm, controlled glow minimal.
+AVOID:
+(GLOBAL AVOID) + explosions, bright sparks everywhere, clutter
+
+File: bg_aer_02E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: a distant beacon source brightens the lane edges with crisp rim reflections, restrained volumetric rays through mist, teal accents slightly stronger but controlled, no characters.
+AVOID:
+(GLOBAL AVOID) + neon overload, heavy bloom, lens flare blobs
+
+
+####################################################################
+AER (SKY) — CORE 03: COMBAT STORM LATTICE
+####################################################################
+
+File: bg_aer_03_core_combat_storm_lattice_v01.png
+PROMPT:
+16:9 cinematic game background, aerial combat zone: storm-lattice pylons and suspended grid catwalk geometry, turbulent clouds behind, far-background lightning-vein illumination extremely faint and rare, cold rim light, steel/ash/obsidian palette, high-contrast realism, controlled glow only, no characters.
+AVOID:
+(GLOBAL AVOID) + muzzle flashes, visible fighters, chaotic shake look, neon storm colors
+
+File: bg_aer_03A_silent_approach_v01.png
+PROMPT:
+Same composition as CORE. “Silent Approach” mood: storm reduced, darker exposure, fewer highlights, lattice silhouettes sharper and quieter, minimal particles, stealth tension.
+AVOID:
+(GLOBAL AVOID) + flashy lightning, bright searchlights, neon glow
+
+File: bg_aer_03B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: soft interference haze across the lattice distance, teal glow slightly diffused, thin vertical light pillars far away, realistic and restrained.
+AVOID:
+(GLOBAL AVOID) + obvious overlays, sharp glitch shapes
+
+File: bg_aer_03C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: uneven segmented teal glow along select lattice edges (subtle), fog bands partially occlude distant beacons, faint scanline-like atmosphere (very subtle), high contrast realism.
+AVOID:
+(GLOBAL AVOID) + heavy scanlines, extreme distortion, warped catwalks
+
+File: bg_aer_03D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: lingering smoke-like haze, dust settling, lattice intact but dim, small non-descript debris scattered in distance, calm and somber.
+AVOID:
+(GLOBAL AVOID) + bodies, gore, explosions, heavy sparks
+
+File: bg_aer_03E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: teal conduits brighten with crisp reflections on wet metal surfaces, distant beacon flare through fog with restrained volumetric rays, still realistic, no characters.
+AVOID:
+(GLOBAL AVOID) + neon bloom everywhere, extreme lens flare blobs
+
+
+####################################################################
+AER (SKY) — CORE 04: AFTERMATH DEAD STORM CORRIDOR
+####################################################################
+
+File: bg_aer_04_core_aftermath_dead_storm_v01.png
+PROMPT:
+16:9 cinematic game background, aftermath quiet sky corridor: pylons remain, a few broken cable lines hanging, storm reduced to faint haze, large negative space, cold rim light, steel/ash/obsidian palette, high contrast silhouettes, controlled glow minimal, no characters.
+AVOID:
+(GLOBAL AVOID) + warm sunset romance lighting, “peaceful” vibes, clutter
+
+File: bg_aer_04A_silent_approach_v01.png
+PROMPT:
+Same composition as CORE. “Silent Approach” mood: darker exposure, heavier negative space, haze slightly thicker, silhouettes fade gently, stealth dread.
+AVOID:
+(GLOBAL AVOID) + bright highlights, neon accents
+
+File: bg_aer_04B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: faint atmospheric shimmer and soft light drift in the haze, thin distant vertical light pillars, teal glow gently diffused, realistic.
+AVOID:
+(GLOBAL AVOID) + graphic overlays, obvious scanlines
+
+File: bg_aer_04C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: slight segmented glow flicker implied on distant conduit runs (subtle, not animated), fog bands break visibility, faint interference haze.
+AVOID:
+(GLOBAL AVOID) + strong glitch blocks, warped geometry
+
+File: bg_aer_04D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: lingering dust and settling haze emphasized, conduits dimmer and partially exposed, wet ground reflections muted, calm and somber realism.
+AVOID:
+(GLOBAL AVOID) + sparks, explosions, gore
+
+File: bg_aer_04E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: a distant beacon flare adds restrained volumetric rays through haze, crisp rim reflections appear on key edges, teal accents slightly stronger but controlled.
+AVOID:
+(GLOBAL AVOID) + neon overload, heavy bloom, extreme lens flare blobs
+
+
+####################################################################
+AER (SKY) — CORE 05: BOSS AERIE PLATFORM RING
+####################################################################
+
+File: bg_aer_05_core_boss_aerie_platform_v01.png
+PROMPT:
+16:9 cinematic game background, sky boss arena: a wide brutalist platform-ring with a central throne-node spire, open-air drop beyond edges, distant aerial megastructures barely visible through high-altitude haze. Cold rim light, severe shadows, steel/ash/obsidian palette, high-contrast realism, controlled glow only, no characters.
+AVOID:
+(GLOBAL AVOID) + showing the boss figure, dramatic lens flare, neon sci-fi nightclub look
+
+File: bg_aer_05A_silent_approach_v01.png
+PROMPT:
+Same composition as CORE. “Silent Approach” mood: darker exposure, glow reduced, haze thicker, spire silhouette more ominous, minimal particles.
+AVOID:
+(GLOBAL AVOID) + spotlights, bright beacons, neon accents
+
+File: bg_aer_05B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: soft drift shimmer in the air, thin distant light pillars, teal glow diffused subtly around the spire, restrained realism.
+AVOID:
+(GLOBAL AVOID) + graphic overlays, sharp glitch shapes
+
+File: bg_aer_05C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: uneven segmented glow along ring seams (subtle), fog bands partially occlude distant beacons, faint scanline-like atmosphere (very subtle).
+AVOID:
+(GLOBAL AVOID) + heavy scanlines, extreme distortion, warping
+
+File: bg_aer_05D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: lingering haze, dimmed conduits along the ring, small non-descript debris specks on the platform surface, somber calm.
+AVOID:
+(GLOBAL AVOID) + explosions, sparks everywhere, bodies, gore
+
+File: bg_aer_05E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: the spire and select ring seams brighten with crisp controlled teal highlights, restrained volumetric rays cut through haze, wet-metal reflections sharpen, no characters.
+AVOID:
+(GLOBAL AVOID) + neon bloom everywhere, lens flare blobs, oversaturation
+
+
+####################################################################
+MARE (OCEAN) — CORE 01: ESTABLISHING BLACK SURFACE
+####################################################################
+
+File: bg_mare_01_core_establishing_black_surface_v01.png
+PROMPT:
+16:9 cinematic game background, ocean surface at night: black water plane with cold rim highlights on ripples, low militarized sky, distant industrial silhouettes on the horizon (rig towers, brutalist pylons). Steel/ash/obsidian palette, high contrast realism, controlled glow only as faint reflections, thin mist bands, no characters.
+AVOID:
+(GLOBAL AVOID) + sunsets, tropical colors, bright moon dominating, close-up ships
+
+File: bg_mare_01A_silent_approach_v01.png
+PROMPT:
+Same composition as CORE. “Silent Approach” mood: darker exposure, fewer highlights, heavier negative space, horizon silhouettes barely visible through haze, quieter water reflections.
+AVOID:
+(GLOBAL AVOID) + bright spotlights, neon glow, heavy glitch
+
+File: bg_mare_01B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: soft atmospheric shimmer in the mist, faint light drift on the horizon (subtle), reflections slightly elongated, restrained realism.
+AVOID:
+(GLOBAL AVOID) + graphic overlays, sharp glitch shapes, neon beams
+
+File: bg_mare_01C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: faint interference haze over the horizon, distant lights partially occluded by thicker fog bands, subtle uneven glow segments on far structures (very minimal).
+AVOID:
+(GLOBAL AVOID) + obvious scanlines, heavy distortion, neon overload
+
+File: bg_mare_01D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: calmer surface, reduced highlights, lingering low mist, distant structures dimmer, somber and still.
+AVOID:
+(GLOBAL AVOID) + explosions, fireballs, chaos clutter
+
+File: bg_mare_01E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: a far-off beacon lamp on the horizon flares through fog with restrained volumetric rays, reflections sharpen in a narrow band on the water, controlled teal accent only.
+AVOID:
+(GLOBAL AVOID) + neon bloom everywhere, extreme lens flare blobs, oversaturation
+
+
+####################################################################
+MARE (OCEAN) — CORE 02: TRAVERSAL MIDWATER RUINS LANE
+####################################################################
+
+File: bg_mare_02_core_traversal_midwater_ruins_lane_v01.png
+PROMPT:
+16:9 cinematic game background, midwater traversal lane: towering kelp-column silhouettes and drowned brutalist ruins forming a readable corridor. Cold rim light, steel/ash/obsidian palette, high contrast realism, controlled glow only (minimal reflections), suspended particulate haze (clean), subtle current flow lines, no characters.
+AVOID:
+(GLOBAL AVOID) + fish swarms, coral reefs, colorful bioluminescence everywhere
+
+File: bg_mare_02A_silent_approach_v01.png
+PROMPT:
+Same composition as CORE. “Silent Approach” mood: darker exposure, fewer highlights, thicker negative space, reduced particulate, stealth descent vibe.
+AVOID:
+(GLOBAL AVOID) + bright sun shafts, aquarium lighting
+
+File: bg_mare_02B_signal_drift_v01.png
+PROMPT:
+Same composition as CORE. “Signal Drift” mood: gentle shimmer in the water column, faint light drift haze, reflections slightly diffused, restrained realism.
+AVOID:
+(GLOBAL AVOID) + obvious overlays, neon beams
+
+File: bg_mare_02C_signal_interference_v01.png
+PROMPT:
+Same composition as CORE. “Signal Interference” mood: uneven segmented glow on one distant conduit line (subtle), fog/silt bands cut visibility, faint interference haze (not a UI effect).
+AVOID:
+(GLOBAL AVOID) + strong glitch blocks, warped geometry
+
+File: bg_mare_02D_aftermath_quiet_v01.png
+PROMPT:
+Same composition as CORE. “Aftermath Quiet” mood: silt settling in layered bands, calmer current, dimmer highlights, somber and still.
+AVOID:
+(GLOBAL AVOID) + chaos clutter, explosions
+
+File: bg_mare_02E_beacon_surge_v01.png
+PROMPT:
+Same composition as CORE. “Beacon Surge” mood: a distant conduit flare adds controlled teal highlights to a few ruin edges, restrained volumetric haze, reflections sharpen slightly, no characters.
+AVOID:
+(GLOBAL AVOID) + neon overload, heavy bloom
+
+
+====================================================================
+GLOBAL VIDEO LOOP STYLE (apply to EVERY PROMPT)
+====================================================================
+- 16:9 cinematic game environment video loop (6–8 seconds), seamless loop
+- No readable text, no logos, no UI/HUD, no watermarks
+- Cold rim light, steel/ash/obsidian palette, high-contrast silhouettes
+- Controlled glow only (minimal, purposeful), militant thriller tone
+- Motion: slow camera push or lateral drift + subtle parallax + atmospheric particles
+- Keep scene readable at a distance (bold shapes, avoid micro-clutter)
+
+GLOBAL AVOID (apply to every AVOID):
+text, letters, numbers, logos, watermarks, UI/HUD, menus, captions, subtitles,
+close-up faces, detailed characters, crowds, bright neon rainbow palettes,
+excessive bloom, strobing lights, heavy lens flare, shakycam, muddy low contrast,
+cartoon style, cute vibes, colorful coral/tropical vibes, gore, organs
+
+
+####################################################################
+CORE LOOP 01 — ESTABLISHING (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_01_establishing_cloud_trench_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. A hostile sky-world establishing shot: a massive cloud trench splitting the atmosphere, distant floating monolith platforms and cable-bridge silhouettes spanning open air. Cold rim light, steel/ash/obsidian palette, high contrast silhouettes, controlled glow only. Motion: slow forward camera push + drifting cloud shred + tiny distant debris specks, subtle parallax depth. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid bright sunny skies, avoid pretty pastel clouds, avoid birds
+
+File: loop_aer_var_01a_establishing_silent_approach_v01.mp4
+PROMPT:
+Same scene as CORE 01 but “Silent Approach” recon mood: darker exposure, fewer highlights, thinner cloud shred, distant platforms barely visible through haze. Motion: slower push-in, more negative space, faint comms-static atmosphere (subtle, not glitchy). No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid heavy glitch artifacts, avoid neon static
+
+File: loop_aer_var_01b_establishing_stormfront_warning_v01.mp4
+PROMPT:
+Same scene as CORE 01 but stormfront warning mood: deeper cloud massing, occasional far-background lightning-vein illumination (controlled and dim, not flashy). Motion: slightly faster cloud drift, tension-building. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid lightning dominating the frame, avoid bright purple storms
+
+
+####################################################################
+CORE LOOP 02 — TRAVERSAL (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_02_traversal_jetstream_run_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Sky traversal lane through jetstreams: angled pylons and suspended catwalk fragments form a readable path over open air. Cold rim light, high contrast silhouettes, controlled glow only. Motion: gentle lateral drift + jetstream streaks sliding past + minimal particulate. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid tunnel claustrophobia, avoid extreme motion blur
+
+File: loop_aer_var_02a_traversal_route_clear_v01.mp4
+PROMPT:
+Same traversal lane but “Route-Clear” ranger mood: clearer visibility, stronger silhouette readability, fewer particles, slightly wider camera framing to show safe path geometry. Motion: steady lateral glide, calm but tense. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid bright cheerful tone
+
+File: loop_aer_var_02b_traversal_extraction_run_v01.mp4
+PROMPT:
+Same traversal lane but “Extraction Run” rescue mood: add a single controlled beacon-like glow point far ahead (no text), subtle urgency. Motion: slightly faster camera drift, wind streaks stronger, still loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid flashing alarms, avoid HUD arrows
+
+
+####################################################################
+CORE LOOP 03 — COMBAT ZONE (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_03_combat_storm_lattice_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Aerial combat zone: storm-lattice pylons and suspended grid catwalk geometry, hard-edged cover silhouettes in turbulent clouds. Cold rim light, high contrast, steel/ash/obsidian palette, controlled glow only. Motion: slow camera push + subtle environmental shake (very mild) + drifting particles; far-background lightning faint and rare. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid muzzle flashes, avoid visible soldiers, avoid chaotic camera shake
+
+File: loop_aer_var_03a_combat_interference_sabotage_v01.mp4
+PROMPT:
+Same combat zone but “Signal Interference” sabotage mood: faint distortion haze in the distance (subtle), one small controlled glow point on a relay node (no markings). Motion: slower push-in, more oppressive atmosphere. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid strong glitch blocks, avoid readable panels
+
+File: loop_aer_var_03b_combat_overdrive_assault_v01.mp4
+PROMPT:
+Same combat zone but “Overdrive” assault mood: slightly brighter rim light, more particulate, occasional controlled spark arcs on a pylon edge (minimal). Motion: slightly faster push-in, increased tension, still clean silhouettes. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid sparks everywhere, avoid neon bloom
+
+
+####################################################################
+CORE LOOP 04 — AFTERMATH / QUIET (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_04_aftermath_dead_storm_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Aftermath quiet sky corridor: storm reduced to faint haze, pylons remain, a few broken cable lines hanging, minimal controlled glow reflections. Cold rim light, high contrast silhouettes, large negative space. Motion: slow drift + gentle cable sway + light particulate. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid “peaceful sunset,” avoid warm golden lighting
+
+File: loop_aer_var_04a_aftermath_safe_corridor_rescue_v01.mp4
+PROMPT:
+Same aftermath corridor but “Safe Corridor” rescue mood: slightly clearer visibility, fewer particles, one dim controlled guidance glow point far away (no text). Motion: slow forward drift, stable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid bright runway lights, avoid signage
+
+File: loop_aer_var_04b_aftermath_ghost_quiet_recon_v01.mp4
+PROMPT:
+Same aftermath corridor but “Ghost Quiet” recon mood: darker exposure, thicker haze, silhouettes fade into negative space. Motion: almost still, barely moving particulate, ominous calm. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid horror gore, avoid jump-scare lighting
+
+
+####################################################################
+CORE LOOP 05 — BOSS ARENA (AER SKY BIOME)
+####################################################################
+
+File: loop_aer_core_05_boss_aerie_platform_v01.mp4
+PROMPT:
+16:9 cinematic game environment video loop (6–8 seconds), seamless. Sky boss arena: a wide brutalist platform-ring with a central throne-node spire, open-air drop beyond edges, distant megastructures barely visible through high-altitude haze. Cold rim light, severe shadows, steel/ash/obsidian palette, controlled glow only. Motion: slow orbiting camera drift (very subtle) + faint haze movement. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid showing the boss figure, avoid dramatic lens flare
+
+File: loop_aer_var_05a_boss_countdown_sabotage_v01.mp4
+PROMPT:
+Same boss arena but sabotage “Countdown Core” mood: the spire has a faint rhythmic controlled glow pulse (slow, not flashing). Motion: steady camera drift, tension rising, loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid fast blinking, avoid alarm text
+
+File: loop_aer_var_05b_boss_clash_assault_v01.mp4
+PROMPT:
+Same boss arena but “Boss Clash” assault mood: slightly stronger rim light and heavier haze turbulence; occasional tiny controlled spark on one ring segment. Motion: slightly faster drift, still stable and loopable. No characters, no UI.
+AVOID:
+(GLOBAL AVOID) + avoid explosive fireballs, avoid visible fighters
