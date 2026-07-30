@@ -4,6 +4,7 @@ namespace Drupal\ooh_outskirts\Controller;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -144,6 +145,85 @@ final class OohOperationAlphaController extends ControllerBase {
     ]);
   }
 
+
+  /**
+   * Sends an Operation Alpha Signal signup email through Drupal mail.
+   */
+  public function submitSignal(Request $request): JsonResponse {
+    $payload = json_decode($request->getContent() ?: '{}', TRUE);
+    if (!is_array($payload)) {
+      return new JsonResponse([
+        'success' => FALSE,
+        'message' => 'Signal request could not be read.',
+      ], 400);
+    }
+
+    $email = strtolower(trim((string) ($payload['email'] ?? '')));
+    $name = $this->sanitizeSignalText($payload['name'] ?? '', 80);
+    $source_path = $this->sanitizeSignalText($payload['sourcePath'] ?? '/operation-alpha', 160);
+
+    if ($email === '' || strlen($email) > 254 || !\Drupal::service('email.validator')->isValid($email)) {
+      return new JsonResponse([
+        'success' => FALSE,
+        'message' => 'Enter a valid email address.',
+      ], 400);
+    }
+
+    $flood = \Drupal::service('flood');
+    $identifier = ($request->getClientIp() ?: 'unknown') . ':' . hash('sha256', $email);
+    if (!$flood->isAllowed('ooh_outskirts.operation_alpha_signal_rapid', 1, 30, $identifier) || !$flood->isAllowed('ooh_outskirts.operation_alpha_signal_hourly', 3, 3600, $identifier)) {
+      return new JsonResponse([
+        'success' => FALSE,
+        'message' => 'Signal already received. Try again later.',
+      ], 429);
+    }
+
+    $recipient = $this->operationAlphaSignalRecipient();
+    if ($recipient === '') {
+      \Drupal::logger('ooh_outskirts')->error('Operation Alpha Signal email failed: no operator recipient is configured.');
+      return new JsonResponse([
+        'success' => FALSE,
+        'message' => 'Signal could not be sent right now.',
+      ], 503);
+    }
+
+    $params = [
+      'visitor_email' => $email,
+      'visitor_name' => $name,
+      'source_path' => $source_path,
+      'submitted' => \Drupal::service('date.formatter')->format(\Drupal::time()->getRequestTime(), 'custom', 'Y-m-d H:i:s O'),
+    ];
+    $langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
+    $mail_manager = \Drupal::service('plugin.manager.mail');
+    $operator_result = $mail_manager->mail('ooh_outskirts', 'operation_alpha_signal_operator', $recipient, $langcode, $params, NULL, TRUE);
+
+    if (empty($operator_result['result'])) {
+      \Drupal::logger('ooh_outskirts')->error('Operation Alpha Signal email failed for hashed visitor @hash.', [
+        '@hash' => substr(hash('sha256', $email), 0, 12),
+      ]);
+      return new JsonResponse([
+        'success' => FALSE,
+        'message' => 'Signal could not be sent right now.',
+      ], 502);
+    }
+
+    $flood->register('ooh_outskirts.operation_alpha_signal_rapid', 30, $identifier);
+    $flood->register('ooh_outskirts.operation_alpha_signal_hourly', 3600, $identifier);
+
+    $confirmation_result = $mail_manager->mail('ooh_outskirts', 'operation_alpha_signal_confirmation', $email, $langcode, $params, NULL, TRUE);
+    if (empty($confirmation_result['result'])) {
+      \Drupal::logger('ooh_outskirts')->warning('Operation Alpha Signal confirmation email failed for hashed visitor @hash.', [
+        '@hash' => substr(hash('sha256', $email), 0, 12),
+      ]);
+    }
+
+    return new JsonResponse([
+      'success' => TRUE,
+      'message' => 'Signal received. Watch your inbox.',
+      'confirmationSent' => !empty($confirmation_result['result']),
+    ]);
+  }
+
   /**
    * Creates a Stripe Checkout session for an Operation Alpha credit package.
    */
@@ -172,7 +252,7 @@ final class OohOperationAlphaController extends ControllerBase {
     if ($secret_key === '') {
       return new JsonResponse([
         'success' => FALSE,
-        'message' => 'Stripe test mode is not configured for Operation Alpha.',
+        'message' => 'Stripe Checkout is not configured for Operation Alpha.',
       ], 503);
     }
 
@@ -214,10 +294,10 @@ final class OohOperationAlphaController extends ControllerBase {
       '#template' => '
         <section class="ooh-operation-alpha ooh-operation-alpha--credits" data-ooh-operation-alpha-credits>
           <div class="ooh-operation-alpha__shell ooh-operation-alpha__shell--credits">
-            <p class="ooh-operation-alpha__eyebrow">STRIPE TEST CHECKOUT</p>
+            <p class="ooh-operation-alpha__eyebrow">STRIPE CHECKOUT</p>
             <h1 class="ooh-operation-alpha__title">PAYMENT RECEIVED</h1>
             <div class="ooh-operation-alpha__copy ooh-operation-alpha__credits-copy">
-              <p>Stripe is confirming this test payment by webhook.</p>
+              <p>Stripe is confirming this payment by webhook.</p>
               <p>Current balance: <strong><span data-ooh-alpha-credit-balance>SYNCING</span> CREDIT(S)</strong></p>
             </div>
             <p class="ooh-operation-alpha__credit-confirmation" data-ooh-alpha-credit-confirmation aria-live="polite">Refreshing account-backed balance.</p>
@@ -256,7 +336,7 @@ final class OohOperationAlphaController extends ControllerBase {
 
     $payload = $request->getContent();
     $signature = (string) $request->headers->get('Stripe-Signature', '');
-    if (!$this->verifyStripeWebhookSignature($payload, $signature, $webhook_secret)) {
+    if (!$this->verifyStripeWebhookSignature($payload, $signature, $webhook_secret, $this->stripeWebhookSecretSource())) {
       \Drupal::logger('ooh_outskirts')->warning('Operation Alpha Stripe webhook rejected because signature verification failed.');
       return new JsonResponse(['success' => FALSE, 'message' => 'Invalid signature.'], 400);
     }
@@ -671,6 +751,29 @@ final class OohOperationAlphaController extends ControllerBase {
   }
 
   /**
+   * Returns the configured Operation Alpha Signal recipient.
+   */
+  private function operationAlphaSignalRecipient(): string {
+    $settings_recipient = trim((string) Settings::get('ooh_operation_alpha_signal_recipient', ''));
+    if ($settings_recipient !== '' && \Drupal::service('email.validator')->isValid($settings_recipient)) {
+      return $settings_recipient;
+    }
+
+    $site_mail = trim((string) \Drupal::config('system.site')->get('mail'));
+    return \Drupal::service('email.validator')->isValid($site_mail) ? $site_mail : '';
+  }
+
+  /**
+   * Sanitizes short Signal text fields for mail/log boundaries.
+   */
+  private function sanitizeSignalText(mixed $value, int $max_length): string {
+    $text = trim(preg_replace('/\s+/', ' ', strip_tags((string) $value)) ?? '');
+    if (strlen($text) > $max_length) {
+      $text = substr($text, 0, $max_length);
+    }
+    return $text;
+  }
+  /**
    * Builds the server-authoritative Operation Alpha account control.
    */
   private function operationAlphaAccountControl(string $destination_route): array {
@@ -773,6 +876,22 @@ final class OohOperationAlphaController extends ControllerBase {
   /**
    * Reads a local secret value without storing it in module code.
    */
+  /**
+   * Identifies which runtime source supplied the active webhook secret.
+   */
+  private function stripeWebhookSecretSource(): string {
+    $env_value = getenv('OOH_STRIPE_WEBHOOK_SECRET');
+    if ($env_value !== FALSE && trim((string) $env_value) !== '') {
+      return strpos(trim((string) $env_value), 'whsec_') === 0 ? 'env' : 'none';
+    }
+
+    $settings_value = \Drupal::service('settings')->get('ooh_stripe_webhook_secret', '');
+    if (trim((string) $settings_value) !== '') {
+      return strpos(trim((string) $settings_value), 'whsec_') === 0 ? 'settings' : 'none';
+    }
+
+    return 'none';
+  }
   private function stripeConfigValue(string $env_name, string $settings_name): string {
     $value = getenv($env_name);
     if ($value === FALSE || trim((string) $value) === '') {
@@ -849,12 +968,14 @@ final class OohOperationAlphaController extends ControllerBase {
   /**
    * Verifies a Stripe-Signature header for the raw webhook body.
    */
-  private function verifyStripeWebhookSignature(string $payload, string $signature_header, string $secret): bool {
+  private function verifyStripeWebhookSignature(string $payload, string $signature_header, string $secret, string $secret_source = 'none'): bool {
     $timestamp = '';
+    $timestamp_count = 0;
     $signatures = [];
     foreach (explode(',', $signature_header) as $part) {
       [$key, $value] = array_pad(explode('=', trim($part), 2), 2, '');
       if ($key === 't') {
+        $timestamp_count++;
         $timestamp = $value;
       }
       elseif ($key === 'v1') {
@@ -862,22 +983,59 @@ final class OohOperationAlphaController extends ControllerBase {
       }
     }
 
-    if ($timestamp === '' || empty($signatures)) {
+    $timestamp_delta = $timestamp !== '' ? abs(\Drupal::time()->getRequestTime() - (int) $timestamp) : -1;
+    $signed_payload = $timestamp !== '' ? $timestamp . '.' . $payload : '';
+    $computed_hmac = $timestamp !== '' ? hash_hmac('sha256', $signed_payload, $secret) : '';
+
+    if ($secret === '') {
+      $this->logStripeWebhookRuntimeInputDiagnostic('no_secret', $secret_source, $secret, $payload, $signed_payload, $timestamp_count, count($signatures), $timestamp_delta, $computed_hmac, 'mismatch');
       return FALSE;
     }
 
-    if (abs(\Drupal::time()->getRequestTime() - (int) $timestamp) > 300) {
+    if ($timestamp === '') {
+      $this->logStripeWebhookRuntimeInputDiagnostic('missing_timestamp', $secret_source, $secret, $payload, $signed_payload, $timestamp_count, count($signatures), $timestamp_delta, $computed_hmac, 'mismatch');
       return FALSE;
     }
 
-    $expected = hash_hmac('sha256', $timestamp . '.' . $payload, $secret);
+    if (empty($signatures)) {
+      $this->logStripeWebhookRuntimeInputDiagnostic('missing_v1', $secret_source, $secret, $payload, $signed_payload, $timestamp_count, count($signatures), $timestamp_delta, $computed_hmac, 'mismatch');
+      return FALSE;
+    }
+
+    if ($timestamp_delta > 300) {
+      $this->logStripeWebhookRuntimeInputDiagnostic('timestamp_outside_tolerance', $secret_source, $secret, $payload, $signed_payload, $timestamp_count, count($signatures), $timestamp_delta, $computed_hmac, 'mismatch');
+      return FALSE;
+    }
+
     foreach ($signatures as $signature) {
-      if (hash_equals($expected, $signature)) {
+      if (hash_equals($computed_hmac, $signature)) {
+        $this->logStripeWebhookRuntimeInputDiagnostic('verified', $secret_source, $secret, $payload, $signed_payload, $timestamp_count, count($signatures), $timestamp_delta, $computed_hmac, 'match');
         return TRUE;
       }
     }
 
+    $this->logStripeWebhookRuntimeInputDiagnostic('hmac_mismatch', $secret_source, $secret, $payload, $signed_payload, $timestamp_count, count($signatures), $timestamp_delta, $computed_hmac, 'mismatch');
     return FALSE;
+  }
+
+  /**
+   * Logs safe runtime-input fingerprints without exposing webhook contents.
+   */
+  private function logStripeWebhookRuntimeInputDiagnostic(string $failure_reason, string $secret_source, string $secret, string $payload, string $signed_payload, int $timestamp_count, int $signature_count, int $timestamp_delta, string $computed_hmac, string $verification_result): void {
+    \Drupal::logger('ooh_outskirts')->warning('Operation Alpha Stripe runtime input diagnostic: secret_source=@secret_source secret_length=@secret_length secret_sha256=@secret_sha256 payload_length=@payload_length payload_sha256=@payload_sha256 signed_payload_sha256=@signed_payload_sha256 t_count=@t_count v1_count=@v1_count timestamp_delta=@timestamp_delta computed_hmac_sha256=@computed_hmac_sha256 verification_result=@verification_result failure_reason=@failure_reason', [
+      '@secret_source' => $secret_source,
+      '@secret_length' => strlen($secret),
+      '@secret_sha256' => hash('sha256', $secret),
+      '@payload_length' => strlen($payload),
+      '@payload_sha256' => hash('sha256', $payload),
+      '@signed_payload_sha256' => $signed_payload !== '' ? hash('sha256', $signed_payload) : '',
+      '@t_count' => $timestamp_count,
+      '@v1_count' => $signature_count,
+      '@timestamp_delta' => $timestamp_delta,
+      '@computed_hmac_sha256' => $computed_hmac !== '' ? hash('sha256', $computed_hmac) : '',
+      '@verification_result' => $verification_result,
+      '@failure_reason' => $failure_reason,
+    ]);
   }
 
   /**

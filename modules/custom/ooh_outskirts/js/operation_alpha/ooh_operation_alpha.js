@@ -1539,14 +1539,63 @@
     }
 
     form.addEventListener('submit', function (event) {
+      var input = form.querySelector('[data-ooh-operation-alpha-email]');
+      var submit = form.querySelector('button[type="submit"]');
+      var email = input ? input.value.trim() : '';
+
       event.preventDefault();
-      storeSignalDismissed();
-      if (status) {
-        status.textContent = 'Signal captured locally. Provider connection pending.';
+      if (submit && submit.disabled) {
+        return;
       }
-      window.setTimeout(function () {
-        hideSignalModal(modal);
-      }, 1500);
+      if (!email) {
+        if (status) {
+          status.textContent = 'Enter an email address to join the signal.';
+        }
+        return;
+      }
+      if (email.length > 254) {
+        if (status) {
+          status.textContent = 'Email address is too long.';
+        }
+        return;
+      }
+
+      if (submit) {
+        submit.disabled = true;
+      }
+      if (status) {
+        status.textContent = 'Sending signal...';
+      }
+
+      creditApi('/operation-alpha/signal', {
+        method: 'POST',
+        body: JSON.stringify({ email: email, sourcePath: window.location.pathname || '/operation-alpha' })
+      }).then(function (json) {
+        if (!json.success) {
+          if (submit) {
+            submit.disabled = false;
+          }
+          if (status) {
+            status.textContent = json.message || 'Signal could not be sent right now.';
+          }
+          return;
+        }
+
+        storeSignalDismissed();
+        if (status) {
+          status.textContent = json.message || 'Signal received. Watch your inbox.';
+        }
+        window.setTimeout(function () {
+          hideSignalModal(modal);
+        }, 1500);
+      }).catch(function () {
+        if (submit) {
+          submit.disabled = false;
+        }
+        if (status) {
+          status.textContent = 'Signal could not be sent right now.';
+        }
+      });
     });
 
     dismiss.addEventListener('click', function () {
@@ -6104,7 +6153,7 @@
         button.disabled = true;
 
         if (confirmation) {
-          confirmation.textContent = 'OPENING STRIPE TEST CHECKOUT: ' + packageLabel.toUpperCase() + ' // ' + packagePrice;
+          confirmation.textContent = 'OPENING STRIPE CHECKOUT: ' + packageLabel.toUpperCase() + ' // ' + packagePrice;
         }
         creditApi('/operation-alpha/credits/purchase', {
           method: 'POST',
@@ -6113,7 +6162,7 @@
           if (!json.success || !json.checkoutUrl) {
             button.disabled = false;
             if (confirmation) {
-              confirmation.textContent = json.loginRequired ? 'LOGIN REQUIRED TO PURCHASE OPERATION ALPHA CREDITS.' : 'STRIPE TEST CHECKOUT COULD NOT BE CREATED.';
+              confirmation.textContent = json.loginRequired ? 'LOGIN REQUIRED TO PURCHASE OPERATION ALPHA CREDITS.' : 'STRIPE CHECKOUT COULD NOT BE CREATED.';
             }
             if (json.loginRequired) {
               window.location.href = routePath('/user/login') + '?destination=' + encodeURIComponent(operationAlphaCreditsPath());
@@ -6121,13 +6170,13 @@
             return;
           }
           if (confirmation) {
-            confirmation.textContent = 'REDIRECTING TO STRIPE TEST CHECKOUT: ' + packageLabel.toUpperCase() + ' // ' + packagePrice + ' // ' + creditCount + ' CREDIT(S).';
+            confirmation.textContent = 'REDIRECTING TO STRIPE CHECKOUT: ' + packageLabel.toUpperCase() + ' // ' + packagePrice + ' // ' + creditCount + ' CREDIT(S).';
           }
           window.location.href = json.checkoutUrl;
         }).catch(function () {
           button.disabled = false;
           if (confirmation) {
-            confirmation.textContent = 'STRIPE TEST CHECKOUT COULD NOT BE CREATED.';
+            confirmation.textContent = 'STRIPE CHECKOUT COULD NOT BE CREATED.';
           }
         });
       });
