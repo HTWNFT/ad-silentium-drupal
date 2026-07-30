@@ -1,0 +1,100 @@
+{
+  "doctrine": {
+    "name": "Operation Alpha Runtime Loop Variant Doctrine",
+    "mode": "local-only, presentation-only, deterministic",
+    "output_root": "output_play_loops",
+    "public_deployment": "manual review and manual copy only"
+  },
+  "categories": {
+    "insertion": {
+      "default": "insertion_drift",
+      "presets": {
+        "insertion_drift": {
+          "description": "Subtle forward drift with light contrast and scanline atmosphere.",
+          "drift_intensity": 0.2,
+          "contrast": 1.04,
+          "saturation": 1.05,
+          "tint": "cyan",
+          "flicker": 0.0,
+          "scanline_intensity": 0.055,
+          "distortion_strength": 0.025,
+          "zoom_strength": 1.035
+        }
+      }
+    },
+    "contact": {
+      "default": "contact_interference",
+      "presets": {
+        "contact_interference": {
+          "description": "Slightly stronger signal interference for contact pressure.",
+          "drift_intensity": 0.32,
+          "contrast": 1.07,
+          "saturation": 1.08,
+          "tint": "cyan_red",
+          "flicker": 0.018,
+          "scanline_intensity": 0.075,
+          "distortion_strength": 0.045,
+          "zoom_strength": 1.045
+        }
+      }
+    },
+    "instability": {
+      "default": "instability_signal_drift",
+      "presets": {
+        "instability_signal_drift": {
+          "description": "Signal instability with visible scanline pressure and controlled distortion.",
+          "drift_intensity": 0.45,
+          "contrast": 1.08,
+          "saturation": 1.06,
+          "tint": "cold_red",
+          "flicker": 0.028,
+          "scanline_intensity": 0.085,
+          "distortion_strength": 0.055,
+          "zoom_strength": 1.05
+        }
+      }
+    },
+    "collapse": {
+      "default": "collapse_flicker",
+      "presets": {
+        "collapse_flicker": {
+          "description": "Conservative collapse-risk flicker and pressure tint.",
+          "drift_intensity": 0.58,
+          "contrast": 1.1,
+          "saturation": 1.03,
+          "tint": "red_pressure",
+          "flicker": 0.045,
+          "scanline_intensity": 0.09,
+          "distortion_strength": 0.065,
+          "zoom_strength": 1.055
+        }
+      }
+    },
+    "extraction": {
+      "default": "extraction_corridor",
+      "presets": {
+        "extraction_corridor": {
+          "description": "Extraction corridor atmosphere with brighter stabilized signal.",
+          "drift_intensity": 0.36,
+          "contrast": 1.05,
+          "saturation": 1.1,
+          "tint": "stabilized_cyan",
+          "flicker": 0.012,
+          "scanline_intensity": 0.06,
+          "distortion_strength": 0.035,
+          "zoom_strength": 1.04
+        }
+      }
+    }
+  },
+  "preview_sheet": {
+    "max_outputs": 3,
+    "category_order": [
+      "insertion",
+      "contact",
+      "instability",
+      "collapse",
+      "extraction"
+    ]
+  }
+}
