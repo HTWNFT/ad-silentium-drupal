@@ -1,0 +1,126 @@
+ENVIRONMENT: TERRA
+DOMAIN: LAND / RUINS / WASTELAND / SUBTERRANEAN
+MOOD: COLLAPSED CIVILIZATION / DUST / SILENCE / HEAT OR DECAY
+THREATS: GROUND HOSTILES / STRUCTURAL COLLAPSE / AMBUSH / TERRAIN FATIGUE
+VISUAL LANGUAGE: CRACKED EARTH / DERELICT STRUCTURES / BUNKERS / ASH / WIND Generate a cinematic establishing shot for a post-collapse terrestrial battlefield.
+
+Environment:
+Vast open wasteland with broken terrain, collapsed structures, and long sightlines.
+
+Visual Elements:
+- Cracked earth and dried mud fissures
+- Destroyed buildings or skeletal industrial ruins
+- Distant smoke plumes or ash clouds
+- Rusted vehicles or abandoned machinery
+
+Atmosphere:
+- Dust blowing across the ground
+- Heat shimmer OR cold grey haze
+- Long shadows (sunset or low light)
+
+Camera:
+Wide, slow-moving cinematic shot from elevated position.
+
+Mood:
+Isolation, desolation, and tension before movement.
+
+Style:
+Hyper-realistic, cinematic, high contrast, muted earth tones with subtle cyan highlights. Generate a grounded traversal scene through a ruined terrestrial environment.
+
+Environment:
+Narrow path through partially destroyed bunker systems or broken roadways.
+
+Visual Elements:
+- Collapsed concrete structures
+- Exposed rebar and debris
+- Tunnels, trenches, or broken corridors
+- Flickering lights or exposed wiring
+
+Atmosphere:
+- Dust particles floating in air
+- Echoing wind or distant metallic sounds
+- Occasional sparks or falling debris
+
+Camera:
+Shoulder-level forward movement, slightly unstable (immersive).
+
+Mood:
+Claustrophobic, uncertain, controlled tension.
+
+Style:
+Gritty realism, battlefield documentary feel. Generate an intense ground combat scene inside a ruined terrestrial structure.
+
+Environment:
+Tight combat zone within a collapsed building or industrial ruin.
+
+Visual Elements:
+- Narrow corridors and broken walls
+- Cover positions (debris piles, concrete slabs)
+- Fire, sparks, or muzzle flashes
+- Shadow-heavy lighting
+
+Enemies:
+Ground-based hostiles emerging from cover or flanking positions.
+
+Atmosphere:
+- Dust clouds from impacts
+- Echoing gunfire
+- Limited visibility
+
+Camera:
+Dynamic, close-quarters perspective with fast motion shifts.
+
+Mood:
+High pressure, chaotic, lethal.
+
+Style:
+Dark, cinematic realism with sharp contrast and particle effects. Generate a quiet aftermath scene following a terrestrial conflict.
+
+Environment:
+Open field or ruined zone after battle.
+
+Visual Elements:
+- Smoldering debris
+- Burned-out structures
+- Bodies or silhouettes (tasteful, non-graphic)
+- Wind moving ash and dust
+
+Atmosphere:
+- Thick silence
+- Occasional distant rumble
+- Slow drifting particles
+
+Camera:
+Still or slow pan across battlefield remains.
+
+Mood:
+Heavy, reflective, somber.
+
+Style:
+Muted colors, cinematic lighting, emphasis on emptiness. Generate a large-scale boss encounter in a fortified terrestrial stronghold.
+
+Environment:
+Massive ground-based fortress, bunker complex, or warlord citadel.
+
+Visual Elements:
+- Reinforced walls, towers, or heavy structures
+- Defensive weapon systems
+- Large central arena or approach corridor
+
+Boss:
+Dominant ground commander or mechanized war entity.
+
+Atmosphere:
+- Heavy dust storms or environmental hazards
+- Explosions and structural instability
+- Strong lighting contrast (fire vs shadow)
+
+Camera:
+Wide-to-close transition, emphasizing scale and threat.
+
+Mood:
+Overwhelming force, final confrontation.
+
+Style:
+Epic cinematic realism, large-scale destruction, high intensity. ROUTE TYPE: LAND Route Credit
+ENVIRONMENT TAG: terra
