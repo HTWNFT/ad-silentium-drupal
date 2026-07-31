@@ -173,6 +173,7 @@ final class OohPlayBlock extends BlockBase {
     $title = htmlspecialchars((string) ($config['title'] ?? 'Operation Alpha Runtime Access'), ENT_QUOTES, 'UTF-8');
     $subtitle = nl2br(htmlspecialchars((string) ($config['subtitle'] ?? ''), ENT_QUOTES, 'UTF-8'));
     $dossier_target = Url::fromRoute('ooh_outskirts.dossier')->toString();
+    $playable_target = Url::fromRoute('ooh_outskirts.playable_mission')->toString();
     $dossier_target_escaped = htmlspecialchars($dossier_target, ENT_QUOTES, 'UTF-8');
     $prompt_library = $this->loadMissionPrompts();
 
@@ -409,6 +410,7 @@ final class OohPlayBlock extends BlockBase {
 
       <div class="ooh-play-scene__actions">
         <button class="ooh-generator__overlay-btn ooh-play-scene__activate" type="button" data-ooh-activate-mission>ENTER FIELD</button>
+        <a class="ooh-generator__overlay-btn ooh-play-scene__deploy is-disabled" href="#" data-ooh-deploy-field aria-disabled="true" tabindex="-1" title="Complete and hydrate a valid mission before deploying to the playable field">DEPLOY TO FIELD</a>
         <a class="ooh-generator__overlay-btn" href="{$dossier_target_escaped}">Return to Dossier</a>
       </div>
     </div>
@@ -427,6 +429,7 @@ HTML;
             'play' => [
               'urls' => [
                 'dossierTarget' => $dossier_target,
+                'playableTarget' => $playable_target,
               ],
             ],
             'missionPrompts' => $prompt_library['prompts'],
@@ -686,3 +689,4 @@ HTML;
   }
 
 }
+

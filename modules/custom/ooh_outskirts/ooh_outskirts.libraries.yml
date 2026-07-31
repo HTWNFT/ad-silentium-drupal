@@ -56,6 +56,20 @@ play:
     - core/once
     - core/drupalSettings
 
+playable_mission:
+  version: 0.1.0-phase-1
+  css:
+    theme:
+      css/ooh_playable.css: {}
+  js:
+    js/playable/ooh_playable_boot.js:
+      attributes:
+        type: module
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupalSettings
+
 operation_alpha:
   version: 1.0.29-oa-consume-server-gate
   css:

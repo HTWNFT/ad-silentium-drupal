@@ -8204,3 +8204,11 @@ body.page-play .ooh-play-session.ooh-play-briefing[data-ooh-runtime-experience-c
     transition: none;
   }
 }
+
+body.path-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) [data-ooh-deploy-field][aria-disabled="true"],
+body.page-play .ooh-play-session.ooh-play-briefing:not(.is-combat-shell) [data-ooh-deploy-field][aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.48;
+  pointer-events: none;
+}
+

@@ -144,6 +144,7 @@
     const briefingEl = root.querySelector('[data-ooh-generated-briefing]');
     const debugEl = root.querySelector('[data-ooh-briefing-debug]');
     const activateButton = root.querySelector('[data-ooh-activate-mission]');
+    configureDeployControl(root, '');
     const combatGate = root.querySelector('[data-ooh-combat-gate]');
     const combatGateButton = root.querySelector('[data-ooh-combat-gate-button]');
     const routeHeader = root.querySelector('[data-ooh-scene-route-label]');
@@ -198,6 +199,53 @@
 
   function missionEntryReady(root) {
     return Boolean(root && root.getAttribute('data-ooh-payload-status') === 'valid');
+  }
+  function validMissionUuid(value) {
+    return /^[a-f0-9-]{36}$/i.test(String(value || '').trim());
+  }
+
+  function fieldRuntimeTarget(settings, missionUuid) {
+    const target = (((settings.urls || {}).playableTarget) || '').trim();
+    if (!target || !validMissionUuid(missionUuid)) {
+      return '';
+    }
+
+    const separator = target.indexOf('?') === -1 ? '?' : '&';
+    return target + separator + 'missionUuid=' + encodeURIComponent(missionUuid);
+  }
+
+  function configureDeployControl(root, missionUuid) {
+    const deployLink = root ? root.querySelector('[data-ooh-deploy-field]') : null;
+    const playSettings = (((drupalSettings || {}).ooh_outskirts || {}).play) || {};
+    const deployTarget = fieldRuntimeTarget(playSettings, missionUuid);
+
+    if (!deployLink) {
+      return;
+    }
+
+    if (!root.oohDeployFieldBound) {
+      deployLink.addEventListener('click', function (event) {
+        if (deployLink.getAttribute('aria-disabled') === 'true' || !validMissionUuid(root.getAttribute('data-ooh-mission-uuid'))) {
+          event.preventDefault();
+        }
+      });
+      root.oohDeployFieldBound = true;
+    }
+
+    if (!missionEntryReady(root) || !deployTarget) {
+      deployLink.setAttribute('href', '#');
+      deployLink.setAttribute('aria-disabled', 'true');
+      deployLink.setAttribute('tabindex', '-1');
+      deployLink.classList.add('is-disabled');
+      deployLink.setAttribute('title', 'Complete and hydrate a valid mission before deploying to the playable field');
+      return;
+    }
+
+    deployLink.setAttribute('href', deployTarget);
+    deployLink.setAttribute('aria-disabled', 'false');
+    deployLink.removeAttribute('tabindex');
+    deployLink.classList.remove('is-disabled');
+    deployLink.setAttribute('title', 'Deploy this staged mission to the playable field');
   }
 
   function setActivationReadyState(root, shell, activateButton) {
@@ -6944,6 +6992,7 @@ function passiveBehaviorPreviewLabel() {
     if (missionUuid) {
       root.setAttribute('data-ooh-mission-uuid', missionUuid);
     }
+    configureDeployControl(root, missionUuid);
 
     const promptLibrary = (((drupalSettings || {}).ooh_outskirts || {}).missionPrompts) || {};
     const selectedPrompt = selectPromptBlock(payload, promptLibrary);
@@ -7147,3 +7196,4 @@ function passiveBehaviorPreviewLabel() {
     }
   };
 })(Drupal, once, drupalSettings);
+

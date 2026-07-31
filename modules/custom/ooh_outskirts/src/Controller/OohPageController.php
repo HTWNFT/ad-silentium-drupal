@@ -83,6 +83,19 @@ class OohPageController extends ControllerBase {
     return $build;
   }
 
+  public function playableMission() {
+    $block = \Drupal::service('plugin.manager.block')
+      ->createInstance('ooh_playable_mission_block', []);
+    $build = $block->build();
+
+    $build['#cache'] = [
+      'contexts' => ['url.query_args:missionUuid', 'user.roles:authenticated'],
+      'max-age' => 0,
+    ];
+
+    return $build;
+  }
+
   public function operationAlpha() {
     return [
       '#theme' => 'ooh_operation_alpha_page',

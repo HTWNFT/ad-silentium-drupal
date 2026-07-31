@@ -80,6 +80,16 @@ ooh_outskirts.play:
   requirements:
     _permission: 'access content'
 
+ooh_outskirts.playable_mission:
+  path: '/play/mission'
+  defaults:
+    _controller: '\Drupal\ooh_outskirts\Controller\OohPageController::playableMission'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+  options:
+    no_cache: TRUE
+
 ooh_outskirts.operation_alpha:
   path: '/operation-alpha'
   defaults:
