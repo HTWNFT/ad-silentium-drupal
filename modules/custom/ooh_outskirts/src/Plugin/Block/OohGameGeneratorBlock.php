@@ -292,7 +292,6 @@ class OohGameGeneratorBlock extends BlockBase {
     $paywall_url = Url::fromRoute('ooh_outskirts.clearance')->toString();
     $enter_target = Url::fromRoute('ooh_outskirts.play')->toString();
     $credits_target = '';
-    $operation_alpha_target = Url::fromRoute('ooh_outskirts.operation_alpha')->toString();
     $home_target = Url::fromRoute('<front>')->toString();
     $account = \Drupal::currentUser();
     $is_logged_in = $account->isAuthenticated();
@@ -352,7 +351,6 @@ class OohGameGeneratorBlock extends BlockBase {
       <a class="ooh-generator__nav-button ooh-generator__nav-button--home" href="' . $home_target . '">HOME</a>
       <div class="ooh-generator__nav-cluster">
         <button class="ooh-generator__nav-button ooh-generator__nav-button--disabled" type="button" disabled aria-disabled="true">CREDITS: ' . $credit_balance . '</button>
-        <a class="ooh-generator__nav-button" href="' . $operation_alpha_target . '">OPERATION ALPHA RETURN</a>
         <a class="ooh-generator__nav-button" href="' . $member_target . '">' . htmlspecialchars($member_label, ENT_QUOTES, 'UTF-8') . '</a>
       </div>
     </nav>
