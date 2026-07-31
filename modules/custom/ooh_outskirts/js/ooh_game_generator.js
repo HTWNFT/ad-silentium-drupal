@@ -281,6 +281,84 @@
           });
         }
 
+        function nextIncompleteSectionName(completedGroup) {
+          const selectedPath = findItem('path', state.path);
+          const selectedAttributes = (state.selectedAttributes && state.selectedAttributes.length) ?
+            state.selectedAttributes :
+            getDefaultAttributes(selectedPath);
+
+          if (!state.playlist) {
+            return 'playlist';
+          }
+          if (!state.path || selectedAttributes.length < minimumAttributes) {
+            return 'recruiter';
+          }
+          if (!state.campaignRoute) {
+            return 'campaignRoute';
+          }
+          if (!state.mission) {
+            return 'mission';
+          }
+          if (completedGroup === 'mission' && selectionsComplete()) {
+            return 'enter';
+          }
+          return '';
+        }
+
+        function focusProgressionTarget(section) {
+          const target = section.querySelector('button:not(:disabled):not([aria-disabled="true"]), a[href]');
+          if (!target) {
+            return;
+          }
+
+          try {
+            target.focus({ preventScroll: true });
+          }
+          catch (e) {
+            target.focus();
+          }
+        }
+
+        function scrollToProgressionSection(sectionName, inputMode) {
+          const section = root.querySelector('[data-ooh-section="' + sectionName + '"]');
+          if (!section) {
+            return;
+          }
+
+          const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          const fixedOffset = window.innerWidth <= 640 ? 108 : 82;
+          const targetTop = Math.max(0, section.getBoundingClientRect().top + window.pageYOffset - fixedOffset);
+
+          window.scrollTo({
+            top: targetTop,
+            behavior: reducedMotion ? 'auto' : 'smooth'
+          });
+
+          if (inputMode === 'keyboard' && sectionName !== 'enter') {
+            focusProgressionTarget(section);
+          }
+        }
+
+        function scheduleDossierProgression(completedGroup, inputMode) {
+          const sectionName = nextIncompleteSectionName(completedGroup);
+          const schedule = window.requestAnimationFrame || function (callback) { return window.setTimeout(callback, 0); };
+          const cancel = window.cancelAnimationFrame || window.clearTimeout;
+
+          if (!sectionName) {
+            return;
+          }
+          if (pendingProgressionFrame) {
+            cancel(pendingProgressionFrame);
+          }
+
+          pendingProgressionFrame = schedule(function () {
+            pendingProgressionFrame = null;
+            schedule(function () {
+              scrollToProgressionSection(sectionName, inputMode);
+            });
+          });
+        }
+
         function spotifyEmbedUrl(spotifyUrl) {
           let parsed;
           const rawUrl = String(spotifyUrl || '').trim();
@@ -389,7 +467,7 @@
               '<span class="ooh-generator__option-copy">' + escapeHtml(item.description || '') + '</span>' +
               '<span class="ooh-generator__option-tier">' + escapeHtml(item.tier || 'free') + '</span>';
 
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function (event) {
               if (!isSectionUnlocked(groupName)) {
                 return;
               }
@@ -412,6 +490,7 @@
               }
               saveState();
               refresh();
+              scheduleDossierProgression(groupName, event.detail === 0 ? 'keyboard' : 'pointer');
             });
 
             container.appendChild(button);
@@ -545,20 +624,21 @@
           const confirmButton = recruiterPanel.querySelector('[data-ooh-recruiter-confirm]');
           if (confirmButton) {
             confirmButton.classList.add('is-confirmed');
-            confirmButton.addEventListener('click', function () {
+            confirmButton.addEventListener('click', function (event) {
               state.path = selectedPath.id;
               if (!state.selectedAttributes || state.selectedAttributes.length < minimumAttributes) {
                 state.selectedAttributes = getDefaultAttributes(selectedPath);
               }
               saveState();
               refresh();
+              scheduleDossierProgression('path', event.detail === 0 ? 'keyboard' : 'pointer');
               confirmButton.textContent = selectedPath.label + ' CONFIRMED';
               confirmButton.classList.add('is-confirmed');
             });
           }
 
           recruiterPanel.querySelectorAll('[data-ooh-attribute]').forEach(function (chip) {
-            chip.addEventListener('click', function () {
+            chip.addEventListener('click', function (event) {
               const attribute = chip.getAttribute('data-ooh-attribute');
               const selected = state.selectedAttributes.slice();
               const index = selected.indexOf(attribute);
@@ -579,6 +659,7 @@
               updateAttributeChips();
               updateSummary();
               updateEnterState();
+              scheduleDossierProgression('path', event.detail === 0 ? 'keyboard' : 'pointer');
             });
           });
 
