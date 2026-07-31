@@ -172,13 +172,34 @@
     }
   };
 
-  const previewLoopDirectory = 'sites/default/files/adsilentium/play_loops/';
+  const previewLoopDirectories = {
+    terra: 'sites/default/files/adsilentium/play_loops/',
+    mare: 'sites/default/files/adsilentium/play_loops/mare/',
+    aer: 'sites/default/files/adsilentium/play_loops/aer/'
+  };
   const previewLoops = {
     insertion: 'oa_play_terra_video_loops_wasteland_ridge_core_insertion_drift_1440.mp4',
     contact: 'oa_play_terra_video_loops_wasteland_ridge_core_contact_interference_1440.mp4',
     instability: 'oa_play_terra_video_loops_wasteland_ridge_core_instability_signal_drift_1440.mp4',
     'collapse-risk': 'oa_play_terra_video_loops_wasteland_ridge_core_collapse_flicker_1440.mp4',
     'extraction-window': 'oa_play_terra_video_loops_wasteland_ridge_core_extraction_corridor_1440.mp4'
+  };
+  const previewLoopFilesByRoute = {
+    terra: previewLoops,
+    mare: {
+      insertion: 'oa_play_terra_video_loops_neon_fog_marsh_core_insertion_drift_1440.mp4',
+      contact: 'oa_play_terra_video_loops_neon_fog_marsh_core_contact_interference_1440.mp4',
+      instability: 'oa_play_terra_video_loops_neon_fog_marsh_core_instability_signal_drift_1440.mp4',
+      'collapse-risk': 'oa_play_terra_video_loops_neon_fog_marsh_core_collapse_flicker_1440.mp4',
+      'extraction-window': 'oa_play_terra_video_loops_neon_fog_marsh_core_extraction_corridor_1440.mp4'
+    },
+    aer: {
+      insertion: 'oa_play_terra_video_loops_underboard_alley_signal_drift_insertion_drift_1440.mp4',
+      contact: 'oa_play_terra_video_loops_underboard_alley_signal_drift_contact_interference_1440.mp4',
+      instability: 'oa_play_terra_video_loops_underboard_alley_signal_drift_instability_signal_drift_1440.mp4',
+      'collapse-risk': 'oa_play_terra_video_loops_underboard_alley_signal_drift_collapse_flicker_1440.mp4',
+      'extraction-window': 'oa_play_terra_video_loops_underboard_alley_signal_drift_extraction_corridor_1440.mp4'
+    }
   };
 
   const manifestationEvents = {
@@ -1127,9 +1148,20 @@
     return environmentFeed(environment, nextFrom(list, state.actionCount + state.stageIndex));
   }
 
-  function loopPathForStage(stageId) {
-    const filename = previewLoops[stageId] || '';
-    const path = filename ? previewLoopDirectory + filename : '';
+  function previewLoopRouteId(root) {
+    const shell = root.querySelector('[data-ooh-scene-shell]');
+    const routeId = String(shell ? shell.getAttribute('data-route') : '')
+      .trim()
+      .toLowerCase();
+    return Object.prototype.hasOwnProperty.call(previewLoopDirectories, routeId) ? routeId : 'terra';
+  }
+
+  function loopPathForStage(stageId, routeId) {
+    const routeKey = Object.prototype.hasOwnProperty.call(previewLoopDirectories, routeId) ? routeId : 'terra';
+    const filenames = previewLoopFilesByRoute[routeKey] || previewLoopFilesByRoute.terra;
+    const filename = filenames[stageId] || '';
+    const directory = previewLoopDirectories[routeKey] || previewLoopDirectories.terra;
+    const path = filename ? directory + filename : '';
     if (!path) {
       return '';
     }
@@ -1139,14 +1171,14 @@
     return '/' + path;
   }
 
-  function syncLoopPreview(experience, active, stageId) {
+  function syncLoopPreview(experience, active, stageId, routeId) {
     const video = experience.loopVideo;
     const loopPreview = experience.loopPreview;
     if (!video || !loopPreview) {
       return;
     }
 
-    const nextSrc = active ? loopPathForStage(stageId) : '';
+    const nextSrc = active ? loopPathForStage(stageId, routeId) : '';
     loopPreview.setAttribute('data-ooh-runtime-experience-loop-stage', active ? stageId : 'standby');
     loopPreview.classList.toggle('is-active', Boolean(nextSrc));
 
@@ -1352,7 +1384,7 @@
     root.setAttribute('data-ooh-runtime-pressure-exchange', pressureExchangeLabel(state, active).toLowerCase());
     root.setAttribute('data-ooh-runtime-manifestation-presence', manifestationPresenceLabel(state, active).toLowerCase());
 
-    syncLoopPreview(experience, active, stage.id);
+    syncLoopPreview(experience, active, stage.id, previewLoopRouteId(root));
 
     experience.overlay.setAttribute('data-ooh-runtime-experience-stage', active ? stage.id : 'standby');
     experience.overlay.setAttribute('data-ooh-runtime-experience-pressure', pressure.toLowerCase());
