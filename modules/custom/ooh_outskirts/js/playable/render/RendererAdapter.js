@@ -1,5 +1,9 @@
 import * as THREE from '../../../assets/playable/vendor/three.module.min.js';
 import { BOOT_STATES, TEST_SCENE, logPlayable } from '../core/AssetManifest.js';
+import { GameLoop } from '../core/GameLoop.js';
+import { InputController } from '../input/InputController.js';
+import { PointerLockController } from '../input/PointerLockController.js';
+import { PlayerController } from '../player/PlayerController.js';
 import { buildTestScene } from './SceneBuilder.js';
 
 export class RendererAdapter {
@@ -12,18 +16,24 @@ export class RendererAdapter {
     this.camera = null;
     this.scene = null;
     this.animatedObjects = [];
-    this.animationId = null;
+    this.gameLoop = null;
+    this.input = null;
+    this.pointerLock = null;
+    this.player = null;
     this.active = false;
-    this.yaw = 0;
-    this.pitch = 0;
+    this.destroyed = false;
+    this.lastHudState = '';
+    this.lastHudUpdate = 0;
     this.boundResize = this.resize.bind(this);
-    this.boundMouseMove = this.handleMouseMove.bind(this);
-    this.boundPointerLockChange = this.handlePointerLockChange.bind(this);
+    this.boundVisibilityChange = this.handleVisibilityChange.bind(this);
   }
 
   initialize() {
     if (!this.viewport) {
       throw new Error('Playable viewport is missing.');
+    }
+    if (this.renderer) {
+      return;
     }
     if (!this.webglAvailable()) {
       throw new Error('WebGL is unavailable in this browser.');
@@ -43,10 +53,27 @@ export class RendererAdapter {
     this.camera.position.set(0, TEST_SCENE.cameraHeight, 6.8);
     this.camera.lookAt(0, 1, -4.5);
 
+    this.player = new PlayerController(THREE, this.camera, builtScene.collisionWorld, {
+      height: TEST_SCENE.cameraHeight
+    });
+    this.input = new InputController({
+      isActive: () => this.active && this.pointerLock?.isLocked(),
+      onEscape: () => this.pause()
+    });
+    this.pointerLock = new PointerLockController(this.renderer.domElement, {
+      onLockChange: (locked) => this.handlePointerLockChange(locked),
+      onMove: (look) => this.player.setLook(look)
+    });
+    this.gameLoop = new GameLoop({
+      update: (delta) => this.update(delta),
+      render: (time) => this.render(time)
+    });
+
     window.addEventListener('resize', this.boundResize);
-    document.addEventListener('pointerlockchange', this.boundPointerLockChange);
+    document.addEventListener('visibilitychange', this.boundVisibilityChange);
     this.resize();
     this.render(0);
+    this.updateHud(true);
     this.statusCallbacks.onRendererState?.(BOOT_STATES.RENDERER_READY);
     logPlayable('info', 'Renderer initialized.', {
       missionUuid: this.bootstrap.missionUuid || '',
@@ -55,26 +82,50 @@ export class RendererAdapter {
   }
 
   enter() {
-    if (!this.renderer || !this.camera || !this.scene) {
+    if (!this.renderer || !this.camera || !this.scene || !this.gameLoop) {
       throw new Error('Renderer is not ready.');
     }
 
     this.active = true;
     this.statusCallbacks.onFieldState?.(BOOT_STATES.TEST_FIELD_ACTIVE);
-    document.addEventListener('mousemove', this.boundMouseMove);
-    if (this.renderer.domElement.requestPointerLock) {
-      this.renderer.domElement.requestPointerLock();
-    }
-    this.start();
+    this.pointerLock?.requestLock();
+    this.gameLoop.start();
+    this.gameLoop.resume();
+    this.updateHud(true);
   }
 
-  pause() {
+  pause({ releasePointer = true } = {}) {
     this.active = false;
+    this.input?.clear();
+    this.gameLoop?.pause();
     this.statusCallbacks.onFieldState?.(BOOT_STATES.TEST_FIELD_PAUSED);
-    document.removeEventListener('mousemove', this.boundMouseMove);
-    if (document.pointerLockElement === this.renderer?.domElement && document.exitPointerLock) {
-      document.exitPointerLock();
+    if (releasePointer) {
+      this.pointerLock?.exitLock();
     }
+    this.updateHud(true);
+  }
+
+  destroy() {
+    if (this.destroyed) {
+      return;
+    }
+    this.destroyed = true;
+    this.active = false;
+    window.removeEventListener('resize', this.boundResize);
+    document.removeEventListener('visibilitychange', this.boundVisibilityChange);
+    this.gameLoop?.destroy();
+    this.input?.destroy();
+    this.pointerLock?.destroy();
+    this.renderer?.domElement?.remove();
+    this.renderer?.dispose();
+    this.gameLoop = null;
+    this.input = null;
+    this.pointerLock = null;
+    this.player = null;
+    this.renderer = null;
+    this.camera = null;
+    this.scene = null;
+    this.animatedObjects = [];
   }
 
   webglAvailable() {
@@ -87,15 +138,12 @@ export class RendererAdapter {
     }
   }
 
-  start() {
-    if (this.animationId) {
+  update(delta) {
+    if (!this.player || !this.input) {
       return;
     }
-    const animate = (time) => {
-      this.animationId = window.requestAnimationFrame(animate);
-      this.render(time);
-    };
-    this.animationId = window.requestAnimationFrame(animate);
+    this.player.update(delta, this.input);
+    this.updateHud();
   }
 
   render(time) {
@@ -122,22 +170,44 @@ export class RendererAdapter {
     this.render(performance.now());
   }
 
-  handleMouseMove(event) {
-    if (!this.active || document.pointerLockElement !== this.renderer?.domElement) {
-      return;
+  handlePointerLockChange(locked) {
+    if (!locked) {
+      this.input?.clear();
+      if (this.active) {
+        this.pause({ releasePointer: false });
+      }
     }
-    this.yaw -= event.movementX * 0.002;
-    this.pitch = Math.max(-0.45, Math.min(0.35, this.pitch - event.movementY * 0.002));
-    this.camera.rotation.order = 'YXZ';
-    this.camera.rotation.y = this.yaw;
-    this.camera.rotation.x = this.pitch;
+    this.updateHud(true);
   }
 
-  handlePointerLockChange() {
-    if (this.active && document.pointerLockElement !== this.renderer?.domElement) {
-      this.active = false;
-      document.removeEventListener('mousemove', this.boundMouseMove);
-      this.statusCallbacks.onFieldState?.(BOOT_STATES.TEST_FIELD_PAUSED);
+  handleVisibilityChange() {
+    if (document.hidden && this.active) {
+      this.pause();
+    }
+  }
+
+  updateHud(force = false) {
+    if (!this.player) {
+      return;
+    }
+    const now = performance.now();
+    const state = this.player.getHudState(this.pointerLock?.isLocked());
+    const encoded = JSON.stringify(state);
+    if (!force && encoded === this.lastHudState && now - this.lastHudUpdate < 120) {
+      return;
+    }
+    this.lastHudState = encoded;
+    this.lastHudUpdate = now;
+    this.setHudValue('lock', state.lock);
+    this.setHudValue('grounded', state.grounded);
+    this.setHudValue('speed', state.speed);
+    this.setHudValue('coordinates', state.coordinates);
+  }
+
+  setHudValue(key, value) {
+    const el = this.root.querySelector('[data-ooh-playable-state="' + key + '"]');
+    if (el && el.textContent !== value) {
+      el.textContent = value;
     }
   }
 }

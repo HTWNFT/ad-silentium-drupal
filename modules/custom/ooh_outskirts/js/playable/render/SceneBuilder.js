@@ -1,5 +1,15 @@
 import { TEST_SCENE } from '../core/AssetManifest.js';
 
+function boxCollider(center, size, category = 'obstacle') {
+  return {
+    category,
+    minX: center.x - size.x / 2,
+    maxX: center.x + size.x / 2,
+    minZ: center.z - size.z / 2,
+    maxZ: center.z + size.z / 2
+  };
+}
+
 export function buildTestScene(THREE, bootstrap) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x06080c);
@@ -57,11 +67,35 @@ export function buildTestScene(THREE, bootstrap) {
   payloadMarker.name = 'payload-marker';
   scene.add(payloadMarker);
 
+  const obstacleSize = TEST_SCENE.obstacle.size;
+  const obstacleHeight = TEST_SCENE.obstacle.height;
+  const obstaclePosition = TEST_SCENE.obstacle.position;
+  const obstacle = new THREE.Mesh(new THREE.BoxGeometry(obstacleSize, obstacleHeight, obstacleSize), wallMaterial);
+  obstacle.position.set(obstaclePosition.x, obstacleHeight / 2, obstaclePosition.z);
+  obstacle.name = 'field-obstacle';
+  scene.add(obstacle);
+
   scene.add(new THREE.HemisphereLight(0x8ab7ff, 0x131015, 1.15));
   const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
   keyLight.position.set(3.5, 6, 4);
   scene.add(keyLight);
   scene.userData.phaseLabel = String(bootstrap.missionTitle || 'Mission Payload').trim() || 'Mission Payload';
 
-  return { scene, animatedObjects: [beacon, payloadMarker] };
+  return {
+    scene,
+    animatedObjects: [beacon, payloadMarker],
+    collisionWorld: {
+      bounds: {
+        minX: -boundary,
+        maxX: boundary,
+        minZ: -boundary,
+        maxZ: boundary
+      },
+      obstacles: [
+        boxCollider({ x: beacon.position.x, z: beacon.position.z }, { x: 1.5, z: 1.5 }, 'beacon'),
+        boxCollider({ x: payloadMarker.position.x, z: payloadMarker.position.z }, { x: 1.1, z: 1.1 }, 'payload-marker'),
+        boxCollider(obstaclePosition, { x: obstacleSize, z: obstacleSize }, 'field-obstacle')
+      ]
+    }
+  };
 }

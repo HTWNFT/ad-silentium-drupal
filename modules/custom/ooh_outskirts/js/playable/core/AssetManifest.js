@@ -15,6 +15,11 @@ export const TEST_SCENE = Object.freeze({
   wallHeight: 3.2,
   boundaryHalfSize: 10,
   cameraHeight: 1.75,
+  obstacle: {
+    size: 1.8,
+    height: 1.4,
+    position: { x: -2.8, z: -1.6 }
+  },
   orientationObjectColor: 0x00e5ff,
   accentObjectColor: 0xff375f
 });

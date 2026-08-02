@@ -94,7 +94,7 @@ function hydrateBootstrap(settings) {
 
 function setText(root, selector, value) {
   const el = root.querySelector(selector);
-  if (el) {
+  if (el && el.textContent !== value) {
     el.textContent = value;
   }
 }
@@ -123,16 +123,56 @@ function renderBootstrap(root, bootstrap) {
 }
 
 function initializePlayable(root) {
+  if (root.oohPlayableRuntime) {
+    return;
+  }
+
   const settings = (((drupalSettings || {}).ooh_outskirts || {}).playableMission) || {};
   const viewport = root.querySelector('[data-ooh-playable-viewport]');
   const enterButton = root.querySelector('[data-ooh-playable-enter]');
   const pauseButton = root.querySelector('[data-ooh-playable-pause]');
   let renderer = null;
+  let destroyed = false;
+
+  const runtime = {
+    destroy() {
+      destroyed = true;
+      enterButton?.removeEventListener('click', enterHandler);
+      pauseButton?.removeEventListener('click', pauseHandler);
+      renderer?.destroy();
+      renderer = null;
+      delete root.oohPlayableRuntime;
+    }
+  };
+
+  const enterHandler = () => {
+    try {
+      if (renderer) {
+        renderer.enter();
+      }
+    }
+    catch (error) {
+      setState(root, 'renderer', BOOT_STATES.RENDERER_FAILED);
+      setPrimary(root, BOOT_STATES.RENDERER_FAILED, error.message || 'Unable to enter test field.');
+      logPlayable('error', 'Unable to enter test field.', error);
+    }
+  };
+
+  const pauseHandler = () => {
+    if (renderer) {
+      renderer.pause();
+    }
+  };
+
+  root.oohPlayableRuntime = runtime;
 
   setState(root, 'boot', BOOT_STATES.BOOTING);
   setPrimary(root, BOOT_STATES.BOOTING, 'Recovering Dossier mission payload.');
 
   hydrateBootstrap(settings).then((bootstrap) => {
+    if (destroyed) {
+      return;
+    }
     renderBootstrap(root, bootstrap);
     if (!bootstrap.payloadAvailable) {
       setState(root, 'payload', BOOT_STATES.PAYLOAD_UNAVAILABLE);
@@ -154,7 +194,7 @@ function initializePlayable(root) {
       },
       onFieldState: (state) => {
         setState(root, 'field', state);
-        setPrimary(root, state, state === BOOT_STATES.TEST_FIELD_ACTIVE ? 'Pointer field active. Press Escape to pause.' : 'Test field paused.');
+        setPrimary(root, state, state === BOOT_STATES.TEST_FIELD_ACTIVE ? 'Pointer field active. Press Escape to pause.' : 'Test field paused. Click Enter Test Field to resume.');
         if (pauseButton) {
           const active = state === BOOT_STATES.TEST_FIELD_ACTIVE;
           pauseButton.disabled = !active;
@@ -164,40 +204,36 @@ function initializePlayable(root) {
     });
     renderer.initialize();
   }).catch((error) => {
+    if (destroyed) {
+      return;
+    }
     setState(root, 'payload', BOOT_STATES.PAYLOAD_UNAVAILABLE);
     setPrimary(root, BOOT_STATES.PAYLOAD_UNAVAILABLE, 'Mission payload hydration failed.');
     setText(root, '[data-ooh-playable-diagnostic]', error.message || 'Mission payload hydration failed.');
     logPlayable('error', 'Playable mission boot failed.', error);
   });
 
-  if (enterButton) {
-    enterButton.addEventListener('click', () => {
-      try {
-        if (renderer) {
-          renderer.enter();
-        }
-      }
-      catch (error) {
-        setState(root, 'renderer', BOOT_STATES.RENDERER_FAILED);
-        setPrimary(root, BOOT_STATES.RENDERER_FAILED, error.message || 'Unable to enter test field.');
-        logPlayable('error', 'Unable to enter test field.', error);
-      }
-    });
-  }
-
-  if (pauseButton) {
-    pauseButton.addEventListener('click', () => {
-      if (renderer) {
-        renderer.pause();
-      }
-    });
-  }
+  enterButton?.addEventListener('click', enterHandler);
+  pauseButton?.addEventListener('click', pauseHandler);
 }
 
 if (Drupal && once) {
   Drupal.behaviors.oohPlayableMission = {
     attach(context) {
       once('ooh-playable-mission', '[data-ooh-playable-mission]', context).forEach(initializePlayable);
+    },
+    detach(context, settings, trigger) {
+      if (trigger !== 'unload') {
+        return;
+      }
+      const roots = [];
+      if (context.matches?.('[data-ooh-playable-mission]')) {
+        roots.push(context);
+      }
+      context.querySelectorAll?.('[data-ooh-playable-mission]').forEach((root) => roots.push(root));
+      roots.forEach((root) => {
+        root.oohPlayableRuntime?.destroy();
+      });
     }
   };
 }
