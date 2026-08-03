@@ -192,6 +192,22 @@
   height: 34px;
 }
 
+.ooh-playable__reticle.is-firing,
+.ooh-playable__reticle.is-miss {
+  animation: ooh-playable-reticle-fire 260ms ease-out;
+}
+
+.ooh-playable__reticle.is-miss {
+  border-color: rgba(118, 231, 255, 0.95);
+  box-shadow: 0 0 18px rgba(118, 231, 255, 0.5);
+}
+
+.ooh-playable__reticle.is-hit {
+  border-color: rgba(255, 243, 106, 1);
+  box-shadow: 0 0 36px rgba(255, 243, 106, 0.9), 0 0 72px rgba(255, 138, 0, 0.55);
+  animation: ooh-playable-reticle-hit 520ms ease-out;
+}
+
 .ooh-playable__controls {
   display: flex;
   flex-wrap: wrap;
@@ -239,6 +255,33 @@
   color: rgba(237, 247, 255, 0.72);
   font-size: 0.88rem;
   line-height: 1.5;
+}
+
+@keyframes ooh-playable-reticle-fire {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    border-color: rgba(237, 247, 255, 0.55);
+  }
+  42% {
+    transform: translate(-50%, -50%) scale(1.45);
+    border-color: rgba(118, 231, 255, 0.95);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    border-color: rgba(237, 247, 255, 0.55);
+  }
+}
+
+@keyframes ooh-playable-reticle-hit {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  45% {
+    transform: translate(-50%, -50%) scale(2.25);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 @media (max-width: 920px) {

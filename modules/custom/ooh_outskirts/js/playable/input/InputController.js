@@ -21,16 +21,20 @@ function isTypingTarget(target) {
 }
 
 export class InputController {
-  constructor({ isActive = () => false, onEscape = null } = {}) {
+  constructor({ target = document, isActive = () => false, onEscape = null, onPrimaryFire = null } = {}) {
+    this.target = target || document;
     this.isActive = isActive;
     this.onEscape = onEscape;
+    this.onPrimaryFire = onPrimaryFire;
     this.keys = new Set();
     this.jumpQueued = false;
     this.boundKeyDown = this.handleKeyDown.bind(this);
     this.boundKeyUp = this.handleKeyUp.bind(this);
+    this.boundMouseDown = this.handleMouseDown.bind(this);
     this.boundBlur = this.clear.bind(this);
     window.addEventListener('keydown', this.boundKeyDown);
     window.addEventListener('keyup', this.boundKeyUp);
+    this.target.addEventListener('mousedown', this.boundMouseDown);
     window.addEventListener('blur', this.boundBlur);
   }
 
@@ -71,6 +75,15 @@ export class InputController {
     if (key !== 'escape') {
       this.keys.delete(key);
     }
+  }
+
+  handleMouseDown(event) {
+    if (event.button !== 0 || !this.isActive()) {
+      return;
+    }
+
+    event.preventDefault();
+    this.onPrimaryFire?.(event);
   }
 
   getMovementAxes() {
@@ -116,6 +129,7 @@ export class InputController {
   destroy() {
     window.removeEventListener('keydown', this.boundKeyDown);
     window.removeEventListener('keyup', this.boundKeyUp);
+    this.target.removeEventListener('mousedown', this.boundMouseDown);
     window.removeEventListener('blur', this.boundBlur);
     this.clear();
   }

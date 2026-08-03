@@ -1,13 +1,17 @@
 import { TEST_SCENE } from '../core/AssetManifest.js';
 
 function boxCollider(center, size, category = 'obstacle') {
-  return {
+  const collider = {
     category,
     minX: center.x - size.x / 2,
     maxX: center.x + size.x / 2,
     minZ: center.z - size.z / 2,
     maxZ: center.z + size.z / 2
   };
+  if (Number.isFinite(size.y) && size.y > 0) {
+    collider.topY = size.y;
+  }
+  return collider;
 }
 
 export function buildTestScene(THREE, bootstrap) {
@@ -67,6 +71,19 @@ export function buildTestScene(THREE, bootstrap) {
   payloadMarker.name = 'payload-marker';
   scene.add(payloadMarker);
 
+  const targetMaterial = new THREE.MeshStandardMaterial({
+    color: 0xfff36a,
+    emissive: 0xff8a00,
+    emissiveIntensity: 0.5,
+    roughness: 0.3,
+    metalness: 0.08
+  });
+  const combatTarget = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 1.35, 24), targetMaterial);
+  combatTarget.position.set(6, 0.675, -5.8);
+  combatTarget.name = 'phase-three-combat-target';
+  combatTarget.userData.combatTarget = true;
+  scene.add(combatTarget);
+
   const obstacleSize = TEST_SCENE.obstacle.size;
   const obstacleHeight = TEST_SCENE.obstacle.height;
   const obstaclePosition = TEST_SCENE.obstacle.position;
@@ -83,7 +100,8 @@ export function buildTestScene(THREE, bootstrap) {
 
   return {
     scene,
-    animatedObjects: [beacon, payloadMarker],
+    animatedObjects: [beacon, payloadMarker, combatTarget],
+    combatTargets: [combatTarget],
     collisionWorld: {
       bounds: {
         minX: -boundary,
@@ -94,7 +112,7 @@ export function buildTestScene(THREE, bootstrap) {
       obstacles: [
         boxCollider({ x: beacon.position.x, z: beacon.position.z }, { x: 1.5, z: 1.5 }, 'beacon'),
         boxCollider({ x: payloadMarker.position.x, z: payloadMarker.position.z }, { x: 1.1, z: 1.1 }, 'payload-marker'),
-        boxCollider(obstaclePosition, { x: obstacleSize, z: obstacleSize }, 'field-obstacle')
+        boxCollider(obstaclePosition, { x: obstacleSize, y: obstacleHeight, z: obstacleSize }, 'field-obstacle')
       ]
     }
   };

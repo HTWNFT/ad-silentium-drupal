@@ -1,6 +1,7 @@
 import * as THREE from '../../../assets/playable/vendor/three.module.min.js';
 import { BOOT_STATES, TEST_SCENE, logPlayable } from '../core/AssetManifest.js';
 import { GameLoop } from '../core/GameLoop.js';
+import { FireController } from '../combat/FireController.js';
 import { InputController } from '../input/InputController.js';
 import { PointerLockController } from '../input/PointerLockController.js';
 import { PlayerController } from '../player/PlayerController.js';
@@ -20,6 +21,7 @@ export class RendererAdapter {
     this.input = null;
     this.pointerLock = null;
     this.player = null;
+    this.fireController = null;
     this.active = false;
     this.destroyed = false;
     this.lastHudState = '';
@@ -57,12 +59,20 @@ export class RendererAdapter {
       height: TEST_SCENE.cameraHeight
     });
     this.input = new InputController({
+      target: document,
       isActive: () => this.active && this.pointerLock?.isLocked(),
-      onEscape: () => this.pause()
+      onEscape: () => this.pause(),
+      onPrimaryFire: () => this.requestPrimaryFire()
     });
     this.pointerLock = new PointerLockController(this.renderer.domElement, {
       onLockChange: (locked) => this.handlePointerLockChange(locked),
       onMove: (look) => this.player.setLook(look)
+    });
+    this.fireController = new FireController(THREE, {
+      camera: this.camera,
+      scene: this.scene,
+      targets: builtScene.combatTargets,
+      onShot: (result) => this.handleShotResult(result)
     });
     this.gameLoop = new GameLoop({
       update: (delta) => this.update(delta),
@@ -116,12 +126,14 @@ export class RendererAdapter {
     this.gameLoop?.destroy();
     this.input?.destroy();
     this.pointerLock?.destroy();
+    this.fireController?.destroy();
     this.renderer?.domElement?.remove();
     this.renderer?.dispose();
     this.gameLoop = null;
     this.input = null;
     this.pointerLock = null;
     this.player = null;
+    this.fireController = null;
     this.renderer = null;
     this.camera = null;
     this.scene = null;
@@ -143,7 +155,28 @@ export class RendererAdapter {
       return;
     }
     this.player.update(delta, this.input);
+    this.fireController?.update(delta);
     this.updateHud();
+  }
+
+  requestPrimaryFire() {
+    if (!this.active || !this.pointerLock?.isLocked()) {
+      return;
+    }
+    this.setHudValue('fire', 'FIRE REQUEST');
+    this.fireController?.fire();
+  }
+
+  handleShotResult(result) {
+    const state = result.hit ? 'HIT ' + result.targetName : 'MISS';
+    this.setHudValue('fire', state);
+    const reticle = this.root.querySelector('.ooh-playable__reticle');
+    if (!reticle) {
+      return;
+    }
+    reticle.classList.remove('is-firing', 'is-hit', 'is-miss');
+    void reticle.offsetWidth;
+    reticle.classList.add(result.hit ? 'is-hit' : 'is-miss');
   }
 
   render(time) {

@@ -43,9 +43,9 @@ final class OohPlayableMissionBlock extends BlockBase {
     </nav>
 
     <header class="ooh-playable__header">
-      <p class="ooh-playable__eyebrow">FIRST-PERSON MISSION EXPERIENCE // PHASE 2A</p>
-      <h1 class="ooh-playable__title">MOVEMENT RUNTIME FOUNDATION</h1>
-      <p class="ooh-playable__intro">Dedicated WebGL field surface with first-person movement, pointer lock, grounded detection, and static collision isolated from Operation Alpha, Dossier, and the existing /play staging runtime.</p>
+      <p class="ooh-playable__eyebrow">FIRST-PERSON MISSION EXPERIENCE // PHASE 3</p>
+      <h1 class="ooh-playable__title">COMBAT INTERACTION FOUNDATION</h1>
+      <p class="ooh-playable__intro">Dedicated WebGL field surface with first-person movement, pointer lock, grounded detection, static collision, and the first aim-fire-hit interaction loop.</p>
     </header>
 
     <div class="ooh-playable__grid">
@@ -72,6 +72,7 @@ final class OohPlayableMissionBlock extends BlockBase {
         <div class="ooh-playable__readout"><span>STANCE</span><strong data-ooh-playable-state="grounded">GROUNDED</strong></div>
         <div class="ooh-playable__readout"><span>MOVE</span><strong data-ooh-playable-state="speed">WALK</strong></div>
         <div class="ooh-playable__readout"><span>XYZ</span><strong data-ooh-playable-state="coordinates">0.0, 0.0, 6.8</strong></div>
+        <div class="ooh-playable__readout"><span>FIRE</span><strong data-ooh-playable-state="fire">READY</strong></div>
         <div class="ooh-playable__readout"><span>MISSION</span><strong data-ooh-playable-field="missionTitle">Unavailable</strong></div>
         <div class="ooh-playable__readout"><span>ROUTE</span><strong data-ooh-playable-field="campaignRoute">Unknown</strong></div>
         <div class="ooh-playable__readout"><span>RECRUITER</span><strong data-ooh-playable-field="recruiter">Unassigned</strong></div>
@@ -95,7 +96,7 @@ HTML;
               'route' => $route_url,
               'queryMissionUuid' => $query_mission_uuid,
               'stateKey' => 'ooh_game_generator_state_v1',
-              'schemaVersion' => 'phase-2a-movement-runtime-v1',
+              'schemaVersion' => 'phase-3-combat-interaction-v1',
               'urls' => [
                 'dossierTarget' => $dossier_url,
                 'playTarget' => $play_url,

@@ -17,7 +17,7 @@ export const TEST_SCENE = Object.freeze({
   cameraHeight: 1.75,
   obstacle: {
     size: 1.8,
-    height: 1.4,
+    height: 0.9,
     position: { x: -2.8, z: -1.6 }
   },
   orientationObjectColor: 0x00e5ff,
