@@ -3,6 +3,7 @@ import { BOOT_STATES, TEST_SCENE, logPlayable } from '../core/AssetManifest.js';
 import { GameLoop } from '../core/GameLoop.js';
 import { FireController } from '../combat/FireController.js';
 import { InputController } from '../input/InputController.js';
+import { MissionController } from '../mission/MissionController.js';
 import { PointerLockController } from '../input/PointerLockController.js';
 import { PlayerController } from '../player/PlayerController.js';
 import { buildTestScene } from './SceneBuilder.js';
@@ -22,6 +23,9 @@ export class RendererAdapter {
     this.pointerLock = null;
     this.player = null;
     this.fireController = null;
+    this.missionController = null;
+    this.missionTarget = null;
+    this.activeCombatTargets = [];
     this.active = false;
     this.destroyed = false;
     this.lastHudState = '';
@@ -51,6 +55,8 @@ export class RendererAdapter {
     const builtScene = buildTestScene(THREE, this.bootstrap);
     this.scene = builtScene.scene;
     this.animatedObjects = builtScene.animatedObjects;
+    this.missionTarget = builtScene.missionTarget || builtScene.combatTargets?.[0] || null;
+    this.activeCombatTargets = Array.isArray(builtScene.combatTargets) ? builtScene.combatTargets.slice() : [];
     this.camera = new THREE.PerspectiveCamera(68, 1, 0.1, 80);
     this.camera.position.set(0, TEST_SCENE.cameraHeight, 6.8);
     this.camera.lookAt(0, 1, -4.5);
@@ -71,8 +77,12 @@ export class RendererAdapter {
     this.fireController = new FireController(THREE, {
       camera: this.camera,
       scene: this.scene,
-      targets: builtScene.combatTargets,
+      targets: this.activeCombatTargets,
       onShot: (result) => this.handleShotResult(result)
+    });
+    this.missionController = new MissionController({
+      targetId: this.missionTarget?.userData?.missionTargetId || 'phase-4-designated-target',
+      objectiveText: 'Locate and destroy the designated target.'
     });
     this.gameLoop = new GameLoop({
       update: (delta) => this.update(delta),
@@ -84,6 +94,7 @@ export class RendererAdapter {
     this.resize();
     this.render(0);
     this.updateHud(true);
+    this.applyMissionState(this.missionController.start());
     this.statusCallbacks.onRendererState?.(BOOT_STATES.RENDERER_READY);
     logPlayable('info', 'Renderer initialized.', {
       missionUuid: this.bootstrap.missionUuid || '',
@@ -134,6 +145,9 @@ export class RendererAdapter {
     this.pointerLock = null;
     this.player = null;
     this.fireController = null;
+    this.missionController = null;
+    this.missionTarget = null;
+    this.activeCombatTargets = [];
     this.renderer = null;
     this.camera = null;
     this.scene = null;
@@ -171,12 +185,70 @@ export class RendererAdapter {
     const state = result.hit ? 'HIT ' + result.targetName : 'MISS';
     this.setHudValue('fire', state);
     const reticle = this.root.querySelector('.ooh-playable__reticle');
-    if (!reticle) {
+    if (reticle) {
+      reticle.classList.remove('is-firing', 'is-hit', 'is-miss');
+      void reticle.offsetWidth;
+      reticle.classList.add(result.hit ? 'is-hit' : 'is-miss');
+    }
+
+    const missionSnapshot = this.missionController?.handleShot(result);
+    if (!missionSnapshot) {
       return;
     }
-    reticle.classList.remove('is-firing', 'is-hit', 'is-miss');
-    void reticle.offsetWidth;
-    reticle.classList.add(result.hit ? 'is-hit' : 'is-miss');
+    if (missionSnapshot.completionTriggered) {
+      this.completeMissionTarget();
+    }
+    this.applyMissionState(missionSnapshot);
+  }
+
+  restartMission() {
+    if (!this.missionController) {
+      return;
+    }
+    const snapshot = this.missionController.restart();
+    this.restoreMissionTarget();
+    this.applyMissionState(snapshot);
+  }
+
+  completeMissionTarget() {
+    if (!this.missionTarget) {
+      return;
+    }
+    this.fireController?.clearTargetEffects?.(this.missionTarget);
+    this.missionTarget.visible = false;
+    this.missionTarget.userData.destroyed = true;
+    this.activeCombatTargets = this.activeCombatTargets.filter((target) => target !== this.missionTarget);
+    this.fireController?.setTargets(this.activeCombatTargets);
+  }
+
+  restoreMissionTarget() {
+    if (!this.missionTarget) {
+      return;
+    }
+    this.fireController?.clearTargetEffects?.(this.missionTarget);
+    this.missionTarget.visible = true;
+    this.missionTarget.userData.destroyed = false;
+    this.missionTarget.scale.setScalar(1);
+    if (this.missionTarget.material && 'emissiveIntensity' in this.missionTarget.material) {
+      this.missionTarget.material.emissiveIntensity = 0.5;
+    }
+    this.activeCombatTargets = this.activeCombatTargets.filter((target) => target !== this.missionTarget);
+    this.activeCombatTargets.push(this.missionTarget);
+    this.fireController?.setTargets(this.activeCombatTargets);
+  }
+
+  applyMissionState(snapshot) {
+    if (!snapshot) {
+      return;
+    }
+    this.setHudValue('objective', snapshot.objectiveText);
+    this.setHudValue('missionState', snapshot.statusText || snapshot.state);
+    this.setHudValue('result', snapshot.successText || 'TARGET AVAILABLE');
+    this.setMissionCompletePresentation(snapshot.completed);
+  }
+
+  setMissionCompletePresentation(isComplete) {
+    this.root.classList.toggle('is-mission-complete', Boolean(isComplete));
   }
 
   render(time) {

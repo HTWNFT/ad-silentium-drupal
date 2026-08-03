@@ -60,6 +60,7 @@ final class OohPlayableMissionBlock extends BlockBase {
         <div class="ooh-playable__controls">
           <button class="ooh-playable__enter" type="button" data-ooh-playable-enter disabled aria-disabled="true">ENTER TEST FIELD</button>
           <button class="ooh-playable__pause" type="button" data-ooh-playable-pause disabled aria-disabled="true">PAUSE FIELD</button>
+          <button class="ooh-playable__restart" type="button" data-ooh-playable-restart disabled aria-disabled="true">RESTART MISSION</button>
         </div>
       </section>
 
@@ -73,6 +74,9 @@ final class OohPlayableMissionBlock extends BlockBase {
         <div class="ooh-playable__readout"><span>MOVE</span><strong data-ooh-playable-state="speed">WALK</strong></div>
         <div class="ooh-playable__readout"><span>XYZ</span><strong data-ooh-playable-state="coordinates">0.0, 0.0, 6.8</strong></div>
         <div class="ooh-playable__readout"><span>FIRE</span><strong data-ooh-playable-state="fire">READY</strong></div>
+        <div class="ooh-playable__readout"><span>OBJECTIVE</span><strong data-ooh-playable-state="objective">Awaiting objective</strong></div>
+        <div class="ooh-playable__readout"><span>MISSION STATE</span><strong data-ooh-playable-state="missionState">IDLE</strong></div>
+        <div class="ooh-playable__readout"><span>RESULT</span><strong data-ooh-playable-state="result">Pending</strong></div>
         <div class="ooh-playable__readout"><span>MISSION</span><strong data-ooh-playable-field="missionTitle">Unavailable</strong></div>
         <div class="ooh-playable__readout"><span>ROUTE</span><strong data-ooh-playable-field="campaignRoute">Unknown</strong></div>
         <div class="ooh-playable__readout"><span>RECRUITER</span><strong data-ooh-playable-field="recruiter">Unassigned</strong></div>

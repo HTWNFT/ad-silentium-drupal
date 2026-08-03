@@ -131,6 +131,7 @@ function initializePlayable(root) {
   const viewport = root.querySelector('[data-ooh-playable-viewport]');
   const enterButton = root.querySelector('[data-ooh-playable-enter]');
   const pauseButton = root.querySelector('[data-ooh-playable-pause]');
+  const restartButton = root.querySelector('[data-ooh-playable-restart]');
   let renderer = null;
   let destroyed = false;
 
@@ -139,6 +140,7 @@ function initializePlayable(root) {
       destroyed = true;
       enterButton?.removeEventListener('click', enterHandler);
       pauseButton?.removeEventListener('click', pauseHandler);
+      restartButton?.removeEventListener('click', restartHandler);
       renderer?.destroy();
       renderer = null;
       delete root.oohPlayableRuntime;
@@ -161,6 +163,12 @@ function initializePlayable(root) {
   const pauseHandler = () => {
     if (renderer) {
       renderer.pause();
+    }
+  };
+
+  const restartHandler = () => {
+    if (renderer) {
+      renderer.restartMission();
     }
   };
 
@@ -200,6 +208,10 @@ function initializePlayable(root) {
           pauseButton.disabled = !active;
           pauseButton.setAttribute('aria-disabled', active ? 'false' : 'true');
         }
+        if (restartButton) {
+          restartButton.disabled = false;
+          restartButton.setAttribute('aria-disabled', 'false');
+        }
       }
     });
     renderer.initialize();
@@ -215,6 +227,7 @@ function initializePlayable(root) {
 
   enterButton?.addEventListener('click', enterHandler);
   pauseButton?.addEventListener('click', pauseHandler);
+  restartButton?.addEventListener('click', restartHandler);
 }
 
 if (Drupal && once) {

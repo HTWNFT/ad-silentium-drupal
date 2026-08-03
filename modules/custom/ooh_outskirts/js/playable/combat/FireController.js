@@ -14,13 +14,24 @@ export class FireController {
     this.THREE = THREE;
     this.camera = camera;
     this.scene = scene;
-    this.targets = Array.isArray(targets) ? targets : [];
+    this.targets = [];
     this.onShot = onShot;
     this.raycaster = new THREE.Raycaster();
     this.origin = new THREE.Vector3();
     this.direction = new THREE.Vector3();
     this.cooldown = 0;
     this.effects = [];
+    this.setTargets(targets);
+  }
+
+  setTargets(targets = []) {
+    const uniqueTargets = [];
+    (Array.isArray(targets) ? targets : []).forEach((target) => {
+      if (target && !uniqueTargets.includes(target)) {
+        uniqueTargets.push(target);
+      }
+    });
+    this.targets = uniqueTargets;
   }
 
   fire() {
@@ -35,7 +46,8 @@ export class FireController {
     this.raycaster.set(this.origin, this.direction);
     this.raycaster.far = RAYCAST_DISTANCE;
 
-    const hits = this.raycaster.intersectObjects(this.targets, false);
+    const raycastTargets = this.targets.filter((target) => target?.visible !== false && target?.userData?.destroyed !== true);
+    const hits = this.raycaster.intersectObjects(raycastTargets, false);
     const hit = hits.find((entry) => entry.object?.userData?.combatTarget === true) || null;
     this.addShotMarker(hit);
 
@@ -46,6 +58,8 @@ export class FireController {
     const result = {
       hit: Boolean(hit),
       targetName: hit?.object?.name || '',
+      targetId: hit?.object?.userData?.missionTargetId || '',
+      targetObject: hit?.object || null,
       distance: hit ? hit.distance : RAYCAST_DISTANCE
     };
     this.onShot?.(result);
@@ -128,6 +142,17 @@ export class FireController {
       baseScale: target.scale.x,
       lifetime: HIT_FLASH_LIFETIME,
       remaining: HIT_FLASH_LIFETIME
+    });
+  }
+
+  clearTargetEffects(target) {
+    this.effects = this.effects.filter((effect) => {
+      if (effect.type !== 'targetFlash' || effect.object !== target) {
+        return true;
+      }
+      effect.object.material.emissiveIntensity = effect.baseIntensity;
+      effect.object.scale.setScalar(effect.baseScale);
+      return false;
     });
   }
 

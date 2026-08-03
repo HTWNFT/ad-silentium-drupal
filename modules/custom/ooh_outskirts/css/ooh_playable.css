@@ -37,7 +37,8 @@
 
 .ooh-playable__nav-link,
 .ooh-playable__enter,
-.ooh-playable__pause {
+.ooh-playable__pause,
+.ooh-playable__restart {
   min-height: 42px;
   border: 1px solid rgba(0, 229, 255, 0.42);
   border-radius: 4px;
@@ -58,13 +59,15 @@
 }
 
 .ooh-playable__enter,
-.ooh-playable__pause {
+.ooh-playable__pause,
+.ooh-playable__restart {
   cursor: pointer;
   padding: 0 16px;
 }
 
 .ooh-playable__enter:disabled,
-.ooh-playable__pause:disabled {
+.ooh-playable__pause:disabled,
+.ooh-playable__restart:disabled {
   cursor: not-allowed;
   opacity: 0.48;
 }
@@ -257,6 +260,15 @@
   line-height: 1.5;
 }
 
+.ooh-playable.is-mission-complete .ooh-playable__viewport {
+  box-shadow: inset 0 0 0 2px rgba(255, 243, 106, 0.8), inset 0 0 54px rgba(255, 138, 0, 0.22);
+}
+
+.ooh-playable.is-mission-complete [data-ooh-playable-state="missionState"],
+.ooh-playable.is-mission-complete [data-ooh-playable-state="result"] {
+  color: #fff36a;
+  text-shadow: 0 0 18px rgba(255, 138, 0, 0.62);
+}
 @keyframes ooh-playable-reticle-fire {
   0% {
     transform: translate(-50%, -50%) scale(1);

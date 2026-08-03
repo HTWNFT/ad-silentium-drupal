@@ -82,6 +82,9 @@ export function buildTestScene(THREE, bootstrap) {
   combatTarget.position.set(6, 0.675, -5.8);
   combatTarget.name = 'phase-three-combat-target';
   combatTarget.userData.combatTarget = true;
+  combatTarget.userData.missionTarget = true;
+  combatTarget.userData.missionTargetId = 'phase-4-designated-target';
+  combatTarget.userData.destroyed = false;
   scene.add(combatTarget);
 
   const obstacleSize = TEST_SCENE.obstacle.size;
@@ -102,6 +105,7 @@ export function buildTestScene(THREE, bootstrap) {
     scene,
     animatedObjects: [beacon, payloadMarker, combatTarget],
     combatTargets: [combatTarget],
+    missionTarget: combatTarget,
     collisionWorld: {
       bounds: {
         minX: -boundary,
