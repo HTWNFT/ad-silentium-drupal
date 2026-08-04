@@ -84,6 +84,8 @@ export function buildTestScene(THREE, bootstrap) {
   combatTarget.userData.combatTarget = true;
   combatTarget.userData.missionTarget = true;
   combatTarget.userData.missionTargetId = 'phase-4-designated-target';
+  combatTarget.userData.hostile = true;
+  combatTarget.userData.hostileId = 'phase-5-hostile-target';
   combatTarget.userData.destroyed = false;
   scene.add(combatTarget);
 

@@ -269,6 +269,16 @@
   color: #fff36a;
   text-shadow: 0 0 18px rgba(255, 138, 0, 0.62);
 }
+.ooh-playable.is-mission-failed .ooh-playable__viewport {
+  box-shadow: inset 0 0 0 2px rgba(255, 55, 95, 0.78), inset 0 0 54px rgba(255, 55, 95, 0.2);
+}
+
+.ooh-playable.is-mission-failed [data-ooh-playable-state="missionState"],
+.ooh-playable.is-mission-failed [data-ooh-playable-state="result"],
+.ooh-playable.is-mission-failed [data-ooh-playable-state="health"] {
+  color: #ff7896;
+  text-shadow: 0 0 18px rgba(255, 55, 95, 0.62);
+}
 @keyframes ooh-playable-reticle-fire {
   0% {
     transform: translate(-50%, -50%) scale(1);
@@ -318,7 +328,8 @@
 
   .ooh-playable__nav-link,
   .ooh-playable__enter,
-  .ooh-playable__pause {
+  .ooh-playable__pause,
+  .ooh-playable__restart {
     justify-content: center;
     width: 100%;
   }

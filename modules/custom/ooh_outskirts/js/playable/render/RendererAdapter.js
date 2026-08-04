@@ -2,6 +2,7 @@ import * as THREE from '../../../assets/playable/vendor/three.module.min.js';
 import { BOOT_STATES, TEST_SCENE, logPlayable } from '../core/AssetManifest.js';
 import { GameLoop } from '../core/GameLoop.js';
 import { FireController } from '../combat/FireController.js';
+import { HostileController } from '../hostile/HostileController.js';
 import { InputController } from '../input/InputController.js';
 import { MissionController } from '../mission/MissionController.js';
 import { PointerLockController } from '../input/PointerLockController.js';
@@ -24,6 +25,7 @@ export class RendererAdapter {
     this.player = null;
     this.fireController = null;
     this.missionController = null;
+    this.hostileController = null;
     this.missionTarget = null;
     this.activeCombatTargets = [];
     this.active = false;
@@ -82,7 +84,11 @@ export class RendererAdapter {
     });
     this.missionController = new MissionController({
       targetId: this.missionTarget?.userData?.missionTargetId || 'phase-4-designated-target',
-      objectiveText: 'Locate and destroy the designated target.'
+      objectiveText: 'Destroy the hostile before it drops your health to zero.'
+    });
+    this.hostileController = new HostileController({
+      target: this.missionTarget,
+      hostileId: this.missionTarget?.userData?.missionTargetId || 'phase-4-designated-target'
     });
     this.gameLoop = new GameLoop({
       update: (delta) => this.update(delta),
@@ -94,7 +100,9 @@ export class RendererAdapter {
     this.resize();
     this.render(0);
     this.updateHud(true);
-    this.applyMissionState(this.missionController.start());
+    const missionSnapshot = this.missionController.start();
+    const hostileSnapshot = this.hostileController.start();
+    this.applyMissionState(missionSnapshot, hostileSnapshot);
     this.statusCallbacks.onRendererState?.(BOOT_STATES.RENDERER_READY);
     logPlayable('info', 'Renderer initialized.', {
       missionUuid: this.bootstrap.missionUuid || '',
@@ -146,6 +154,7 @@ export class RendererAdapter {
     this.player = null;
     this.fireController = null;
     this.missionController = null;
+    this.hostileController = null;
     this.missionTarget = null;
     this.activeCombatTargets = [];
     this.renderer = null;
@@ -170,6 +179,7 @@ export class RendererAdapter {
     }
     this.player.update(delta, this.input);
     this.fireController?.update(delta);
+    this.updateHostile(delta);
     this.updateHud();
   }
 
@@ -191,23 +201,46 @@ export class RendererAdapter {
       reticle.classList.add(result.hit ? 'is-hit' : 'is-miss');
     }
 
-    const missionSnapshot = this.missionController?.handleShot(result);
-    if (!missionSnapshot) {
+    let missionSnapshot = this.missionController?.handleShot(result);
+    let hostileSnapshot = this.hostileController?.getState();
+    if (this.isMissionActive()) {
+      hostileSnapshot = this.hostileController?.handleShot(result);
+      if (hostileSnapshot?.defeatTriggered) {
+        missionSnapshot = this.missionController?.handleHostileDefeated();
+        this.completeMissionTarget();
+      }
+    }
+    this.applyMissionState(missionSnapshot, hostileSnapshot);
+  }
+
+  updateHostile(delta) {
+    if (!this.hostileController || !this.missionController || !this.player) {
       return;
     }
-    if (missionSnapshot.completionTriggered) {
-      this.completeMissionTarget();
+
+    const hostileSnapshot = this.hostileController.update(delta, {
+      playerPosition: this.player.position,
+      canAttack: this.isMissionActive()
+    });
+    let missionSnapshot = this.missionController.getState();
+    if (hostileSnapshot.damageTriggered) {
+      missionSnapshot = this.missionController.handlePlayerDamage(hostileSnapshot.damageAmount);
     }
-    this.applyMissionState(missionSnapshot);
+    this.applyMissionState(missionSnapshot, hostileSnapshot);
+  }
+
+  isMissionActive() {
+    return this.missionController?.getState().state === 'ACTIVE';
   }
 
   restartMission() {
-    if (!this.missionController) {
+    if (!this.missionController || !this.hostileController) {
       return;
     }
-    const snapshot = this.missionController.restart();
+    const missionSnapshot = this.missionController.restart();
+    const hostileSnapshot = this.hostileController.restart();
     this.restoreMissionTarget();
-    this.applyMissionState(snapshot);
+    this.applyMissionState(missionSnapshot, hostileSnapshot);
   }
 
   completeMissionTarget() {
@@ -237,18 +270,21 @@ export class RendererAdapter {
     this.fireController?.setTargets(this.activeCombatTargets);
   }
 
-  applyMissionState(snapshot) {
+  applyMissionState(snapshot, hostileSnapshot = null) {
     if (!snapshot) {
       return;
     }
     this.setHudValue('objective', snapshot.objectiveText);
     this.setHudValue('missionState', snapshot.statusText || snapshot.state);
-    this.setHudValue('result', snapshot.successText || 'TARGET AVAILABLE');
-    this.setMissionCompletePresentation(snapshot.completed);
+    this.setHudValue('health', snapshot.healthText || String(snapshot.playerHealth));
+    this.setHudValue('threat', hostileSnapshot?.threatText || 'INACTIVE');
+    this.setHudValue('result', snapshot.failureText || snapshot.successText || 'HOSTILE ACTIVE');
+    this.setMissionOutcomePresentation(snapshot);
   }
 
-  setMissionCompletePresentation(isComplete) {
-    this.root.classList.toggle('is-mission-complete', Boolean(isComplete));
+  setMissionOutcomePresentation(snapshot) {
+    this.root.classList.toggle('is-mission-complete', Boolean(snapshot.completed));
+    this.root.classList.toggle('is-mission-failed', Boolean(snapshot.failed));
   }
 
   render(time) {

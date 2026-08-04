@@ -57,7 +57,7 @@ play:
     - core/drupalSettings
 
 playable_mission:
-  version: 4.0.0
+  version: 5.0.0
   css:
     theme:
       css/ooh_playable.css: {}

@@ -74,6 +74,8 @@ final class OohPlayableMissionBlock extends BlockBase {
         <div class="ooh-playable__readout"><span>MOVE</span><strong data-ooh-playable-state="speed">WALK</strong></div>
         <div class="ooh-playable__readout"><span>XYZ</span><strong data-ooh-playable-state="coordinates">0.0, 0.0, 6.8</strong></div>
         <div class="ooh-playable__readout"><span>FIRE</span><strong data-ooh-playable-state="fire">READY</strong></div>
+        <div class="ooh-playable__readout"><span>HEALTH</span><strong data-ooh-playable-state="health">100</strong></div>
+        <div class="ooh-playable__readout"><span>THREAT</span><strong data-ooh-playable-state="threat">INACTIVE</strong></div>
         <div class="ooh-playable__readout"><span>OBJECTIVE</span><strong data-ooh-playable-state="objective">Awaiting objective</strong></div>
         <div class="ooh-playable__readout"><span>MISSION STATE</span><strong data-ooh-playable-state="missionState">IDLE</strong></div>
         <div class="ooh-playable__readout"><span>RESULT</span><strong data-ooh-playable-state="result">Pending</strong></div>
