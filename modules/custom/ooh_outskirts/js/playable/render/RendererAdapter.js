@@ -1,13 +1,16 @@
 import * as THREE from '../../../assets/playable/vendor/three.module.min.js';
-import { BOOT_STATES, TEST_SCENE, logPlayable } from '../core/AssetManifest.js';
+import { BOOT_STATES, logPlayable } from '../core/AssetManifest.js';
 import { GameLoop } from '../core/GameLoop.js';
 import { FireController } from '../combat/FireController.js';
 import { HostileController } from '../hostile/HostileController.js';
 import { InputController } from '../input/InputController.js';
+import { LevelDefinitionRegistry } from '../levels/LevelDefinitionRegistry.js';
 import { MissionController } from '../mission/MissionController.js';
 import { PointerLockController } from '../input/PointerLockController.js';
 import { PlayerController } from '../player/PlayerController.js';
 import { buildTestScene } from './SceneBuilder.js';
+
+const CAMERA_HEIGHT = 1.75;
 
 export class RendererAdapter {
   constructor(root, viewport, bootstrap, statusCallbacks = {}) {
@@ -15,6 +18,13 @@ export class RendererAdapter {
     this.viewport = viewport;
     this.bootstrap = bootstrap;
     this.statusCallbacks = statusCallbacks;
+    this.requestedLevelId = bootstrap.requestedLevelId ||
+      (bootstrap.level || {}).requestedLevelId ||
+      bootstrap.rawRequestedLevelId ||
+      (bootstrap.level || {}).rawRequestedLevelId ||
+      '';
+    this.levelResolution = LevelDefinitionRegistry.resolve(this.requestedLevelId);
+    this.levelDefinition = this.levelResolution.definition;
     this.renderer = null;
     this.camera = null;
     this.scene = null;
@@ -28,6 +38,7 @@ export class RendererAdapter {
     this.hostileController = null;
     this.missionTargets = [];
     this.activeCombatTargets = [];
+    this.objectiveMarker = null;
     this.active = false;
     this.destroyed = false;
     this.lastHudState = '';
@@ -54,17 +65,17 @@ export class RendererAdapter {
     this.renderer.domElement.setAttribute('aria-label', 'Ad Silentium playable mission WebGL test scene');
     this.viewport.appendChild(this.renderer.domElement);
 
-    const builtScene = buildTestScene(THREE, this.bootstrap);
+    const builtScene = buildTestScene(THREE, this.levelDefinition, this.bootstrap);
     this.scene = builtScene.scene;
     this.animatedObjects = builtScene.animatedObjects;
+    this.objectiveMarker = builtScene.objectiveMarker || null;
     this.missionTargets = Array.isArray(builtScene.combatTargets) ? builtScene.combatTargets.slice() : [];
     this.activeCombatTargets = this.missionTargets.slice();
     this.camera = new THREE.PerspectiveCamera(68, 1, 0.1, 80);
-    this.camera.position.set(0, TEST_SCENE.cameraHeight, 6.8);
-    this.camera.lookAt(0, 1, -4.5);
 
     this.player = new PlayerController(THREE, this.camera, builtScene.collisionWorld, {
-      height: TEST_SCENE.cameraHeight
+      height: CAMERA_HEIGHT,
+      spawn: this.levelDefinition.player.spawn
     });
     this.input = new InputController({
       target: document,
@@ -76,26 +87,30 @@ export class RendererAdapter {
       onLockChange: (locked) => this.handlePointerLockChange(locked),
       onMove: (look) => this.player.setLook(look)
     });
+    this.applyPlayerFacing();
     this.fireController = new FireController(THREE, {
       camera: this.camera,
       scene: this.scene,
       targets: this.activeCombatTargets,
       onShot: (result) => this.handleShotResult(result)
     });
-    const targetIds = this.missionTargets.map((target) => target.userData?.missionTargetId || target.userData?.hostileId || target.name);
+    const requiredTargetIds = this.levelDefinition.hostiles
+      .filter((hostile) => hostile.required)
+      .map((hostile) => hostile.id);
     this.missionController = new MissionController({
-      targetIds,
-      objectiveText: 'Destroy all hostiles before they drop your health to zero.'
+      targetIds: requiredTargetIds,
+      objectiveText: this.levelDefinition.mission.objectiveText
     });
     this.hostileController = new HostileController({
-      hostiles: this.missionTargets.map((target, index) => ({
-        target,
-        hostileId: target.userData?.missionTargetId || target.userData?.hostileId || target.name,
-        attackInterval: 1.25 + index * 0.18,
-        attackDamage: 10,
-        attackRadius: 4.5,
-        detectionRadius: 8.5,
-        alertDelay: 0.45 + index * 0.08
+      hostiles: this.levelDefinition.hostiles.map((hostile) => ({
+        target: this.findMissionTarget(hostile.id),
+        hostileId: hostile.id,
+        maxHealth: hostile.maxHealth,
+        attackInterval: hostile.attackInterval,
+        attackDamage: hostile.attackDamage,
+        attackRadius: hostile.attackRadius,
+        detectionRadius: hostile.detectionRadius,
+        alertDelay: hostile.alertDelay
       })),
       obstacles: builtScene.collisionWorld?.obstacles || []
     });
@@ -112,10 +127,14 @@ export class RendererAdapter {
     const missionSnapshot = this.missionController.start();
     const hostileSnapshot = this.hostileController.start();
     this.applyMissionState(missionSnapshot, hostileSnapshot);
+    this.updateLevelDiagnostics();
     this.statusCallbacks.onRendererState?.(BOOT_STATES.RENDERER_READY);
     logPlayable('info', 'Renderer initialized.', {
       missionUuid: this.bootstrap.missionUuid || '',
       campaignRoute: this.bootstrap.campaignRoute || '',
+      requestedLevelId: this.levelResolution.requestedId || '',
+      activeLevelId: this.levelResolution.activeId,
+      fallbackReason: this.levelResolution.fallbackReason || '',
       hostileCount: this.missionTargets.length
     });
   }
@@ -167,6 +186,7 @@ export class RendererAdapter {
     this.hostileController = null;
     this.missionTargets = [];
     this.activeCombatTargets = [];
+    this.objectiveMarker = null;
     this.renderer = null;
     this.camera = null;
     this.scene = null;
@@ -247,11 +267,22 @@ export class RendererAdapter {
     if (!this.missionController || !this.hostileController) {
       return;
     }
+    this.player?.respawn();
+    this.applyPlayerFacing();
     const missionSnapshot = this.missionController.restart();
     const hostileSnapshot = this.hostileController.restart();
     this.restoreMissionTargets();
+    this.restoreObjective();
     this.applyMissionState(missionSnapshot, hostileSnapshot);
+    this.updateHud(true);
+    this.updateLevelDiagnostics('Restarted active level: ' + this.levelResolution.activeId + '.');
     this.setHudValue('fire', 'READY');
+  }
+
+  applyPlayerFacing() {
+    const facing = this.levelDefinition.player?.facing || {};
+    this.player?.setLook({ yaw: facing.yaw || 0, pitch: facing.pitch || 0 });
+    this.pointerLock?.setOrientation({ yaw: facing.yaw || 0, pitch: facing.pitch || 0 });
   }
 
   completeMissionTarget(hostileId) {
@@ -278,6 +309,12 @@ export class RendererAdapter {
     });
     this.activeCombatTargets = this.missionTargets.slice();
     this.fireController?.setTargets(this.activeCombatTargets);
+  }
+
+  restoreObjective() {
+    if (this.objectiveMarker) {
+      this.objectiveMarker.visible = true;
+    }
   }
 
   findMissionTarget(hostileId) {
@@ -317,12 +354,26 @@ export class RendererAdapter {
     if (hostileSnapshot?.damageTriggered) {
       return 'DAMAGE ' + hostileSnapshot.damageAmount + ' // ' + (hostileSnapshot.damageEvents || []).map((event) => event.hostileId).join(', ');
     }
+    if (hostileSnapshot?.restartTriggered) {
+      return 'RESTARTED // ' + this.levelResolution.activeId;
+    }
     return 'HOSTILES ACTIVE';
   }
 
   setMissionOutcomePresentation(snapshot) {
     this.root.classList.toggle('is-mission-complete', Boolean(snapshot.completed));
     this.root.classList.toggle('is-mission-failed', Boolean(snapshot.failed));
+  }
+
+  updateLevelDiagnostics(prefix = '') {
+    const requested = this.levelResolution.requestedId || '(default)';
+    const fallback = this.levelResolution.didFallback ? ' // FALLBACK ' + this.levelResolution.fallbackReason + ' -> ' + this.levelResolution.activeId : ' // NO FALLBACK';
+    const details = 'LEVEL REQUESTED: ' + requested + ' // ACTIVE: ' + this.levelResolution.activeId + fallback;
+    const payloadDiagnostic = this.root.querySelector('[data-ooh-playable-diagnostic]');
+    if (payloadDiagnostic) {
+      const base = prefix ? prefix + ' ' : '';
+      payloadDiagnostic.textContent = base + details + ' // MISSION: ' + (this.bootstrap.missionId || this.levelDefinition.mission.id || 'unavailable');
+    }
   }
 
   render(time) {

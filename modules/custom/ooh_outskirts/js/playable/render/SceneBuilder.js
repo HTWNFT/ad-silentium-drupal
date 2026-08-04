@@ -1,5 +1,3 @@
-import { TEST_SCENE } from '../core/AssetManifest.js';
-
 function boxCollider(center, size, category = 'obstacle') {
   const collider = {
     category,
@@ -16,7 +14,7 @@ function boxCollider(center, size, category = 'obstacle') {
 
 function createHostileTarget(THREE, material, definition) {
   const target = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 1.35, 24), material.clone());
-  target.position.set(definition.position.x, 0.675, definition.position.z);
+  target.position.set(definition.position.x, definition.position.y, definition.position.z);
   target.name = definition.name;
   target.userData.combatTarget = true;
   target.userData.missionTarget = true;
@@ -27,27 +25,55 @@ function createHostileTarget(THREE, material, definition) {
   return target;
 }
 
-export function buildTestScene(THREE, bootstrap) {
+function createOrientationBeacon(THREE, material, definition) {
+  const beacon = new THREE.Mesh(new THREE.ConeGeometry(0.75, 1.8, 5), material.clone());
+  beacon.position.set(definition.position.x, definition.position.y, definition.position.z);
+  beacon.name = definition.id;
+  beacon.userData.scenePrimitiveId = definition.id;
+  return beacon;
+}
+
+function createObjectiveMarker(THREE, material, definition) {
+  const marker = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.1, 1.1), material.clone());
+  marker.position.set(definition.position.x, definition.position.y, definition.position.z);
+  marker.name = definition.id;
+  marker.userData.objective = true;
+  marker.userData.objectiveId = definition.id;
+  return marker;
+}
+
+function createObstacle(THREE, material, definition) {
+  const obstacle = new THREE.Mesh(new THREE.BoxGeometry(definition.size.x, definition.size.y, definition.size.z), material.clone());
+  obstacle.position.set(definition.position.x, definition.position.y, definition.position.z);
+  obstacle.name = definition.id;
+  obstacle.visible = definition.visible !== false;
+  obstacle.userData.obstacle = true;
+  obstacle.userData.obstacleId = definition.id;
+  return obstacle;
+}
+
+export function buildTestScene(THREE, levelDefinition, bootstrap = {}) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x06080c);
   scene.fog = new THREE.Fog(0x06080c, 12, 34);
 
-  const floorGeometry = new THREE.PlaneGeometry(TEST_SCENE.floorSize, TEST_SCENE.floorSize, 10, 10);
+  const sceneConfig = levelDefinition.scene;
+  const floorGeometry = new THREE.PlaneGeometry(sceneConfig.floorSize, sceneConfig.floorSize, 10, 10);
   const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x111820, roughness: 0.82, metalness: 0.08 });
   const floor = new THREE.Mesh(floorGeometry, floorMaterial);
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   scene.add(floor);
 
-  const grid = new THREE.GridHelper(TEST_SCENE.floorSize, 22, 0x00e5ff, 0x1c3b44);
+  const grid = new THREE.GridHelper(sceneConfig.floorSize, 22, 0x00e5ff, 0x1c3b44);
   grid.position.y = 0.012;
   scene.add(grid);
 
   const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x151d26, roughness: 0.74, metalness: 0.15 });
-  const wallLength = TEST_SCENE.floorSize;
+  const wallLength = sceneConfig.floorSize;
   const wallDepth = 0.28;
-  const wallHeight = TEST_SCENE.wallHeight;
-  const boundary = TEST_SCENE.boundaryHalfSize;
+  const wallHeight = sceneConfig.wallHeight;
+  const boundary = sceneConfig.boundaryHalfSize;
   const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, wallDepth);
   const sideWallGeometry = new THREE.BoxGeometry(wallDepth, wallHeight, wallLength);
 
@@ -63,27 +89,17 @@ export function buildTestScene(THREE, bootstrap) {
   });
 
   const beaconMaterial = new THREE.MeshStandardMaterial({
-    color: TEST_SCENE.orientationObjectColor,
-    emissive: TEST_SCENE.orientationObjectColor,
+    color: 0x00e5ff,
+    emissive: 0x00e5ff,
     emissiveIntensity: 0.65,
     roughness: 0.35
   });
-  const beacon = new THREE.Mesh(new THREE.ConeGeometry(0.75, 1.8, 5), beaconMaterial);
-  beacon.position.set(0, 0.9, -4.5);
-  beacon.name = 'orientation-beacon';
-  scene.add(beacon);
-
   const accentMaterial = new THREE.MeshStandardMaterial({
-    color: TEST_SCENE.accentObjectColor,
-    emissive: TEST_SCENE.accentObjectColor,
+    color: 0xff375f,
+    emissive: 0xff375f,
     emissiveIntensity: 0.28,
     roughness: 0.45
   });
-  const payloadMarker = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.1, 1.1), accentMaterial);
-  payloadMarker.position.set(3.25, 0.55, -2.4);
-  payloadMarker.name = 'payload-marker';
-  scene.add(payloadMarker);
-
   const targetMaterial = new THREE.MeshStandardMaterial({
     color: 0xfff36a,
     emissive: 0xff8a00,
@@ -91,36 +107,54 @@ export function buildTestScene(THREE, bootstrap) {
     roughness: 0.3,
     metalness: 0.08
   });
-  const hostileDefinitions = [
-    { id: 'phase-6-hostile-01', name: 'phase-six-hostile-01', position: { x: 6, z: -5.8 } },
-    { id: 'phase-6-hostile-02', name: 'phase-six-hostile-02', position: { x: 1.4, z: -6.6 } },
-    { id: 'phase-6-hostile-03', name: 'phase-six-hostile-03', position: { x: -5.2, z: -4.7 } }
-  ];
-  const combatTargets = hostileDefinitions.map((definition) => {
+
+  const animatedObjects = [];
+  const collisionObstacles = [];
+
+  (sceneConfig.primitives || []).forEach((definition) => {
+    if (definition.type !== 'orientation_beacon' || definition.visible === false) {
+      return;
+    }
+    const beacon = createOrientationBeacon(THREE, beaconMaterial, definition);
+    scene.add(beacon);
+    animatedObjects.push(beacon);
+    if (definition.collision) {
+      collisionObstacles.push(boxCollider(definition.position, { x: 1.5, z: 1.5 }, definition.id));
+    }
+  });
+
+  const objectiveMarker = createObjectiveMarker(THREE, accentMaterial, levelDefinition.objective);
+  scene.add(objectiveMarker);
+  animatedObjects.push(objectiveMarker);
+  collisionObstacles.push(boxCollider(levelDefinition.objective.position, { x: 1.1, z: 1.1 }, levelDefinition.objective.id));
+
+  (levelDefinition.obstacles || []).forEach((definition) => {
+    const obstacle = createObstacle(THREE, wallMaterial, definition);
+    scene.add(obstacle);
+    if (definition.collision) {
+      collisionObstacles.push(boxCollider(definition.position, definition.size, definition.id));
+    }
+  });
+
+  const combatTargets = (levelDefinition.hostiles || []).map((definition) => {
     const target = createHostileTarget(THREE, targetMaterial, definition);
     scene.add(target);
     return target;
   });
-
-  const obstacleSize = TEST_SCENE.obstacle.size;
-  const obstacleHeight = TEST_SCENE.obstacle.height;
-  const obstaclePosition = TEST_SCENE.obstacle.position;
-  const obstacle = new THREE.Mesh(new THREE.BoxGeometry(obstacleSize, obstacleHeight, obstacleSize), wallMaterial);
-  obstacle.position.set(obstaclePosition.x, obstacleHeight / 2, obstaclePosition.z);
-  obstacle.name = 'field-obstacle';
-  scene.add(obstacle);
+  animatedObjects.push(...combatTargets);
 
   scene.add(new THREE.HemisphereLight(0x8ab7ff, 0x131015, 1.15));
   const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
   keyLight.position.set(3.5, 6, 4);
   scene.add(keyLight);
-  scene.userData.phaseLabel = String(bootstrap.missionTitle || 'Mission Payload').trim() || 'Mission Payload';
+  scene.userData.phaseLabel = String(bootstrap.missionTitle || levelDefinition.debugName || 'Mission Payload').trim() || 'Mission Payload';
+  scene.userData.levelId = levelDefinition.id;
 
   return {
     scene,
-    animatedObjects: [beacon, payloadMarker, ...combatTargets],
+    animatedObjects,
     combatTargets,
-    missionTarget: combatTargets[0],
+    objectiveMarker,
     collisionWorld: {
       bounds: {
         minX: -boundary,
@@ -128,11 +162,7 @@ export function buildTestScene(THREE, bootstrap) {
         minZ: -boundary,
         maxZ: boundary
       },
-      obstacles: [
-        boxCollider({ x: beacon.position.x, z: beacon.position.z }, { x: 1.5, z: 1.5 }, 'beacon'),
-        boxCollider({ x: payloadMarker.position.x, z: payloadMarker.position.z }, { x: 1.1, z: 1.1 }, 'payload-marker'),
-        boxCollider(obstaclePosition, { x: obstacleSize, y: obstacleHeight, z: obstacleSize }, 'field-obstacle')
-      ]
+      obstacles: collisionObstacles
     }
   };
 }

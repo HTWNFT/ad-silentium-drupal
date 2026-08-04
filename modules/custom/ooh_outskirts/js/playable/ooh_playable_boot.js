@@ -59,6 +59,11 @@ function validMissionUuid(value) {
   return /^[a-f0-9-]{36}$/i.test(String(value || '').trim());
 }
 
+function safeLevelId(value) {
+  const levelId = String(value || '').trim().toLowerCase();
+  return /^[a-z0-9_]+$/.test(levelId) ? levelId : '';
+}
+
 function hydrateBootstrap(settings) {
   const stateKey = settings.stateKey || 'ooh_game_generator_state_v1';
   const storedState = readStoredState(stateKey);
@@ -66,30 +71,50 @@ function hydrateBootstrap(settings) {
   const queryMissionUuid = validMissionUuid(settings.queryMissionUuid) ? settings.queryMissionUuid : '';
   const missionUuid = queryMissionUuid || storedMissionUuid;
   const lookupPath = (((settings.urls || {}).missionLookup) || 'ooh/mission-lookup').trim();
+  const levelRequest = safeLevelId(settings.queryLevelId);
+  const levelMeta = {
+    requestedLevelId: levelRequest,
+    rawRequestedLevelId: String(settings.queryLevelId || '').trim()
+  };
 
   if (missionUuid) {
-    return lookupMissionPayload(missionUuid, lookupPath).then((missionData) => normalizeMissionPayload(missionData.payload, {
-      route: settings.route || '/play/mission',
-      missionUuid: missionData.missionUuid || missionUuid,
-      schemaVersion: settings.schemaVersion || '',
-      source: queryMissionUuid ? 'query_mission_lookup' : 'local_storage_mission_lookup',
-      lifecycleState: missionData.lifecycleState || ''
+    return lookupMissionPayload(missionUuid, lookupPath).then((missionData) => ({
+      ...normalizeMissionPayload(missionData.payload, {
+        route: settings.route || '/play/mission',
+        missionUuid: missionData.missionUuid || missionUuid,
+        schemaVersion: settings.schemaVersion || '',
+        source: queryMissionUuid ? 'query_mission_lookup' : 'local_storage_mission_lookup',
+        lifecycleState: missionData.lifecycleState || ''
+      }),
+      requestedLevelId: levelMeta.requestedLevelId,
+      rawRequestedLevelId: levelMeta.rawRequestedLevelId,
+      level: levelMeta
     }));
   }
 
   if (storedState.payload) {
-    return Promise.resolve(normalizeMissionPayload(storedState.payload, {
-      route: settings.route || '/play/mission',
-      schemaVersion: settings.schemaVersion || '',
-      source: 'local_storage_payload'
-    }));
+    return Promise.resolve({
+      ...normalizeMissionPayload(storedState.payload, {
+        route: settings.route || '/play/mission',
+        schemaVersion: settings.schemaVersion || '',
+        source: 'local_storage_payload'
+      }),
+      requestedLevelId: levelMeta.requestedLevelId,
+      rawRequestedLevelId: levelMeta.rawRequestedLevelId,
+      level: levelMeta
+    });
   }
 
-  return Promise.resolve(normalizeMissionPayload(null, {
-    route: settings.route || '/play/mission',
-    schemaVersion: settings.schemaVersion || '',
-    source: 'no_payload'
-  }));
+  return Promise.resolve({
+    ...normalizeMissionPayload(null, {
+      route: settings.route || '/play/mission',
+      schemaVersion: settings.schemaVersion || '',
+      source: 'no_payload'
+    }),
+    requestedLevelId: levelMeta.requestedLevelId,
+    rawRequestedLevelId: levelMeta.rawRequestedLevelId,
+    level: levelMeta
+  });
 }
 
 function setText(root, selector, value) {
@@ -118,7 +143,7 @@ function renderBootstrap(root, bootstrap) {
   const missing = ((bootstrap.debug || {}).missingFields || []).join(', ');
   const diagnostic = bootstrap.payloadAvailable ?
     'Payload source: ' + source + ' // version: ' + version :
-    'Payload unavailable. Missing: ' + (missing || 'mission payload') + '. Return to Dossier or /play staging.';
+    'Payload unavailable. Missing: ' + (missing || 'mission payload') + '. Loading development-safe level metadata only.';
   setText(root, '[data-ooh-playable-diagnostic]', diagnostic);
 }
 
@@ -182,15 +207,13 @@ function initializePlayable(root) {
       return;
     }
     renderBootstrap(root, bootstrap);
+
+    setState(root, 'payload', bootstrap.payloadAvailable ? BOOT_STATES.PAYLOAD_READY : BOOT_STATES.PAYLOAD_UNAVAILABLE);
+    setPrimary(root, bootstrap.payloadAvailable ? BOOT_STATES.PAYLOAD_READY : BOOT_STATES.PAYLOAD_UNAVAILABLE, bootstrap.payloadAvailable ? 'Mission payload recovered. Initializing WebGL renderer.' : 'No valid mission payload is available. Initializing selected test level.');
     if (!bootstrap.payloadAvailable) {
-      setState(root, 'payload', BOOT_STATES.PAYLOAD_UNAVAILABLE);
-      setPrimary(root, BOOT_STATES.PAYLOAD_UNAVAILABLE, 'No valid mission payload is available for the test field.');
-      logPlayable('warn', 'Payload unavailable for playable route.', bootstrap.debug || {});
-      return;
+      logPlayable('warn', 'Payload unavailable for playable route; loading selected test level.', bootstrap.debug || {});
     }
 
-    setState(root, 'payload', BOOT_STATES.PAYLOAD_READY);
-    setPrimary(root, BOOT_STATES.PAYLOAD_READY, 'Mission payload recovered. Initializing WebGL renderer.');
     renderer = new RendererAdapter(root, viewport, bootstrap, {
       onRendererState: (state) => {
         setState(root, 'renderer', state);
