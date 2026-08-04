@@ -5,35 +5,32 @@ export const MISSION_STATES = Object.freeze({
   FAILED: 'FAILED'
 });
 
-export const TARGET_STATES = Object.freeze({
-  AVAILABLE: 'AVAILABLE',
-  HIT: 'HIT',
-  DESTROYED: 'DESTROYED',
-  RESTORED: 'RESTORED'
-});
-
-const DEFAULT_TARGET_ID = 'phase-4-designated-target';
-const DEFAULT_OBJECTIVE = 'Destroy the hostile before it drops your health to zero.';
+const DEFAULT_OBJECTIVE = 'Destroy all hostiles before they drop your health to zero.';
 const DEFAULT_MAX_PLAYER_HEALTH = 100;
 
 export class MissionController {
   constructor({
-    targetId = DEFAULT_TARGET_ID,
+    targetIds = [],
     objectiveText = DEFAULT_OBJECTIVE,
     maxPlayerHealth = DEFAULT_MAX_PLAYER_HEALTH
   } = {}) {
-    this.targetId = String(targetId || DEFAULT_TARGET_ID);
+    this.targetIds = this.normalizeTargetIds(targetIds);
     this.objectiveText = String(objectiveText || DEFAULT_OBJECTIVE);
     this.maxPlayerHealth = Math.max(1, Number(maxPlayerHealth) || DEFAULT_MAX_PLAYER_HEALTH);
     this.playerHealth = this.maxPlayerHealth;
     this.state = MISSION_STATES.IDLE;
-    this.targetState = TARGET_STATES.AVAILABLE;
+    this.defeatedTargetIds = new Set();
+  }
+
+  normalizeTargetIds(targetIds) {
+    const ids = Array.isArray(targetIds) ? targetIds : [];
+    return Object.freeze(ids.map((id) => String(id || '').trim()).filter(Boolean));
   }
 
   start() {
     this.state = MISSION_STATES.ACTIVE;
-    this.targetState = TARGET_STATES.AVAILABLE;
     this.playerHealth = this.maxPlayerHealth;
+    this.defeatedTargetIds = new Set();
     return this.snapshot();
   }
 
@@ -41,15 +38,23 @@ export class MissionController {
     return this.snapshot();
   }
 
-  handleHostileDefeated() {
+  handleHostileDefeated(hostileId = '') {
     if (this.state !== MISSION_STATES.ACTIVE) {
       return this.snapshot();
     }
 
-    this.targetState = TARGET_STATES.HIT;
-    this.targetState = TARGET_STATES.DESTROYED;
-    this.state = MISSION_STATES.COMPLETE;
-    return this.snapshot({ completionTriggered: true });
+    const id = String(hostileId || '').trim();
+    if (!id || this.defeatedTargetIds.has(id)) {
+      return this.snapshot();
+    }
+
+    this.defeatedTargetIds.add(id);
+    if (this.defeatedTargetIds.size >= this.targetIds.length) {
+      this.state = MISSION_STATES.COMPLETE;
+      return this.snapshot({ completionTriggered: true, defeatedHostileId: id });
+    }
+
+    return this.snapshot({ defeatTriggered: true, defeatedHostileId: id });
   }
 
   handlePlayerDamage(amount = 0) {
@@ -73,8 +78,8 @@ export class MissionController {
 
   restart() {
     this.state = MISSION_STATES.ACTIVE;
-    this.targetState = TARGET_STATES.RESTORED;
     this.playerHealth = this.maxPlayerHealth;
+    this.defeatedTargetIds = new Set();
     return this.snapshot({ restartTriggered: true });
   }
 
@@ -87,33 +92,39 @@ export class MissionController {
     failureTriggered = false,
     restartTriggered = false,
     damageTriggered = false,
-    damageAmount = 0
+    damageAmount = 0,
+    defeatTriggered = false,
+    defeatedHostileId = ''
   } = {}) {
     const completed = this.state === MISSION_STATES.COMPLETE;
     const failed = this.state === MISSION_STATES.FAILED;
-    const targetState = this.targetState;
-
-    if (this.targetState === TARGET_STATES.RESTORED) {
-      this.targetState = TARGET_STATES.AVAILABLE;
-    }
+    const requiredHostileCount = this.targetIds.length;
+    const defeatedHostileCount = this.defeatedTargetIds.size;
+    const remainingHostileCount = Math.max(0, requiredHostileCount - defeatedHostileCount);
 
     return Object.freeze({
       state: this.state,
-      targetState,
       objectiveText: this.objectiveText,
       statusText: completed ? 'MISSION COMPLETE' : failed ? 'MISSION FAILED' : this.state,
-      successText: completed ? 'HOSTILE DEFEATED // EXTRACTION READY' : '',
+      successText: completed ? 'ALL HOSTILES DEFEATED // EXTRACTION READY' : '',
       failureText: failed ? 'PLAYER DOWN // RESTART REQUIRED' : '',
       completed,
       failed,
       playerHealth: this.playerHealth,
       maxPlayerHealth: this.maxPlayerHealth,
-      healthText: String(this.playerHealth),
+      healthText: String(this.playerHealth) + ' / ' + String(this.maxPlayerHealth),
+      requiredHostileCount,
+      defeatedHostileCount,
+      remainingHostileCount,
+      remainingText: String(remainingHostileCount) + ' / ' + String(requiredHostileCount),
+      defeatedTargetIds: Object.freeze(Array.from(this.defeatedTargetIds)),
       completionTriggered,
       failureTriggered,
       restartTriggered,
       damageTriggered,
-      damageAmount
+      damageAmount,
+      defeatTriggered,
+      defeatedHostileId
     });
   }
 }

@@ -26,7 +26,7 @@ export class RendererAdapter {
     this.fireController = null;
     this.missionController = null;
     this.hostileController = null;
-    this.missionTarget = null;
+    this.missionTargets = [];
     this.activeCombatTargets = [];
     this.active = false;
     this.destroyed = false;
@@ -57,8 +57,8 @@ export class RendererAdapter {
     const builtScene = buildTestScene(THREE, this.bootstrap);
     this.scene = builtScene.scene;
     this.animatedObjects = builtScene.animatedObjects;
-    this.missionTarget = builtScene.missionTarget || builtScene.combatTargets?.[0] || null;
-    this.activeCombatTargets = Array.isArray(builtScene.combatTargets) ? builtScene.combatTargets.slice() : [];
+    this.missionTargets = Array.isArray(builtScene.combatTargets) ? builtScene.combatTargets.slice() : [];
+    this.activeCombatTargets = this.missionTargets.slice();
     this.camera = new THREE.PerspectiveCamera(68, 1, 0.1, 80);
     this.camera.position.set(0, TEST_SCENE.cameraHeight, 6.8);
     this.camera.lookAt(0, 1, -4.5);
@@ -82,13 +82,22 @@ export class RendererAdapter {
       targets: this.activeCombatTargets,
       onShot: (result) => this.handleShotResult(result)
     });
+    const targetIds = this.missionTargets.map((target) => target.userData?.missionTargetId || target.userData?.hostileId || target.name);
     this.missionController = new MissionController({
-      targetId: this.missionTarget?.userData?.missionTargetId || 'phase-4-designated-target',
-      objectiveText: 'Destroy the hostile before it drops your health to zero.'
+      targetIds,
+      objectiveText: 'Destroy all hostiles before they drop your health to zero.'
     });
     this.hostileController = new HostileController({
-      target: this.missionTarget,
-      hostileId: this.missionTarget?.userData?.missionTargetId || 'phase-4-designated-target'
+      hostiles: this.missionTargets.map((target, index) => ({
+        target,
+        hostileId: target.userData?.missionTargetId || target.userData?.hostileId || target.name,
+        attackInterval: 1.25 + index * 0.18,
+        attackDamage: 10,
+        attackRadius: 4.5,
+        detectionRadius: 8.5,
+        alertDelay: 0.45 + index * 0.08
+      })),
+      obstacles: builtScene.collisionWorld?.obstacles || []
     });
     this.gameLoop = new GameLoop({
       update: (delta) => this.update(delta),
@@ -106,7 +115,8 @@ export class RendererAdapter {
     this.statusCallbacks.onRendererState?.(BOOT_STATES.RENDERER_READY);
     logPlayable('info', 'Renderer initialized.', {
       missionUuid: this.bootstrap.missionUuid || '',
-      campaignRoute: this.bootstrap.campaignRoute || ''
+      campaignRoute: this.bootstrap.campaignRoute || '',
+      hostileCount: this.missionTargets.length
     });
   }
 
@@ -155,7 +165,7 @@ export class RendererAdapter {
     this.fireController = null;
     this.missionController = null;
     this.hostileController = null;
-    this.missionTarget = null;
+    this.missionTargets = [];
     this.activeCombatTargets = [];
     this.renderer = null;
     this.camera = null;
@@ -179,12 +189,12 @@ export class RendererAdapter {
     }
     this.player.update(delta, this.input);
     this.fireController?.update(delta);
-    this.updateHostile(delta);
+    this.updateHostiles(delta);
     this.updateHud();
   }
 
   requestPrimaryFire() {
-    if (!this.active || !this.pointerLock?.isLocked()) {
+    if (!this.active || !this.pointerLock?.isLocked() || !this.isMissionActive()) {
       return;
     }
     this.setHudValue('fire', 'FIRE REQUEST');
@@ -206,14 +216,14 @@ export class RendererAdapter {
     if (this.isMissionActive()) {
       hostileSnapshot = this.hostileController?.handleShot(result);
       if (hostileSnapshot?.defeatTriggered) {
-        missionSnapshot = this.missionController?.handleHostileDefeated();
-        this.completeMissionTarget();
+        missionSnapshot = this.missionController?.handleHostileDefeated(hostileSnapshot.defeatedHostileId);
+        this.completeMissionTarget(hostileSnapshot.defeatedHostileId);
       }
     }
     this.applyMissionState(missionSnapshot, hostileSnapshot);
   }
 
-  updateHostile(delta) {
+  updateHostiles(delta) {
     if (!this.hostileController || !this.missionController || !this.player) {
       return;
     }
@@ -239,35 +249,44 @@ export class RendererAdapter {
     }
     const missionSnapshot = this.missionController.restart();
     const hostileSnapshot = this.hostileController.restart();
-    this.restoreMissionTarget();
+    this.restoreMissionTargets();
     this.applyMissionState(missionSnapshot, hostileSnapshot);
+    this.setHudValue('fire', 'READY');
   }
 
-  completeMissionTarget() {
-    if (!this.missionTarget) {
+  completeMissionTarget(hostileId) {
+    const missionTarget = this.findMissionTarget(hostileId);
+    if (!missionTarget) {
       return;
     }
-    this.fireController?.clearTargetEffects?.(this.missionTarget);
-    this.missionTarget.visible = false;
-    this.missionTarget.userData.destroyed = true;
-    this.activeCombatTargets = this.activeCombatTargets.filter((target) => target !== this.missionTarget);
+    this.fireController?.clearTargetEffects?.(missionTarget);
+    missionTarget.visible = false;
+    missionTarget.userData.destroyed = true;
+    this.activeCombatTargets = this.activeCombatTargets.filter((target) => target !== missionTarget);
     this.fireController?.setTargets(this.activeCombatTargets);
   }
 
-  restoreMissionTarget() {
-    if (!this.missionTarget) {
-      return;
-    }
-    this.fireController?.clearTargetEffects?.(this.missionTarget);
-    this.missionTarget.visible = true;
-    this.missionTarget.userData.destroyed = false;
-    this.missionTarget.scale.setScalar(1);
-    if (this.missionTarget.material && 'emissiveIntensity' in this.missionTarget.material) {
-      this.missionTarget.material.emissiveIntensity = 0.5;
-    }
-    this.activeCombatTargets = this.activeCombatTargets.filter((target) => target !== this.missionTarget);
-    this.activeCombatTargets.push(this.missionTarget);
+  restoreMissionTargets() {
+    this.missionTargets.forEach((missionTarget) => {
+      this.fireController?.clearTargetEffects?.(missionTarget);
+      missionTarget.visible = true;
+      missionTarget.userData.destroyed = false;
+      missionTarget.scale.setScalar(1);
+      if (missionTarget.material && 'emissiveIntensity' in missionTarget.material) {
+        missionTarget.material.emissiveIntensity = 0.5;
+      }
+    });
+    this.activeCombatTargets = this.missionTargets.slice();
     this.fireController?.setTargets(this.activeCombatTargets);
+  }
+
+  findMissionTarget(hostileId) {
+    const id = String(hostileId || '').trim();
+    return this.missionTargets.find((target) => (
+      target.userData?.missionTargetId === id ||
+      target.userData?.hostileId === id ||
+      target.name === id
+    )) || null;
   }
 
   applyMissionState(snapshot, hostileSnapshot = null) {
@@ -277,9 +296,28 @@ export class RendererAdapter {
     this.setHudValue('objective', snapshot.objectiveText);
     this.setHudValue('missionState', snapshot.statusText || snapshot.state);
     this.setHudValue('health', snapshot.healthText || String(snapshot.playerHealth));
-    this.setHudValue('threat', hostileSnapshot?.threatText || 'INACTIVE');
-    this.setHudValue('result', snapshot.failureText || snapshot.successText || 'HOSTILE ACTIVE');
+    this.setHudValue('threat', this.formatThreatText(hostileSnapshot, snapshot));
+    this.setHudValue('result', this.formatResultText(snapshot, hostileSnapshot));
     this.setMissionOutcomePresentation(snapshot);
+  }
+
+  formatThreatText(hostileSnapshot, missionSnapshot) {
+    const remaining = missionSnapshot?.remainingText || '';
+    const hostileStateText = hostileSnapshot?.hostiles?.map((hostile) => hostile.hostileId + ':' + hostile.state).join(' | ') || 'INACTIVE';
+    return remaining ? 'REMAINING ' + remaining + ' // ' + hostileStateText : hostileStateText;
+  }
+
+  formatResultText(snapshot, hostileSnapshot) {
+    if (snapshot.failureText || snapshot.successText) {
+      return snapshot.failureText || snapshot.successText;
+    }
+    if (hostileSnapshot?.defeatTriggered) {
+      return 'HOSTILE DEFEATED // ' + hostileSnapshot.defeatedHostileId;
+    }
+    if (hostileSnapshot?.damageTriggered) {
+      return 'DAMAGE ' + hostileSnapshot.damageAmount + ' // ' + (hostileSnapshot.damageEvents || []).map((event) => event.hostileId).join(', ');
+    }
+    return 'HOSTILES ACTIVE';
   }
 
   setMissionOutcomePresentation(snapshot) {

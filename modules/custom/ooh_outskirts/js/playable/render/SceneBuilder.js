@@ -14,6 +14,19 @@ function boxCollider(center, size, category = 'obstacle') {
   return collider;
 }
 
+function createHostileTarget(THREE, material, definition) {
+  const target = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 1.35, 24), material.clone());
+  target.position.set(definition.position.x, 0.675, definition.position.z);
+  target.name = definition.name;
+  target.userData.combatTarget = true;
+  target.userData.missionTarget = true;
+  target.userData.missionTargetId = definition.id;
+  target.userData.hostile = true;
+  target.userData.hostileId = definition.id;
+  target.userData.destroyed = false;
+  return target;
+}
+
 export function buildTestScene(THREE, bootstrap) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x06080c);
@@ -78,16 +91,16 @@ export function buildTestScene(THREE, bootstrap) {
     roughness: 0.3,
     metalness: 0.08
   });
-  const combatTarget = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 1.35, 24), targetMaterial);
-  combatTarget.position.set(6, 0.675, -5.8);
-  combatTarget.name = 'phase-three-combat-target';
-  combatTarget.userData.combatTarget = true;
-  combatTarget.userData.missionTarget = true;
-  combatTarget.userData.missionTargetId = 'phase-4-designated-target';
-  combatTarget.userData.hostile = true;
-  combatTarget.userData.hostileId = 'phase-5-hostile-target';
-  combatTarget.userData.destroyed = false;
-  scene.add(combatTarget);
+  const hostileDefinitions = [
+    { id: 'phase-6-hostile-01', name: 'phase-six-hostile-01', position: { x: 6, z: -5.8 } },
+    { id: 'phase-6-hostile-02', name: 'phase-six-hostile-02', position: { x: 1.4, z: -6.6 } },
+    { id: 'phase-6-hostile-03', name: 'phase-six-hostile-03', position: { x: -5.2, z: -4.7 } }
+  ];
+  const combatTargets = hostileDefinitions.map((definition) => {
+    const target = createHostileTarget(THREE, targetMaterial, definition);
+    scene.add(target);
+    return target;
+  });
 
   const obstacleSize = TEST_SCENE.obstacle.size;
   const obstacleHeight = TEST_SCENE.obstacle.height;
@@ -105,9 +118,9 @@ export function buildTestScene(THREE, bootstrap) {
 
   return {
     scene,
-    animatedObjects: [beacon, payloadMarker, combatTarget],
-    combatTargets: [combatTarget],
-    missionTarget: combatTarget,
+    animatedObjects: [beacon, payloadMarker, ...combatTargets],
+    combatTargets,
+    missionTarget: combatTargets[0],
     collisionWorld: {
       bounds: {
         minX: -boundary,
