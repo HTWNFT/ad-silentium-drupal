@@ -5,6 +5,12 @@ const DEFAULT_LEVEL_ID = 'development_arena';
 const SUPPORTED_SUCCESS_CONDITIONS = Object.freeze(['all_required_hostiles_defeated']);
 const SUPPORTED_FAILURE_CONDITIONS = Object.freeze(['player_health_zero']);
 const ID_PATTERN = /^[a-z0-9_]+$/;
+const MISSION_LEVEL_MAP = Object.freeze({
+  missionId: Object.freeze({
+    recon: 'development_arena',
+    survival: 'alternate_arena'
+  })
+});
 
 function deepClone(value) {
   if (value === null || typeof value !== 'object') {
@@ -31,6 +37,28 @@ function deepFreeze(value) {
 function cleanRequestedId(value) {
   const id = String(value || '').trim().toLowerCase();
   return ID_PATTERN.test(id) ? id : '';
+}
+
+function identityValue(value) {
+  const id = String(value || '').trim().toLowerCase();
+  return ID_PATTERN.test(id) ? id : '';
+}
+
+function canonicalIdentity(payload = {}) {
+  const snapshot = payload.snapshot && typeof payload.snapshot === 'object' ? payload.snapshot : {};
+  const mission = payload.mission || snapshot.mission || {};
+  const route = payload.route || snapshot.route || {};
+  const campaignRoute = payload.campaignRoute || snapshot.campaignRoute || {};
+  const playlist = payload.playlist || snapshot.playlist || {};
+
+  return Object.freeze({
+    missionId: identityValue(payload.missionId || payload.missionType || mission.id),
+    missionType: identityValue(payload.missionType || payload.missionId || mission.id),
+    routeId: identityValue(payload.routeId || route.id || mission.campaignRoute || campaignRoute.id || payload.campaignRouteId),
+    missionRouteId: identityValue(payload.missionRouteId || mission.campaignRoute),
+    campaignRouteId: identityValue(payload.campaignRouteId || campaignRoute.id),
+    playlistId: identityValue(payload.playlistId || playlist.id)
+  });
 }
 
 function finiteNumber(value, fallback) {
@@ -225,6 +253,31 @@ export class LevelDefinitionRegistry {
       didFallback,
       fallbackReason,
       definition: deepFreeze(deepClone(registry.get(activeId)))
+    });
+  }
+
+  static resolvePayload(payload = {}) {
+    const identity = canonicalIdentity(payload);
+    const missionLevelId = MISSION_LEVEL_MAP.missionId[identity.missionId] || '';
+
+    if (missionLevelId && registry.has(missionLevelId)) {
+      return Object.freeze({
+        mapped: true,
+        missionDerivedLevelId: missionLevelId,
+        matchedField: 'missionId',
+        matchedValue: identity.missionId,
+        reason: 'confirmed_canonical_mission_id',
+        identity
+      });
+    }
+
+    return Object.freeze({
+      mapped: false,
+      missionDerivedLevelId: '',
+      matchedField: identity.missionId ? 'missionId' : '',
+      matchedValue: identity.missionId,
+      reason: identity.missionId ? 'unsupported_mission_id' : 'missing_mission_id',
+      identity
     });
   }
 

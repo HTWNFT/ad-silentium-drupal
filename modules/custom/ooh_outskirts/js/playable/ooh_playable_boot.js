@@ -1,4 +1,5 @@
 import { BOOT_STATES, logPlayable, normalizeMissionPayload, readable } from './core/AssetManifest.js';
+import { LevelDefinitionRegistry } from './levels/LevelDefinitionRegistry.js';
 import { RendererAdapter } from './render/RendererAdapter.js';
 
 const Drupal = window.Drupal;
@@ -64,57 +65,94 @@ function safeLevelId(value) {
   return /^[a-z0-9_]+$/.test(levelId) ? levelId : '';
 }
 
-function hydrateBootstrap(settings) {
-  const stateKey = settings.stateKey || 'ooh_game_generator_state_v1';
-  const storedState = readStoredState(stateKey);
-  const storedMissionUuid = validMissionUuid(storedState.serverMissionUuid) ? storedState.serverMissionUuid : '';
-  const queryMissionUuid = validMissionUuid(settings.queryMissionUuid) ? settings.queryMissionUuid : '';
-  const missionUuid = queryMissionUuid || storedMissionUuid;
-  const lookupPath = (((settings.urls || {}).missionLookup) || 'ooh/mission-lookup').trim();
-  const levelRequest = safeLevelId(settings.queryLevelId);
-  const levelMeta = {
-    requestedLevelId: levelRequest,
-    rawRequestedLevelId: String(settings.queryLevelId || '').trim()
-  };
+function buildLevelMeta(rawQueryLevelId, payload = null, payloadAvailable = false, lookupSucceeded = false, mappingUnavailableReason = '') {
+  const rawRequestedLevelId = String(rawQueryLevelId || '').trim();
+  const queryLevelId = safeLevelId(rawRequestedLevelId);
+  const payloadResolution = payloadAvailable ? LevelDefinitionRegistry.resolvePayload(payload || {}) : null;
+  const missionDerivedLevelId = payloadResolution && payloadResolution.mapped ? payloadResolution.missionDerivedLevelId : '';
+  let requestedLevelId = '';
+  let resolutionSource = 'safe_default';
+  let fallbackStatus = 'safe_default';
 
+  if (missionDerivedLevelId) {
+    requestedLevelId = missionDerivedLevelId;
+    resolutionSource = 'mission_payload';
+    fallbackStatus = queryLevelId && queryLevelId !== missionDerivedLevelId ? 'query_level_ignored' : 'no_fallback';
+  }
+  else if (queryLevelId) {
+    requestedLevelId = queryLevelId;
+    resolutionSource = 'development_query_fallback';
+    fallbackStatus = payloadAvailable ? 'mission_mapping_unresolved' : (mappingUnavailableReason || (lookupSucceeded ? 'payload_unavailable' : 'mission_lookup_unavailable'));
+  }
+
+  return Object.freeze({
+    requestedLevelId,
+    rawRequestedLevelId,
+    queryLevelId,
+    missionDerivedLevelId,
+    resolutionSource,
+    fallbackStatus,
+    mapping: payloadResolution || Object.freeze({
+      mapped: false,
+      missionDerivedLevelId: '',
+      matchedField: '',
+      matchedValue: '',
+      reason: mappingUnavailableReason || (lookupSucceeded ? 'payload_unavailable' : 'mission_lookup_unavailable'),
+      identity: Object.freeze({})
+    })
+  });
+}
+
+function bootstrapWithLevel(normalizedPayload, levelMeta) {
+  return {
+    ...normalizedPayload,
+    requestedLevelId: levelMeta.requestedLevelId,
+    rawRequestedLevelId: levelMeta.rawRequestedLevelId,
+    level: levelMeta
+  };
+}
+
+function hydrateBootstrap(settings) {
+  const queryMissionUuid = validMissionUuid(settings.queryMissionUuid) ? settings.queryMissionUuid : '';
+  const missionUuid = queryMissionUuid;
+  const lookupPath = (((settings.urls || {}).missionLookup) || 'ooh/mission-lookup').trim();
   if (missionUuid) {
-    return lookupMissionPayload(missionUuid, lookupPath).then((missionData) => ({
-      ...normalizeMissionPayload(missionData.payload, {
+    return lookupMissionPayload(missionUuid, lookupPath).then((missionData) => {
+      const normalized = normalizeMissionPayload(missionData.payload, {
         route: settings.route || '/play/mission',
         missionUuid: missionData.missionUuid || missionUuid,
         schemaVersion: settings.schemaVersion || '',
         source: queryMissionUuid ? 'query_mission_lookup' : 'local_storage_mission_lookup',
         lifecycleState: missionData.lifecycleState || ''
-      }),
-      requestedLevelId: levelMeta.requestedLevelId,
-      rawRequestedLevelId: levelMeta.rawRequestedLevelId,
-      level: levelMeta
-    }));
-  }
-
-  if (storedState.payload) {
-    return Promise.resolve({
-      ...normalizeMissionPayload(storedState.payload, {
+      });
+      return bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, missionData.payload, normalized.payloadAvailable, true));
+    }).catch((error) => {
+      logPlayable('warn', 'Mission lookup unavailable; falling back to development level selection.', error.message);
+      const normalized = normalizeMissionPayload(null, {
         route: settings.route || '/play/mission',
+        missionUuid,
         schemaVersion: settings.schemaVersion || '',
-        source: 'local_storage_payload'
-      }),
-      requestedLevelId: levelMeta.requestedLevelId,
-      rawRequestedLevelId: levelMeta.rawRequestedLevelId,
-      level: levelMeta
+        source: 'mission_lookup_failed'
+      });
+      return bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, null, false, false));
     });
   }
 
-  return Promise.resolve({
-    ...normalizeMissionPayload(null, {
+  if (settings.queryLevelId) {
+    const normalized = normalizeMissionPayload(null, {
       route: settings.route || '/play/mission',
       schemaVersion: settings.schemaVersion || '',
-      source: 'no_payload'
-    }),
-    requestedLevelId: levelMeta.requestedLevelId,
-    rawRequestedLevelId: levelMeta.rawRequestedLevelId,
-    level: levelMeta
+      source: 'no_mission_context'
+    });
+    return Promise.resolve(bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, null, false, false, 'mission_mapping_unresolved')));
+  }
+
+  const normalized = normalizeMissionPayload(null, {
+    route: settings.route || '/play/mission',
+    schemaVersion: settings.schemaVersion || '',
+    source: 'no_payload'
   });
+  return Promise.resolve(bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, null, false, false)));
 }
 
 function setText(root, selector, value) {

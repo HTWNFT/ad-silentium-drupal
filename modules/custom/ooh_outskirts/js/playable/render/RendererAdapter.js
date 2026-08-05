@@ -366,13 +366,30 @@ export class RendererAdapter {
   }
 
   updateLevelDiagnostics(prefix = '') {
+    const levelMeta = this.bootstrap.level || {};
+    const mapping = levelMeta.mapping || {};
+    const identity = mapping.identity || {};
     const requested = this.levelResolution.requestedId || '(default)';
-    const fallback = this.levelResolution.didFallback ? ' // FALLBACK ' + this.levelResolution.fallbackReason + ' -> ' + this.levelResolution.activeId : ' // NO FALLBACK';
-    const details = 'LEVEL REQUESTED: ' + requested + ' // ACTIVE: ' + this.levelResolution.activeId + fallback;
+    const fallback = this.levelResolution.didFallback ? 'REGISTRY FALLBACK ' + this.levelResolution.fallbackReason + ' -> ' + this.levelResolution.activeId : (levelMeta.fallbackStatus || 'no_fallback');
+    const missionIdentity = this.bootstrap.missionId || identity.missionId || this.levelDefinition.mission.id || 'unavailable';
+    const routeIdentity = identity.routeId || this.bootstrap.campaignRoute || 'unknown';
+    const levelIdentity = levelMeta.missionDerivedLevelId || this.levelResolution.activeId;
+    const source = levelMeta.resolutionSource || 'safe_default';
+    const rawQuery = levelMeta.rawRequestedLevelId || '(none)';
+    const match = mapping.matchedField && mapping.matchedValue ? mapping.matchedField + '=' + mapping.matchedValue : (mapping.reason || 'unmapped');
+    const details = 'MISSION UUID: ' + (this.bootstrap.missionUuid || 'unavailable') +
+      ' // MISSION: ' + missionIdentity +
+      ' // ROUTE: ' + routeIdentity +
+      ' // LEVEL: ' + levelIdentity +
+      ' // ACTIVE: ' + this.levelResolution.activeId +
+      ' // SOURCE: ' + source +
+      ' // ?level: ' + rawQuery +
+      ' // STATUS: ' + fallback +
+      ' // MATCH: ' + match;
     const payloadDiagnostic = this.root.querySelector('[data-ooh-playable-diagnostic]');
     if (payloadDiagnostic) {
       const base = prefix ? prefix + ' ' : '';
-      payloadDiagnostic.textContent = base + details + ' // MISSION: ' + (this.bootstrap.missionId || this.levelDefinition.mission.id || 'unavailable');
+      payloadDiagnostic.textContent = base + details;
     }
   }
 
