@@ -25,6 +25,7 @@ export class RendererAdapter {
       '';
     this.levelResolution = LevelDefinitionRegistry.resolve(this.requestedLevelId);
     this.levelDefinition = this.levelResolution.definition;
+    this.runtimeConfig = this.buildRuntimeConfig();
     this.renderer = null;
     this.camera = null;
     this.scene = null;
@@ -65,7 +66,7 @@ export class RendererAdapter {
     this.renderer.domElement.setAttribute('aria-label', 'Ad Silentium playable mission WebGL test scene');
     this.viewport.appendChild(this.renderer.domElement);
 
-    const builtScene = buildTestScene(THREE, this.levelDefinition, this.bootstrap);
+    const builtScene = buildTestScene(THREE, this.levelDefinition, this.bootstrap, this.runtimeConfig);
     this.scene = builtScene.scene;
     this.animatedObjects = builtScene.animatedObjects;
     this.objectiveMarker = builtScene.objectiveMarker || null;
@@ -99,7 +100,7 @@ export class RendererAdapter {
       .map((hostile) => hostile.id);
     this.missionController = new MissionController({
       targetIds: requiredTargetIds,
-      objectiveText: this.levelDefinition.mission.objectiveText
+      objectiveText: this.runtimeConfig.mission.objectiveText
     });
     this.hostileController = new HostileController({
       hostiles: this.levelDefinition.hostiles.map((hostile) => ({
@@ -135,7 +136,38 @@ export class RendererAdapter {
       requestedLevelId: this.levelResolution.requestedId || '',
       activeLevelId: this.levelResolution.activeId,
       fallbackReason: this.levelResolution.fallbackReason || '',
+      atmosphereId: (this.runtimeConfig.atmosphere || {}).atmosphereId || '',
+      atmosphereSource: (this.runtimeConfig.atmosphere || {}).source || '',
       hostileCount: this.missionTargets.length
+    });
+  }
+
+  buildRuntimeConfig() {
+    const context = this.bootstrap.runtimeMissionContext || {};
+    const levelMeta = this.bootstrap.level || {};
+    const mapping = levelMeta.mapping || {};
+    const presentation = context.presentation || this.bootstrap.presentation || {};
+    const atmosphere = mapping.atmosphere || this.levelResolution.atmosphere || {};
+    const missionTitle = String(presentation.missionTitle || this.bootstrap.missionTitle || this.levelDefinition.debugName || '').trim();
+    const objectiveText = String(this.levelDefinition.mission.objectiveText || '').trim();
+
+    return Object.freeze({
+      identity: Object.freeze({
+        ...((context.identity || {})),
+        ...((mapping.identity || {}))
+      }),
+      mission: Object.freeze({
+        title: missionTitle || this.levelDefinition.debugName,
+        objectiveText
+      }),
+      atmosphere: Object.freeze({
+        ...atmosphere
+      }),
+      level: Object.freeze({
+        activeId: this.levelResolution.activeId,
+        requestedId: this.levelResolution.requestedId,
+        fallbackReason: this.levelResolution.fallbackReason || levelMeta.fallbackStatus || ''
+      })
     });
   }
 
@@ -374,6 +406,7 @@ export class RendererAdapter {
     const missionIdentity = this.bootstrap.missionId || identity.missionId || this.levelDefinition.mission.id || 'unavailable';
     const routeIdentity = identity.routeId || this.bootstrap.campaignRoute || 'unknown';
     const levelIdentity = levelMeta.missionDerivedLevelId || this.levelResolution.activeId;
+    const atmosphere = this.runtimeConfig.atmosphere || {};
     const source = levelMeta.resolutionSource || 'safe_default';
     const rawQuery = levelMeta.rawRequestedLevelId || '(none)';
     const match = mapping.matchedField && mapping.matchedValue ? mapping.matchedField + '=' + mapping.matchedValue : (mapping.reason || 'unmapped');
@@ -385,7 +418,10 @@ export class RendererAdapter {
       ' // SOURCE: ' + source +
       ' // ?level: ' + rawQuery +
       ' // STATUS: ' + fallback +
-      ' // MATCH: ' + match;
+      ' // MATCH: ' + match +
+      ' // ATMOSPHERE: ' + (atmosphere.atmosphereId || 'technical_arena') +
+      ' // ATMOSPHERE SOURCE: ' + (atmosphere.source || 'safe_default') +
+      (atmosphere.fallbackReason ? ' // ATMOSPHERE FALLBACK: ' + atmosphere.fallbackReason : '');
     const payloadDiagnostic = this.root.querySelector('[data-ooh-playable-diagnostic]');
     if (payloadDiagnostic) {
       const base = prefix ? prefix + ' ' : '';

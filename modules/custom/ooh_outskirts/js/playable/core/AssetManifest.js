@@ -42,10 +42,30 @@ export function readable(value, fallback = 'Unavailable') {
   return text === '' ? fallback : text;
 }
 
+function identityValue(value) {
+  const id = String(value || '').trim().toLowerCase();
+  return /^[a-z0-9_]+$/.test(id) ? id : '';
+}
+
 export function normalizeMissionPayload(payload, meta = {}) {
   if (!payload || typeof payload !== 'object') {
     return {
       payloadAvailable: false,
+      identity: Object.freeze({
+        missionUuid: readable(meta.missionUuid || '', ''),
+        missionId: '',
+        missionType: '',
+        routeId: '',
+        missionRouteId: '',
+        campaignRouteId: '',
+        playlistId: '',
+        pathId: ''
+      }),
+      presentation: Object.freeze({
+        missionTitle: 'Mission unavailable',
+        recruiter: 'Unassigned',
+        playlist: 'Unlinked'
+      }),
       debug: {
         source: meta.source || 'unavailable',
         schemaVersion: meta.schemaVersion || ''
@@ -62,6 +82,14 @@ export function normalizeMissionPayload(payload, meta = {}) {
   const playlist = payload.playlist || snapshot.playlist || {};
   const routeId = payload.routeId || route.id || mission.campaignRoute || campaignRoute.id || payload.campaignRouteId || '';
   const missionId = payload.missionId || payload.missionType || mission.id || '';
+  const missionType = payload.missionType || payload.missionId || mission.id || '';
+  const missionRouteId = payload.missionRouteId || mission.campaignRoute || '';
+  const campaignRouteId = payload.campaignRouteId || campaignRoute.id || '';
+  const playlistId = payload.playlistId || playlist.id || '';
+  const pathId = payload.pathId || path.id || '';
+  const missionTitle = readable(mission.label || mission.title || missionId, 'Mission unavailable');
+  const recruiterLabel = readable(recruiter.name || recruiter.label, 'Unassigned');
+  const playlistLabel = readable(playlist.label || playlist.title, 'Unlinked');
   const missing = [];
 
   if (!missionId) {
@@ -81,15 +109,31 @@ export function normalizeMissionPayload(payload, meta = {}) {
     route: meta.route || '/play/mission',
     missionId: readable(missionId, ''),
     missionUuid: readable(meta.missionUuid || payload.missionUuid || '', ''),
-    missionTitle: readable(mission.label || mission.title || missionId, 'Mission unavailable'),
+    missionTitle,
     campaignRoute: readable(routeId || campaignRoute.label, 'Unknown'),
-    recruiter: readable(recruiter.name || recruiter.label, 'Unassigned'),
-    playlist: readable(playlist.label || playlist.title, 'Unlinked'),
+    recruiter: recruiterLabel,
+    playlist: playlistLabel,
+    identity: Object.freeze({
+      missionUuid: readable(meta.missionUuid || payload.missionUuid || '', ''),
+      missionId: identityValue(missionId),
+      missionType: identityValue(missionType),
+      routeId: identityValue(routeId),
+      missionRouteId: identityValue(missionRouteId),
+      campaignRouteId: identityValue(campaignRouteId),
+      playlistId: identityValue(playlistId),
+      pathId: identityValue(pathId)
+    }),
+    presentation: Object.freeze({
+      missionTitle,
+      recruiter: recruiterLabel,
+      playlist: playlistLabel
+    }),
     payloadAvailable: missing.length === 0,
     debug: {
       source: meta.source || 'unknown',
       schemaVersion: meta.schemaVersion || '',
       payloadVersion: readable(payload.payloadVersion, ''),
+      payloadUuid: readable(meta.payloadUuid || payload.payloadUuid || '', ''),
       lifecycleState: readable(meta.lifecycleState, ''),
       missingFields: missing
     }

@@ -52,24 +52,107 @@ function createObstacle(THREE, material, definition) {
   return obstacle;
 }
 
-export function buildTestScene(THREE, levelDefinition, bootstrap = {}) {
+function atmosphereConfig(runtimeConfig = {}) {
+  const atmosphereId = String((runtimeConfig.atmosphere || {}).atmosphereId || '').trim();
+  const presets = {
+    technical_arena: {
+      background: 0x06080c,
+      fog: 0x06080c,
+      fogNear: 12,
+      fogFar: 34,
+      floor: 0x111820,
+      wall: 0x151d26,
+      gridCenter: 0x00e5ff,
+      gridLine: 0x1c3b44,
+      hemisphereSky: 0x8ab7ff,
+      hemisphereGround: 0x131015,
+      hemisphereIntensity: 1.15,
+      key: 0xffffff,
+      keyIntensity: 2.2
+    },
+    alternate_technical: {
+      background: 0x071016,
+      fog: 0x071016,
+      fogNear: 10,
+      fogFar: 31,
+      floor: 0x132022,
+      wall: 0x1d272a,
+      gridCenter: 0xffd166,
+      gridLine: 0x31515a,
+      hemisphereSky: 0xffd6a5,
+      hemisphereGround: 0x171018,
+      hemisphereIntensity: 1.08,
+      key: 0xfff1c7,
+      keyIntensity: 2.05
+    },
+    dead_riverbed: {
+      background: 0x0a0908,
+      fog: 0x17100d,
+      fogNear: 9,
+      fogFar: 29,
+      floor: 0x211b16,
+      wall: 0x2b2119,
+      gridCenter: 0xff9f1c,
+      gridLine: 0x4b3121,
+      hemisphereSky: 0xd6b083,
+      hemisphereGround: 0x1b120d,
+      hemisphereIntensity: 1.1,
+      key: 0xffcc88,
+      keyIntensity: 2.1
+    },
+    industrial_marsh: {
+      background: 0x071316,
+      fog: 0x0b262c,
+      fogNear: 8,
+      fogFar: 27,
+      floor: 0x0e2527,
+      wall: 0x183033,
+      gridCenter: 0x4de0d2,
+      gridLine: 0x1d565a,
+      hemisphereSky: 0x78fff0,
+      hemisphereGround: 0x071515,
+      hemisphereIntensity: 1.18,
+      key: 0xb7fff6,
+      keyIntensity: 1.95
+    },
+    aerial_trench_gate: {
+      background: 0x070b18,
+      fog: 0x101936,
+      fogNear: 11,
+      fogFar: 36,
+      floor: 0x10172a,
+      wall: 0x182343,
+      gridCenter: 0x76e7ff,
+      gridLine: 0x253e72,
+      hemisphereSky: 0xa9c7ff,
+      hemisphereGround: 0x090b16,
+      hemisphereIntensity: 1.2,
+      key: 0xd9e6ff,
+      keyIntensity: 2.3
+    }
+  };
+  return presets[atmosphereId] || presets.technical_arena;
+}
+
+export function buildTestScene(THREE, levelDefinition, bootstrap = {}, runtimeConfig = {}) {
+  const atmosphere = atmosphereConfig(runtimeConfig);
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x06080c);
-  scene.fog = new THREE.Fog(0x06080c, 12, 34);
+  scene.background = new THREE.Color(atmosphere.background);
+  scene.fog = new THREE.Fog(atmosphere.fog, atmosphere.fogNear, atmosphere.fogFar);
 
   const sceneConfig = levelDefinition.scene;
   const floorGeometry = new THREE.PlaneGeometry(sceneConfig.floorSize, sceneConfig.floorSize, 10, 10);
-  const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x111820, roughness: 0.82, metalness: 0.08 });
+  const floorMaterial = new THREE.MeshStandardMaterial({ color: atmosphere.floor, roughness: 0.82, metalness: 0.08 });
   const floor = new THREE.Mesh(floorGeometry, floorMaterial);
   floor.rotation.x = -Math.PI / 2;
   floor.receiveShadow = true;
   scene.add(floor);
 
-  const grid = new THREE.GridHelper(sceneConfig.floorSize, 22, 0x00e5ff, 0x1c3b44);
+  const grid = new THREE.GridHelper(sceneConfig.floorSize, 22, atmosphere.gridCenter, atmosphere.gridLine);
   grid.position.y = 0.012;
   scene.add(grid);
 
-  const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x151d26, roughness: 0.74, metalness: 0.15 });
+  const wallMaterial = new THREE.MeshStandardMaterial({ color: atmosphere.wall, roughness: 0.74, metalness: 0.15 });
   const wallLength = sceneConfig.floorSize;
   const wallDepth = 0.28;
   const wallHeight = sceneConfig.wallHeight;
@@ -143,12 +226,13 @@ export function buildTestScene(THREE, levelDefinition, bootstrap = {}) {
   });
   animatedObjects.push(...combatTargets);
 
-  scene.add(new THREE.HemisphereLight(0x8ab7ff, 0x131015, 1.15));
-  const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+  scene.add(new THREE.HemisphereLight(atmosphere.hemisphereSky, atmosphere.hemisphereGround, atmosphere.hemisphereIntensity));
+  const keyLight = new THREE.DirectionalLight(atmosphere.key, atmosphere.keyIntensity);
   keyLight.position.set(3.5, 6, 4);
   scene.add(keyLight);
   scene.userData.phaseLabel = String(bootstrap.missionTitle || levelDefinition.debugName || 'Mission Payload').trim() || 'Mission Payload';
   scene.userData.levelId = levelDefinition.id;
+  scene.userData.atmosphereId = String((runtimeConfig.atmosphere || {}).atmosphereId || 'technical_arena');
 
   return {
     scene,

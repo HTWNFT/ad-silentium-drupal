@@ -104,10 +104,33 @@ function buildLevelMeta(rawQueryLevelId, payload = null, payloadAvailable = fals
 }
 
 function bootstrapWithLevel(normalizedPayload, levelMeta) {
+  const mapping = levelMeta.mapping || {};
+  const runtimeMissionContext = Object.freeze({
+    identity: Object.freeze({
+      ...((normalizedPayload.identity || {})),
+      ...((mapping.identity || {})),
+      missionUuid: normalizedPayload.missionUuid || (normalizedPayload.identity || {}).missionUuid || ''
+    }),
+    presentation: Object.freeze({
+      missionTitle: normalizedPayload.missionTitle || (normalizedPayload.presentation || {}).missionTitle || 'Mission unavailable',
+      recruiter: normalizedPayload.recruiter || (normalizedPayload.presentation || {}).recruiter || 'Unassigned',
+      playlist: normalizedPayload.playlist || (normalizedPayload.presentation || {}).playlist || 'Unlinked'
+    }),
+    level: levelMeta,
+    resolution: Object.freeze({
+      source: levelMeta.resolutionSource,
+      fallbackStatus: levelMeta.fallbackStatus,
+      requestedLevelId: levelMeta.requestedLevelId,
+      missionDerivedLevelId: levelMeta.missionDerivedLevelId
+    }),
+    debug: normalizedPayload.debug || Object.freeze({})
+  });
+
   return {
     ...normalizedPayload,
     requestedLevelId: levelMeta.requestedLevelId,
     rawRequestedLevelId: levelMeta.rawRequestedLevelId,
+    runtimeMissionContext,
     level: levelMeta
   };
 }
@@ -123,6 +146,7 @@ function hydrateBootstrap(settings) {
         missionUuid: missionData.missionUuid || missionUuid,
         schemaVersion: settings.schemaVersion || '',
         source: queryMissionUuid ? 'query_mission_lookup' : 'local_storage_mission_lookup',
+        payloadUuid: missionData.payloadUuid || '',
         lifecycleState: missionData.lifecycleState || ''
       });
       return bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, missionData.payload, normalized.payloadAvailable, true));

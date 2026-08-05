@@ -11,6 +11,21 @@ const MISSION_LEVEL_MAP = Object.freeze({
     survival: 'alternate_arena'
   })
 });
+const ROUTE_ATMOSPHERE_MAP = Object.freeze({
+  terra: 'dead_riverbed',
+  mare: 'industrial_marsh',
+  aer: 'aerial_trench_gate'
+});
+const ENVIRONMENT_ATMOSPHERE_MAP = Object.freeze({
+  development: 'technical_arena',
+  alternate_technical: 'alternate_technical',
+  dead_riverbed: 'dead_riverbed',
+  industrial_marsh: 'industrial_marsh',
+  aerial_trench_gate: 'aerial_trench_gate'
+});
+const BIOME_ATMOSPHERE_MAP = Object.freeze({
+  technical_arena: 'technical_arena'
+});
 
 function deepClone(value) {
   if (value === null || typeof value !== 'object') {
@@ -50,6 +65,7 @@ function canonicalIdentity(payload = {}) {
   const route = payload.route || snapshot.route || {};
   const campaignRoute = payload.campaignRoute || snapshot.campaignRoute || {};
   const playlist = payload.playlist || snapshot.playlist || {};
+  const path = payload.path || snapshot.path || {};
 
   return Object.freeze({
     missionId: identityValue(payload.missionId || payload.missionType || mission.id),
@@ -57,7 +73,44 @@ function canonicalIdentity(payload = {}) {
     routeId: identityValue(payload.routeId || route.id || mission.campaignRoute || campaignRoute.id || payload.campaignRouteId),
     missionRouteId: identityValue(payload.missionRouteId || mission.campaignRoute),
     campaignRouteId: identityValue(payload.campaignRouteId || campaignRoute.id),
-    playlistId: identityValue(payload.playlistId || playlist.id)
+    playlistId: identityValue(payload.playlistId || playlist.id),
+    pathId: identityValue(payload.pathId || path.id)
+  });
+}
+
+function resolveAtmosphere(identity = {}, definition = null) {
+  const levelEnvironment = (definition || {}).environment || {};
+  const environmentId = identityValue(levelEnvironment.id);
+  const biomeId = identityValue(levelEnvironment.biomeId);
+  const routeAtmosphereId = ROUTE_ATMOSPHERE_MAP[identity.routeId] || '';
+  const environmentAtmosphereId = ENVIRONMENT_ATMOSPHERE_MAP[environmentId] || '';
+  const biomeAtmosphereId = BIOME_ATMOSPHERE_MAP[biomeId] || '';
+  const atmosphereId = routeAtmosphereId || environmentAtmosphereId || biomeAtmosphereId || 'technical_arena';
+  let source = 'safe_default';
+  let fallbackReason = '';
+
+  if (routeAtmosphereId) {
+    source = 'canonical_route_id';
+  }
+  else if (environmentAtmosphereId) {
+    source = 'level_environment_id';
+    fallbackReason = identity.routeId ? 'unsupported_route_id' : 'missing_route_id';
+  }
+  else if (biomeAtmosphereId) {
+    source = 'level_biome_id';
+    fallbackReason = environmentId ? 'unsupported_environment_id' : 'missing_environment_id';
+  }
+  else {
+    fallbackReason = 'unsupported_atmosphere_identity';
+  }
+
+  return Object.freeze({
+    atmosphereId,
+    source,
+    fallbackReason,
+    routeId: identity.routeId || '',
+    environmentId,
+    biomeId
   });
 }
 
@@ -247,12 +300,15 @@ export class LevelDefinitionRegistry {
       fallbackReason = 'unknown_level_id';
     }
 
+    const definition = deepFreeze(deepClone(registry.get(activeId)));
+
     return Object.freeze({
       requestedId: requestedText,
       activeId,
       didFallback,
       fallbackReason,
-      definition: deepFreeze(deepClone(registry.get(activeId)))
+      atmosphere: resolveAtmosphere({}, definition),
+      definition
     });
   }
 
@@ -261,12 +317,14 @@ export class LevelDefinitionRegistry {
     const missionLevelId = MISSION_LEVEL_MAP.missionId[identity.missionId] || '';
 
     if (missionLevelId && registry.has(missionLevelId)) {
+      const definition = registry.get(missionLevelId);
       return Object.freeze({
         mapped: true,
         missionDerivedLevelId: missionLevelId,
         matchedField: 'missionId',
         matchedValue: identity.missionId,
         reason: 'confirmed_canonical_mission_id',
+        atmosphere: resolveAtmosphere(identity, definition),
         identity
       });
     }
@@ -277,6 +335,7 @@ export class LevelDefinitionRegistry {
       matchedField: identity.missionId ? 'missionId' : '',
       matchedValue: identity.missionId,
       reason: identity.missionId ? 'unsupported_mission_id' : 'missing_mission_id',
+      atmosphere: resolveAtmosphere(identity, registry.get(DEFAULT_LEVEL_ID)),
       identity
     });
   }
