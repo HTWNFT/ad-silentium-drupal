@@ -65,41 +65,13 @@ function safeLevelId(value) {
   return /^[a-z0-9_]+$/.test(levelId) ? levelId : '';
 }
 
-function buildLevelMeta(rawQueryLevelId, payload = null, payloadAvailable = false, lookupSucceeded = false, mappingUnavailableReason = '') {
-  const rawRequestedLevelId = String(rawQueryLevelId || '').trim();
-  const queryLevelId = safeLevelId(rawRequestedLevelId);
-  const payloadResolution = payloadAvailable ? LevelDefinitionRegistry.resolvePayload(payload || {}) : null;
-  const missionDerivedLevelId = payloadResolution && payloadResolution.mapped ? payloadResolution.missionDerivedLevelId : '';
-  let requestedLevelId = '';
-  let resolutionSource = 'safe_default';
-  let fallbackStatus = 'safe_default';
-
-  if (missionDerivedLevelId) {
-    requestedLevelId = missionDerivedLevelId;
-    resolutionSource = 'mission_payload';
-    fallbackStatus = queryLevelId && queryLevelId !== missionDerivedLevelId ? 'query_level_ignored' : 'no_fallback';
-  }
-  else if (queryLevelId) {
-    requestedLevelId = queryLevelId;
-    resolutionSource = 'development_query_fallback';
-    fallbackStatus = payloadAvailable ? 'mission_mapping_unresolved' : (mappingUnavailableReason || (lookupSucceeded ? 'payload_unavailable' : 'mission_lookup_unavailable'));
-  }
-
-  return Object.freeze({
-    requestedLevelId,
-    rawRequestedLevelId,
-    queryLevelId,
-    missionDerivedLevelId,
-    resolutionSource,
-    fallbackStatus,
-    mapping: payloadResolution || Object.freeze({
-      mapped: false,
-      missionDerivedLevelId: '',
-      matchedField: '',
-      matchedValue: '',
-      reason: mappingUnavailableReason || (lookupSucceeded ? 'payload_unavailable' : 'mission_lookup_unavailable'),
-      identity: Object.freeze({})
-    })
+function buildLevelMeta(rawQueryLevelId, payload = null, canonicalContextAvailable = false, lookupSucceeded = false, mappingUnavailableReason = '') {
+  return LevelDefinitionRegistry.resolveSelection({
+    payload,
+    canonicalContextAvailable,
+    queryLevelId: safeLevelId(rawQueryLevelId) || rawQueryLevelId,
+    lookupSucceeded,
+    mappingUnavailableReason
   });
 }
 
@@ -149,7 +121,7 @@ function hydrateBootstrap(settings) {
         payloadUuid: missionData.payloadUuid || '',
         lifecycleState: missionData.lifecycleState || ''
       });
-      return bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, missionData.payload, normalized.payloadAvailable, true));
+      return bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, missionData.payload, true, true));
     }).catch((error) => {
       logPlayable('warn', 'Mission lookup unavailable; falling back to development level selection.', error.message);
       const normalized = normalizeMissionPayload(null, {

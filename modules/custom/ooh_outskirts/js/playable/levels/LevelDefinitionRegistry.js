@@ -9,6 +9,10 @@ const MISSION_LEVEL_MAP = Object.freeze({
   missionId: Object.freeze({
     recon: 'development_arena',
     survival: 'alternate_arena'
+  }),
+  missionType: Object.freeze({
+    recon: 'development_arena',
+    survival: 'alternate_arena'
   })
 });
 const ROUTE_ATMOSPHERE_MAP = Object.freeze({
@@ -66,6 +70,9 @@ function canonicalIdentity(payload = {}) {
   const campaignRoute = payload.campaignRoute || snapshot.campaignRoute || {};
   const playlist = payload.playlist || snapshot.playlist || {};
   const path = payload.path || snapshot.path || {};
+  const level = payload.level || snapshot.level || {};
+  const environment = payload.environment || snapshot.environment || {};
+  const biome = payload.biome || snapshot.biome || {};
 
   return Object.freeze({
     missionId: identityValue(payload.missionId || payload.missionType || mission.id),
@@ -74,31 +81,97 @@ function canonicalIdentity(payload = {}) {
     missionRouteId: identityValue(payload.missionRouteId || mission.campaignRoute),
     campaignRouteId: identityValue(payload.campaignRouteId || campaignRoute.id),
     playlistId: identityValue(payload.playlistId || playlist.id),
-    pathId: identityValue(payload.pathId || path.id)
+    pathId: identityValue(payload.pathId || path.id),
+    levelId: identityValue(payload.levelId || level.id),
+    environmentId: identityValue(payload.environmentId || environment.id),
+    biomeId: identityValue(payload.biomeId || biome.id || environment.biomeId)
   });
+}
+
+function selectorRecord(selector, value, reason) {
+  return Object.freeze({ selector, value, reason });
+}
+
+function unsupportedCanonicalSelectors(identity = {}) {
+  const unsupported = [];
+
+  if (identity.levelId && !registry.has(identity.levelId)) {
+    unsupported.push(selectorRecord('levelId', identity.levelId, 'unsupported_level_id'));
+  }
+  if (identity.missionId && !MISSION_LEVEL_MAP.missionId[identity.missionId]) {
+    unsupported.push(selectorRecord('missionId', identity.missionId, 'unsupported_mission_id'));
+  }
+  if (identity.missionType && !MISSION_LEVEL_MAP.missionType[identity.missionType]) {
+    unsupported.push(selectorRecord('missionType', identity.missionType, 'unsupported_mission_type'));
+  }
+  if (identity.routeId && !ROUTE_ATMOSPHERE_MAP[identity.routeId]) {
+    unsupported.push(selectorRecord('routeId', identity.routeId, 'unsupported_route_id'));
+  }
+  if (identity.environmentId && !ENVIRONMENT_ATMOSPHERE_MAP[identity.environmentId]) {
+    unsupported.push(selectorRecord('environmentId', identity.environmentId, 'unsupported_environment_id'));
+  }
+  if (identity.biomeId && !BIOME_ATMOSPHERE_MAP[identity.biomeId]) {
+    unsupported.push(selectorRecord('biomeId', identity.biomeId, 'unsupported_biome_id'));
+  }
+
+  return Object.freeze(unsupported);
+}
+
+function resolveCanonicalLevelId(identity = {}) {
+  if (identity.levelId && registry.has(identity.levelId)) {
+    return Object.freeze({ levelId: identity.levelId, matchedField: 'levelId', matchedValue: identity.levelId, source: 'canonical_level_id', reason: 'confirmed_canonical_level_id' });
+  }
+  if (identity.missionId && MISSION_LEVEL_MAP.missionId[identity.missionId]) {
+    return Object.freeze({ levelId: MISSION_LEVEL_MAP.missionId[identity.missionId], matchedField: 'missionId', matchedValue: identity.missionId, source: 'canonical_mission_id', reason: 'confirmed_canonical_mission_id' });
+  }
+  if (identity.missionType && MISSION_LEVEL_MAP.missionType[identity.missionType]) {
+    return Object.freeze({ levelId: MISSION_LEVEL_MAP.missionType[identity.missionType], matchedField: 'missionType', matchedValue: identity.missionType, source: 'canonical_mission_type', reason: 'confirmed_canonical_mission_type' });
+  }
+  if (identity.levelId) {
+    return Object.freeze({ levelId: '', matchedField: 'levelId', matchedValue: identity.levelId, source: 'mission_payload', reason: 'unsupported_level_id' });
+  }
+  if (identity.missionId) {
+    return Object.freeze({ levelId: '', matchedField: 'missionId', matchedValue: identity.missionId, source: 'mission_payload', reason: 'unsupported_mission_id' });
+  }
+  if (identity.missionType) {
+    return Object.freeze({ levelId: '', matchedField: 'missionType', matchedValue: identity.missionType, source: 'mission_payload', reason: 'unsupported_mission_type' });
+  }
+  return Object.freeze({ levelId: '', matchedField: '', matchedValue: '', source: 'mission_payload', reason: 'missing_canonical_level_selector' });
 }
 
 function resolveAtmosphere(identity = {}, definition = null) {
   const levelEnvironment = (definition || {}).environment || {};
-  const environmentId = identityValue(levelEnvironment.id);
-  const biomeId = identityValue(levelEnvironment.biomeId);
+  const levelEnvironmentId = identityValue(levelEnvironment.id);
+  const levelBiomeId = identityValue(levelEnvironment.biomeId);
+  const canonicalEnvironmentId = identityValue(identity.environmentId);
+  const canonicalBiomeId = identityValue(identity.biomeId);
   const routeAtmosphereId = ROUTE_ATMOSPHERE_MAP[identity.routeId] || '';
-  const environmentAtmosphereId = ENVIRONMENT_ATMOSPHERE_MAP[environmentId] || '';
-  const biomeAtmosphereId = BIOME_ATMOSPHERE_MAP[biomeId] || '';
-  const atmosphereId = routeAtmosphereId || environmentAtmosphereId || biomeAtmosphereId || 'technical_arena';
+  const canonicalEnvironmentAtmosphereId = ENVIRONMENT_ATMOSPHERE_MAP[canonicalEnvironmentId] || '';
+  const canonicalBiomeAtmosphereId = BIOME_ATMOSPHERE_MAP[canonicalBiomeId] || '';
+  const levelEnvironmentAtmosphereId = ENVIRONMENT_ATMOSPHERE_MAP[levelEnvironmentId] || '';
+  const levelBiomeAtmosphereId = BIOME_ATMOSPHERE_MAP[levelBiomeId] || '';
+  const atmosphereId = routeAtmosphereId || canonicalEnvironmentAtmosphereId || canonicalBiomeAtmosphereId || levelEnvironmentAtmosphereId || levelBiomeAtmosphereId || 'technical_arena';
   let source = 'safe_default';
   let fallbackReason = '';
 
   if (routeAtmosphereId) {
     source = 'canonical_route_id';
   }
-  else if (environmentAtmosphereId) {
+  else if (canonicalEnvironmentAtmosphereId) {
+    source = 'canonical_environment_id';
+    fallbackReason = identity.routeId ? 'unsupported_route_id' : 'missing_route_id';
+  }
+  else if (canonicalBiomeAtmosphereId) {
+    source = 'canonical_biome_id';
+    fallbackReason = canonicalEnvironmentId ? 'unsupported_environment_id' : 'missing_environment_id';
+  }
+  else if (levelEnvironmentAtmosphereId) {
     source = 'level_environment_id';
     fallbackReason = identity.routeId ? 'unsupported_route_id' : 'missing_route_id';
   }
-  else if (biomeAtmosphereId) {
+  else if (levelBiomeAtmosphereId) {
     source = 'level_biome_id';
-    fallbackReason = environmentId ? 'unsupported_environment_id' : 'missing_environment_id';
+    fallbackReason = levelEnvironmentId ? 'unsupported_environment_id' : 'missing_environment_id';
   }
   else {
     fallbackReason = 'unsupported_atmosphere_identity';
@@ -109,8 +182,8 @@ function resolveAtmosphere(identity = {}, definition = null) {
     source,
     fallbackReason,
     routeId: identity.routeId || '',
-    environmentId,
-    biomeId
+    environmentId: canonicalEnvironmentId || levelEnvironmentId,
+    biomeId: canonicalBiomeId || levelBiomeId
   });
 }
 
@@ -274,69 +347,116 @@ function buildRegistry(definitions) {
 
 const registry = buildRegistry([developmentArena, alternateArena]);
 
+function frozenDefinition(levelId) {
+  return deepFreeze(deepClone(registry.get(levelId)));
+}
+
+function buildMapping(canonicalMatch, identity, unsupportedSelectors) {
+  return Object.freeze({
+    mapped: Boolean(canonicalMatch.levelId && unsupportedSelectors.length === 0),
+    missionDerivedLevelId: canonicalMatch.levelId || '',
+    matchedField: canonicalMatch.matchedField || '',
+    matchedValue: canonicalMatch.matchedValue || '',
+    reason: canonicalMatch.reason || '',
+    unsupportedSelectors,
+    atmosphere: null,
+    identity
+  });
+}
+
 export class LevelDefinitionRegistry {
   static defaultLevelId() {
     return DEFAULT_LEVEL_ID;
   }
 
   static resolve(requestedId = '') {
-    const cleanedId = cleanRequestedId(requestedId);
-    const requestedText = String(requestedId || '').trim();
-    let activeId = cleanedId || DEFAULT_LEVEL_ID;
-    let didFallback = false;
-    let fallbackReason = '';
-
-    if (!requestedText) {
-      activeId = DEFAULT_LEVEL_ID;
-    }
-    else if (!cleanedId) {
-      activeId = DEFAULT_LEVEL_ID;
-      didFallback = true;
-      fallbackReason = 'malformed_level_id';
-    }
-    else if (!registry.has(cleanedId)) {
-      activeId = DEFAULT_LEVEL_ID;
-      didFallback = true;
-      fallbackReason = 'unknown_level_id';
-    }
-
-    const definition = deepFreeze(deepClone(registry.get(activeId)));
-
-    return Object.freeze({
-      requestedId: requestedText,
-      activeId,
-      didFallback,
-      fallbackReason,
-      atmosphere: resolveAtmosphere({}, definition),
-      definition
-    });
+    return this.resolveSelection({ queryLevelId: requestedId, canonicalContextAvailable: false });
   }
 
   static resolvePayload(payload = {}) {
-    const identity = canonicalIdentity(payload);
-    const missionLevelId = MISSION_LEVEL_MAP.missionId[identity.missionId] || '';
+    const resolution = this.resolveSelection({ payload, canonicalContextAvailable: true });
+    const mapping = resolution.mapping || {};
+    return Object.freeze({
+      mapped: mapping.mapped,
+      missionDerivedLevelId: mapping.missionDerivedLevelId,
+      matchedField: mapping.matchedField,
+      matchedValue: mapping.matchedValue,
+      reason: mapping.reason,
+      unsupportedSelectors: mapping.unsupportedSelectors || Object.freeze([]),
+      atmosphere: resolution.atmosphere,
+      identity: mapping.identity || Object.freeze({})
+    });
+  }
 
-    if (missionLevelId && registry.has(missionLevelId)) {
-      const definition = registry.get(missionLevelId);
-      return Object.freeze({
-        mapped: true,
-        missionDerivedLevelId: missionLevelId,
-        matchedField: 'missionId',
-        matchedValue: identity.missionId,
-        reason: 'confirmed_canonical_mission_id',
-        atmosphere: resolveAtmosphere(identity, definition),
-        identity
-      });
+  static resolveSelection(selection = {}) {
+    const rawRequestedLevelId = String(selection.queryLevelId || '').trim();
+    const queryLevelId = cleanRequestedId(rawRequestedLevelId);
+    const hasValidQueryLevel = Boolean(queryLevelId && registry.has(queryLevelId));
+    const canonicalContextAvailable = Boolean(selection.canonicalContextAvailable && selection.payload && typeof selection.payload === 'object');
+    const identity = canonicalContextAvailable ? canonicalIdentity(selection.payload) : Object.freeze({});
+    const unsupportedSelectors = canonicalContextAvailable ? unsupportedCanonicalSelectors(identity) : Object.freeze([]);
+    const canonicalMatch = canonicalContextAvailable ? resolveCanonicalLevelId(identity) : Object.freeze({ levelId: '', matchedField: '', matchedValue: '', source: '', reason: '' });
+    const developmentQueryIgnored = Boolean(canonicalContextAvailable && queryLevelId && (!canonicalMatch.levelId || queryLevelId !== canonicalMatch.levelId));
+    let activeId = DEFAULT_LEVEL_ID;
+    let requestedLevelId = '';
+    let resolutionSource = 'safe_default';
+    let fallbackUsed = false;
+    let fallbackReason = '';
+    let fallbackStatus = 'safe_default';
+
+    if (canonicalContextAvailable) {
+      requestedLevelId = canonicalMatch.levelId || identity.levelId || '';
+      resolutionSource = canonicalMatch.source || 'mission_payload';
+      if (canonicalMatch.levelId && unsupportedSelectors.length === 0) {
+        activeId = canonicalMatch.levelId;
+        fallbackStatus = developmentQueryIgnored ? 'query_level_ignored' : 'no_fallback';
+      }
+      else {
+        fallbackUsed = true;
+        fallbackReason = unsupportedSelectors.length ? 'unsupported_canonical_metadata' : (canonicalMatch.reason || 'missing_canonical_level_selector');
+        fallbackStatus = fallbackReason;
+      }
+    }
+    else if (hasValidQueryLevel) {
+      activeId = queryLevelId;
+      requestedLevelId = queryLevelId;
+      resolutionSource = 'development_query_fallback';
+      fallbackStatus = selection.mappingUnavailableReason || 'canonical_context_absent';
+    }
+    else {
+      requestedLevelId = queryLevelId;
+      fallbackUsed = true;
+      fallbackReason = rawRequestedLevelId ? (queryLevelId ? 'unknown_level_id' : 'malformed_level_id') : (selection.mappingUnavailableReason || 'missing_canonical_context_and_query_level');
+      fallbackStatus = fallbackReason;
     }
 
-    return Object.freeze({
-      mapped: false,
-      missionDerivedLevelId: '',
-      matchedField: identity.missionId ? 'missionId' : '',
-      matchedValue: identity.missionId,
-      reason: identity.missionId ? 'unsupported_mission_id' : 'missing_mission_id',
-      atmosphere: resolveAtmosphere(identity, registry.get(DEFAULT_LEVEL_ID)),
-      identity
+    const definition = frozenDefinition(activeId);
+    const atmosphere = resolveAtmosphere(identity, definition);
+    const mapping = buildMapping(canonicalMatch, identity, unsupportedSelectors);
+
+    return deepFreeze({
+      requestedId: requestedLevelId || rawRequestedLevelId,
+      requestedLevelId,
+      rawRequestedLevelId,
+      queryLevelId,
+      activeId,
+      resolvedLevelId: activeId,
+      missionDerivedLevelId: canonicalMatch.levelId || '',
+      resolutionSource,
+      fallbackUsed,
+      didFallback: fallbackUsed,
+      fallbackReason,
+      fallbackStatus,
+      unsupportedSelectors,
+      developmentQueryIgnored,
+      canonicalContextAvailable,
+      lookupSucceeded: Boolean(selection.lookupSucceeded),
+      mapping: Object.freeze({
+        ...mapping,
+        atmosphere
+      }),
+      atmosphere,
+      definition
     });
   }
 

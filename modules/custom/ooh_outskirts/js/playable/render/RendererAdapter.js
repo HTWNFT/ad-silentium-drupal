@@ -4,7 +4,6 @@ import { GameLoop } from '../core/GameLoop.js';
 import { FireController } from '../combat/FireController.js';
 import { HostileController } from '../hostile/HostileController.js';
 import { InputController } from '../input/InputController.js';
-import { LevelDefinitionRegistry } from '../levels/LevelDefinitionRegistry.js';
 import { MissionController } from '../mission/MissionController.js';
 import { PointerLockController } from '../input/PointerLockController.js';
 import { PlayerController } from '../player/PlayerController.js';
@@ -18,12 +17,11 @@ export class RendererAdapter {
     this.viewport = viewport;
     this.bootstrap = bootstrap;
     this.statusCallbacks = statusCallbacks;
-    this.requestedLevelId = bootstrap.requestedLevelId ||
-      (bootstrap.level || {}).requestedLevelId ||
-      bootstrap.rawRequestedLevelId ||
-      (bootstrap.level || {}).rawRequestedLevelId ||
-      '';
-    this.levelResolution = LevelDefinitionRegistry.resolve(this.requestedLevelId);
+    this.levelResolution = bootstrap.level || null;
+    if (!this.levelResolution || !this.levelResolution.definition) {
+      throw new Error('Playable level resolution is missing.');
+    }
+    this.requestedLevelId = this.levelResolution.requestedLevelId || this.levelResolution.rawRequestedLevelId || '';
     this.levelDefinition = this.levelResolution.definition;
     this.runtimeConfig = this.buildRuntimeConfig();
     this.renderer = null;
@@ -144,10 +142,10 @@ export class RendererAdapter {
 
   buildRuntimeConfig() {
     const context = this.bootstrap.runtimeMissionContext || {};
-    const levelMeta = this.bootstrap.level || {};
+    const levelMeta = this.levelResolution || {};
     const mapping = levelMeta.mapping || {};
     const presentation = context.presentation || this.bootstrap.presentation || {};
-    const atmosphere = mapping.atmosphere || this.levelResolution.atmosphere || {};
+    const atmosphere = levelMeta.atmosphere || mapping.atmosphere || {};
     const missionTitle = String(presentation.missionTitle || this.bootstrap.missionTitle || this.levelDefinition.debugName || '').trim();
     const objectiveText = String(this.levelDefinition.mission.objectiveText || '').trim();
 
@@ -166,7 +164,11 @@ export class RendererAdapter {
       level: Object.freeze({
         activeId: this.levelResolution.activeId,
         requestedId: this.levelResolution.requestedId,
-        fallbackReason: this.levelResolution.fallbackReason || levelMeta.fallbackStatus || ''
+        fallbackReason: levelMeta.fallbackReason || levelMeta.fallbackStatus || '',
+        source: levelMeta.resolutionSource || 'safe_default',
+        fallbackStatus: levelMeta.fallbackStatus || '',
+        developmentQueryIgnored: Boolean(levelMeta.developmentQueryIgnored),
+        unsupportedSelectors: Object.freeze((levelMeta.unsupportedSelectors || []).map((selector) => ({ ...selector })))
       })
     });
   }
@@ -398,17 +400,19 @@ export class RendererAdapter {
   }
 
   updateLevelDiagnostics(prefix = '') {
-    const levelMeta = this.bootstrap.level || {};
+    const levelMeta = this.levelResolution || {};
     const mapping = levelMeta.mapping || {};
     const identity = mapping.identity || {};
     const requested = this.levelResolution.requestedId || '(default)';
-    const fallback = this.levelResolution.didFallback ? 'REGISTRY FALLBACK ' + this.levelResolution.fallbackReason + ' -> ' + this.levelResolution.activeId : (levelMeta.fallbackStatus || 'no_fallback');
+    const fallback = levelMeta.didFallback ? 'REGISTRY FALLBACK ' + (levelMeta.fallbackReason || levelMeta.fallbackStatus || 'unspecified') + ' -> ' + levelMeta.activeId : (levelMeta.fallbackStatus || 'no_fallback');
     const missionIdentity = this.bootstrap.missionId || identity.missionId || this.levelDefinition.mission.id || 'unavailable';
     const routeIdentity = identity.routeId || this.bootstrap.campaignRoute || 'unknown';
     const levelIdentity = levelMeta.missionDerivedLevelId || this.levelResolution.activeId;
     const atmosphere = this.runtimeConfig.atmosphere || {};
     const source = levelMeta.resolutionSource || 'safe_default';
     const rawQuery = levelMeta.rawRequestedLevelId || '(none)';
+    const ignoredQuery = levelMeta.developmentQueryIgnored ? ' // IGNORED ?level: ' + rawQuery : '';
+    const unsupported = (levelMeta.unsupportedSelectors || []).map((selector) => selector.selector + '=' + selector.value + ':' + selector.reason).join(', ');
     const match = mapping.matchedField && mapping.matchedValue ? mapping.matchedField + '=' + mapping.matchedValue : (mapping.reason || 'unmapped');
     const details = 'MISSION UUID: ' + (this.bootstrap.missionUuid || 'unavailable') +
       ' // MISSION: ' + missionIdentity +
@@ -416,9 +420,10 @@ export class RendererAdapter {
       ' // LEVEL: ' + levelIdentity +
       ' // ACTIVE: ' + this.levelResolution.activeId +
       ' // SOURCE: ' + source +
-      ' // ?level: ' + rawQuery +
+      ' // ?level: ' + rawQuery + ignoredQuery +
       ' // STATUS: ' + fallback +
       ' // MATCH: ' + match +
+      (unsupported ? ' // UNSUPPORTED: ' + unsupported : '') +
       ' // ATMOSPHERE: ' + (atmosphere.atmosphereId || 'technical_arena') +
       ' // ATMOSPHERE SOURCE: ' + (atmosphere.source || 'safe_default') +
       (atmosphere.fallbackReason ? ' // ATMOSPHERE FALLBACK: ' + atmosphere.fallbackReason : '');

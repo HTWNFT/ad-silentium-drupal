@@ -10,19 +10,6 @@ export const BOOT_STATES = Object.freeze({
   TEST_FIELD_PAUSED: 'TEST FIELD PAUSED'
 });
 
-export const TEST_SCENE = Object.freeze({
-  floorSize: 22,
-  wallHeight: 3.2,
-  boundaryHalfSize: 10,
-  cameraHeight: 1.75,
-  obstacle: {
-    size: 1.8,
-    height: 0.9,
-    position: { x: -2.8, z: -1.6 }
-  },
-  orientationObjectColor: 0x00e5ff,
-  accentObjectColor: 0xff375f
-});
 
 export function logPlayable(level, message, detail) {
   const logger = console[level] || console.log;
@@ -59,7 +46,10 @@ export function normalizeMissionPayload(payload, meta = {}) {
         missionRouteId: '',
         campaignRouteId: '',
         playlistId: '',
-        pathId: ''
+        pathId: '',
+        levelId: '',
+        environmentId: '',
+        biomeId: ''
       }),
       presentation: Object.freeze({
         missionTitle: 'Mission unavailable',
@@ -78,6 +68,9 @@ export function normalizeMissionPayload(payload, meta = {}) {
   const route = payload.route || snapshot.route || {};
   const campaignRoute = payload.campaignRoute || snapshot.campaignRoute || {};
   const path = payload.path || snapshot.path || {};
+  const level = payload.level || snapshot.level || {};
+  const environment = payload.environment || snapshot.environment || {};
+  const biome = payload.biome || snapshot.biome || {};
   const recruiter = payload.recruiter || snapshot.recruiter || {};
   const playlist = payload.playlist || snapshot.playlist || {};
   const routeId = payload.routeId || route.id || mission.campaignRoute || campaignRoute.id || payload.campaignRouteId || '';
@@ -87,6 +80,9 @@ export function normalizeMissionPayload(payload, meta = {}) {
   const campaignRouteId = payload.campaignRouteId || campaignRoute.id || '';
   const playlistId = payload.playlistId || playlist.id || '';
   const pathId = payload.pathId || path.id || '';
+  const levelId = payload.levelId || level.id || '';
+  const environmentId = payload.environmentId || environment.id || '';
+  const biomeId = payload.biomeId || biome.id || environment.biomeId || '';
   const missionTitle = readable(mission.label || mission.title || missionId, 'Mission unavailable');
   const recruiterLabel = readable(recruiter.name || recruiter.label, 'Unassigned');
   const playlistLabel = readable(playlist.label || playlist.title, 'Unlinked');
@@ -121,7 +117,10 @@ export function normalizeMissionPayload(payload, meta = {}) {
       missionRouteId: identityValue(missionRouteId),
       campaignRouteId: identityValue(campaignRouteId),
       playlistId: identityValue(playlistId),
-      pathId: identityValue(pathId)
+      pathId: identityValue(pathId),
+      levelId: identityValue(levelId),
+      environmentId: identityValue(environmentId),
+      biomeId: identityValue(biomeId)
     }),
     presentation: Object.freeze({
       missionTitle,
