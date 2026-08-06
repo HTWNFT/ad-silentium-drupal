@@ -14,7 +14,7 @@ player_pages:
       css/ooh-player-pages.css: {}
 
 landing:
-  version: 1.0.3-homepage-audio
+  version: 1.0.5-prologue-actions
   css:
     theme:
       css/ooh-landing.css: {}

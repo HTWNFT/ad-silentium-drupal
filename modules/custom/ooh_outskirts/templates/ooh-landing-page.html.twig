@@ -71,11 +71,11 @@
       <h1 class="ooh-hero__title ooh-game-title">AD SILENTIUM</h1>
 
       <div class="ooh-hero__actions">
-        <button class="ooh-hero__button ooh-hero__button--primary" type="button" disabled aria-disabled="true" data-ooh-action="enter">
+        <a class="ooh-hero__button ooh-hero__button--primary" href="{{ path('ooh_outskirts.dossier') }}" data-ooh-action="enter">
           ENTER
-        </button>
+        </a>
 
-        <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue" type="button" disabled aria-disabled="true" data-ooh-action="prologue">
+        <button class="ooh-hero__button ooh-hero__button--secondary" id="ooh-read-prologue" type="button" data-ooh-action="prologue">
           READ PROLOGUE
         </button>
       </div>
@@ -120,6 +120,12 @@
             You are one of The Selected and are a target of Genetic Warlords and Creations of all kinds. You may choose the path of the Merged, a character who is a fusion of human and technology, with powers that translate well into a world that has merged with you, mirroring technology in nature. Or you may choose the path of the Doomed, a character with the power to manipulate the still-existing "Old Reality" at will, having evolved in a way that was once forsaken and then reclaimed by your kind. The forces of human progress and evolution have merged, and fate is to be earned in the new cross-reality of Ad Silentium.
           </p>
         </div>
+      </div>
+
+      <div class="ooh-landing-dialog__actions">
+        <button class="ooh-landing-dialog__button ooh-landing-dialog__button--ghost" type="button" data-ooh-prologue-skip>SKIP</button>
+        <button class="ooh-landing-dialog__button ooh-landing-dialog__button--ghost" type="button" data-ooh-prologue-replay>REPLAY</button>
+        <a class="ooh-landing-dialog__button" href="{{ path('ooh_outskirts.dossier') }}" data-ooh-prologue-enter>ENTER</a>
       </div>
     </div>
   </section>

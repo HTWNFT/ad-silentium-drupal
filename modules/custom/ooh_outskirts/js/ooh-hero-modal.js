@@ -14,13 +14,15 @@
 
         // ----- Modal wiring -----
         const openBtn = landing.querySelector('#ooh-read-prologue');
-        const enterBtn = landing.querySelector('[data-ooh-action="enter"]');
         const closeBtn = landing.querySelector('#ooh-close-prologue');
         const modal = landing.querySelector('#ooh-prologue-modal');
         const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
         const crawl = landing.querySelector('#ooh-prologue-crawl');
-        const fullBuildLocked = true;
-        const prologueAutoFireDisabled = true;
+        const prologueEnterBtn = modal ? modal.querySelector('[data-ooh-prologue-enter]') : null;
+        const skipBtn = modal ? modal.querySelector('[data-ooh-prologue-skip]') : null;
+        const replayBtn = modal ? modal.querySelector('[data-ooh-prologue-replay]') : null;
+        const prologueAutoOpenKey = 'ooh_prologue_auto_opened_v1';
+        const prologueAutoDelayMs = 400;
 
         if (!root) {
           warnOnce('hero-missing', 'OOH landing: hero root not found.');
@@ -42,9 +44,6 @@
         };
 
         const openModal = () => {
-          if (fullBuildLocked) {
-            return;
-          }
           if (!modal) {
             return;
           }
@@ -63,23 +62,41 @@
           document.body.classList.remove('ooh-modal-open');
         };
 
-        if (enterBtn) {
-          enterBtn.setAttribute('disabled', 'disabled');
-          enterBtn.setAttribute('aria-disabled', 'true');
-          enterBtn.removeAttribute('href');
-          enterBtn.addEventListener('click', (event) => {
-            event.preventDefault();
+        const hasSeenPrologue = () => {
+          try {
+            return window.localStorage.getItem(prologueAutoOpenKey) === '1';
+          }
+          catch (error) {
+            return true;
+          }
+        };
+
+        const markSeenPrologue = () => {
+          try {
+            window.localStorage.setItem(prologueAutoOpenKey, '1');
+          }
+          catch (error) {}
+        };
+
+        const deferAutoOpenPrologue = () => {
+          const defer = window.requestAnimationFrame || ((callback) => window.setTimeout(callback, 16));
+
+          defer(() => {
+            defer(() => {
+              window.setTimeout(() => {
+                if (!modal || modal.classList.contains('is-open') || hasSeenPrologue()) {
+                  return;
+                }
+                markSeenPrologue();
+                openModal();
+              }, prologueAutoDelayMs);
+            });
           });
-        }
+        };
 
         if (openBtn) {
-          openBtn.setAttribute('disabled', 'disabled');
-          openBtn.setAttribute('aria-disabled', 'true');
-          openBtn.addEventListener('click', (event) => {
-            if (fullBuildLocked || openBtn.hasAttribute('disabled') || openBtn.getAttribute('aria-disabled') === 'true') {
-              event.preventDefault();
-              return;
-            }
+          openBtn.addEventListener('click', () => {
+            markSeenPrologue();
             openModal();
           });
         }
@@ -89,6 +106,21 @@
         if (backdrop) {
           backdrop.addEventListener('click', closeModal);
         }
+        if (skipBtn) {
+          skipBtn.addEventListener('click', () => {
+            markSeenPrologue();
+            closeModal();
+          });
+        }
+        if (replayBtn) {
+          replayBtn.addEventListener('click', restartCrawl);
+        }
+        if (prologueEnterBtn) {
+          prologueEnterBtn.addEventListener('click', () => {
+            markSeenPrologue();
+            closeModal();
+          });
+        }
 
         document.addEventListener('keydown', (event) => {
           if (event.key === 'Escape' && modal && modal.classList.contains('is-open')) {
@@ -96,10 +128,9 @@
           }
         });
 
-        if (prologueAutoFireDisabled || fullBuildLocked) {
-          closeModal();
+        if (modal && !hasSeenPrologue()) {
+          deferAutoOpenPrologue();
         }
-
         // ----- Landing monetization UI scaffold -----
         (() => {
           const STARTER_CREDITS = 60;

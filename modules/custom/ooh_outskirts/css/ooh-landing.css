@@ -483,7 +483,7 @@ body:has(.ooh-landing-page) .ooh-prologue__title {
 
 body:has(.ooh-landing-page) .ooh-prologue__viewport {
   position: absolute;
-  inset: 154px 54px 42px;
+  inset: 154px 54px 104px;
   z-index: 4;
   overflow: hidden;
   mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 82%, transparent 100%);
@@ -506,6 +506,13 @@ body:has(.ooh-landing-page) .ooh-prologue__crawl p {
   margin: 0 0 1.35em;
 }
 
+body:has(.ooh-landing-page) .ooh-prologue-modal__panel > .ooh-landing-dialog__actions {
+  position: absolute;
+  left: 54px;
+  right: 54px;
+  bottom: 24px;
+  z-index: 6;
+}
 body:has(.ooh-landing-page) .ooh-prologue__crawl p:nth-child(2n) {
   animation: ooh-prologue-text-flicker 7.25s infinite steps(1, end);
 }
@@ -571,7 +578,13 @@ body:has(.ooh-landing-page) .ooh-prologue__crawl p:nth-child(2n) {
   }
 
   body:has(.ooh-landing-page) .ooh-prologue__viewport {
-    inset: 142px 20px 30px;
+    inset: 142px 20px 108px;
+  }
+
+  body:has(.ooh-landing-page) .ooh-prologue-modal__panel > .ooh-landing-dialog__actions {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
   }
 }
 

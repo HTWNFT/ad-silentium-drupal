@@ -301,66 +301,8 @@
           playAmbient('startup');
         }
 
-        // ----- Modal wiring -----
-        const openBtn = document.getElementById('ooh-read-prologue');
-        const enterBtn = document.querySelector('[data-ooh-action="enter"]');
+        // ----- Operation Alpha routing -----
         const operationAlphaBtn = document.querySelector('[data-ooh-action="operation-alpha"]');
-        const closeBtn = document.getElementById('ooh-close-prologue');
-        const modal = document.getElementById('ooh-prologue-modal');
-        const backdrop = modal ? modal.querySelector('[data-close="1"]') : null;
-        const crawl = document.getElementById('ooh-prologue-crawl');
-
-        oohSlideLog('launcher disabled state', {
-          enterDisabled: enterBtn ? enterBtn.hasAttribute('disabled') || enterBtn.getAttribute('aria-disabled') === 'true' : null,
-          readPrologueDisabled: openBtn ? openBtn.hasAttribute('disabled') || openBtn.getAttribute('aria-disabled') === 'true' : null,
-          operationAlphaDisabled: operationAlphaBtn ? operationAlphaBtn.hasAttribute('disabled') || operationAlphaBtn.getAttribute('aria-disabled') === 'true' : null
-        });
-
-        const restartCrawl = () => {
-          if (!crawl) {
-            return;
-          }
-          crawl.style.animation = 'none';
-          void crawl.offsetHeight;
-          crawl.style.animation = '';
-        };
-
-        const openModal = () => {
-          if (!modal) {
-            return;
-          }
-          modal.classList.add('is-open');
-          modal.setAttribute('aria-hidden', 'false');
-          document.body.classList.add('ooh-modal-open');
-          restartCrawl();
-        };
-
-        const closeModal = () => {
-          if (!modal) {
-            return;
-          }
-          modal.classList.remove('is-open');
-          modal.setAttribute('aria-hidden', 'true');
-          document.body.classList.remove('ooh-modal-open');
-        };
-
-        if (enterBtn) {
-          enterBtn.setAttribute('disabled', 'disabled');
-          enterBtn.setAttribute('aria-disabled', 'true');
-          enterBtn.removeAttribute('href');
-          enterBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-          });
-        }
-
-        if (openBtn) {
-          openBtn.setAttribute('disabled', 'disabled');
-          openBtn.setAttribute('aria-disabled', 'true');
-        }
-
-        if (openBtn && !openBtn.hasAttribute('disabled') && openBtn.getAttribute('aria-disabled') !== 'true') {
-          openBtn.addEventListener('click', openModal);
-        }
         if (operationAlphaBtn) {
           operationAlphaBtn.addEventListener('click', (event) => {
             const href = operationAlphaBtn.getAttribute('href');
@@ -373,19 +315,6 @@
             fadeAmbientAndRoute(href);
           });
         }
-        if (closeBtn) {
-          closeBtn.addEventListener('click', closeModal);
-        }
-        if (backdrop) {
-          backdrop.addEventListener('click', closeModal);
-        }
-
-        document.addEventListener('keydown', (event) => {
-          if (event.key === 'Escape' && modal && modal.classList.contains('is-open')) {
-            closeModal();
-          }
-        });
-
         // ----- Carousel wiring -----
         const slides = Array.from(root.querySelectorAll('.ooh-hero__slide'));
         const dotsWrap = root.querySelector('.ooh-hero__dots');
