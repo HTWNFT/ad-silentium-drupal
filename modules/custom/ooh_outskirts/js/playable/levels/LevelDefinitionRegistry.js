@@ -88,6 +88,24 @@ function canonicalIdentity(payload = {}) {
   });
 }
 
+function suppliedCanonicalIdentity(identity = null) {
+  if (!identity || typeof identity !== 'object') {
+    return null;
+  }
+  return Object.freeze({
+    missionId: identityValue(identity.missionId),
+    missionType: identityValue(identity.missionType),
+    routeId: identityValue(identity.routeId),
+    missionRouteId: identityValue(identity.missionRouteId),
+    campaignRouteId: identityValue(identity.campaignRouteId),
+    playlistId: identityValue(identity.playlistId),
+    pathId: identityValue(identity.pathId),
+    levelId: identityValue(identity.levelId),
+    environmentId: identityValue(identity.environmentId),
+    biomeId: identityValue(identity.biomeId)
+  });
+}
+
 function selectorRecord(selector, value, reason) {
   return Object.freeze({ selector, value, reason });
 }
@@ -392,8 +410,9 @@ export class LevelDefinitionRegistry {
     const rawRequestedLevelId = String(selection.queryLevelId || '').trim();
     const queryLevelId = cleanRequestedId(rawRequestedLevelId);
     const hasValidQueryLevel = Boolean(queryLevelId && registry.has(queryLevelId));
-    const canonicalContextAvailable = Boolean(selection.canonicalContextAvailable && selection.payload && typeof selection.payload === 'object');
-    const identity = canonicalContextAvailable ? canonicalIdentity(selection.payload) : Object.freeze({});
+    const suppliedIdentity = suppliedCanonicalIdentity(selection.canonicalIdentity);
+    const canonicalContextAvailable = Boolean(selection.canonicalContextAvailable && (suppliedIdentity || (selection.payload && typeof selection.payload === 'object')));
+    const identity = canonicalContextAvailable ? (suppliedIdentity || canonicalIdentity(selection.payload)) : Object.freeze({});
     const unsupportedSelectors = canonicalContextAvailable ? unsupportedCanonicalSelectors(identity) : Object.freeze([]);
     const canonicalMatch = canonicalContextAvailable ? resolveCanonicalLevelId(identity) : Object.freeze({ levelId: '', matchedField: '', matchedValue: '', source: '', reason: '' });
     const developmentQueryIgnored = Boolean(canonicalContextAvailable && queryLevelId && (!canonicalMatch.levelId || queryLevelId !== canonicalMatch.levelId));

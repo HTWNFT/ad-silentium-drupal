@@ -1,4 +1,5 @@
-import { BOOT_STATES, logPlayable, normalizeMissionPayload, readable } from './core/AssetManifest.js';
+import { BOOT_STATES, logPlayable, readable } from './core/AssetManifest.js';
+import { adaptExistingGeneratorContract } from './core/ExistingGeneratorContractAdapter.js';
 import { LevelDefinitionRegistry } from './levels/LevelDefinitionRegistry.js';
 import { RendererAdapter } from './render/RendererAdapter.js';
 
@@ -65,9 +66,9 @@ function safeLevelId(value) {
   return /^[a-z0-9_]+$/.test(levelId) ? levelId : '';
 }
 
-function buildLevelMeta(rawQueryLevelId, payload = null, canonicalContextAvailable = false, lookupSucceeded = false, mappingUnavailableReason = '') {
+function buildLevelMeta(rawQueryLevelId, contract = null, canonicalContextAvailable = false, lookupSucceeded = false, mappingUnavailableReason = '') {
   return LevelDefinitionRegistry.resolveSelection({
-    payload,
+    canonicalIdentity: contract && contract.identity ? contract.identity : null,
     canonicalContextAvailable,
     queryLevelId: safeLevelId(rawQueryLevelId) || rawQueryLevelId,
     lookupSucceeded,
@@ -75,18 +76,18 @@ function buildLevelMeta(rawQueryLevelId, payload = null, canonicalContextAvailab
   });
 }
 
-function bootstrapWithLevel(normalizedPayload, levelMeta) {
+function bootstrapWithLevel(contract, levelMeta) {
   const mapping = levelMeta.mapping || {};
   const runtimeMissionContext = Object.freeze({
     identity: Object.freeze({
-      ...((normalizedPayload.identity || {})),
+      ...((contract.identity || {})),
       ...((mapping.identity || {})),
-      missionUuid: normalizedPayload.missionUuid || (normalizedPayload.identity || {}).missionUuid || ''
+      missionUuid: contract.missionUuid || (contract.identity || {}).missionUuid || ''
     }),
     presentation: Object.freeze({
-      missionTitle: normalizedPayload.missionTitle || (normalizedPayload.presentation || {}).missionTitle || 'Mission unavailable',
-      recruiter: normalizedPayload.recruiter || (normalizedPayload.presentation || {}).recruiter || 'Unassigned',
-      playlist: normalizedPayload.playlist || (normalizedPayload.presentation || {}).playlist || 'Unlinked'
+      missionTitle: contract.missionTitle || (contract.presentation || {}).missionTitle || 'Mission unavailable',
+      recruiter: contract.recruiter || (contract.presentation || {}).recruiter || 'Unassigned',
+      playlist: contract.playlist || (contract.presentation || {}).playlist || 'Unlinked'
     }),
     level: levelMeta,
     resolution: Object.freeze({
@@ -95,14 +96,20 @@ function bootstrapWithLevel(normalizedPayload, levelMeta) {
       requestedLevelId: levelMeta.requestedLevelId,
       missionDerivedLevelId: levelMeta.missionDerivedLevelId
     }),
-    debug: normalizedPayload.debug || Object.freeze({})
+    debug: contract.debug || Object.freeze({}),
+    existingGeneratorContract: Object.freeze({
+      runtime: contract.runtime || Object.freeze({}),
+      character: contract.character || Object.freeze({}),
+      provenance: contract.provenance || Object.freeze({})
+    })
   });
 
   return {
-    ...normalizedPayload,
+    ...contract,
     requestedLevelId: levelMeta.requestedLevelId,
     rawRequestedLevelId: levelMeta.rawRequestedLevelId,
     runtimeMissionContext,
+    existingGeneratorContract: runtimeMissionContext.existingGeneratorContract,
     level: levelMeta
   };
 }
@@ -113,7 +120,7 @@ function hydrateBootstrap(settings) {
   const lookupPath = (((settings.urls || {}).missionLookup) || 'ooh/mission-lookup').trim();
   if (missionUuid) {
     return lookupMissionPayload(missionUuid, lookupPath).then((missionData) => {
-      const normalized = normalizeMissionPayload(missionData.payload, {
+      const adapted = adaptExistingGeneratorContract(missionData.payload, {
         route: settings.route || '/play/mission',
         missionUuid: missionData.missionUuid || missionUuid,
         schemaVersion: settings.schemaVersion || '',
@@ -121,34 +128,34 @@ function hydrateBootstrap(settings) {
         payloadUuid: missionData.payloadUuid || '',
         lifecycleState: missionData.lifecycleState || ''
       });
-      return bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, missionData.payload, true, true));
+      return bootstrapWithLevel(adapted, buildLevelMeta(settings.queryLevelId, adapted, true, true));
     }).catch((error) => {
       logPlayable('warn', 'Mission lookup unavailable; falling back to development level selection.', error.message);
-      const normalized = normalizeMissionPayload(null, {
+      const adapted = adaptExistingGeneratorContract(null, {
         route: settings.route || '/play/mission',
         missionUuid,
         schemaVersion: settings.schemaVersion || '',
         source: 'mission_lookup_failed'
       });
-      return bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, null, false, false));
+      return bootstrapWithLevel(adapted, buildLevelMeta(settings.queryLevelId, null, false, false));
     });
   }
 
   if (settings.queryLevelId) {
-    const normalized = normalizeMissionPayload(null, {
+    const adapted = adaptExistingGeneratorContract(null, {
       route: settings.route || '/play/mission',
       schemaVersion: settings.schemaVersion || '',
       source: 'no_mission_context'
     });
-    return Promise.resolve(bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, null, false, false, 'mission_mapping_unresolved')));
+    return Promise.resolve(bootstrapWithLevel(adapted, buildLevelMeta(settings.queryLevelId, null, false, false, 'mission_mapping_unresolved')));
   }
 
-  const normalized = normalizeMissionPayload(null, {
+  const adapted = adaptExistingGeneratorContract(null, {
     route: settings.route || '/play/mission',
     schemaVersion: settings.schemaVersion || '',
     source: 'no_payload'
   });
-  return Promise.resolve(bootstrapWithLevel(normalized, buildLevelMeta(settings.queryLevelId, null, false, false)));
+  return Promise.resolve(bootstrapWithLevel(adapted, buildLevelMeta(settings.queryLevelId, null, false, false)));
 }
 
 function setText(root, selector, value) {
