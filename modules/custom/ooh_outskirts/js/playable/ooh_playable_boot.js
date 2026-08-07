@@ -1,5 +1,6 @@
 import { BOOT_STATES, logPlayable, readable } from './core/AssetManifest.js';
 import { adaptExistingGeneratorContract } from './core/ExistingGeneratorContractAdapter.js';
+import { buildCampaignSequence, selectCampaignSequenceEntry } from './levels/CampaignSequenceRegistry.js';
 import { LevelDefinitionRegistry } from './levels/LevelDefinitionRegistry.js';
 import { RendererAdapter } from './render/RendererAdapter.js';
 
@@ -66,9 +67,28 @@ function safeLevelId(value) {
   return /^[a-z0-9_]+$/.test(levelId) ? levelId : '';
 }
 
-function buildLevelMeta(rawQueryLevelId, contract = null, canonicalContextAvailable = false, lookupSucceeded = false, mappingUnavailableReason = '') {
+function safeSequenceEntry(value) {
+  const text = String(value || '').trim();
+  return /^[1-9][0-9]*$/.test(text) ? text : '';
+}
+
+function sequenceIdentity(entry = null, contract = null) {
+  if (!entry) {
+    return contract && contract.identity ? contract.identity : null;
+  }
+  return {
+    ...((contract && contract.identity) || {}),
+    missionId: entry.missionType,
+    missionType: entry.missionType,
+    routeId: entry.routeId,
+    levelId: entry.canonicalLevelId,
+    environmentId: entry.environmentId
+  };
+}
+
+function buildLevelMeta(rawQueryLevelId, contract = null, canonicalContextAvailable = false, lookupSucceeded = false, mappingUnavailableReason = '', selectedEntry = null) {
   return LevelDefinitionRegistry.resolveSelection({
-    canonicalIdentity: contract && contract.identity ? contract.identity : null,
+    canonicalIdentity: sequenceIdentity(selectedEntry, contract),
     canonicalContextAvailable,
     queryLevelId: safeLevelId(rawQueryLevelId) || rawQueryLevelId,
     lookupSucceeded,
@@ -76,8 +96,15 @@ function buildLevelMeta(rawQueryLevelId, contract = null, canonicalContextAvaila
   });
 }
 
-function bootstrapWithLevel(contract, levelMeta) {
+function buildSequenceMeta(contract, requestedSequenceEntry) {
+  const sequence = buildCampaignSequence(contract);
+  const selection = selectCampaignSequenceEntry(sequence, safeSequenceEntry(requestedSequenceEntry));
+  return Object.freeze({ sequence, selection });
+}
+
+function bootstrapWithLevel(contract, levelMeta, sequenceMeta = null) {
   const mapping = levelMeta.mapping || {};
+  const selectedSequenceEntry = (sequenceMeta && sequenceMeta.selection && sequenceMeta.selection.selectedEntry) || null;
   const runtimeMissionContext = Object.freeze({
     identity: Object.freeze({
       ...((contract.identity || {})),
@@ -97,6 +124,9 @@ function bootstrapWithLevel(contract, levelMeta) {
       missionDerivedLevelId: levelMeta.missionDerivedLevelId
     }),
     debug: contract.debug || Object.freeze({}),
+    campaignSequence: sequenceMeta ? sequenceMeta.sequence : null,
+    selectedSequenceEntry,
+    sequenceSelection: sequenceMeta ? sequenceMeta.selection : null,
     existingGeneratorContract: Object.freeze({
       runtime: contract.runtime || Object.freeze({}),
       character: contract.character || Object.freeze({}),
@@ -108,6 +138,9 @@ function bootstrapWithLevel(contract, levelMeta) {
     ...contract,
     requestedLevelId: levelMeta.requestedLevelId,
     rawRequestedLevelId: levelMeta.rawRequestedLevelId,
+    campaignSequence: sequenceMeta ? sequenceMeta.sequence : null,
+    selectedSequenceEntry,
+    sequenceSelection: sequenceMeta ? sequenceMeta.selection : null,
     runtimeMissionContext,
     existingGeneratorContract: runtimeMissionContext.existingGeneratorContract,
     level: levelMeta
@@ -128,7 +161,8 @@ function hydrateBootstrap(settings) {
         payloadUuid: missionData.payloadUuid || '',
         lifecycleState: missionData.lifecycleState || ''
       });
-      return bootstrapWithLevel(adapted, buildLevelMeta(settings.queryLevelId, adapted, true, true));
+      const sequenceMeta = buildSequenceMeta(adapted, settings.querySequenceEntry);
+      return bootstrapWithLevel(adapted, buildLevelMeta(settings.queryLevelId, adapted, true, true, '', sequenceMeta.selection.selectedEntry), sequenceMeta);
     }).catch((error) => {
       logPlayable('warn', 'Mission lookup unavailable; falling back to development level selection.', error.message);
       const adapted = adaptExistingGeneratorContract(null, {
@@ -185,7 +219,19 @@ function renderBootstrap(root, bootstrap) {
   const diagnostic = bootstrap.payloadAvailable ?
     'Payload source: ' + source + ' // version: ' + version :
     'Payload unavailable. Missing: ' + (missing || 'mission payload') + '. Loading development-safe level metadata only.';
-  setText(root, '[data-ooh-playable-diagnostic]', diagnostic);
+  const sequence = bootstrap.campaignSequence || null;
+  const selection = bootstrap.sequenceSelection || null;
+  const selectedEntry = bootstrap.selectedSequenceEntry || null;
+  const sequenceDiagnostic = sequence && selectedEntry ?
+    ' // Sequence source: ' + sequence.sequenceSource +
+    ' // count: ' + sequence.entries.length +
+    ' // selected: ' + selectedEntry.sequence +
+    ' // mission: ' + selectedEntry.missionType +
+    ' // route: ' + selectedEntry.routeId +
+    ' // canonical level: ' + selectedEntry.canonicalLevelId +
+    ' // selector: ' + ((selection || {}).selectionSource || 'default_first_entry') :
+    '';
+  setText(root, '[data-ooh-playable-diagnostic]', diagnostic + sequenceDiagnostic);
 }
 
 function initializePlayable(root) {

@@ -34,6 +34,11 @@ final class OohPlayableMissionBlock extends BlockBase {
       $query_level = '';
     }
 
+    $query_sequence_entry = trim((string) $request->query->get('sequenceEntry', ''));
+    if (!preg_match('/^[1-9][0-9]*$/', $query_sequence_entry)) {
+      $query_sequence_entry = '';
+    }
+
     $route_url = Url::fromRoute('ooh_outskirts.playable_mission')->toString();
     $dossier_url = Url::fromRoute('ooh_outskirts.dossier')->toString();
     $play_url = Url::fromRoute('ooh_outskirts.play')->toString();
@@ -107,6 +112,7 @@ HTML;
               'route' => $route_url,
               'queryMissionUuid' => $query_mission_uuid,
               'queryLevelId' => $query_level,
+              'querySequenceEntry' => $query_sequence_entry,
               'stateKey' => 'ooh_game_generator_state_v1',
               'schemaVersion' => 'phase-3-combat-interaction-v1',
               'urls' => [
@@ -119,7 +125,7 @@ HTML;
         ],
       ],
       '#cache' => [
-        'contexts' => ['url.query_args:missionUuid', 'url.query_args:level', 'user.roles:authenticated'],
+        'contexts' => ['url.query_args:missionUuid', 'url.query_args:level', 'url.query_args:sequenceEntry', 'user.roles:authenticated'],
         'max-age' => 0,
       ],
     ];

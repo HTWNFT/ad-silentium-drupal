@@ -414,6 +414,19 @@ export class RendererAdapter {
     const ignoredQuery = levelMeta.developmentQueryIgnored ? ' // IGNORED ?level: ' + rawQuery : '';
     const unsupported = (levelMeta.unsupportedSelectors || []).map((selector) => selector.selector + '=' + selector.value + ':' + selector.reason).join(', ');
     const match = mapping.matchedField && mapping.matchedValue ? mapping.matchedField + '=' + mapping.matchedValue : (mapping.reason || 'unmapped');
+    const sequence = this.bootstrap.campaignSequence || {};
+    const selectedEntry = this.bootstrap.selectedSequenceEntry || {};
+    const sequenceSelection = this.bootstrap.sequenceSelection || {};
+    const sequenceDetails = selectedEntry.sequence ?
+      ' // SEQUENCE SOURCE: ' + (sequence.sequenceSource || 'unknown') +
+      ' // SEQUENCE COUNT: ' + ((sequence.entries || []).length || 0) +
+      ' // SEQUENCE ENTRY: ' + selectedEntry.sequence +
+      ' // SEQUENCE MISSION: ' + selectedEntry.missionType +
+      ' // SEQUENCE ROUTE: ' + selectedEntry.routeId +
+      ' // SEQUENCE LEVEL: ' + selectedEntry.canonicalLevelId +
+      ' // SEQUENCE SELECTOR: ' + (sequenceSelection.selectionSource || 'default_first_entry') +
+      (sequenceSelection.developmentOverrideReason ? ' // SEQUENCE OVERRIDE: ' + sequenceSelection.developmentOverrideReason : '') :
+      ' // SEQUENCE SOURCE: unavailable';
     const details = 'MISSION UUID: ' + (this.bootstrap.missionUuid || 'unavailable') +
       ' // MISSION: ' + missionIdentity +
       ' // ROUTE: ' + routeIdentity +
@@ -423,6 +436,7 @@ export class RendererAdapter {
       ' // ?level: ' + rawQuery + ignoredQuery +
       ' // STATUS: ' + fallback +
       ' // MATCH: ' + match +
+      sequenceDetails +
       (unsupported ? ' // UNSUPPORTED: ' + unsupported : '') +
       ' // ATMOSPHERE: ' + (atmosphere.atmosphereId || 'technical_arena') +
       ' // ATMOSPHERE SOURCE: ' + (atmosphere.source || 'safe_default') +
